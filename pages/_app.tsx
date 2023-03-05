@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
+import { Analytics } from "@vercel/analytics/react";
 
 import Layout from "../components/layout";
 
@@ -44,6 +45,8 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/icon@32.png" />
       </Head>
+
+      <Analytics />
 
       {mounted && (
         <Layout>
