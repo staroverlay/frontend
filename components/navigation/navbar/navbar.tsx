@@ -3,12 +3,13 @@ import {
   Box,
   Flex,
   Heading,
-  IconButton,
   Image,
   useColorMode,
 } from "@chakra-ui/react";
-import { BiBell, BiMoon, BiSun } from "react-icons/bi";
+import { BiBell, BiMoon, BiSun, BiCog, BiExit } from "react-icons/bi";
+
 import NavbarButton from "./navbar-button/navbar-button";
+import NavbarDropdown from "./navbar-dropdown/navbar-dropdown";
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -37,13 +38,29 @@ export function Navbar() {
             icon={colorMode === "dark" ? <BiMoon /> : <BiSun />}
             onClick={toggleColorMode}
           />
-          <Avatar
-            name={"Sammwy"}
-            size={"sm"}
-            src={
-              "https://static-cdn.jtvnw.net/jtv_user_pictures/a286eed0-c827-4215-b4cc-36cdce07c6db-profile_image-300x300.png"
-            }
-          />
+          <NavbarDropdown
+            content={[
+              {
+                label: "Settings",
+                icon: BiCog,
+                link: "/settings",
+              },
+              {
+                label: "Logout",
+                icon: BiExit,
+                link: "/logout",
+                color: "critical",
+              },
+            ]}
+          >
+            <Avatar
+              name={"Sammwy"}
+              size={"sm"}
+              src={
+                "https://static-cdn.jtvnw.net/jtv_user_pictures/a286eed0-c827-4215-b4cc-36cdce07c6db-profile_image-300x300.png"
+              }
+            />
+          </NavbarDropdown>
         </Flex>
       </Flex>
     </Box>
