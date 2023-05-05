@@ -16,7 +16,6 @@ export default function NavbarButton(props: NavbarButtonProps) {
         icon={props.icon}
         onClick={props.onClick}
         variant={"ghost"}
-        marginRight={"8px"}
       />
       {props.children !== undefined && props.children}
     </Box>

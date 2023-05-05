@@ -34,7 +34,6 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
         as={Button}
         rightIcon={<BiChevronDown />}
         variant={"unstyled"}
-        margin={"10px 15px"}
         textAlign={"center"}
         height={"100%"}
         color={"#777"}

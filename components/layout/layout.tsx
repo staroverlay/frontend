@@ -1,4 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 
 import Navbar from "../navigation/navbar";
 import Sidebar from "../navigation/sidebar";
@@ -8,6 +9,12 @@ interface LayoutProps {
 }
 
 export function Layout({ children }: LayoutProps) {
+  const { pathname } = useRouter();
+
+  if (pathname == "/login") {
+    return children;
+  }
+
   return (
     <Box>
       <Navbar />
