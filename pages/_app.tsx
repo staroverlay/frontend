@@ -5,11 +5,11 @@ import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { Analytics } from "@vercel/analytics/react";
 
 import Layout from "../components/layout";
-import User from "../lib/user";
 
 import { AuthProvider } from "../contexts/auth";
 
 import Twitch from "../lib/services/twitch";
+import User from "../lib/interfaces/user";
 
 // Theme
 const colors = {
@@ -42,7 +42,7 @@ interface InitialAppProps extends AppProps {
   };
 }
 
-export default function App({ Component, pageProps, props }: InitialAppProps) {
+export default function App({ Component, pageProps }: InitialAppProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function App({ Component, pageProps, props }: InitialAppProps) {
   }, []);
 
   return (
-    <AuthProvider authURL={props.authURL} user={props.user}>
+    <AuthProvider>
       <ChakraProvider theme={theme}>
         <Head>
           <title>StreamOverlay</title>
@@ -70,12 +70,3 @@ export default function App({ Component, pageProps, props }: InitialAppProps) {
     </AuthProvider>
   );
 }
-
-App.getInitialProps = () => {
-  return {
-    props: {
-      authURL: Twitch.authenticate(),
-      user: null,
-    },
-  };
-};

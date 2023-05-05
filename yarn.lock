@@ -2273,11 +2273,6 @@ graphql-tag@^2.12.6:
   dependencies:
     tslib "^2.1.0"
 
-graphql@^16.6.0:
-  version "16.6.0"
-  resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
-  integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
-
 has-bigints@^1.0.1, has-bigints@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/has-bigints/-/has-bigints-1.0.2.tgz#0871bd3e3d51626f6ca0966668ba35d5602d6eaa"
@@ -3318,10 +3313,10 @@ tsutils@^3.21.0:
   dependencies:
     tslib "^1.8.1"
 
-twitch-oauth@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/twitch-oauth/-/twitch-oauth-0.1.0.tgz#cdccec664ca2e54535bfbddb2303f688ac80295e"
-  integrity sha512-U4YWrHbcZU6RVT/Eh/9kyGwG4+FQ+D/3N+P4G15/N4/kh5r92zWOY8eipGcXWnpFcNh2NIPinKhEfe4kY0PCrg==
+twitch-oauth@0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/twitch-oauth/-/twitch-oauth-0.1.2.tgz#4b5145734c5601b8a8e01c4d2a1a290e338d802f"
+  integrity sha512-Wqa+SbB2l5uvAQ8r9DvQT1VSIBQN4Tod33I8VuCZR38nn9y5AbziriEyyzI0dhL4YhafFGLpO0rg9nXcuYURIA==
   dependencies:
     isomorphic-unfetch "^3.1.0"
 

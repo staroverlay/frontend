@@ -5,21 +5,14 @@ import User from "../../lib/interfaces/user";
 import useWindow from "../../hooks/useWindow";
 import { setBearerToken } from "../../lib/graphql/client";
 import { getCurrentUser } from "../../lib/services/auth";
+import twitch from "../../lib/services/twitch";
 
 type NullableUser = User | null;
 
-interface AuthProviderProps extends PropsWithChildren {
-  authURL: string;
-  user: NullableUser;
-}
-
-export function AuthProvider({
-  children,
-  authURL,
-  user: LoggedUser,
-}: AuthProviderProps) {
+export function AuthProvider({ children }: PropsWithChildren) {
   const [fetched, setFetched] = useState<boolean>(false);
-  const [user, setUser] = useState<NullableUser>(LoggedUser);
+  const [user, setUser] = useState<NullableUser>(null);
+  const authURL = twitch.authenticate();
   const { openAndWaitMessage } = useWindow(authURL);
 
   useEffect(() => {

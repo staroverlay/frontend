@@ -1,6 +1,8 @@
 import React from "react";
-import User from "../../lib/user";
+
 import { AuthHook } from "./auth-hook";
+
+import User from "../../lib/interfaces/user";
 
 export const AuthContext = React.createContext<AuthHook>({
   authURL: "",
