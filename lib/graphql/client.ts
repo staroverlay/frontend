@@ -5,11 +5,15 @@ const cache = new CacheLoader({
 });
 
 const client = new GraphQLClient({
-  endpoint: process.env["BACKEND_SERVER"] as string,
+  endpoint: process.env["NEXT_PUBLIC_BACKEND_SERVER"] as string,
   cache,
   headers: {
     "X-Client": "so_next/api",
   },
 });
+
+export function setBearerToken(token: string) {
+  client.addHeader("Authorization", `Bearer ${token}`);
+}
 
 export default client;
