@@ -53,7 +53,7 @@ function NavbarAsLogged({ user }: { user: User }) {
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { user, login } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Box width={"100%"} height={"65px"} padding={"15px 30px"}>
@@ -79,7 +79,6 @@ export function Navbar() {
             onClick={toggleColorMode}
           />
 
-          {user == null && <NavbarAsGuest onLogin={login} />}
           {user != null && <NavbarAsLogged user={user} />}
         </Flex>
       </Flex>

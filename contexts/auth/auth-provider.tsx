@@ -2,60 +2,83 @@ import { PropsWithChildren, useEffect, useState } from "react";
 
 import { AuthContext } from "./auth-context";
 import User from "../../lib/interfaces/user";
-import useWindow from "../../hooks/useWindow";
 import { setBearerToken } from "../../lib/graphql/client";
 import { getCurrentUser } from "../../lib/services/auth";
 import twitch from "../../lib/services/twitch";
 
-type NullableUser = User | null;
-
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [fetched, setFetched] = useState<boolean>(false);
-  const [user, setUser] = useState<NullableUser>(null);
-  const authURL = twitch.authenticate();
-  const { openAndWaitMessage } = useWindow(authURL);
+  const [token, setToken] = useState<string | null>();
+  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    if (!fetched) {
-      const fetchUserData = async () => {
-        const token = localStorage.getItem("token");
-        if (token) {
-          setBearerToken(token);
-          const user = await getCurrentUser();
-          setUser(user);
-        }
+  const [fetched, setFetched] = useState(false);
 
-        setFetched(true);
-      };
-
-      fetchUserData();
-    }
-  }, [fetched]);
-
-  function isLogged(): boolean {
-    return user !== null;
+  function isLogged() {
+    return user != null && token != null;
   }
 
-  async function login(): Promise<User> {
-    const { user, session } = await openAndWaitMessage("so_auth");
-    if (user) setUser(user);
-    if (session) {
+  async function loginWithCode(code: string): Promise<User> {
+    const res = await fetch("/api/login", {
+      body: JSON.stringify({ code }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "post",
+    });
+
+    const { session, user, error } = await res.json();
+    if (session && user) {
       const { token } = session;
       localStorage.setItem("token", token);
       setBearerToken(token);
+      setToken(token);
+      setUser(user);
+      return user;
+    } else {
+      const errorMessage = error?.message || error || "Unknown error";
+      throw new Error(errorMessage);
     }
-    return user as User;
   }
 
-  async function logout(): Promise<void> {}
+  async function loginWithToken(newToken: string) {
+    if (token != newToken) setToken(newToken);
+    setBearerToken(newToken);
+    const user = await getCurrentUser();
+    setUser(user);
+    return user;
+  }
+
+  async function logout(): Promise<void> {
+    setBearerToken("");
+    localStorage.removeItem("token");
+  }
+
+  function redirectToLogin() {
+    window.location.href = twitch.authenticate();
+  }
+
+  useEffect(() => {
+    async function login() {
+      const token = localStorage.getItem("token");
+      if (token) {
+        await loginWithToken(token);
+      }
+      setFetched(true);
+    }
+
+    if (!fetched) {
+      login();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetched, token]);
 
   return (
     <AuthContext.Provider
       value={{
-        authURL,
         user,
         isLogged,
-        login,
+        loginWithCode,
+        loginWithToken,
+        redirectToLogin,
         logout,
       }}
     >

@@ -1,9 +1,10 @@
-import User from "../../lib/user";
+import User from "../../lib/interfaces/user";
 
 export interface AuthHook {
-  authURL: string;
   user: User | null;
   isLogged: () => boolean;
-  login: () => Promise<User>;
+  loginWithCode: (token: string) => Promise<User>;
+  loginWithToken: (token: string) => Promise<User>;
   logout: () => Promise<void>;
+  redirectToLogin: () => void;
 }

@@ -4,27 +4,29 @@ import { useRouter } from "next/router";
 import { Flex, Heading, Text } from "@chakra-ui/react";
 import { BsTwitch } from "react-icons/bs";
 
-import useFetch from "../hooks/useFetch";
-import { ResponseError } from "../lib/interfaces/response";
+import useAuth from "../hooks/useAuth";
 
 export default function Login() {
-  const { error, ...loginQuery } = useFetch("post", "/api/login");
+  const { loginWithCode, loginWithToken, redirectToLogin } = useAuth();
   const { query } = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const code = query.code;
-
-    if (code) {
-      loginQuery.sendOnce(null, { code });
+    async function login(code: string) {
+      const token = await loginWithCode(code);
+      const user = await loginWithToken(token);
+      if (!user) {
+        setError("Unknown error");
+      }
     }
-  }, [loginQuery, query.code]);
 
-  useEffect(() => {
-    const data = loginQuery.data;
-    if (data) {
-      window?.opener.postMessage({ channel: "so_auth", data }, "*");
+    if (query.code) {
+      login(query.code as string).catch((e) => {
+        setError(e.message);
+      });
     }
-  }, [loginQuery.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query.code]);
 
   return (
     <Flex
@@ -43,8 +45,8 @@ export default function Login() {
         </>
       ) : (
         <>
-          <Heading my={"10px"}>Error ({error.kind})</Heading>
-          <Text fontSize={"18px"}>{error.message}</Text>
+          <Heading my={"10px"}>Error</Heading>
+          <Text fontSize={"18px"}>{error}</Text>
         </>
       )}
     </Flex>

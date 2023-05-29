@@ -1,5 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import useAuth from "../../hooks/useAuth";
 
 import Navbar from "../navigation/navbar";
 import Sidebar from "../navigation/sidebar";
@@ -8,11 +9,12 @@ interface LayoutProps {
   children: React.ReactElement;
 }
 
-export function Layout({ children }: LayoutProps) {
-  const { pathname } = useRouter();
+function AuthenticatedLayout({ children }: LayoutProps) {
+  const { pathname, push } = useRouter();
 
   if (pathname == "/login") {
-    return children;
+    push("/");
+    return <></>;
   }
 
   return (
@@ -23,5 +25,27 @@ export function Layout({ children }: LayoutProps) {
         <Box>{children}</Box>
       </Flex>
     </Box>
+  );
+}
+
+function GuestLayout({ children }: LayoutProps) {
+  const { redirectToLogin } = useAuth();
+  const { pathname } = useRouter();
+
+  if (pathname == "/login") {
+    return children;
+  }
+
+  redirectToLogin();
+  return <></>;
+}
+
+export function Layout(props: LayoutProps) {
+  const { isLogged } = useAuth();
+
+  return isLogged() ? (
+    <AuthenticatedLayout {...props} />
+  ) : (
+    <GuestLayout {...props} />
   );
 }
