@@ -68,23 +68,33 @@ function SidebarItem({ icon: IconElement, to, label }: SidebarItemProps) {
 
 export function Sidebar() {
   return (
-    <Box borderRadius={"7px"} padding={"5px"} marginRight={"15px"}>
+    <Box
+      borderRadius={"7px"}
+      padding={"5px"}
+      marginRight={"15px"}
+      minWidth={"180px"}
+    >
       <SidebarSection>
         <SidebarHeader>Overview</SidebarHeader>
         <SidebarItem to="/" icon={BsHouse} label="Home" />
-        <SidebarItem to="/" icon={BsStar} label="Membership" />
-        <SidebarItem to="/" icon={BsShop} label="Marketplace" />
-        <SidebarItem to="/" icon={BsPalette} label="My assets" />
+
+        {/*
+          <SidebarItem to="/" icon={BsStar} label="Membership" />
+          <SidebarItem to="/" icon={BsShop} label="Marketplace" />
+        */}
       </SidebarSection>
 
       <SidebarSection>
         <SidebarHeader>Streaming</SidebarHeader>
+        <SidebarItem to="/widgets" icon={BsWindowSidebar} label="My widgets" />
+        <SidebarItem to="/media" icon={BsImage} label="Manage media" />
+        {/*
         <SidebarItem to="/" icon={BsAppIndicator} label="Dashboard" />
         <SidebarItem to="/" icon={BsClockHistory} label="Activity feed" />
-        <SidebarItem to="/" icon={BsWindowSidebar} label="My widgets" />
-        <SidebarItem to="/" icon={BsImage} label="Manage assets" />
+        
         <SidebarItem to="/" icon={BsShield} label="Editors & Moderators" />
         <SidebarItem to="/" icon={BiBot} label="Chatbot" />
+        */}
       </SidebarSection>
     </Box>
   );

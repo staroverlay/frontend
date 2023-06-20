@@ -60,7 +60,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
     async function login() {
       const token = localStorage.getItem("token");
       if (token) {
-        await loginWithToken(token);
+        await loginWithToken(token).catch((e) => {
+          logout();
+        });
       }
       setFetched(true);
     }

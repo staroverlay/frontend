@@ -1,12 +1,12 @@
-export type ResponseError = {
+export type IResponseError = {
   field?: string;
   kind: string;
   message: string;
 };
 
-type Response = {
-  error?: ResponseError;
+type IResponse = {
+  error?: IResponseError;
   data?: any;
 };
 
-export default Response;
+export default IResponse;

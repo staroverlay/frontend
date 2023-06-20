@@ -10,7 +10,6 @@ const CreateSessionMutation = mutation`
                 id
                 username
                 avatar
-                role
             }
         }
     }

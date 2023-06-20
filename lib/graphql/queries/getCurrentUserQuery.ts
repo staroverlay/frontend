@@ -6,7 +6,6 @@ const getCurrentUserQuery = query`
             id
             username
             avatar
-            role
         }
     }
 `;

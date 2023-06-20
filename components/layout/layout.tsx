@@ -22,7 +22,7 @@ function AuthenticatedLayout({ children }: LayoutProps) {
       <Navbar />
       <Flex height={"calc(100vh - 65px)"} width={"100%"} padding={"10px"}>
         <Sidebar />
-        <Box>{children}</Box>
+        {children}
       </Flex>
     </Box>
   );

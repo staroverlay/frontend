@@ -1,0 +1,24 @@
+.card {
+  border-radius: 8px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 10px;
+  padding: 5px 10px;
+  transition: 75ms ease-in-out all;
+  user-select: none;
+  width: 200px;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.title {
+  font-size: 15px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: bolder;
+  text-align: right;
+}
