@@ -9,6 +9,7 @@ const GetAllMediaQuery = query`
             size
             type
             uploadId
+            userId
         }
     }
 `;

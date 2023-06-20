@@ -1,14 +1,20 @@
 import { useDisclosure } from "@chakra-ui/react";
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from "react";
 import UploadModal from "../../components/modals/upload-modal/UploadModal";
 
 import IMedia from "../../lib/interfaces/media";
+import { getAllMedia } from "../../lib/services/media";
 import { MediaContext } from "./media-context";
 
 export function MediaProvider({ children }: PropsWithChildren) {
   const [medias, setMedias] = useState<IMedia[]>([]);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [fetched, setFetched] = useState(false);
+
+  const fetchMedia = async () => {
+    const medias = await getAllMedia();
+    setMedias(medias);
+  };
 
   const removeMedia = (media: IMedia | string) => {
     const id = typeof media === "string" ? media : media._id;
@@ -27,6 +33,13 @@ export function MediaProvider({ children }: PropsWithChildren) {
     onOpen();
   };
 
+  useEffect(() => {
+    if (!fetched) {
+      setFetched(true);
+      fetchMedia();
+    }
+  }, [fetched]);
+
   return (
     <MediaContext.Provider
       value={{
@@ -39,7 +52,7 @@ export function MediaProvider({ children }: PropsWithChildren) {
       }}
     >
       <UploadModal isOpen={isOpen} onClose={onClose} />
-      {children}
+      {fetched && children}
     </MediaContext.Provider>
   );
 }

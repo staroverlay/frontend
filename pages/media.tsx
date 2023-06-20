@@ -60,19 +60,9 @@ function MediaFilesTab({ files, filter }: MediaFilesProps) {
   );
 }
 
-const files: IMedia[] = [
-  {
-    _id: "1",
-    name: "Test",
-    type: "image",
-    resourceId: "1",
-    size: 0,
-    uploadId: "",
-    userId: "",
-  },
-];
-
 export default function Media() {
+  const { medias } = useMedia();
+
   return (
     <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
       <Box>
@@ -86,12 +76,17 @@ export default function Media() {
       <Flex gap={"10px"}>
         <StatsCard
           title="Storage Quota"
-          value="0"
+          value={medias.length.toString()}
           maxValue="10"
           unit="GB"
           bg="#A770EF"
         />
-        <StatsCard title="Saved items" value="0" maxValue="10" bg="#fc67fa" />
+        <StatsCard
+          title="Saved items"
+          value={medias.length.toString()}
+          maxValue="10"
+          bg="#fc67fa"
+        />
       </Flex>
 
       <Tabs variant="soft-rounded">
@@ -106,9 +101,9 @@ export default function Media() {
         </Flex>
 
         <TabPanels mt={"20px"}>
-          <MediaFilesTab files={files} filter={"image"} />
-          <MediaFilesTab files={files} filter={"sound"} />
-          <MediaFilesTab files={files} filter={"video"} />
+          <MediaFilesTab files={medias} filter={"image"} />
+          <MediaFilesTab files={medias} filter={"sound"} />
+          <MediaFilesTab files={medias} filter={"video"} />
         </TabPanels>
       </Tabs>
     </Flex>

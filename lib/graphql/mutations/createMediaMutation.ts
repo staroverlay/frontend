@@ -2,7 +2,7 @@ import { mutation } from "astraql";
 
 const CreateMediaMutation = mutation`
     createMedia($payload: CreateMediaDTO!) {
-        createMedia(payload: $CreateMediaDTO) {
+        createMedia(payload: $payload) {
             _id
             name
             resourceId

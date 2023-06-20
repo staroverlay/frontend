@@ -59,8 +59,8 @@ export function splitBufferInChunks(
   return chunks;
 }
 
-export async function uploadFile(file: File) {
-  const media = await createMedia(file.type, file.name, file.size);
+export async function uploadFile(file: File, name?: string) {
+  const media = await createMedia(file.type, name || file.name, file.size);
   const buffer = await readFileAsArrayBuffer(file);
   const chunks = splitBufferInChunks(buffer, 5 * 1024 * 1024);
   const parts: IMediaPart[] = [];
@@ -74,5 +74,5 @@ export async function uploadFile(file: File) {
     parts.push(part);
   }
 
-  await completeMedia(media._id, parts);
+  return await completeMedia(media._id, parts);
 }

@@ -27,6 +27,7 @@
     "next": "13.0.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-drag-drop-files": "^2.3.10",
     "react-icons": "^4.7.1",
     "twitch-oauth": "0.1.2",
     "typescript": "4.9.4"

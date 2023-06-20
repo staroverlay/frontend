@@ -7,6 +7,8 @@ const R2 = new Axios({
   },
   maxBodyLength: Infinity,
   maxContentLength: Infinity,
+  transformRequest: [(data) => JSON.stringify(data)],
+  transformResponse: [(data) => JSON.parse(data)],
 });
 
 export default R2;

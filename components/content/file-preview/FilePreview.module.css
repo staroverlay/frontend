@@ -1,0 +1,13 @@
+.image-container {
+  width: 100%;
+}
+
+.image {
+  border-radius: 8px;
+  width: 100%;
+}
+
+.image:hover {
+  cursor: pointer;
+  opacity: 0.6;
+}
