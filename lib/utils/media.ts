@@ -64,12 +64,52 @@ export function getVideoCover(
   });
 }
 
+export async function getAudioThumbnail(media: IMedia): Promise<string | null> {
+  const url = getMediaURL(media);
+  if (!url) return null;
+
+  const WaveSurfer = (await import("wavesurfer.js")).default;
+
+  const container = document.createElement("div");
+  container.style.width = "300px";
+  container.style.height = "250px";
+  container.style.position = "absolute";
+  container.style.opacity = "0";
+  container.style.filter = "blur(10px)";
+  document.body.appendChild(container);
+
+  const wavesurfer = WaveSurfer.create({
+    container,
+    backgroundColor: "transparent",
+    waveColor: "#A770EF",
+    barWidth: 3,
+    barHeight: 1,
+    height: 250,
+    normalize: true,
+    responsive: true,
+    barRadius: 3,
+    closeAudioContext: true,
+  });
+
+  wavesurfer.load(url);
+  return new Promise((resolve) => {
+    wavesurfer.on("ready", () => {
+      setTimeout(async () => {
+        const uri = await wavesurfer.exportImage("image/jpeg", 0.75, "dataURL");
+        console.log(uri);
+        container.remove();
+        resolve(uri as string);
+      }, 800);
+    });
+  });
+}
+
 export async function getMediaThumbnail(media: IMedia): Promise<string | null> {
   if (media.type == "image") {
     return getMediaURL(media);
   } else if (media.type == "video") {
     return await getVideoCover(media);
   } else {
-    return "";
+    return await getAudioThumbnail(media);
   }
 }
