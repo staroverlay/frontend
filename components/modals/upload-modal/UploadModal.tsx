@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Button, Flex, Input, chakra } from "@chakra-ui/react";
 import { FileUploader } from "react-drag-drop-files";
 import BaseModal from "../base-modal/BaseModal";
@@ -16,9 +16,19 @@ interface UploadModalProps {
 
 export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
   const { addMedia } = useMedia();
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [name, setName] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
+
+  const setName = (name: string) => {
+    if (nameInputRef.current) {
+      nameInputRef.current.value = name;
+    }
+  };
+
+  const getName = () => {
+    return nameInputRef.current?.value || "";
+  };
 
   const handleClose = () => {
     setFile(null);
@@ -27,20 +37,17 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
   };
 
   const handleUploadFile = async () => {
-    if (!file || !name) {
-      throw new Error("File and name are required");
+    if (!file) {
+      throw new Error("File are required");
     }
 
-    const media = await uploadFile(file, name);
+    const media = await uploadFile(file, getName());
     addMedia(media);
-  };
-
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
   };
 
   const handleFileChange = (file: File) => {
     setFile(file);
+    setName(file.name);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLDivElement>) => {
@@ -68,7 +75,6 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
         <FileUploader
           handleChange={handleFileChange}
           name="file"
-          file={file}
           types={fileTypes}
           maxSize={10}
           required
@@ -78,12 +84,7 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
         {file && (
           <>
-            <Input
-              onChange={handleNameChange}
-              value={name}
-              placeholder="File name"
-              required
-            />
+            <Input ref={nameInputRef} placeholder="File name" required />
 
             <Button disabled={uploading} type={"submit"}>
               Upload

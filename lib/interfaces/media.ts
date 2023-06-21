@@ -1,4 +1,4 @@
-export type FileType = "image" | "sound" | "video";
+export type FileType = "image" | "audio" | "video";
 
 export default interface IMedia {
   _id: string;

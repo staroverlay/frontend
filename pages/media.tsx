@@ -105,7 +105,7 @@ export default function Media() {
 
         <TabPanels mt={"20px"}>
           <MediaFilesTab files={medias} filter={"image"} />
-          <MediaFilesTab files={medias} filter={"sound"} />
+          <MediaFilesTab files={medias} filter={"audio"} />
           <MediaFilesTab files={medias} filter={"video"} />
         </TabPanels>
       </Tabs>

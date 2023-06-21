@@ -8,8 +8,8 @@ import {
   CardFooter,
   useDisclosure,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { FiTrash, FiEdit } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { FiTrash, FiEdit, FiDownload } from "react-icons/fi";
 import useMedia from "../../../hooks/useMedia";
 
 import IMedia from "../../../lib/interfaces/media";
@@ -66,18 +66,38 @@ function DeleteButton({ media }: MediaCardProps) {
   );
 }
 
+function DownloadButton({ media }: MediaCardProps) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <IconButton
+        aria-label="Edit"
+        colorScheme={"cyan"}
+        icon={<FiDownload />}
+      />
+    </>
+  );
+}
+
 function EditButton({ media }: MediaCardProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <>
-      <IconButton aria-label="Edit" colorScheme={"cyan"} icon={<FiEdit />} />
+      <IconButton aria-label="Edit" colorScheme={"green"} icon={<FiEdit />} />
     </>
   );
 }
 
 export default function MediaCard({ media }: MediaCardProps) {
-  const thumbnail = getMediaThumbnail(media);
+  const [thumbnail, setThumbnail] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (media) {
+      getMediaThumbnail(media).then(setThumbnail);
+    }
+  }, [media]);
 
   return (
     <div
@@ -102,6 +122,7 @@ export default function MediaCard({ media }: MediaCardProps) {
         <CardFooter className={styles.footer}>
           <Flex gap={"4px"}>
             <EditButton media={media} />
+            <DownloadButton media={media} />
             <DeleteButton media={media} />
           </Flex>
         </CardFooter>

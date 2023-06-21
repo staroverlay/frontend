@@ -2,12 +2,13 @@
   width: 100%;
 }
 
-.image {
+.image,
+.video {
   border-radius: 8px;
   width: 100%;
 }
 
-.image:hover {
+.image:hover,
+.video:hover {
   cursor: pointer;
-  opacity: 0.6;
 }
