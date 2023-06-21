@@ -8,52 +8,17 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import { BiBell, BiMoon, BiSun, BiCog, BiExit } from "react-icons/bi";
-import { BsTwitch } from "react-icons/bs";
 
 import NavbarButton from "./navbar-button/navbar-button";
 import NavbarDropdown from "./navbar-dropdown/navbar-dropdown";
 
 import useAuth from "../../../hooks/useAuth";
 
-import User from "../../../lib/interfaces/user";
-
-function NavbarAsGuest({ onLogin }: { onLogin: () => Promise<User> }) {
-  return (
-    <Button onClick={onLogin} leftIcon={<BsTwitch />}>
-      Login with Twitch
-    </Button>
-  );
-}
-
-function NavbarAsLogged({ user }: { user: User }) {
-  return (
-    <>
-      <NavbarButton label="Notifications" icon={<BiBell />} />
-
-      <NavbarDropdown
-        content={[
-          {
-            label: "Settings",
-            icon: BiCog,
-            link: "/settings",
-          },
-          {
-            label: "Logout",
-            icon: BiExit,
-            link: "/logout",
-            color: "critical",
-          },
-        ]}
-      >
-        <Avatar name={user.username} size={"sm"} src={user.avatar} />
-      </NavbarDropdown>
-    </>
-  );
-}
-
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { user } = useAuth();
+
+  if (!user) return <></>;
 
   return (
     <Box width={"100%"} height={"65px"} padding={"15px 30px"}>
@@ -61,14 +26,12 @@ export function Navbar() {
         {/* Branding */}
         <Flex>
           <Image
-            src={"/icon@32.png"}
+            src={colorMode === "dark" ? "/icon@32.png" : "/black@64.png"}
             alt={"Logo"}
-            height={"100%"}
+            height={"32px"}
             marginRight={"5px"}
           />
-          <Heading color={"purple.400"} fontSize={"2xl"}>
-            StreamOverlay
-          </Heading>
+          <Heading fontSize={"2xl"}>StarOverlay</Heading>
         </Flex>
 
         {/* Buttons */}
@@ -79,7 +42,25 @@ export function Navbar() {
             onClick={toggleColorMode}
           />
 
-          {user != null && <NavbarAsLogged user={user} />}
+          <NavbarButton label="Notifications" icon={<BiBell />} />
+
+          <NavbarDropdown
+            content={[
+              {
+                label: "Settings",
+                icon: BiCog,
+                link: "/settings",
+              },
+              {
+                label: "Logout",
+                icon: BiExit,
+                link: "/logout",
+                color: "critical",
+              },
+            ]}
+          >
+            <Avatar name={user.username} size={"sm"} src={user.avatar} />
+          </NavbarDropdown>
         </Flex>
       </Flex>
     </Box>

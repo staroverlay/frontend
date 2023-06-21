@@ -1,6 +1,16 @@
-import { Card, CardBody } from "@chakra-ui/react";
-import Image from "next/image";
+import {
+  Card,
+  Box,
+  Flex,
+  CardBody,
+  Tag,
+  Badge,
+  CardFooter,
+} from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
 import IMedia from "../../../lib/interfaces/media";
+
+import styles from "./MediaCard.module.css";
 
 interface MediaCardProps {
   media: IMedia;
@@ -18,19 +28,26 @@ function getMediaThumbnail(media: IMedia) {
 
 export default function MediaCard({ media }: MediaCardProps) {
   const thumbnail = getMediaThumbnail(media);
+  const [hover, setHover] = useState(false);
+  const cardRef = useRef();
+
+  useEffect(() => {}, [cardRef]);
 
   return (
-    <Card width={"300px"}>
+    <Card
+      backgroundImage={`url(${thumbnail})`}
+      className={styles.card}
+      ref={cardRef}
+    >
       <CardBody>
-        {thumbnail && (
-          <Image
-            src={thumbnail}
-            alt={"Thumbnail"}
-            width={"300"}
-            height={"250"}
-          />
-        )}
+        <Flex justifyContent={"space-between"} width={"100%"}>
+          <Tag variant={"solid"}>{media.name}</Tag>
+
+          <Badge>{(media.size / 1024).toFixed(2)} KB</Badge>
+        </Flex>
       </CardBody>
+
+      <CardFooter>adsad</CardFooter>
     </Card>
   );
 }
