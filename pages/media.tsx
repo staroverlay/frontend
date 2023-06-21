@@ -13,8 +13,10 @@ import {
   SimpleGrid,
   Card,
 } from "@chakra-ui/react";
+import { useState } from "react";
 import MediaCard from "../components/cards/media/MediaCard";
 import StatsCard from "../components/cards/stats/StatsCard";
+import MediaPreviewModal from "../components/modals/media-preview-modal/MediaPreviewModal";
 import useMedia from "../hooks/useMedia";
 import IMedia, { FileType } from "../lib/interfaces/media";
 
@@ -65,50 +67,53 @@ function MediaFilesTab({ files, filter }: MediaFilesProps) {
 
 export default function Media() {
   const { medias } = useMedia();
+  const [selectedMedia, setSelectedMedia] = useState<IMedia | null>(null);
 
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
-      <Box>
-        <Heading>Media</Heading>
-        <Text>
-          All media files available for your account widgets can be managed
-          here.
-        </Text>
-      </Box>
+    <>
+      <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+        <Box>
+          <Heading>Media</Heading>
+          <Text>
+            All media files available for your account widgets can be managed
+            here.
+          </Text>
+        </Box>
 
-      <Flex gap={"10px"}>
-        <StatsCard
-          title="Storage Quota"
-          value={medias.length.toString()}
-          maxValue="10"
-          unit="GB"
-          bg="#A770EF"
-        />
-        <StatsCard
-          title="Saved items"
-          value={medias.length.toString()}
-          maxValue="10"
-          bg="#fc67fa"
-        />
-      </Flex>
-
-      <Tabs variant="soft-rounded">
-        <Flex justifyContent={"space-between"}>
-          <TabList gap={"10px"}>
-            <Tab>Image</Tab>
-            <Tab>Sounds</Tab>
-            <Tab>Video</Tab>
-          </TabList>
-
-          <UploadContentButton />
+        <Flex gap={"10px"}>
+          <StatsCard
+            title="Storage Quota"
+            value={medias.length.toString()}
+            maxValue="10"
+            unit="GB"
+            bg="#A770EF"
+          />
+          <StatsCard
+            title="Saved items"
+            value={medias.length.toString()}
+            maxValue="10"
+            bg="#fc67fa"
+          />
         </Flex>
 
-        <TabPanels mt={"20px"}>
-          <MediaFilesTab files={medias} filter={"image"} />
-          <MediaFilesTab files={medias} filter={"audio"} />
-          <MediaFilesTab files={medias} filter={"video"} />
-        </TabPanels>
-      </Tabs>
-    </Flex>
+        <Tabs variant="soft-rounded">
+          <Flex justifyContent={"space-between"}>
+            <TabList gap={"10px"}>
+              <Tab>Image</Tab>
+              <Tab>Sounds</Tab>
+              <Tab>Video</Tab>
+            </TabList>
+
+            <UploadContentButton />
+          </Flex>
+
+          <TabPanels mt={"20px"}>
+            <MediaFilesTab files={medias} filter={"image"} />
+            <MediaFilesTab files={medias} filter={"audio"} />
+            <MediaFilesTab files={medias} filter={"video"} />
+          </TabPanels>
+        </Tabs>
+      </Flex>
+    </>
   );
 }

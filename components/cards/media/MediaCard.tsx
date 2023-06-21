@@ -17,6 +17,7 @@ import { deleteMedia } from "../../../lib/services/media";
 import { getMediaThumbnail } from "../../../lib/utils/media";
 import { toastPending } from "../../../lib/utils/toasts";
 import ConfirmationAlert from "../../alerts/confirmation/ConfirmationAlert";
+import MediaPreviewModal from "../../modals/media-preview-modal/MediaPreviewModal";
 
 import styles from "./MediaCard.module.css";
 
@@ -92,6 +93,7 @@ function EditButton({ media }: MediaCardProps) {
 
 export default function MediaCard({ media }: MediaCardProps) {
   const [thumbnail, setThumbnail] = useState<string | null>(null);
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   useEffect(() => {
     if (media) {
@@ -104,12 +106,14 @@ export default function MediaCard({ media }: MediaCardProps) {
       style={{ backgroundImage: `url(${thumbnail})` }}
       className={styles.container}
     >
+      <MediaPreviewModal isOpen={isOpen} onClose={onClose} media={media} />
+
       <Card
         backgroundColor={"transparent"}
         backgroundImage={`url(${thumbnail})`}
         className={styles.card}
       >
-        <CardBody padding={"10px"}>
+        <CardBody padding={"10px"} onClick={onOpen}>
           <Flex justifyContent={"space-between"} width={"100%"}>
             <Tag variant={"solid"}>{media.name}</Tag>
 

@@ -24,14 +24,18 @@ function AudioFilePreview({ uri }: InternalFilePreviewProps) {
 }
 
 interface FilePreviewProps {
-  file: File;
+  file?: File;
+  media?: IMedia;
 }
 
-export default function FilePreview({ file }: FilePreviewProps) {
-  const isImage = file.type.startsWith("image/");
-  const isVideo = file.type.startsWith("video/");
-  const isAudio = file.type.startsWith("audio/");
-  const url = URL.createObjectURL(file);
+export default function FilePreview({ file, media }: FilePreviewProps) {
+  const isImage = file?.type.startsWith("image/") || media?.type === "image";
+  const isVideo = file?.type.startsWith("video/") || media?.type === "video";
+  const isAudio = file?.type.startsWith("audio/") || media?.type === "audio";
+
+  if (!file && !media) return null;
+
+  const url = file ? URL.createObjectURL(file) : getMediaURL(media as IMedia);
 
   return (
     <Flex className={styles.container}>
