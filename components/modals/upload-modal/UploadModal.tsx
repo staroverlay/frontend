@@ -1,19 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import {
-  Button,
-  Flex,
-  Input,
-  chakra,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-} from "@chakra-ui/react";
+import { Button, Flex, Input, chakra } from "@chakra-ui/react";
 import { FileUploader } from "react-drag-drop-files";
 import BaseModal from "../base-modal/BaseModal";
 import FilePreview from "../../content/file-preview/FilePreview";
 import { uploadFile } from "../../../lib/services/storage";
 import useMedia from "../../../hooks/useMedia";
+import { toastPending } from "../../../lib/utils/toasts";
 
 const fileTypes = ["JPG", "PNG", "GIF", "WEBP", "MP3", "MP4", "WEBM"];
 
@@ -27,12 +19,16 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");
   const [uploading, setUploading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+
+  const handleClose = () => {
+    setFile(null);
+    setName("");
+    onClose();
+  };
 
   const handleUploadFile = async () => {
     if (!file || !name) {
-      setError("Please select a file and a name");
-      return;
+      throw new Error("File and name are required");
     }
 
     const media = await uploadFile(file, name);
@@ -41,44 +37,38 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
-    if (error) setError(null);
   };
 
   const handleFileChange = (file: File) => {
     setFile(file);
-    if (error) setError(null);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLDivElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (uploading) return;
 
     setUploading(true);
-    handleUploadFile()
-      .catch((e) => setError(e.message))
-      .finally(() => setUploading(false));
+    await toastPending(handleUploadFile, {
+      pending: "Uploading file",
+      success: "File uploaded",
+    });
+    setUploading(false);
+    handleClose();
   };
 
   return (
-    <BaseModal title={"Upload a file"} isOpen={isOpen} onClose={onClose}>
+    <BaseModal title={"Upload a file"} isOpen={isOpen} onClose={handleClose}>
       <Flex
         as={chakra.form}
         direction={"column"}
         gap={"10px"}
         onSubmit={handleSubmit}
       >
-        {error && (
-          <Alert status="error">
-            <AlertIcon />
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
         <FileUploader
           handleChange={handleFileChange}
           name="file"
+          file={file}
           types={fileTypes}
           maxSize={10}
           required

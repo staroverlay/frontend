@@ -7,10 +7,11 @@ import { Analytics } from "@vercel/analytics/react";
 import Layout from "../components/layout";
 
 import { AuthProvider } from "../contexts/auth";
-
-import Twitch from "../lib/services/twitch";
 import User from "../lib/interfaces/user";
 import { MediaProvider } from "../contexts/media/media-provider";
+import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 // Theme
 const colors = {
@@ -65,6 +66,7 @@ export default function App({ Component, pageProps }: InitialAppProps) {
           </Head>
 
           <Analytics />
+          <ToastContainer />
 
           {mounted && (
             <Layout>

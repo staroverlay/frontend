@@ -1,0 +1,37 @@
+.container,
+.card {
+  height: 250px;
+  width: 300px;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 200ms ease-in-out;
+}
+
+.container {
+  background-size: cover;
+  filter: brightness(0.8);
+}
+
+.container:hover {
+  filter: brightness(1);
+}
+
+.card {
+  background-size: contain;
+  border-radius: 8px;
+  cursor: pointer;
+  backdrop-filter: blur(15px);
+}
+
+.footer {
+  opacity: 0;
+  transition: all 70ms ease-in-out;
+}
+
+.card:hover > .footer {
+  opacity: 1;
+}
+
+.image {
+  border-radius: 8px;
+}

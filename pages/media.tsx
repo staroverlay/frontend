@@ -13,8 +13,8 @@ import {
   SimpleGrid,
   Card,
 } from "@chakra-ui/react";
-import MediaCard from "../components/cards/media-card/MediaCard";
-import StatsCard from "../components/cards/stats-card/StatsCard";
+import MediaCard from "../components/cards/media/MediaCard";
+import StatsCard from "../components/cards/stats/StatsCard";
 import useMedia from "../hooks/useMedia";
 import IMedia, { FileType } from "../lib/interfaces/media";
 
@@ -49,13 +49,16 @@ function MediaFilesTab({ files, filter }: MediaFilesProps) {
 
   return (
     <TabPanel>
-      <SimpleGrid minChildWidth="120px" spacing="40px">
+      <SimpleGrid
+        gridTemplateColumns={"repeat(auto-fit, 300px)"}
+        spacing="40px"
+      >
         {filteredFiles.map((file) => (
           <MediaCard key={file.resourceId} media={file} />
         ))}
-
-        {isEmpty && <NoMediaTab />}
       </SimpleGrid>
+
+      {isEmpty && <NoMediaTab />}
     </TabPanel>
   );
 }
