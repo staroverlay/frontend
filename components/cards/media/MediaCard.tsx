@@ -14,7 +14,8 @@ import useMedia from "../../../hooks/useMedia";
 
 import IMedia from "../../../lib/interfaces/media";
 import { deleteMedia } from "../../../lib/services/media";
-import { getMediaThumbnail } from "../../../lib/utils/media";
+import { downloadURL } from "../../../lib/utils/files";
+import { getMediaThumbnail, getMediaURL } from "../../../lib/utils/media";
 import { toastPending } from "../../../lib/utils/toasts";
 import ConfirmationAlert from "../../alerts/confirmation/ConfirmationAlert";
 import MediaPreviewModal from "../../modals/media-preview-modal/MediaPreviewModal";
@@ -68,7 +69,11 @@ function DeleteButton({ media }: MediaCardProps) {
 }
 
 function DownloadButton({ media }: MediaCardProps) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const url = getMediaURL(media);
+
+  const handleDownload = () => {
+    downloadURL(url, media.name);
+  };
 
   return (
     <>
@@ -76,6 +81,7 @@ function DownloadButton({ media }: MediaCardProps) {
         aria-label="Edit"
         colorScheme={"cyan"}
         icon={<FiDownload />}
+        onClick={handleDownload}
       />
     </>
   );
