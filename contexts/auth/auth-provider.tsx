@@ -5,6 +5,8 @@ import User from "../../lib/interfaces/user";
 import { setBearerToken } from "../../lib/graphql/client";
 import { getCurrentUser } from "../../lib/services/auth";
 import twitch from "../../lib/services/twitch";
+import { toastError } from "../../lib/utils/toasts";
+import Loading from "../../components/layout/loading";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
@@ -59,19 +61,35 @@ export function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     async function login() {
       const token = localStorage.getItem("token");
-      if (token) {
-        await loginWithToken(token).catch((e) => {
-          logout();
-        });
+
+      if (!token) {
+        return setFetched(true);
       }
-      setFetched(true);
+
+      let error = null;
+      const user = await loginWithToken(token).catch(
+        (e) => (error = e.message)
+      );
+      const logged = user !== null;
+
+      if (logged) {
+        setFetched(true);
+      } else {
+        const isFetchError = error === "Failed to fetch";
+        if (isFetchError) {
+          return toastError(`Failed to fetch, maybe the server is down.`);
+        }
+        logout();
+        setFetched(true);
+        toastError(`Failed to login, retrying...`);
+      }
     }
 
     if (!fetched) {
       login();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetched, token]);
+  }, [fetched]);
 
   return (
     <AuthContext.Provider
@@ -84,7 +102,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
         logout,
       }}
     >
-      {fetched && children}
+      <Loading loaded={fetched} message={"Logging in"}>
+        {children}
+      </Loading>
     </AuthContext.Provider>
   );
 }

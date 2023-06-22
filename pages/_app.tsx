@@ -53,6 +53,8 @@ export default function App({ Component, pageProps }: InitialAppProps) {
 
   return (
     <ChakraProvider theme={theme}>
+      <ToastContainer />
+
       <AuthProvider>
         <MediaProvider>
           <Head>
@@ -66,7 +68,6 @@ export default function App({ Component, pageProps }: InitialAppProps) {
           </Head>
 
           <Analytics />
-          <ToastContainer />
 
           {mounted && (
             <Layout>

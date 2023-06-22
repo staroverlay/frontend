@@ -26,3 +26,9 @@ export function toastPending(
     ...DEFAULT,
   });
 }
+
+export function toastError(message: string) {
+  return toast.error(message, {
+    ...DEFAULT,
+  });
+}
