@@ -4,8 +4,10 @@ const getCurrentUserQuery = query`
     getCurrentUser {
         getCurrentUser {
             id
-            username
             avatar
+            isCreator
+            email
+            username
         }
     }
 `;

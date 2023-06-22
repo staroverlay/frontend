@@ -11,4 +11,9 @@ export default interface ITemplate {
   service: ServiceType;
   html: string;
   fields?: ITemplateField[];
+  visibility: "public" | "unlisted" | "private";
 }
+
+export type ITemplateRaw = ITemplate & {
+  fields?: string;
+};

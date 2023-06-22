@@ -10,10 +10,12 @@ import {
   BsWindowSidebar,
   BsImage,
   BsShield,
+  BsPaintBucket,
 } from "react-icons/bs";
 import { BiBot } from "react-icons/bi";
 import { IconType } from "react-icons";
 import Link from "next/link";
+import useAuth from "../../../hooks/useAuth";
 
 interface SidebarItemProps {
   icon: IconType;
@@ -54,19 +56,21 @@ function SidebarItem({ icon: IconElement, to, label }: SidebarItemProps) {
       fontSize={"14px"}
       padding={"5px 15px"}
     >
-      <Flex alignItems={"center"}>
+      <Flex alignItems={"center"} gap={"6px"}>
         {IconElement != null && (
-          <Icon fontSize={"20px"}>
+          <Box fontSize={"16px"}>
             <IconElement />
-          </Icon>
+          </Box>
         )}
-        <Text ml={IconElement != null ? "5px" : "0px"}>{label}</Text>
+        <Text>{label}</Text>
       </Flex>
     </Text>
   );
 }
 
 export function Sidebar() {
+  const { user } = useAuth();
+
   return (
     <Box
       borderRadius={"7px"}
@@ -83,6 +87,17 @@ export function Sidebar() {
           <SidebarItem to="/" icon={BsShop} label="Marketplace" />
         */}
       </SidebarSection>
+
+      {user?.isCreator && (
+        <SidebarSection>
+          <SidebarHeader>Creator</SidebarHeader>
+          <SidebarItem
+            to="/creator/templates"
+            icon={BsPalette}
+            label="My templates"
+          />
+        </SidebarSection>
+      )}
 
       <SidebarSection>
         <SidebarHeader>Streaming</SidebarHeader>
