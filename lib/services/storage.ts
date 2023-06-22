@@ -4,7 +4,7 @@ import CompleteMediaMutation from "../graphql/mutations/completeMediaMutation";
 import CreateMediaMutation from "../graphql/mutations/createMediaMutation";
 
 import IMedia from "../interfaces/media";
-import IMediaPart from "../interfaces/mediapart";
+import IMediaPart from "../interfaces/media-part";
 import { readFileAsArrayBuffer } from "../utils/files";
 
 export async function createMedia(
