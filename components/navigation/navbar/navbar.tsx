@@ -13,6 +13,7 @@ import NavbarButton from "./navbar-button/navbar-button";
 import NavbarDropdown from "./navbar-dropdown/navbar-dropdown";
 
 import useAuth from "../../../hooks/useAuth";
+import Link from "next/link";
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -24,15 +25,17 @@ export function Navbar() {
     <Box width={"100%"} height={"65px"} padding={"15px 30px"}>
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         {/* Branding */}
-        <Flex>
-          <Image
-            src={colorMode === "dark" ? "/icon@32.png" : "/black@64.png"}
-            alt={"Logo"}
-            height={"32px"}
-            marginRight={"5px"}
-          />
-          <Heading fontSize={"2xl"}>StarOverlay</Heading>
-        </Flex>
+        <Link href="/">
+          <Flex alignItems={"center"}>
+            <Image
+              src={colorMode === "dark" ? "/icon@32.png" : "/black@64.png"}
+              alt={"Logo"}
+              height={"32px"}
+              marginRight={"5px"}
+            />
+            <Heading fontSize={"2xl"}>StarOverlay</Heading>
+          </Flex>
+        </Link>
 
         {/* Buttons */}
         <Flex alignItems={"center"} gap={"8px"}>

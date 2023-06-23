@@ -11,6 +11,7 @@ export default function Error404() {
       width={"100%"}
       height={"100vh"}
       position={"absolute"}
+      zIndex={"-1"}
       top={"0"}
       left={"0"}
     >

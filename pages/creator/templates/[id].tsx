@@ -18,7 +18,7 @@ import useTemplates from "../../../hooks/useTemplates";
 import Error404 from "../../404";
 import { toastPending } from "@/lib/utils/toasts";
 import { hasObjectChanged } from "@/lib/utils/object";
-import ITemplate from "@/lib/interfaces/template";
+import CodeEditorTab from "@/components/editor/template-editor/CodeEditorTab";
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
@@ -118,6 +118,8 @@ export default function CreatorTemplatePage() {
             visibility={visibility}
             setVisibility={setVisibility}
           />
+
+          <CodeEditorTab code={html || ""} setCode={setHTML} />
         </TabPanels>
       </Tabs>
     </Flex>

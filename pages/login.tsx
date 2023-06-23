@@ -13,8 +13,7 @@ export default function Login() {
 
   useEffect(() => {
     async function login(code: string) {
-      const token = await loginWithCode(code);
-      const user = await loginWithToken(token);
+      const user = await loginWithCode(code);
       if (!user) {
         setError("Unknown error");
       }

@@ -41,10 +41,12 @@ export function TemplatesProvider({ children }: PropsWithChildren) {
       setFetched(true);
     };
 
-    if (user) {
+    if (user && !fetched) {
       fetchTemplates();
+    } else if (!fetched) {
+      setFetched(true);
     }
-  }, [user]);
+  }, [user, fetched]);
 
   return (
     <TemplatesContext.Provider

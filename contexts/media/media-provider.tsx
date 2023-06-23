@@ -1,3 +1,4 @@
+import useAuth from "@/hooks/useAuth";
 import { useDisclosure } from "@chakra-ui/react";
 import { PropsWithChildren, useEffect, useState } from "react";
 import Loading from "../../components/layout/loading";
@@ -8,15 +9,10 @@ import { getAllMedia } from "../../lib/services/media";
 import { MediaContext } from "./media-context";
 
 export function MediaProvider({ children }: PropsWithChildren) {
+  const { user } = useAuth();
   const [medias, setMedias] = useState<IMedia[]>([]);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [fetched, setFetched] = useState(false);
-
-  const fetchMedia = async () => {
-    const medias = await getAllMedia();
-    setMedias(medias);
-    setFetched(true);
-  };
 
   const removeMedia = (media: IMedia | string) => {
     const id = typeof media === "string" ? media : media._id;
@@ -36,10 +32,18 @@ export function MediaProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
-    if (!fetched) {
+    const fetchMedia = async () => {
+      const medias = await getAllMedia();
+      setMedias(medias);
+      setFetched(true);
+    };
+
+    if (user && !fetched) {
       fetchMedia();
+    } else if (!fetched) {
+      setFetched(true);
     }
-  }, [fetched]);
+  }, [user, fetched]);
 
   return (
     <MediaContext.Provider
