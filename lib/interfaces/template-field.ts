@@ -15,6 +15,7 @@ export type FieldStringSettings = {
   minLength?: number;
   maxLength?: number;
   validate?: "email" | "number" | "non-spaces";
+  default?: string;
 };
 
 export type FieldNumberSettings = {
@@ -23,10 +24,12 @@ export type FieldNumberSettings = {
   rangeSteps?: number;
   display?: "input" | "range";
   type?: "float" | "integer";
+  default?: number;
 };
 
 export type FieldBooleanSettings = {
   display?: "checkbox" | "slider";
+  default?: boolean;
 };
 
 export type FieldMapSettings = {
@@ -52,6 +55,7 @@ export type FieldEnumSettingsItem = {
 export type FieldEnumSettings = {
   options: FieldEnumSettingsItem[];
   display?: "select" | "radio";
+  default?: string;
 };
 
 export default interface ITemplateField {
@@ -61,7 +65,6 @@ export default interface ITemplateField {
   category?: string;
   type: TemplateFieldType;
   required?: boolean;
-  default?: object;
   string?: FieldStringSettings;
   number?: FieldNumberSettings;
   boolean?: FieldBooleanSettings;

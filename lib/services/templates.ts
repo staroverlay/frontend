@@ -1,13 +1,22 @@
 import client from "../graphql/client";
+import CreateTemplateMutation from "../graphql/mutations/createTemplateMutation";
+import UpdateTemplateMutation from "../graphql/mutations/updateTemplateMutation";
 import GetMyTemplatesQuery from "../graphql/queries/getMyTemplatesQuery";
 import GetTemplatesByAuthorQuery from "../graphql/queries/getTemplatesByAuthorQuery";
 import ITemplate, { ITemplateRaw } from "../interfaces/template";
+import { cleanEquals } from "../utils/object";
+import TemplateUpdate from "./dtos/template-update";
+
+function fixTemplate(raw: ITemplateRaw) {
+  const template: ITemplate = {
+    ...raw,
+    fields: raw.fields ? JSON.parse(raw.fields) : null,
+  };
+  return template;
+}
 
 function fixTemplates(raws: ITemplateRaw[]) {
-  const templates: ITemplate[] = raws.map((template: ITemplateRaw) => ({
-    ...template,
-    fields: template.fields ? JSON.parse(template.fields) : null,
-  }));
+  const templates: ITemplate[] = raws.map((raw) => fixTemplate(raw));
   return templates;
 }
 
@@ -30,4 +39,22 @@ export async function getSharedTemplates() {
   } else {
     return [];
   }
+}
+
+export async function createTemplate(name: string) {
+  const payload = { name, visibility: "private" };
+  const raw = await client.fetch(CreateTemplateMutation, { payload });
+  return fixTemplate(raw as ITemplateRaw);
+}
+
+export async function updateTemplate(
+  template: ITemplate,
+  update: TemplateUpdate
+) {
+  const payload = cleanEquals(template, update);
+  const raw = await client.fetch(UpdateTemplateMutation, {
+    id: template._id,
+    payload,
+  });
+  return fixTemplate(raw as ITemplateRaw);
 }

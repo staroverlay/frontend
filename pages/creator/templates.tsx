@@ -6,15 +6,59 @@ import {
   Text,
   Button,
   SimpleGrid,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import InputAlert from "../../components/alerts/input/InputAlert";
 import StatsCard from "../../components/cards/stats/StatsCard";
 import TemplateCard from "../../components/cards/template/TemplateCard";
 import useTemplates from "../../hooks/useTemplates";
 import ITemplate from "../../lib/interfaces/template";
+import { createTemplate } from "../../lib/services/templates";
+import { toastPending } from "../../lib/utils/toasts";
 
 function CreateTemplateButton() {
-  return <Button>Create template</Button>;
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { addTemplate } = useTemplates();
+  const [isCreating, setIsCreating] = useState(false);
+
+  const handleCreateTemplate = async (input: string) => {
+    const template = await createTemplate(input);
+    if (!template) throw new Error("Template not created");
+    addTemplate(template);
+    onClose();
+  };
+
+  const handleCreate = async (input: string) => {
+    setIsCreating(true);
+    await toastPending(handleCreateTemplate(input), {
+      pending: "Creating template...",
+      success: "Template created!",
+    });
+    setIsCreating(false);
+  };
+
+  return (
+    <>
+      <InputAlert
+        isOpen={isOpen}
+        isLoading={isCreating}
+        onClose={onClose}
+        onAccept={handleCreate}
+        title="Create template"
+        placeholder="Template name"
+      >
+        Choose a name for your template. You can change it later.
+      </InputAlert>
+      <Button
+        onClick={onOpen}
+        isLoading={isOpen}
+        disabled={isOpen || isCreating}
+      >
+        Create template
+      </Button>
+    </>
+  );
 }
 
 function NoTemplates({ message }: { message?: string }) {
@@ -53,8 +97,6 @@ function TemplatesGrid({ templates }: TemplateGridProps) {
         />
       </Flex>
 
-      {templatesQuery.length == 0 && <NoTemplates />}
-
       <SimpleGrid
         gridTemplateColumns={"repeat(auto-fit, 300px)"}
         spacing="40px"
@@ -84,46 +126,31 @@ export default function Templates() {
   ).length;
 
   return (
-    <>
-      <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
-        <Box>
-          <Heading>My templates</Heading>
-          <Text>
-            Create templates, use them for your streams, give them as a
-            commission or sell them on the marketplace.
-          </Text>
-        </Box>
+    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+      <Box>
+        <Heading>My templates</Heading>
+        <Text>
+          Create templates, use them for your streams, give them as a commission
+          or sell them on the marketplace.
+        </Text>
+      </Box>
 
-        <Flex gap={"10px"}>
-          <StatsCard
-            title="Private"
-            value={privates.toString()}
-            maxValue="100"
-            bg="#FC5C7D"
-          />
-          <StatsCard
-            title="Published"
-            value={publics.toString()}
-            maxValue="10"
-            bg="#6A82FB"
-          />
-        </Flex>
-
-        <TemplatesGrid
-          templates={[
-            {
-              _id: "0",
-              author: "Sammwy",
-              html: "<div>Hello World</div>",
-              name: "My first template",
-              scopes: ["platform:storage"],
-              service: "twitch",
-              description: "This is just an example template",
-              visibility: "private",
-            },
-          ]}
+      <Flex gap={"10px"}>
+        <StatsCard
+          title="Private"
+          value={privates.toString()}
+          maxValue="100"
+          bg="#FC5C7D"
+        />
+        <StatsCard
+          title="Published"
+          value={publics.toString()}
+          maxValue="10"
+          bg="#6A82FB"
         />
       </Flex>
-    </>
+
+      <TemplatesGrid templates={userTemplates} />
+    </Flex>
   );
 }

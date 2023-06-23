@@ -10,7 +10,6 @@ import {
   Text,
   Badge,
   IconButton,
-  Link,
   Button,
   Menu,
   MenuButton,
@@ -19,6 +18,7 @@ import {
   MenuDivider,
   useDisclosure,
 } from "@chakra-ui/react";
+import Link from "next/link";
 import React, { useState } from "react";
 import {
   FaEye,
@@ -37,7 +37,7 @@ import styles from "./TemplateCard.module.css";
 
 interface TemplateCardProps {
   template: ITemplate;
-  context?: "explorer" | "creator";
+  context?: "explorer" | "creator" | "editor";
 }
 
 const icons = {
@@ -62,7 +62,9 @@ export default function TemplateCard(props: TemplateCardProps) {
 
   const { template } = props;
   const context = props.context || "explorer";
+  const isEditor = props.context == "editor";
   const isExplorer = context === "explorer";
+  const isEditorOrExplorer = isEditor || isExplorer;
 
   const VisibilityBadge = () => (
     <Badge colorScheme={colors[template.visibility]}>
@@ -84,8 +86,12 @@ export default function TemplateCard(props: TemplateCardProps) {
     <Menu>
       <MenuButton as={IconButton} icon={<FaEllipsisV />} variant={"ghost"} />
       <MenuList>
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>View product page</MenuItem>
+        <Link href={`/creator/templates/${template._id}`}>
+          <MenuItem>Edit</MenuItem>
+        </Link>
+        <Link href={`/marketplace/templates/${template._id}`}>
+          <MenuItem>View store page</MenuItem>
+        </Link>
         <MenuItem>Clone</MenuItem>
         <MenuDivider />
         <MenuItem color={"cyan.400"}>Copy link</MenuItem>
@@ -129,14 +135,14 @@ export default function TemplateCard(props: TemplateCardProps) {
       <CardBody>
         <Stack spacing="2">
           <Flex className={styles.flex} justifyContent={"space-between"}>
-            <Heading size="md">{template.name}</Heading>
-            {!isExplorer && <OptionsButton />}
+            <Heading size="md">{template.name || "Unnamed Template"}</Heading>
+            {!isEditorOrExplorer && <OptionsButton />}
           </Flex>
 
           {!isExplorer && (
             <Flex className={styles.flex}>
               <VisibilityBadge />
-              <PriceBadge />
+              {!isEditor && <PriceBadge />}
             </Flex>
           )}
 
@@ -149,6 +155,8 @@ export default function TemplateCard(props: TemplateCardProps) {
               </Link>
             )}
 
+            {isEditor && <Text>By you ({template.author})</Text>}
+
             <Flex className={styles.flex} gap={"10px"}>
               <Flex className={styles.flex}>
                 <FaEye /> 0
@@ -159,7 +167,7 @@ export default function TemplateCard(props: TemplateCardProps) {
             </Flex>
           </Flex>
 
-          {isExplorer && (
+          {isEditorOrExplorer && (
             <Flex className={styles.flex}>
               <Button size={"xs"} colorScheme={"pink"}>
                 Use

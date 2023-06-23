@@ -22,9 +22,11 @@ export function toastPending(
     };
   }
 
-  return toast.promise(promise, messages, {
-    ...DEFAULT,
-  });
+  return toast
+    .promise(promise, messages, {
+      ...DEFAULT,
+    })
+    .catch(() => {});
 }
 
 export function toastError(message: string) {
