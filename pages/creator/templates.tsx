@@ -1,17 +1,27 @@
-import { Box, Flex, Heading, Text, Button, SimpleGrid } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Input,
+  Text,
+  Button,
+  SimpleGrid,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import StatsCard from "../../components/cards/stats/StatsCard";
 import TemplateCard from "../../components/cards/template/TemplateCard";
+import useTemplates from "../../hooks/useTemplates";
 import ITemplate from "../../lib/interfaces/template";
 
 function CreateTemplateButton() {
   return <Button>Create template</Button>;
 }
 
-function NoTemplates() {
+function NoTemplates({ message }: { message?: string }) {
   return (
     <Flex alignContent={"center"} justifyContent={"center"}>
       <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-        <Heading>No templates</Heading>
+        <Heading>{message ? message : "No templates"}</Heading>
         <CreateTemplateButton />
       </Flex>
     </Flex>
@@ -23,24 +33,56 @@ interface TemplateGridProps {
 }
 
 function TemplatesGrid({ templates }: TemplateGridProps) {
-  if (templates.length == 0) {
-    return <NoTemplates />;
-  }
+  const [search, setSearch] = useState("");
+  const templatesQuery = templates
+    .filter((template) =>
+      template.name.toLowerCase().includes(search.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  if (templates.length == 0) return <NoTemplates />;
 
   return (
-    <SimpleGrid gridTemplateColumns={"repeat(auto-fit, 300px)"} spacing="40px">
-      {templates.map((template) => (
-        <TemplateCard
-          key={template._id}
-          template={template}
-          context={"creator"}
+    <Flex direction={"column"} gap={"10px"}>
+      <Flex gap={"5px"}>
+        <CreateTemplateButton />
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          width={"initial"}
         />
-      ))}
-    </SimpleGrid>
+      </Flex>
+
+      {templatesQuery.length == 0 && <NoTemplates />}
+
+      <SimpleGrid
+        gridTemplateColumns={"repeat(auto-fit, 300px)"}
+        spacing="40px"
+      >
+        {templatesQuery.map((template) => (
+          <TemplateCard
+            key={template._id}
+            template={template}
+            context={"creator"}
+          />
+        ))}
+      </SimpleGrid>
+    </Flex>
   );
 }
 
 export default function Templates() {
+  const { userTemplates } = useTemplates();
+
+  const publics = userTemplates.filter(
+    (template) => template.visibility == "public"
+  ).length;
+
+  const privates = userTemplates.filter(
+    (template) =>
+      template.visibility == "private" || template.visibility == "unlisted"
+  ).length;
+
   return (
     <>
       <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
@@ -53,8 +95,18 @@ export default function Templates() {
         </Box>
 
         <Flex gap={"10px"}>
-          <StatsCard title="Private" value="0" maxValue="100" bg="#FC5C7D" />
-          <StatsCard title="Published" value="0" maxValue="10" bg="#6A82FB" />
+          <StatsCard
+            title="Private"
+            value={privates.toString()}
+            maxValue="100"
+            bg="#FC5C7D"
+          />
+          <StatsCard
+            title="Published"
+            value={publics.toString()}
+            maxValue="10"
+            bg="#6A82FB"
+          />
         </Flex>
 
         <TemplatesGrid

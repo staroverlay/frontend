@@ -96,6 +96,10 @@ export default function TemplateCard(props: TemplateCardProps) {
     </Menu>
   );
 
+  async function handleDelete() {
+    onCloseDelete();
+  }
+
   const DeleteModal = () => {
     return (
       <ConfirmationAlert
@@ -117,10 +121,6 @@ export default function TemplateCard(props: TemplateCardProps) {
       </ConfirmationAlert>
     );
   };
-
-  async function handleDelete() {
-    onCloseDelete();
-  }
 
   return (
     <Card className={styles.card}>

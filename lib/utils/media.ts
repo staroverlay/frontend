@@ -36,7 +36,6 @@ export function getVideoCover(
       }, 200);
       // extract video thumbnail once seeking is complete
       videoPlayer.addEventListener("seeked", () => {
-        console.log("video is now paused at %ss.", seekTo);
         // define a canvas to have the same dimension as the video
         const canvas = document.createElement("canvas");
         canvas.width = videoPlayer.videoWidth;
@@ -92,11 +91,11 @@ export async function getAudioThumbnail(media: IMedia): Promise<string | null> {
   });
 
   wavesurfer.load(url);
+
   return new Promise((resolve) => {
     wavesurfer.on("ready", () => {
       setTimeout(async () => {
         const uri = await wavesurfer.exportImage("image/jpeg", 0.75, "dataURL");
-        console.log(uri);
         container.remove();
         resolve(uri as string);
       }, 800);

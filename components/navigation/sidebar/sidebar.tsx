@@ -37,9 +37,7 @@ function SidebarHeader({ children }: PropsWithChildren) {
       fontWeight={"bold"}
       padding={"5px 15px"}
     >
-      <Flex>
-        <Text>{children}</Text>
-      </Flex>
+      {children}
     </Text>
   );
 }
@@ -62,7 +60,7 @@ function SidebarItem({ icon: IconElement, to, label }: SidebarItemProps) {
             <IconElement />
           </Box>
         )}
-        <Text>{label}</Text>
+        {label}
       </Flex>
     </Text>
   );

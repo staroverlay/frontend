@@ -7,6 +7,7 @@ import {
   Badge,
   CardFooter,
   useDisclosure,
+  Skeleton,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { FiTrash, FiEdit, FiDownload } from "react-icons/fi";
@@ -106,6 +107,10 @@ export default function MediaCard({ media }: MediaCardProps) {
       getMediaThumbnail(media).then(setThumbnail);
     }
   }, [media]);
+
+  if (!thumbnail) {
+    return <Skeleton />;
+  }
 
   return (
     <div
