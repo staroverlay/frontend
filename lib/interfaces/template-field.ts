@@ -1,3 +1,60 @@
+export const TemplateFieldTypes = [
+  {
+    id: "string",
+    label: "Text (String)",
+  },
+
+  {
+    id: "number",
+    label: "Number",
+  },
+
+  {
+    id: "boolean",
+    label: "Toggle (Boolean)",
+  },
+
+  {
+    id: "map",
+    label: "Dictionary (Map)",
+  },
+
+  {
+    id: "array",
+    label: "List (Array)",
+  },
+
+  {
+    id: "enum",
+    label: "Select (Enum)",
+  },
+
+  {
+    id: "platform:media",
+    label: "Media",
+  },
+
+  {
+    id: "platform:media.audio",
+    label: "Media (Only audio)",
+  },
+
+  {
+    id: "platform:media.image",
+    label: "Media (Only image)",
+  },
+
+  {
+    id: "platform:media.video",
+    label: "Media (Only video)",
+  },
+
+  {
+    id: "twitch:reward",
+    label: "Twitch Reward",
+  },
+];
+
 export type TemplateFieldType =
   | "string"
   | "number"

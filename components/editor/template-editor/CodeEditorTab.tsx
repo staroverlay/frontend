@@ -1,9 +1,8 @@
 import { Flex, TabPanel } from "@chakra-ui/react";
 import Editor from "react-simple-code-editor";
-import { highlight, languages } from "prismjs";
+import a, { highlight, languages } from "prismjs";
 
 import "prismjs/themes/prism.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
 
 interface CodeEditorTabProps {
   code: string;
@@ -17,7 +16,33 @@ export default function CodeEditorTab({ code, setCode }: CodeEditorTabProps) {
         <Editor
           value={code}
           onValueChange={setCode}
-          highlight={(code) => highlight(code, languages.html, "html")}
+          highlight={(code) =>
+            highlight(
+              code,
+              {
+                ...languages.extend("html", {
+                  script: {
+                    pattern: /<script[\w\W]*?>[\w\W]*?<\/script>/g,
+                    inside: {
+                      tag: {
+                        pattern: /<script[\w\W]*?>|<\/script>/g,
+                      },
+                      rest: languages.extend("javascript", {
+                        operator: {
+                          pattern:
+                            /==================================================/g,
+                          alias: "punctuation",
+                        },
+                      }),
+                    },
+
+                    alias: "language-javascript",
+                  },
+                }),
+              },
+              "html"
+            )
+          }
           padding={10}
           tabSize={2}
           insertSpaces={true}

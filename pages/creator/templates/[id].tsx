@@ -19,6 +19,7 @@ import Error404 from "../../404";
 import { toastPending } from "@/lib/utils/toasts";
 import { hasObjectChanged } from "@/lib/utils/object";
 import CodeEditorTab from "@/components/editor/template-editor/CodeEditorTab";
+import FieldsTab from "@/components/editor/template-editor/FieldsTab";
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
@@ -120,6 +121,7 @@ export default function CreatorTemplatePage() {
           />
 
           <CodeEditorTab code={html || ""} setCode={setHTML} />
+          <FieldsTab fields={fields} setFields={setFields} />
         </TabPanels>
       </Tabs>
     </Flex>
