@@ -71,7 +71,6 @@ export type TemplateFieldType =
 export type FieldStringSettings = {
   minLength?: number;
   maxLength?: number;
-  validate?: "email" | "number" | "non-spaces";
   default?: string;
 };
 
@@ -115,17 +114,20 @@ export type FieldEnumSettings = {
   default?: string;
 };
 
-export default interface ITemplateField {
-  id: string;
-  label?: string;
-  description?: string;
-  category?: string;
-  type: TemplateFieldType;
-  required?: boolean;
+export interface ITemplateAdvancedField {
   string?: FieldStringSettings;
   number?: FieldNumberSettings;
   boolean?: FieldBooleanSettings;
   map?: FieldMapSettings;
   array?: FieldArraySettings;
   enum?: FieldEnumSettings;
+}
+
+export default interface ITemplateField extends ITemplateAdvancedField {
+  id: string;
+  label?: string;
+  description?: string;
+  category?: string;
+  type: TemplateFieldType;
+  required?: boolean;
 }
