@@ -50,12 +50,12 @@ export default function OverviewTab() {
   return (
     <TabPanel>
       <form onSubmit={handleSubmit}>
-        <Flex flexDir={"column"} gap={"10px"}>
+        <Flex flexDir={"column"} gap={"20px"}>
           <FormControl>
-            <FormLabel fontSize={"sm"}>Username</FormLabel>
+            <FormLabel fontSize={"md"}>Username</FormLabel>
             <Input
               placeholder={"Username"}
-              size={"sm"}
+              size={"md"}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -64,13 +64,13 @@ export default function OverviewTab() {
 
           <FormControl>
             <Flex alignItems={"center"} gap={"7px"} mb={"5px"}>
-              <FormLabel fontSize="sm" m={"0"}>
+              <FormLabel fontSize="md" m={"0"}>
                 Email
               </FormLabel>
 
               <Button
                 variant={"outline"}
-                size={"xs"}
+                size={"sm"}
                 fontSize={"12px"}
                 onClick={() => {
                   if (displayEmail) {
@@ -85,7 +85,7 @@ export default function OverviewTab() {
 
             <Input
               placeholder={"john@doe.com"}
-              size={"sm"}
+              size={"md"}
               type={"email"}
               value={displayEmail ? email : hideEmail(email)}
               onChange={(e) => setEmail(e.target.value)}

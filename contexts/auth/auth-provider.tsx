@@ -11,6 +11,7 @@ import { invalidateSession } from "@/lib/services/session-service";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   const [fetched, setFetched] = useState(false);
@@ -20,7 +21,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
   }
 
   async function logout(invalidate = false) {
+    if (invalidate) {
+      await invalidateSession().catch(() => null);
+    }
+
     localStorage.removeItem("token");
+    localStorage.removeItem("ssid");
 
     if (user != null) {
       setUser(null);
@@ -30,29 +36,36 @@ export function AuthProvider({ children }: PropsWithChildren) {
       setToken(null);
     }
 
-    if (invalidate) {
-      await invalidateSession().catch(() => null);
+    if (sessionId != null) {
+      setSessionId(null);
     }
-    
+
     removeBearerToken();
   }
 
-  async function login({session, user}: ISessionAndUser): Promise<User> {
+  function login({ session, user }: ISessionAndUser): User {
     const token = session.token;
 
-    setToken(token);
     setBearerToken(token);
+    setToken(token);
     setUser(user);
-    localStorage.setItem("token",token);
+    setSessionId(session._id);
+
+    localStorage.setItem("token", token);
+    localStorage.setItem("ssid", session._id);
+
     return user;
   }
 
   async function loginWithPreviousToken(): Promise<User | null> {
     const token = localStorage.getItem("token");
-    if (!token) return null;
+    const ssid = localStorage.getItem("ssid");
+
+    if (!token || !ssid) return null;
 
     setToken(token);
     setBearerToken(token);
+    setSessionId(ssid);
 
     const user = await getCurrentUser();
     return user;
@@ -64,21 +77,24 @@ export function AuthProvider({ children }: PropsWithChildren) {
       if (user) setUser(user);
     }
 
-    handle().catch((e) => {
-      const error = e.message;
+    handle()
+      .catch((e) => {
+        const error = e.message;
 
-      if (error == "INVALID_SESSION") {
-        logout();
-      }
+        if (error == "INVALID_SESSION") {
+          logout();
+        }
 
-      toastError(e.message)
-    }).finally(() => setFetched(true));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+        toastError(e.message);
+      })
+      .finally(() => setFetched(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
+        sessionId,
         user,
         setUser,
         isLogged,

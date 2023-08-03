@@ -4,6 +4,7 @@ const CreateSessionMutation = mutation`
     createSession($payload: CreateSessionDTO!) {
         createSession(payload: $payload) {
             session {
+                _id
                 token
             }
             user {

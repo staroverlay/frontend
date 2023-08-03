@@ -13,6 +13,7 @@ import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
 import { TemplatesProvider } from "../contexts/templates";
+import { IntegrationsProvider } from "@/contexts/integrations";
 
 // Theme
 const colors = {
@@ -65,15 +66,17 @@ export default function App({ Component, pageProps }: InitialAppProps) {
       <ToastContainer />
 
       <AuthProvider>
-        <MediaProvider>
-          <TemplatesProvider>
-            {mounted && (
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            )}
-          </TemplatesProvider>
-        </MediaProvider>
+        <IntegrationsProvider>
+          <MediaProvider>
+            <TemplatesProvider>
+              {mounted && (
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              )}
+            </TemplatesProvider>
+          </MediaProvider>
+        </IntegrationsProvider>
       </AuthProvider>
     </ChakraProvider>
   );

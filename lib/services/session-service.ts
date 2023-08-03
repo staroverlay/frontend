@@ -1,7 +1,8 @@
 import client from "../graphql/client";
 import CreateSessionMutation from "../graphql/mutations/createSessionMutation";
-import CreateSessionWithTwitchMutation from "../graphql/mutations/createSessionTwithTwitchMutation";
+import CreateSessionWithTwitchMutation from "../graphql/mutations/createSessionWithTwitchMutation";
 import InvalidateAllSessionsMutation from "../graphql/mutations/invalidateAllSessionsMutation";
+import InvalidateSessionByIDMutation from "../graphql/mutations/invalidateSessionByIDMutation";
 import InvalidateSessionMutation from "../graphql/mutations/invalidateSessionMutation";
 import GetSessionsQuery from "../graphql/queries/getSessionsQuery";
 
@@ -20,6 +21,11 @@ export async function invalidateSession(): Promise<Boolean> {
 
 export async function invalidateAllSessions(): Promise<Boolean> {
   const success = await client.fetch(InvalidateAllSessionsMutation);
+  return success as Boolean;
+}
+
+export async function invalidateSessionByID(id: string): Promise<Boolean> {
+  const success = await client.fetch(InvalidateSessionByIDMutation, { id });
   return success as Boolean;
 }
 

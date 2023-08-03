@@ -10,3 +10,7 @@ export function hideEmail(email: string): string {
 
   return `${firstPart}***@${secondPart}***.${thirdPart}`;
 }
+
+export function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

@@ -38,7 +38,7 @@ export function MediaProvider({ children }: PropsWithChildren) {
       setFetched(true);
     };
 
-    if (user && !fetched) {
+    if (user) {
       fetchMedia();
     } else if (!fetched) {
       setFetched(true);
