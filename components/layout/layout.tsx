@@ -1,9 +1,11 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import useAuth from "../../hooks/useAuth";
 
+import useAuth from "../../hooks/useAuth";
 import Navbar from "../navigation/navbar";
 import Sidebar from "../navigation/sidebar";
+
+import styles from "./layout.module.css";
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -12,7 +14,7 @@ interface LayoutProps {
 function AuthenticatedLayout({ children }: LayoutProps) {
   const { pathname, push } = useRouter();
 
-  if (pathname == "/login") {
+  if (pathname.startsWith("/auth")) {
     push("/");
     return <></>;
   }
@@ -32,8 +34,8 @@ function GuestLayout({ children }: LayoutProps) {
   const { redirectToLogin } = useAuth();
   const { pathname } = useRouter();
 
-  if (pathname == "/login") {
-    return children;
+  if (pathname.startsWith("/auth") || pathname == "/login") {
+    return <Box className={styles["guess-bg"]}>{children}</Box>;
   }
 
   redirectToLogin();
