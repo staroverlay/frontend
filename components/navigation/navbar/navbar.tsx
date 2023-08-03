@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) return <></>;
 
@@ -57,7 +57,7 @@ export function Navbar() {
               {
                 label: "Logout",
                 icon: BiExit,
-                link: "/logout",
+                onClick: () => logout(true),
                 color: "critical",
               },
             ]}

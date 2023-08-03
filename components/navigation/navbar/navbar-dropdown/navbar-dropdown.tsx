@@ -18,6 +18,7 @@ interface NavbarDropdownItem {
   icon?: IconType;
   label: string;
   link?: string;
+  onClick?: () => unknown;
   color?: "normal" | "critical";
 }
 
@@ -44,24 +45,26 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
         display={"block"}
         bg={colorMode === "dark" ? "blackAlpha.500" : "blackAlpha.100"}
       >
-        {content.map(({ link, icon: IconElement, label, color }, key) => (
-          <MenuItem
-            key={key}
-            bg={"transparent"}
-            color={(color || "normal") === "normal" ? "inherit" : "red.500"}
-          >
-            <Link href={link || "#"}>
-              <Text>
-                {IconElement && (
-                  <Icon fontSize={"20px"} mr={"5px"}>
-                    <IconElement />
-                  </Icon>
-                )}
-                {label}
-              </Text>
-            </Link>
-          </MenuItem>
-        ))}
+        {content.map(
+          ({ link, icon: IconElement, label, color, onClick }, key) => (
+            <MenuItem
+              key={key}
+              bg={"transparent"}
+              color={(color || "normal") === "normal" ? "inherit" : "red.500"}
+            >
+              <Link href={link || "#"} onClick={onClick}>
+                <Text>
+                  {IconElement && (
+                    <Icon fontSize={"20px"} mr={"5px"}>
+                      <IconElement />
+                    </Icon>
+                  )}
+                  {label}
+                </Text>
+              </Link>
+            </MenuItem>
+          )
+        )}
       </MenuList>
     </Menu>
   );
