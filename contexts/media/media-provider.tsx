@@ -5,7 +5,7 @@ import Loading from "../../components/layout/loading";
 import UploadModal from "../../components/modals/upload-modal/UploadModal";
 
 import IMedia from "../../lib/interfaces/media";
-import { getAllMedia } from "../../lib/services/media";
+import { getAllMedia } from "../../lib/services/media-service";
 import { MediaContext } from "./media-context";
 
 export function MediaProvider({ children }: PropsWithChildren) {

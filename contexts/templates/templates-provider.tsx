@@ -5,7 +5,7 @@ import ITemplate from "../../lib/interfaces/template";
 import {
   getMyTemplates,
   getSharedTemplates,
-} from "../../lib/services/templates";
+} from "../../lib/services/template-service";
 import { TemplatesContext } from "./templates-context";
 
 export function TemplatesProvider({ children }: PropsWithChildren) {

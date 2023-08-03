@@ -1,7 +1,10 @@
 export default interface IUser {
-  id: string;
+  _id: string;
   avatar: string;
   isCreator: boolean;
+  isEmailVerified: boolean;
   email: string;
   username: string;
+  createdAt: string;
+  updatedAt: string;
 }

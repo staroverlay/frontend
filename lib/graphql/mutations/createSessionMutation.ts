@@ -1,15 +1,20 @@
 import { mutation } from "astraql";
 
 const CreateSessionMutation = mutation`
-    login($access_token: String!, $refresh_token: String!) {
-        login(access_token: $access_token, refresh_token: $refresh_token) {
+    createSession($payload: CreateSessionDTO!) {
+        createSession(payload: $payload) {
             session {
                 token
             }
             user {
-                id
+                _id
                 username
                 avatar
+                email
+                isCreator
+                isEmailVerified
+                createdAt
+                updatedAt
             }
         }
     }

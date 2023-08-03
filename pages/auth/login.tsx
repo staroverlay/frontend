@@ -1,3 +1,5 @@
+import useAuth from "@/hooks/useAuth";
+import { createSession } from "@/lib/services/session-service";
 import {
   Alert,
   AlertDescription,
@@ -19,13 +21,28 @@ import { FaKickstarter, FaTwitch, FaYoutube } from "react-icons/fa";
 export default function Login() {
   const { colorMode } = useColorMode();
   const mainColor = colorMode === "light" ? "white" : "black";
+  
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+
+    const payload = { email, password };
+    const session = await createSession(payload).catch((e) => {
+      setError(e.message);
+      return null;
+    }).finally(() => setLoading(false));
+
+    if (session) {
+      login(session);
+    }
   };
 
   useEffect(() => {
@@ -67,6 +84,7 @@ export default function Login() {
               onChange={(e) => {
                 setEmail(e.target.value);
               }}
+              disabled={loading}
             />
           </FormControl>
 
@@ -80,11 +98,12 @@ export default function Login() {
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
+              disabled={loading}
             />
           </FormControl>
 
           <Flex flexDirection={"column"} gap={"10px"}>
-            <Button type="submit">Login</Button>
+            <Button type="submit" disabled={loading} isLoading={loading}>Login</Button>
 
             <Flex justifyContent={"space-between"}>
               <Link
@@ -107,16 +126,19 @@ export default function Login() {
                 aria-label="Login with Kick"
                 colorScheme={"green"}
                 icon={<FaKickstarter />}
+                disabled={loading}
               />
               <IconButton
                 aria-label="Login with Twitch"
                 colorScheme={"purple"}
                 icon={<FaTwitch />}
+                disabled={loading} 
               />
               <IconButton
                 aria-label="Login with YouTube"
                 colorScheme={"red"}
                 icon={<FaYoutube />}
+                disabled={loading} 
               />
             </Flex>
           </Flex>

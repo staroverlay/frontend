@@ -14,7 +14,7 @@ import StatsCard from "../../components/cards/stats/StatsCard";
 import TemplateCard from "../../components/cards/template/TemplateCard";
 import useTemplates from "../../hooks/useTemplates";
 import ITemplate from "../../lib/interfaces/template";
-import { createTemplate } from "../../lib/services/templates";
+import { createTemplate } from "../../lib/services/template-service";
 import { toastPending } from "../../lib/utils/toasts";
 
 function CreateTemplateButton() {

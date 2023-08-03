@@ -31,21 +31,33 @@ function AuthenticatedLayout({ children }: LayoutProps) {
 }
 
 function GuestLayout({ children }: LayoutProps) {
-  const { redirectToLogin } = useAuth();
-  const { pathname } = useRouter();
+  const { pathname, push } = useRouter();
+  const { isLogged, user } = useAuth();
+  const isEmailVerified = user?.isEmailVerified;
 
-  if (pathname.startsWith("/auth") || pathname == "/login") {
+  if (!pathname.startsWith("/auth/verify") && isLogged() && !isEmailVerified) {
+    push("/auth/verify");
+    return <></>;
+  }
+
+  if (pathname.startsWith("/auth/verify") && !isLogged()) {
+    push("/auth/login");
+    return <></>;
+  }
+
+  if (pathname.startsWith("/auth")) {
     return <Box className={styles["guess-bg"]}>{children}</Box>;
   }
 
-  redirectToLogin();
+  push("/auth/login");
   return <></>;
 }
 
 export function Layout(props: LayoutProps) {
-  const { isLogged } = useAuth();
+  const { isLogged, user } = useAuth();
+  const isEmailVerified = user?.isEmailVerified;
 
-  return isLogged() ? (
+  return isEmailVerified && isLogged() ? (
     <AuthenticatedLayout {...props} />
   ) : (
     <GuestLayout {...props} />

@@ -10,7 +10,7 @@ import {
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { updateTemplate } from "@/lib/services/templates";
+import { updateTemplate } from "@/lib/services/template-service";
 import OverviewTab from "../../../components/editor/template-editor/OverviewTab";
 
 import useTemplates from "../../../hooks/useTemplates";

@@ -2,11 +2,12 @@ import { PropsWithChildren, useEffect, useState } from "react";
 
 import { AuthContext } from "./auth-context";
 import User from "../../lib/interfaces/user";
-import { setBearerToken } from "../../lib/graphql/client";
-import { getCurrentUser } from "../../lib/services/auth";
-import twitch from "../../lib/services/twitch";
+import { removeBearerToken, setBearerToken } from "../../lib/graphql/client";
+import { getCurrentUser } from "../../lib/services/user-service";
 import { toastError } from "../../lib/utils/toasts";
 import Loading from "../../components/layout/loading";
+import ISessionAndUser from "@/lib/interfaces/session-and-user";
+import { invalidateSession } from "@/lib/services/session-service";
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
@@ -18,87 +19,70 @@ export function AuthProvider({ children }: PropsWithChildren) {
     return user != null && token != null;
   }
 
-  async function loginWithCode(code: string): Promise<User> {
-    const res = await fetch("/api/login", {
-      body: JSON.stringify({ code }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-    });
+  async function logout(invalidate = false) {
+    localStorage.removeItem("token");
 
-    const { session, user, error } = await res.json();
-    if (session && user) {
-      const { token } = session;
-      localStorage.setItem("token", token);
-      setBearerToken(token);
-      setToken(token);
-      setUser(user);
-      return user;
-    } else {
-      const errorMessage = error?.message || error || "Unknown error";
-      throw new Error(errorMessage);
+    if (user != null) {
+      setUser(null);
     }
+
+    if (token != null) {
+      setToken(null);
+    }
+
+    if (invalidate) {
+      await invalidateSession().catch(() => null);
+    }
+    
+    removeBearerToken();
   }
 
-  async function loginWithToken(newToken: string) {
-    if (token != newToken) setToken(newToken);
-    setBearerToken(newToken);
-    const user = await getCurrentUser();
+  async function login({session, user}: ISessionAndUser): Promise<User> {
+    const token = session.token;
+
+    setToken(token);
+    setBearerToken(token);
     setUser(user);
+    localStorage.setItem("token",token);
     return user;
   }
 
-  async function logout(): Promise<void> {
-    setBearerToken("");
-    localStorage.removeItem("token");
-  }
+  async function loginWithPreviousToken(): Promise<User | null> {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
 
-  function redirectToLogin() {
-    window.location.href = twitch.authenticate();
+    setToken(token);
+    setBearerToken(token);
+
+    const user = await getCurrentUser();
+    return user;
   }
 
   useEffect(() => {
-    async function login() {
-      const token = localStorage.getItem("token");
+    async function handle() {
+      const user = await loginWithPreviousToken();
+      if (user) setUser(user);
+    }
 
-      if (!token) {
-        return setFetched(true);
-      }
+    handle().catch((e) => {
+      const error = e.message;
 
-      let error = null;
-      const user = await loginWithToken(token).catch(
-        (e) => (error = e.message)
-      );
-      const logged = user !== null;
-
-      if (logged) {
-        setFetched(true);
-      } else {
-        const isFetchError = error === "Failed to fetch";
-        if (isFetchError) {
-          return toastError(`Failed to fetch, maybe the server is down.`);
-        }
+      if (error == "INVALID_SESSION") {
         logout();
-        setFetched(true);
-        toastError(`Failed to login, retrying...`);
       }
-    }
 
-    if (!fetched) {
-      login();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetched]);
+      toastError(e.message)
+    }).finally(() => setFetched(true));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         isLogged,
-        loginWithCode,
-        loginWithToken,
-        redirectToLogin,
+        login,
         logout,
       }}
     >

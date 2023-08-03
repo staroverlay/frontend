@@ -1,10 +1,10 @@
+import ISessionAndUser from "@/lib/interfaces/session-and-user";
 import User from "../../lib/interfaces/user";
 
 export interface AuthHook {
   user: User | null;
+  setUser: (user: User | null) => void;
   isLogged: () => boolean;
-  loginWithCode: (token: string) => Promise<User>;
-  loginWithToken: (token: string) => Promise<User>;
-  logout: () => Promise<void>;
-  redirectToLogin: () => void;
+  login: (session: ISessionAndUser) => Promise<User>;
+  logout: (invalidate: boolean) => Promise<void>;
 }

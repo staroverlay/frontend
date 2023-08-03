@@ -1,3 +1,4 @@
+import { createUser } from "@/lib/services/user-service";
 import {
   Alert,
   AlertDescription,
@@ -13,6 +14,7 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { FaKickstarter, FaTwitch, FaYoutube } from "react-icons/fa";
 
@@ -20,13 +22,16 @@ export default function Register() {
   const { colorMode } = useColorMode();
   const mainColor = colorMode === "light" ? "white" : "black";
 
+  const { push: navigateTo } = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -37,6 +42,18 @@ export default function Register() {
     if (password.length < 8) {
       setError("Password must be at least 8 characters long.");
       return;
+    }
+
+    setLoading(true);
+
+    const payload = { email, password, username: email.split("@")[0] };
+    const user = await createUser(payload).catch((e) => {
+      setError(e.message);
+      return null;
+    }).finally(() => setLoading(false));
+
+    if (user) {
+      navigateTo("/auth/login");
     }
   };
 

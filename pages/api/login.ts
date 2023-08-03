@@ -3,7 +3,7 @@ import client from "../../lib/graphql/client";
 import CreateSessionMutation from "../../lib/graphql/mutations/createSessionMutation";
 
 import Response from "../../lib/interfaces/response";
-import Twitch from "../../lib/services/twitch";
+import Twitch from "../../lib/utils/twitch";
 
 interface Payload {
   code?: string;

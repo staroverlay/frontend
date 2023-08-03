@@ -3,11 +3,14 @@ import { query } from "astraql";
 const getCurrentUserQuery = query`
     getCurrentUser {
         getCurrentUser {
-            id
-            avatar
-            isCreator
-            email
+            _id
             username
+            avatar
+            email
+            isCreator
+            isEmailVerified
+            createdAt
+            updatedAt
         }
     }
 `;

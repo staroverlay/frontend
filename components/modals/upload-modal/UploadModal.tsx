@@ -3,7 +3,7 @@ import { Button, Flex, Input, chakra } from "@chakra-ui/react";
 import { FileUploader } from "react-drag-drop-files";
 import BaseModal from "../base-modal/BaseModal";
 import FilePreview from "../../content/file-preview/FilePreview";
-import { uploadFile } from "../../../lib/services/storage";
+import { uploadFile } from "../../../lib/utils/storage";
 import useMedia from "../../../hooks/useMedia";
 import { toastPending } from "../../../lib/utils/toasts";
 

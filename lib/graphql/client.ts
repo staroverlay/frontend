@@ -16,4 +16,8 @@ export function setBearerToken(token: string) {
   client.addHeader("Authorization", `Bearer ${token}`);
 }
 
+export function removeBearerToken() {
+  client.removeHeader("Authorization");
+}
+
 export default client;

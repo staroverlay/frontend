@@ -6,9 +6,14 @@ import User from "../../lib/interfaces/user";
 
 export const AuthContext = React.createContext<AuthHook>({
   user: null,
+  setUser: (): void => {
+    throw new Error("Not implemented");
+  },
   isLogged: (): boolean => false,
-  loginWithCode: (code: string): Promise<User> => new Promise(() => {}),
-  loginWithToken: (token: string): Promise<User> => new Promise(() => {}),
-  logout: (): Promise<void> => new Promise(() => {}),
-  redirectToLogin: (): void => {},
+  login: async (): Promise<User> => {
+    throw new Error("Not implemented");
+  },
+  logout: async (): Promise<void> => {
+    throw new Error("Not implemented");
+  },
 });
