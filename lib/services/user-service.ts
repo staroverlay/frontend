@@ -1,6 +1,7 @@
 import client from "../graphql/client";
 import CreateUserMutation from "../graphql/mutations/createUserMutation";
 import CreateUserWithTwitchMutation from "../graphql/mutations/createUserWithTwitchMutation";
+import UpdatePasswordMutation from "../graphql/mutations/updatePasswordMutation";
 import UpdateUserMutation from "../graphql/mutations/updateUserMutation";
 import VerifyEmailMutation from "../graphql/mutations/verifyEmailMutation";
 import getCurrentUserQuery from "../graphql/queries/getCurrentUserQuery";
@@ -38,4 +39,12 @@ export async function updateUser(payload: {
 }): Promise<IUser> {
   const user = await client.fetch(UpdateUserMutation, { payload });
   return user as IUser;
+}
+
+export async function updatePassword(payload: {
+  oldPassword: string;
+  newPassword: string;
+}) {
+  const user = await client.fetch(UpdatePasswordMutation, { payload });
+  return user != null;
 }

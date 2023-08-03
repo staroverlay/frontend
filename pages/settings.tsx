@@ -1,4 +1,5 @@
 import ConnectionsTab from "@/components/editor/settings/ConnectionsTab";
+import DangerZoneTab from "@/components/editor/settings/DangerZoneTab";
 import OverviewTab from "@/components/editor/settings/OverviewTab";
 import SessionsTab from "@/components/editor/settings/SessionsTab";
 import { Box, Flex, Tab, TabList, TabPanels, Tabs } from "@chakra-ui/react";
@@ -19,6 +20,7 @@ export default function Settings() {
             <OverviewTab />
             <ConnectionsTab />
             <SessionsTab />
+            <DangerZoneTab />
           </TabPanels>
         </Box>
       </Tabs>
