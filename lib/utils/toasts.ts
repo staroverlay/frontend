@@ -34,3 +34,9 @@ export function toastError(message: string) {
     ...DEFAULT,
   });
 }
+
+export function toastSuccess(message: string) {
+  return toast.success(message, {
+    ...DEFAULT,
+  });
+}

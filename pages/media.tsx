@@ -67,8 +67,6 @@ function MediaFilesTab({ files, filter }: MediaFilesProps) {
 
 export default function Media() {
   const { medias } = useMedia();
-  const [selectedMedia, setSelectedMedia] = useState<IMedia | null>(null);
-
   return (
     <>
       <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
