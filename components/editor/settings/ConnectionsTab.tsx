@@ -21,7 +21,13 @@ import {
   BsPlusLg,
   BsYoutube,
 } from "react-icons/bs";
-import { toastError } from "@/lib/utils/toasts";
+import { toastError, toastSuccess } from "@/lib/utils/toasts";
+import { oauthIntegration } from "@/lib/utils/oauth";
+import {
+  disconnectIntegration,
+  syncProfileWithIntegration,
+} from "@/lib/services/integration-service";
+import useAuth from "@/hooks/useAuth";
 
 const URLS: Record<IntegrationType, string> = {
   kick: "https://kick.com/",
@@ -42,9 +48,8 @@ const ConnectionButton = ({
 }: {
   type: IntegrationType;
   Icon: IconType;
-  onConnect: (type: IntegrationType) => Promise<IIntegration>;
+  onConnect: (type: IntegrationType) => Promise<void>;
 }) => {
-  const { addIntegration } = useIntegrations();
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
 
@@ -53,17 +58,12 @@ const ConnectionButton = ({
 
   const handleConnect = async () => {
     setLoading(true);
-
-    const integration = await onConnect(type)
+    await onConnect(type)
       .catch((e) => {
         toastError(e.message);
         return null;
       })
       .finally(() => setLoading(false));
-
-    if (integration) {
-      addIntegration(integration);
-    }
   };
 
   return (
@@ -106,16 +106,40 @@ const ConnectionButton = ({
 const ConnectionItem = ({
   integration,
   Icon,
+  onDisconnect,
 }: {
   integration: IIntegration;
   Icon: IconType;
+  onDisconnect: (integration: IIntegration) => Promise<void>;
 }) => {
   const { colorMode } = useColorMode();
-  const [hover, setHover] = useState(false);
+  const { setUser } = useAuth();
 
   const bg = colorMode == "dark" ? "blackAlpha.700" : "blackAlpha.200";
   const accent = colorMode == "dark" ? "purple.200" : "purple.500";
   const link = URLS[integration.type] + integration.username;
+
+  const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
+  const [hover, setHover] = useState(false);
+
+  const handleDisconnect = () => {
+    setLoading(true);
+    onDisconnect(integration)
+      .catch((e) => toastError(e.message))
+      .finally(() => setLoading(false));
+  };
+
+  const handleSync = () => {
+    setSyncing(true);
+    syncProfileWithIntegration(integration)
+      .then((user) => {
+        setUser(user);
+        toastSuccess("Successfully synced profile");
+      })
+      .catch((e) => toastError(e.message))
+      .finally(() => setSyncing(false));
+  };
 
   return (
     <Flex
@@ -127,7 +151,7 @@ const ConnectionItem = ({
       width={"100%"}
     >
       <Flex alignItems={"center"} gap={"8px"}>
-        <Icon fill={COLORS[integration.type]} fontSize={"45px"} />
+        <Icon fill={COLORS[integration.type]} fontSize={"30px"} />
         <Avatar size={"md"} src={integration.avatar} />
 
         <Box>
@@ -148,17 +172,29 @@ const ConnectionItem = ({
         </Box>
       </Flex>
 
-      <Box>
+      <Flex alignItems={"center"} gap={"7px"}>
+        <Button
+          onClick={handleSync}
+          size="sm"
+          isLoading={syncing}
+          disabled={syncing}
+        >
+          Sync
+        </Button>
+
         <Button
           colorScheme={hover ? "red" : "green"}
           size="sm"
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
+          onClick={handleDisconnect}
+          isLoading={loading}
+          disabled={loading}
         >
           {hover ? <BsTrash /> : <BsCheck />}
           {hover ? "Disconnect" : "Connected"}
         </Button>
-      </Box>
+      </Flex>
     </Flex>
   );
 };
@@ -167,35 +203,46 @@ const ConnectionProvider = ({
   type,
   Icon,
   onConnect,
+  onDisconnect,
 }: {
   type: IntegrationType;
   Icon: IconType;
-  onConnect: (type: IntegrationType) => Promise<IIntegration>;
+  onConnect: (type: IntegrationType) => Promise<void>;
+  onDisconnect: (integration: IIntegration) => Promise<void>;
 }) => {
   const { getIntegration } = useIntegrations();
   const integration = getIntegration(type);
 
   if (integration) {
-    return <ConnectionItem integration={integration} Icon={Icon} />;
+    return (
+      <ConnectionItem
+        integration={integration}
+        Icon={Icon}
+        onDisconnect={onDisconnect}
+      />
+    );
   } else {
     return <ConnectionButton type={type} Icon={Icon} onConnect={onConnect} />;
   }
 };
 
 export default function ConnectionsTab() {
-  const onConnect = async (type: IntegrationType): Promise<IIntegration> => {
-    const username = prompt("Enter your username");
-    if (!username) throw new Error("Username is required");
+  const { addIntegration, removeIntegration } = useIntegrations();
 
-    const integration: IIntegration = {
-      type,
-      username,
-      avatar: "https://via.placeholder.com/150",
-      _id: "",
-      integrationId: "",
-    };
+  const onConnect = async (type: IntegrationType): Promise<void> => {
+    const integration = await oauthIntegration(type);
+    if (integration) {
+      addIntegration(integration);
+      toastSuccess("Successfully connected " + capitalize(type));
+    }
+  };
 
-    return integration;
+  const onDisconnect = async (integration: IIntegration): Promise<void> => {
+    const success = await disconnectIntegration(integration._id);
+    if (success) {
+      removeIntegration(integration);
+      toastSuccess("Successfully disconnected " + capitalize(integration.type));
+    }
   };
 
   return (
@@ -203,16 +250,19 @@ export default function ConnectionsTab() {
       <Flex flexDir={"column"} gap={"10px"}>
         <ConnectionProvider
           onConnect={onConnect}
+          onDisconnect={onDisconnect}
           Icon={FaKickstarter}
           type={"kick"}
         />
         <ConnectionProvider
           onConnect={onConnect}
+          onDisconnect={onDisconnect}
           Icon={BsTwitch}
           type={"twitch"}
         />
         <ConnectionProvider
           onConnect={onConnect}
+          onDisconnect={onDisconnect}
           Icon={BsYoutube}
           type={"youtube"}
         />

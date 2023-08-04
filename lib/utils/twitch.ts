@@ -7,7 +7,7 @@ const twitch = new TwitchOAuth({
     process.env.VERCEL
       ? "https://" + process.env.VERCEL_URL
       : "http://localhost:3000"
-  }/auth/twitch`,
+  }/oauth/twitch`,
   scope: ["user:read:email"],
   method: "code",
 });

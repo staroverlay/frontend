@@ -2,13 +2,24 @@ import ConnectionsTab from "@/components/editor/settings/ConnectionsTab";
 import DangerZoneTab from "@/components/editor/settings/DangerZoneTab";
 import OverviewTab from "@/components/editor/settings/OverviewTab";
 import SessionsTab from "@/components/editor/settings/SessionsTab";
-import { Box, Flex, Tab, TabList, TabPanels, Tabs } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Tab,
+  TabList,
+  TabPanels,
+  Tabs,
+  useColorMode,
+} from "@chakra-ui/react";
 
 export default function Settings() {
+  const { colorMode } = useColorMode();
+  const bg = colorMode === "light" ? "blackAlpha.300" : "blackAlpha.700";
+
   return (
     <Flex flexDir={"column"} gap={"10px"} width={"100%"}>
       <Tabs variant="soft-rounded" size={"sm"} width={"100%"}>
-        <TabList bg={"blackAlpha.700"} borderRadius={"12px"} p={"7px 14px"}>
+        <TabList bg={bg} borderRadius={"12px"} p={"7px 14px"}>
           <Tab>Overview</Tab>
           <Tab>Connections</Tab>
           <Tab>Sessions</Tab>

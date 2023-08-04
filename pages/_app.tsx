@@ -14,6 +14,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TemplatesProvider } from "../contexts/templates";
 import { IntegrationsProvider } from "@/contexts/integrations";
+import { useRouter } from "next/router";
+import path from "path";
 
 // Theme
 const colors = {
@@ -48,10 +50,22 @@ interface InitialAppProps extends AppProps {
 
 export default function App({ Component, pageProps }: InitialAppProps) {
   const [mounted, setMounted] = useState(false);
+  const { pathname } = useRouter();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  {
+    /* Don't render layout on oauth */
+  }
+  if (pathname.startsWith("/oauth")) {
+    return (
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    );
+  }
 
   return (
     <ChakraProvider theme={theme}>
