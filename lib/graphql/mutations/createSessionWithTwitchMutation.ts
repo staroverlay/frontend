@@ -4,6 +4,7 @@ const CreateSessionWithTwitchMutation = mutation`
     createSessionWithTwitch($code: String!) {
         createSessionWithTwitch(code: $code) {
             session {
+                _id
                 token
             }
             user {

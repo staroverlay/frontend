@@ -1,4 +1,8 @@
+import { IntegrationType } from "@/lib/interfaces/integration";
+import IUser from "@/lib/interfaces/user";
 import { createUser } from "@/lib/services/user-service";
+import { oauthRegister } from "@/lib/utils/oauth";
+import { handlePromise } from "@/lib/utils/promise";
 import {
   Alert,
   AlertDescription,
@@ -47,10 +51,12 @@ export default function Register() {
     setLoading(true);
 
     const payload = { email, password, username: email.split("@")[0] };
-    const user = await createUser(payload).catch((e) => {
-      setError(e.message);
-      return null;
-    }).finally(() => setLoading(false));
+    const user = await createUser(payload)
+      .catch((e) => {
+        setError(e.message);
+        return null;
+      })
+      .finally(() => setLoading(false));
 
     if (user) {
       navigateTo("/auth/login");
@@ -60,6 +66,16 @@ export default function Register() {
   useEffect(() => {
     setError(null);
   }, [email, password, confirmPassword]);
+
+  const handleOAuthRegister = async (type: IntegrationType) => {
+    setLoading(true);
+
+    const user = await handlePromise<IUser | null>(oauthRegister(type)).finally(
+      () => setLoading(false)
+    );
+
+    if (user) navigateTo("/login");
+  };
 
   return (
     <Flex
@@ -139,16 +155,19 @@ export default function Register() {
                 aria-label="Login with Kick"
                 colorScheme={"green"}
                 icon={<FaKickstarter />}
+                onClick={() => handleOAuthRegister("kick")}
               />
               <IconButton
                 aria-label="Login with Twitch"
                 colorScheme={"purple"}
                 icon={<FaTwitch />}
+                onClick={() => handleOAuthRegister("twitch")}
               />
               <IconButton
                 aria-label="Login with YouTube"
                 colorScheme={"red"}
                 icon={<FaYoutube />}
+                onClick={() => handleOAuthRegister("youtube")}
               />
             </Flex>
           </Flex>
