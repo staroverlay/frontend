@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
 import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 
-import IWidget from "@/lib/interfaces/widget";
-import { getMyWidgets } from "@/lib/services/widget-service";
-import Loading from "@/components/layout/loading";
 import WidgetsGrid from "@/components/content/widgets-grid/WidgetsGrid";
 import StatsCard from "@/components/cards/stats/StatsCard";
 import usePlan from "@/hooks/usePlan";

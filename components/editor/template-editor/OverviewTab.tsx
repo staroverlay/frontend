@@ -161,6 +161,8 @@ export default function OverviewTab(props: OverviewTabProps) {
         <Box maxWidth={"350px"} width={"100%"} mt={"30px"}>
           <TemplateCard
             context="editor"
+            onCreateWidget={() => {}}
+            onDelete={() => {}}
             template={{
               _id: user?._id || "",
               author: user?.username || "",
@@ -169,6 +171,7 @@ export default function OverviewTab(props: OverviewTabProps) {
               visibility: props.visibility,
               description: props.description,
               service: props.service,
+              version: 0,
             }}
           />
         </Box>

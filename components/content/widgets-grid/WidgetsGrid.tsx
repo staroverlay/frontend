@@ -1,7 +1,6 @@
 import ConfirmationAlert from "@/components/alerts/confirmation/ConfirmationAlert";
 import WidgetCard from "@/components/cards/widget/WidgetCard";
 import useWidgets from "@/hooks/useWidgets";
-import ITemplate from "@/lib/interfaces/template";
 import IWidget from "@/lib/interfaces/widget";
 import { deleteWidget } from "@/lib/services/widget-service";
 import { toastPending } from "@/lib/utils/toasts";
@@ -17,7 +16,7 @@ function NoWidgets({ message }: { message?: string }) {
   return (
     <Flex alignContent={"center"} justifyContent={"center"}>
       <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-        <Heading>{message ? message : "No templates"}</Heading>
+        <Heading>{message ? message : "No widgets"}</Heading>
       </Flex>
     </Flex>
   );

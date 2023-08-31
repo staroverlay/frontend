@@ -2,17 +2,22 @@ import client from "../graphql/client";
 import CreateWidgetMutation from "../graphql/mutations/createWidgetMutation";
 import DeleteWidgetMutation from "../graphql/mutations/deleteWidgetMutation";
 import GetWidgetsQuery from "../graphql/queries/getWidgetsQuery";
-import IDictionary from "../interfaces/shared/IDictionary";
 import IWidget from "../interfaces/widget";
 import WidgetCreatePayload from "./dtos/widget-create-payload";
+
+function fixWidget(widget: IWidget) {
+  const raw = widget.settings as unknown as string;
+  if (raw && typeof raw == "string") {
+    widget.settings = JSON.parse(raw);
+  }
+  return widget;
+}
 
 export async function createWidget(
   payload: WidgetCreatePayload
 ): Promise<IWidget> {
-  const fixedPayload: IDictionary = { ...payload };
-  return (await client.fetch(CreateWidgetMutation, {
-    payload: fixedPayload,
-  })) as IWidget;
+  const widget = await client.fetch(CreateWidgetMutation, { payload });
+  return fixWidget(widget as IWidget);
 }
 
 export async function deleteWidget(widget: IWidget): Promise<boolean> {
@@ -22,5 +27,5 @@ export async function deleteWidget(widget: IWidget): Promise<boolean> {
 
 export async function getMyWidgets(): Promise<IWidget[]> {
   const widgets = await client.fetch(GetWidgetsQuery);
-  return widgets as IWidget[];
+  return widgets.map(fixWidget) as IWidget[];
 }

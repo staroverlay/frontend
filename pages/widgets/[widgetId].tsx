@@ -16,6 +16,9 @@ import { hasObjectChanged } from "@/lib/utils/object";
 import { toastPending } from "@/lib/utils/toasts";
 
 import Error404 from "../404";
+import WidgetOverviewTab from "@/components/editor/widget-editor/WidgetOverviewTab";
+import WidgetSettingsTab from "@/components/editor/widget-editor/WidgetSettingsTab";
+import IDictionary from "@/lib/interfaces/shared/IDictionary";
 
 export default function WidgetPage() {
   const { widgets, updateWidget } = useWidgets();
@@ -30,8 +33,9 @@ export default function WidgetPage() {
   const currentTemplate = JSON.parse(widget?.templateRaw || "{}") as ITemplate;
 
   // Input fields.
-  const [name, setName] = useState(widget?.displayName);
-  const [scopes, setScopes] = useState(widget?.scopes);
+  const [name, setName] = useState(widget?.displayName || "");
+  const [scopes, setScopes] = useState(widget?.scopes || []);
+  const [settings, setSettings] = useState<IDictionary>(widget?.settings || {});
 
   // Payload.
   const updatePayload = {
@@ -75,11 +79,26 @@ export default function WidgetPage() {
       <Tabs variant={"enclosed"}>
         <TabList>
           <Tab>Overview</Tab>
-          <Tab>Code editor</Tab>
-          <Tab>Fields</Tab>
+          <Tab>Settings</Tab>
         </TabList>
 
-        <TabPanels></TabPanels>
+        <TabPanels>
+          <WidgetOverviewTab
+            name={name}
+            scopes={scopes}
+            setName={setName}
+            setScopes={setScopes}
+            template={currentTemplate}
+            widget={widget}
+          />
+
+          <WidgetSettingsTab
+            setSettings={setSettings}
+            settings={settings}
+            template={currentTemplate}
+            widget={widget}
+          />
+        </TabPanels>
       </Tabs>
     </Flex>
   );
