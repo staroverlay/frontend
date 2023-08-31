@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   Badge,
   Box,
@@ -6,7 +7,6 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Menu,
   MenuButton,
   MenuDivider,
@@ -19,6 +19,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import IWidget from "@/lib/interfaces/widget";
 
 import styles from "./WidgetCard.module.css";
+import ITemplate from "@/lib/interfaces/template";
 
 export interface WidgetCardProps {
   widget: IWidget;
@@ -31,6 +32,8 @@ export default function WidgetCard({
   onClone,
   onDelete,
 }: WidgetCardProps) {
+  const template = JSON.parse(widget.templateRaw) as ITemplate;
+
   const OptionsButton = () => (
     <Menu>
       <MenuButton as={IconButton} icon={<FaEllipsisV />} variant={"ghost"} />
@@ -69,8 +72,8 @@ export default function WidgetCard({
 
           <Box className={styles.author}>
             From{" "}
-            <Link href={`/store/templates/${widget.template}`}>
-              {widget.template}
+            <Link href={`/store/templates/${widget.templateId}`}>
+              {template.name}
             </Link>
           </Box>
         </Stack>

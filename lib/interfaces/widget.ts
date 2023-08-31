@@ -7,13 +7,9 @@ export default interface IWidget {
   userId: string;
   enabled: boolean;
   token: string;
-  template: string;
-  html: string;
-  scopes?: TemplateScope[];
+  templateId: string;
+  templateRaw: string;
+  templateVersion: number;
   settings?: IDictionary;
+  scopes: TemplateScope[];
 }
-
-export type IWidgetCreatePayload = Omit<
-  IWidget,
-  "userId" | "enabled" | "token" | "html" | "scopes" | "_id"
->;

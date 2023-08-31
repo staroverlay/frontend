@@ -9,6 +9,7 @@ export const MediaContext = React.createContext<MediaHook>({
   removeMedia: (media: IMedia | string): void => {},
   addMedia: (media: IMedia): void => {},
   updateMedia: (media: IMedia): void => {},
+  storageUsage: 0,
   isUploadModalOpen: false,
   openUploadModal: (): void => {},
 });

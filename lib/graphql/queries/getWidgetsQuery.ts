@@ -8,9 +8,9 @@ const GetWidgetsQuery = query`
             userId
             enabled
             token
-            template
-            html
-            scopes
+            templateId
+            templateRaw
+            templateVersion
             settings
         }
     }

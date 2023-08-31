@@ -13,6 +13,7 @@ export default interface ITemplate {
   html: string;
   fields?: ITemplateField[];
   visibility: TemplateVisibility;
+  version: number;
 }
 
 export type ITemplateRaw = ITemplate & {

@@ -9,6 +9,7 @@ import { deleteTemplate } from "@/lib/services/template-service";
 import { createWidget } from "@/lib/services/widget-service";
 import useTemplates from "@/hooks/useTemplates";
 import InputAlert from "@/components/alerts/input/InputAlert";
+import useWidgets from "@/hooks/useWidgets";
 
 interface TemplatesGridProps {
   search?: string;
@@ -37,6 +38,7 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
     onClose: onDeleteClose,
   } = useDisclosure();
 
+  const { addWidget } = useWidgets();
   const { removeTemplate } = useTemplates();
   const [loading, setLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ITemplate | null>(
@@ -49,15 +51,17 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
       createWidget({
         displayName: name,
         template: selectedTemplate?._id as string,
-        settings: {},
       }),
       {
         pending: "Creating widget",
         success: "Widget created",
       }
     )
-      .then(() => {
+      .then((widget) => {
         onCreateClose();
+        if (widget) {
+          addWidget(widget);
+        }
       })
       .finally(() => setLoading(false));
   };

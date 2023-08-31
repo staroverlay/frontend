@@ -12,6 +12,7 @@ const CreateTemplateMutation = mutation`
             html
             fields
             visibility
+            version
         }
     }
 `;

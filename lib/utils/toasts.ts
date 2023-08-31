@@ -10,10 +10,10 @@ const DEFAULT: ToastOptions = {
   theme: "dark",
 };
 
-export function toastPending(
-  promise: Promise<unknown> | (() => Promise<unknown>),
-  messages: ToastPromiseParams<unknown, string, unknown>
-) {
+export function toastPending<T>(
+  promise: Promise<T> | (() => Promise<T>),
+  messages: ToastPromiseParams<T, string, unknown>
+): Promise<T | null> {
   if (!messages.error) {
     messages.error = {
       render: ({ data }: any) => {
@@ -26,7 +26,7 @@ export function toastPending(
     .promise(promise, messages, {
       ...DEFAULT,
     })
-    .catch(() => {});
+    .catch(() => null);
 }
 
 export function toastError(message: string) {

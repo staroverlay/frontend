@@ -1,21 +1,23 @@
 import client from "../graphql/client";
 import CreateWidgetMutation from "../graphql/mutations/createWidgetMutation";
+import DeleteWidgetMutation from "../graphql/mutations/deleteWidgetMutation";
 import GetWidgetsQuery from "../graphql/queries/getWidgetsQuery";
 import IDictionary from "../interfaces/shared/IDictionary";
-import IWidget, { IWidgetCreatePayload } from "../interfaces/widget";
+import IWidget from "../interfaces/widget";
+import WidgetCreatePayload from "./dtos/widget-create-payload";
 
 export async function createWidget(
-  payload: IWidgetCreatePayload
+  payload: WidgetCreatePayload
 ): Promise<IWidget> {
   const fixedPayload: IDictionary = { ...payload };
-
-  if (fixedPayload.settings && typeof fixedPayload != "string") {
-    fixedPayload.settings = JSON.stringify(fixedPayload.settings);
-  }
-
   return (await client.fetch(CreateWidgetMutation, {
     payload: fixedPayload,
   })) as IWidget;
+}
+
+export async function deleteWidget(widget: IWidget): Promise<boolean> {
+  const result = await client.fetch(DeleteWidgetMutation, { id: widget._id });
+  return result as unknown as boolean;
 }
 
 export async function getMyWidgets(): Promise<IWidget[]> {

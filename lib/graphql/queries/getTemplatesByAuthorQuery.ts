@@ -12,6 +12,7 @@ const GetTemplatesByAuthorQuery = query`
             html
             fields
             visibility
+            version
         }
     }
 `;

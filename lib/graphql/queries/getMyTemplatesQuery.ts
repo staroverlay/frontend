@@ -12,6 +12,7 @@ const GetMyTemplatesQuery = query`
             html
             fields
             visibility
+            version
         }
     }
 `;

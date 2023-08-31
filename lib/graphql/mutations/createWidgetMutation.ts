@@ -8,8 +8,9 @@ const CreateWidgetMutation = mutation`
             userId
             enabled
             token
-            template
-            html
+            templateId
+            templateRaw
+            templateVersion
             scopes
             settings
         }

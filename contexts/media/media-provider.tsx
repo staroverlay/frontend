@@ -8,9 +8,20 @@ import IMedia from "../../lib/interfaces/media";
 import { getAllMedia } from "../../lib/services/media-service";
 import { MediaContext } from "./media-context";
 
+function getStorageUsage(medias: IMedia[]) {
+  let storage = 0;
+
+  for (const media of medias) {
+    storage += media.size;
+  }
+
+  return storage;
+}
+
 export function MediaProvider({ children }: PropsWithChildren) {
   const { user } = useAuth();
   const [medias, setMedias] = useState<IMedia[]>([]);
+  const storageUsage = getStorageUsage(medias);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [fetched, setFetched] = useState(false);
 
@@ -52,6 +63,7 @@ export function MediaProvider({ children }: PropsWithChildren) {
         removeMedia,
         addMedia,
         updateMedia,
+        storageUsage,
         isUploadModalOpen: isOpen,
         openUploadModal,
       }}
