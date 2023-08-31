@@ -162,7 +162,7 @@ export default function OverviewTab(props: OverviewTabProps) {
           <TemplateCard
             context="editor"
             template={{
-              _id: user?.id || "",
+              _id: user?._id || "",
               author: user?.username || "",
               html: "",
               name: props.name,

@@ -1,4 +1,4 @@
-type TemplateScope =
+export type TemplateScope =
   | "platform:storage"
   | "twitch:chat"
   | "twitch:emotes"

@@ -124,6 +124,7 @@ export interface ITemplateAdvancedField {
 }
 
 export default interface ITemplateField extends ITemplateAdvancedField {
+  _internalId: string;
   id: string;
   label?: string;
   description?: string;

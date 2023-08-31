@@ -44,6 +44,7 @@ export default function FieldItem({
   useEffect(() => {
     const data = {
       ...advanced,
+      _internalId: field._internalId,
       id,
       label,
       type,

@@ -1,11 +1,11 @@
 import { Flex, Text } from "@chakra-ui/react";
 import { PropsWithChildren } from "react";
 
-interface LoadingProps extends PropsWithChildren {
+interface ErrorPageProps extends PropsWithChildren {
   message?: string;
 }
 
-export default function Loading({ children, message }: LoadingProps) {
+export default function ErrorPage({ children, message }: ErrorPageProps) {
   return (
     <Flex
       alignItems={"center"}

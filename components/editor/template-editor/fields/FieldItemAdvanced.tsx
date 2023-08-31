@@ -71,9 +71,12 @@ export default function FieldItemAdvanced({
 
     const key = cacheType;
     const value = getSelected();
-    const obj: { [key: string]: unknown } = {};
-    obj[key] = value;
-    setValue(obj);
+
+    if (value != undefined && value != null) {
+      const obj: { [key: string]: unknown } = {};
+      obj[key] = value;
+      setValue(obj);
+    }
   }, [cacheType, string, number, boolean, map, array, _enum, setValue]);
 
   if (type == "string") {

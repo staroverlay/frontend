@@ -27,7 +27,7 @@ export default function StringFieldItem({
         <FormLabel>Min Length</FormLabel>
         <Input
           placeholder={"0"}
-          value={settingsState?.minLength}
+          value={settingsState?.minLength || ""}
           type={"number"}
           onChange={(e) =>
             setSettingsState({
@@ -43,7 +43,7 @@ export default function StringFieldItem({
         <FormLabel>Max Length</FormLabel>
         <Input
           placeholder={"9999"}
-          value={settingsState?.maxLength}
+          value={settingsState?.maxLength || ""}
           type={"number"}
           onChange={(e) =>
             setSettingsState({
@@ -58,7 +58,7 @@ export default function StringFieldItem({
         <FormLabel>Default value</FormLabel>
         <Input
           placeholder={"0"}
-          value={settingsState?.default}
+          value={settingsState?.default || ""}
           onChange={(e) =>
             setSettingsState({
               ...settingsState,

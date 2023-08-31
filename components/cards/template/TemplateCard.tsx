@@ -1,9 +1,6 @@
 import {
-  Box,
   Card,
   CardBody,
-  CardHeader,
-  CardFooter,
   Flex,
   Heading,
   Stack,
@@ -16,10 +13,9 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import {
   FaEye,
   FaLock,
@@ -30,14 +26,14 @@ import {
 } from "react-icons/fa";
 
 import ITemplate from "../../../lib/interfaces/template";
-import { toastPending } from "../../../lib/utils/toasts";
-import ConfirmationAlert from "../../alerts/confirmation/ConfirmationAlert";
 
 import styles from "./TemplateCard.module.css";
 
-interface TemplateCardProps {
+export interface TemplateCardProps {
   template: ITemplate;
   context?: "explorer" | "creator" | "editor";
+  onCreateWidget: (template: ITemplate) => void;
+  onDelete: (template: ITemplate) => void;
 }
 
 const icons = {
@@ -53,14 +49,8 @@ const colors = {
 };
 
 export default function TemplateCard(props: TemplateCardProps) {
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: openDeleteDialog,
-    onClose: onCloseDelete,
-  } = useDisclosure();
-  const [isDeleting, setIsDeleting] = useState(false);
-
   const { template } = props;
+
   const context = props.context || "explorer";
   const isEditor = props.context == "editor";
   const isExplorer = context === "explorer";
@@ -86,52 +76,38 @@ export default function TemplateCard(props: TemplateCardProps) {
     <Menu>
       <MenuButton as={IconButton} icon={<FaEllipsisV />} variant={"ghost"} />
       <MenuList>
+        {/* Streamer menu */}
+        <MenuItem
+          color={"green.400"}
+          onClick={() => props.onCreateWidget(template)}
+        >
+          Create Widget
+        </MenuItem>
+
+        <MenuDivider />
+
+        {/* Editor menu */}
         <Link href={`/creator/templates/${template._id}`}>
           <MenuItem>Edit</MenuItem>
         </Link>
+        <MenuItem>Clone</MenuItem>
+
+        <MenuDivider />
+
+        {/* Shared menu */}
         <Link href={`/marketplace/templates/${template._id}`}>
           <MenuItem>View store page</MenuItem>
         </Link>
-        <MenuItem>Clone</MenuItem>
-        <MenuDivider />
         <MenuItem color={"cyan.400"}>Copy link</MenuItem>
-        <MenuItem color={"red.400"} onClick={openDeleteDialog}>
+        <MenuItem color={"red.400"} onClick={() => props.onDelete(template)}>
           Delete
         </MenuItem>
       </MenuList>
     </Menu>
   );
 
-  async function handleDelete() {
-    onCloseDelete();
-  }
-
-  const DeleteModal = () => {
-    return (
-      <ConfirmationAlert
-        isOpen={isDeleteOpen}
-        onClose={onCloseDelete}
-        onAccept={async () => {
-          setIsDeleting(true);
-          await toastPending(handleDelete, {
-            pending: "Deleting template",
-            success: "Template deleted",
-          });
-          setIsDeleting(false);
-        }}
-        isLoading={isDeleting}
-        title={`Delete ${template.name}?`}
-      >
-        This action can not be undone. Make sure you have a backup in case you
-        need this template in the future.
-      </ConfirmationAlert>
-    );
-  };
-
   return (
     <Card className={styles.card}>
-      <DeleteModal />
-
       <CardBody>
         <Stack spacing="2">
           <Flex className={styles.flex} justifyContent={"space-between"}>

@@ -1,3 +1,4 @@
+import TemplatesGrid from "@/components/content/templates-grid/TemplatesGrid";
 import {
   Box,
   Flex,
@@ -72,49 +73,9 @@ function NoTemplates({ message }: { message?: string }) {
   );
 }
 
-interface TemplateGridProps {
-  templates: ITemplate[];
-}
-
-function TemplatesGrid({ templates }: TemplateGridProps) {
-  const [search, setSearch] = useState("");
-  const templatesQuery = templates
-    .filter((template) =>
-      template.name.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) => a.name.localeCompare(b.name));
-
-  if (templates.length == 0) return <NoTemplates />;
-
-  return (
-    <Flex direction={"column"} gap={"10px"}>
-      <Flex gap={"5px"}>
-        <CreateTemplateButton />
-        <Input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          width={"initial"}
-        />
-      </Flex>
-
-      <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
-        spacing="40px"
-      >
-        {templatesQuery.map((template) => (
-          <TemplateCard
-            key={template._id}
-            template={template}
-            context={"creator"}
-          />
-        ))}
-      </SimpleGrid>
-    </Flex>
-  );
-}
-
 export default function Templates() {
   const { userTemplates } = useTemplates();
+  const [search, setSearch] = useState("");
 
   const publics = userTemplates.filter(
     (template) => template.visibility == "public"
@@ -134,7 +95,6 @@ export default function Templates() {
           or sell them on the marketplace.
         </Text>
       </Box>
-
       <Flex gap={"10px"}>
         <StatsCard
           title="Private"
@@ -150,7 +110,18 @@ export default function Templates() {
         />
       </Flex>
 
-      <TemplatesGrid templates={userTemplates} />
+      <Flex direction={"column"} gap={"10px"}>
+        <Flex gap={"5px"}>
+          <CreateTemplateButton />
+          <Input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            width={"initial"}
+          />
+        </Flex>
+
+        <TemplatesGrid templates={userTemplates} search={search} />
+      </Flex>
     </Flex>
   );
 }

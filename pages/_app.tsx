@@ -79,6 +79,7 @@ export default function App({ Component, pageProps }: InitialAppProps) {
       {process.env.NODE_ENV === "production" && <Analytics />}
       <ToastContainer />
 
+      {/* TODO: Use fetch in pages instead global contexts. */}
       <AuthProvider>
         <IntegrationsProvider>
           <MediaProvider>

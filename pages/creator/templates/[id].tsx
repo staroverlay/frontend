@@ -8,7 +8,7 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { updateTemplate } from "@/lib/services/template-service";
 import OverviewTab from "../../../components/editor/template-editor/OverviewTab";
@@ -60,7 +60,7 @@ export default function CreatorTemplatePage() {
 
   // Handlers
   const handleSaveTemplate = async () => {
-    const newTemplate = await updateTemplate(template, {
+    await updateTemplate(template, {
       name,
       description,
       scopes,
@@ -69,10 +69,6 @@ export default function CreatorTemplatePage() {
       fields,
       visibility,
     });
-
-    if (newTemplate) {
-      updateUserTemplate(newTemplate);
-    }
   };
 
   const handleSave = async () => {
@@ -121,7 +117,7 @@ export default function CreatorTemplatePage() {
           />
 
           <CodeEditorTab code={html || ""} setCode={setHTML} />
-          <FieldsTab fields={fields} setFields={setFields} />
+          <FieldsTab fields={fields || []} setFields={setFields} />
         </TabPanels>
       </Tabs>
     </Flex>
