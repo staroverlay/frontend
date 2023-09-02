@@ -12,10 +12,11 @@ export default function Widgets() {
   return (
     <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
       <Box>
-        <Heading>Media</Heading>
+        <Heading>Widgets</Heading>
         <Text>
-          All media files available for your account widgets can be managed
-          here.
+          All the widgets you create from templates will be here. If you want to
+          create a new one, find a template you like and select &quot;Create
+          widget&quot;.
         </Text>
       </Box>
 
