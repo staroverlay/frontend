@@ -1,43 +1,36 @@
-import ITemplateField from "@/lib/interfaces/template-field";
+import ITemplateField, {
+  TemplateFieldType,
+} from "@/lib/interfaces/template-field";
+import { ValueOf } from "next/dist/shared/lib/constants";
+import FieldRendererArray from "./FieldRendererArray";
+
 import FieldRendererBoolean from "./FieldRendererBoolean";
 import FieldRendererNumber from "./FieldRendererNumber";
 import FieldRendererString from "./FieldRendererString";
 
 export interface FieldRendererProps {
   field: ITemplateField;
-  value: unknown;
-  setValue: (value: unknown) => void;
+  value: any;
+  setValue: (value: any) => void;
 }
+
+export const RENDER_MAP: {
+  [k in TemplateFieldType]: (props: FieldRendererProps) => JSX.Element;
+} = {
+  string: FieldRendererString,
+  number: FieldRendererNumber,
+  boolean: FieldRendererBoolean,
+  array: FieldRendererArray,
+};
 
 export default function FieldRenderer({
   field,
   value,
   setValue,
 }: FieldRendererProps) {
-  if (field.type == "string") {
-    return (
-      <FieldRendererString
-        field={field}
-        value={value as string}
-        setValue={setValue}
-      />
-    );
-  } else if (field.type == "number") {
-    return (
-      <FieldRendererNumber
-        field={field}
-        value={value as number}
-        setValue={setValue}
-      />
-    );
-  } else if (field.type == "boolean") {
-    return (
-      <FieldRendererBoolean
-        field={field}
-        value={value as boolean}
-        setValue={setValue}
-      />
-    );
+  const Renderer = RENDER_MAP[field.type];
+  if (Renderer != null) {
+    return <Renderer field={field} value={value} setValue={setValue} />;
   }
 
   return <></>;

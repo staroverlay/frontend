@@ -65,22 +65,6 @@ export default function ArrayFieldItem({
         />
       </FormControl>
       <FormControl>
-        <FormLabel>Display</FormLabel>
-        <Select
-          value={settings?.display}
-          onChange={(e) =>
-            setSettingsState({
-              ...settingsState,
-              display: e.target.value as "list" | "table",
-            })
-          }
-          size={"sm"}
-        >
-          <option value={"list"}>List</option>
-          <option value={"table"}>Table</option>
-        </Select>
-      </FormControl>
-      <FormControl>
         <FormLabel>Type</FormLabel>
         <Select
           value={settings?.type}

@@ -66,22 +66,6 @@ export default function MapFieldItem({
             size={"sm"}
           />
         </FormControl>
-        <FormControl>
-          <FormLabel>Display</FormLabel>
-          <Select
-            value={settings?.display}
-            onChange={(e) =>
-              setSettingsState({
-                ...settingsState,
-                display: e.target.value as "list" | "table",
-              })
-            }
-            size={"sm"}
-          >
-            <option value={"list"}>List</option>
-            <option value={"table"}>Table</option>
-          </Select>
-        </FormControl>
       </SimpleGrid>
 
       <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>

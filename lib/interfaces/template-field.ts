@@ -93,13 +93,11 @@ export type FieldMapSettings = {
   maxItems?: number;
   key: TemplateFieldType;
   value: TemplateFieldType;
-  display?: "list" | "table";
 };
 
 export type FieldArraySettings = {
   minItems?: number;
   maxItems?: number;
-  display?: "list" | "table";
   type: TemplateFieldType;
 };
 
