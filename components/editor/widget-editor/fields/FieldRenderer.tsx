@@ -1,10 +1,10 @@
 import ITemplateField, {
   TemplateFieldType,
 } from "@/lib/interfaces/template-field";
-import { ValueOf } from "next/dist/shared/lib/constants";
-import FieldRendererArray from "./FieldRendererArray";
 
+import FieldRendererArray from "./FieldRendererArray";
 import FieldRendererBoolean from "./FieldRendererBoolean";
+import FieldRendererEnum from "./FieldRendererEnum";
 import FieldRendererMap from "./FieldRendererMap";
 import FieldRendererMedia from "./FieldRendererMedia";
 import FieldRendererMediaAudio from "./FieldRendererMediaAudio";
@@ -27,6 +27,7 @@ export const RENDER_MAP: {
   boolean: FieldRendererBoolean,
   array: FieldRendererArray,
   map: FieldRendererMap,
+  enum: FieldRendererEnum,
   "platform:media": FieldRendererMedia,
   "platform:media.audio": FieldRendererMediaAudio,
   "platform:media.image": FieldRendererMediaImage,

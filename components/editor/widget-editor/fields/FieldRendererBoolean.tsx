@@ -2,7 +2,6 @@ import {
   Checkbox,
   Flex,
   FormControl,
-  FormHelperText,
   FormLabel,
   Switch,
   Text,
