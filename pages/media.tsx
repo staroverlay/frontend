@@ -1,3 +1,4 @@
+import MediasGrid from "@/components/content/medias-grid/MediasGrid";
 import usePlan from "@/hooks/usePlan";
 import {
   Box,
@@ -10,14 +11,8 @@ import {
   Heading,
   Text,
   Button,
-  Toast,
-  SimpleGrid,
-  Card,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import MediaCard from "../components/cards/media/MediaCard";
 import StatsCard from "../components/cards/stats/StatsCard";
-import MediaPreviewModal from "../components/modals/media-preview-modal/MediaPreviewModal";
 import useMedia from "../hooks/useMedia";
 import IMedia, { FileType } from "../lib/interfaces/media";
 
@@ -31,37 +26,10 @@ function UploadContentButton() {
   return <Button onClick={openUploadModal}>Upload content</Button>;
 }
 
-function NoMediaTab() {
-  return (
-    <TabPanel>
-      <Flex alignContent={"center"} justifyContent={"center"}>
-        <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-          <Heading>No media files</Heading>
-          <UploadContentButton />
-        </Flex>
-      </Flex>
-    </TabPanel>
-  );
-}
-
 function MediaFilesTab({ files, filter }: MediaFilesProps) {
-  const filteredFiles = files.filter((file) =>
-    filter ? file.type == filter : true
-  );
-  const isEmpty = filteredFiles.length === 0;
-
   return (
     <TabPanel>
-      <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
-        spacing="40px"
-      >
-        {filteredFiles.map((file) => (
-          <MediaCard key={file.resourceId} media={file} />
-        ))}
-      </SimpleGrid>
-
-      {isEmpty && <NoMediaTab />}
+      <MediasGrid medias={files} filter={filter} />
     </TabPanel>
   );
 }

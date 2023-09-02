@@ -5,6 +5,7 @@ export interface MediaHook {
   addMedia: (media: IMedia) => void;
   updateMedia: (media: IMedia) => void;
   removeMedia: (media: IMedia | string) => void;
+  getMedia: (id: string) => IMedia | undefined;
   storageUsage: number;
 
   isUploadModalOpen: boolean;

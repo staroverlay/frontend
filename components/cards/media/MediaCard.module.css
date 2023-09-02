@@ -1,7 +1,25 @@
-.container,
-.card {
+/* Sizes */
+.card-lg .container,
+.card-lg .card {
   height: 250px;
   width: 300px;
+}
+
+.card-md .container,
+.card-md .card {
+  height: 180px;
+  width: 240px;
+}
+
+.card-sm .container,
+.card-sm .card {
+  height: 140px;
+  width: 180px;
+}
+
+/* Styles */
+.container,
+.card {
   background-position: center;
   background-repeat: no-repeat;
   transition: all 200ms ease-in-out;

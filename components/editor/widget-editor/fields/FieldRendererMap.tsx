@@ -112,7 +112,7 @@ export default function FieldRendererMap({
           size={"xs"}
           disabled={
             isAnyFieldNull() ||
-            (opts?.maxItems != undefined && opts?.maxItems >= items.length)
+            (opts?.maxItems != undefined && items.length >= opts?.maxItems)
           }
         >
           Add

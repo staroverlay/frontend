@@ -6,6 +6,10 @@ import FieldRendererArray from "./FieldRendererArray";
 
 import FieldRendererBoolean from "./FieldRendererBoolean";
 import FieldRendererMap from "./FieldRendererMap";
+import FieldRendererMedia from "./FieldRendererMedia";
+import FieldRendererMediaAudio from "./FieldRendererMediaAudio";
+import FieldRendererMediaImage from "./FieldRendererMediaImage";
+import FieldRendererMediaVideo from "./FieldRendererMediaVideo";
 import FieldRendererNumber from "./FieldRendererNumber";
 import FieldRendererString from "./FieldRendererString";
 
@@ -23,6 +27,10 @@ export const RENDER_MAP: {
   boolean: FieldRendererBoolean,
   array: FieldRendererArray,
   map: FieldRendererMap,
+  "platform:media": FieldRendererMedia,
+  "platform:media.audio": FieldRendererMediaAudio,
+  "platform:media.image": FieldRendererMediaImage,
+  "platform:media.video": FieldRendererMediaVideo,
 };
 
 export default function FieldRenderer({

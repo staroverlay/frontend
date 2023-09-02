@@ -38,6 +38,10 @@ export function MediaProvider({ children }: PropsWithChildren) {
     setMedias(medias.map((m) => (m._id === media._id ? media : m)));
   };
 
+  const getMedia = (id: string) => {
+    return medias.find((m) => m._id === id);
+  };
+
   const openUploadModal = () => {
     onOpen();
   };
@@ -63,6 +67,7 @@ export function MediaProvider({ children }: PropsWithChildren) {
         removeMedia,
         addMedia,
         updateMedia,
+        getMedia,
         storageUsage,
         isUploadModalOpen: isOpen,
         openUploadModal,
