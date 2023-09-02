@@ -11,11 +11,16 @@ export type TemplateScope =
   | "twitch:prediction"
   | "twitch:stream-up";
 
-export const TemplateScopes = [
+export type TemplateScopeData = {
+  id: TemplateScope;
+  name: string;
+  debuggable?: boolean;
+};
+
+export const TemplateScopes: TemplateScopeData[] = [
   {
     id: "platform:storage",
     name: "Extension Storage",
-    debuggable: false,
   },
 
   {

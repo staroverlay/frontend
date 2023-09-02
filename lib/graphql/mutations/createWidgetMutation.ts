@@ -10,7 +10,6 @@ const CreateWidgetMutation = mutation`
             token
             templateId
             templateRaw
-            templateVersion
             scopes
             settings
         }

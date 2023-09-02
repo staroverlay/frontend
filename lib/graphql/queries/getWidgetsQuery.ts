@@ -10,7 +10,6 @@ const GetWidgetsQuery = query`
             token
             templateId
             templateRaw
-            templateVersion
             settings
         }
     }

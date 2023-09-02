@@ -2,14 +2,28 @@ import client from "../graphql/client";
 import CreateWidgetMutation from "../graphql/mutations/createWidgetMutation";
 import DeleteWidgetMutation from "../graphql/mutations/deleteWidgetMutation";
 import GetWidgetsQuery from "../graphql/queries/getWidgetsQuery";
+import ITemplate from "../interfaces/template";
 import IWidget from "../interfaces/widget";
 import WidgetCreatePayload from "./dtos/widget-create-payload";
 
 function fixWidget(widget: IWidget) {
+  // Fix settings
   const raw = widget.settings as unknown as string;
   if (raw && typeof raw == "string") {
     widget.settings = JSON.parse(raw);
   }
+
+  // Fix template
+  const templateRaw = widget.templateRaw as unknown as string;
+  const templateParsed = JSON.parse(templateRaw) as ITemplate;
+  widget.template = templateParsed;
+
+  // Fix template fields
+  const templateFields = widget.template?.fields;
+  if (templateFields && typeof templateFields == "string") {
+    widget.template.fields = JSON.parse(templateFields);
+  }
+
   return widget;
 }
 

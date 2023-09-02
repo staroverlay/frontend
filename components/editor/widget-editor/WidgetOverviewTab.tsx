@@ -50,6 +50,7 @@ interface ScopeListProps {
 
 const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
   const scopeList = getScopes(templateScopes);
+
   return (
     <>
       {scopeList.map((scope) => (

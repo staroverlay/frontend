@@ -30,7 +30,7 @@ export default function WidgetPage() {
   const widget = widgets.find((w) => w._id === widgetId);
 
   // Find template by widget.
-  const currentTemplate = JSON.parse(widget?.templateRaw || "{}") as ITemplate;
+  const cachedTemplate = widget?.template as ITemplate;
 
   // Input fields.
   const [name, setName] = useState(widget?.displayName || "");
@@ -88,14 +88,14 @@ export default function WidgetPage() {
             scopes={scopes}
             setName={setName}
             setScopes={setScopes}
-            template={currentTemplate}
+            template={cachedTemplate}
             widget={widget}
           />
 
           <WidgetSettingsTab
             setSettings={setSettings}
             settings={settings}
-            template={currentTemplate}
+            template={cachedTemplate}
             widget={widget}
           />
         </TabPanels>
