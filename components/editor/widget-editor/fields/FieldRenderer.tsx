@@ -12,6 +12,7 @@ import FieldRendererMediaImage from "./FieldRendererMediaImage";
 import FieldRendererMediaVideo from "./FieldRendererMediaVideo";
 import FieldRendererNumber from "./FieldRendererNumber";
 import FieldRendererString from "./FieldRendererString";
+import FieldRendererTwitchReward from "./FieldRendererTwitchReward";
 
 export interface FieldRendererProps {
   field: ITemplateField;
@@ -32,6 +33,7 @@ export const RENDER_MAP: {
   "platform:media.audio": FieldRendererMediaAudio,
   "platform:media.image": FieldRendererMediaImage,
   "platform:media.video": FieldRendererMediaVideo,
+  "twitch:reward": FieldRendererTwitchReward,
 };
 
 export default function FieldRenderer({

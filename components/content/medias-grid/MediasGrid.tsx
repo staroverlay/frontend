@@ -3,6 +3,8 @@ import useMedia from "@/hooks/useMedia";
 import IMedia, { FileType } from "@/lib/interfaces/media";
 import { Button, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
 
+import styles from "./MediasGrid.module.css";
+
 interface MediasGridProps {
   medias: IMedia[];
   cardSize?: "sm" | "md" | "lg";
@@ -24,7 +26,7 @@ export default function MediasGrid(props: MediasGridProps) {
   return (
     <>
       <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
+        className={styles[`grid-${props.cardSize || "lg"}`]}
         spacing="40px"
       >
         {filtered.map((media) => (

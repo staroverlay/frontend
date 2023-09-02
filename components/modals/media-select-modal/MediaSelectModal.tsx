@@ -22,7 +22,7 @@ export default function MediaSelectModal({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      size={"5xl"}
+      size={"4xl"}
       title={`Select a media file`}
     >
       <MediasGrid
