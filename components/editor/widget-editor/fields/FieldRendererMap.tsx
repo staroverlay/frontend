@@ -14,31 +14,52 @@ import {
 import ITemplateField from "@/lib/interfaces/template-field";
 import FieldRenderer from "./FieldRenderer";
 import { FaTrash } from "react-icons/fa";
+import { useState } from "react";
 
-export interface FieldRendererArrayProps {
+export interface FieldRendererMapProps {
   field: ITemplateField;
-  value: unknown[];
+  value: { [key: string]: any };
   setValue: (value: unknown) => void;
 }
 
-export default function FieldRendererArray(props: FieldRendererArrayProps) {
-  const { field, setValue } = props;
-  const value = props.value || [];
-  const opts = field.array;
+export default function FieldRendererMap({
+  field,
+  value,
+  setValue,
+}: FieldRendererMapProps) {
+  const opts = field.map;
+  const [items, setItems] = useState<{ key: any; value: any }[]>(
+    Object.keys(value || {}).map((key) => ({
+      key,
+      value: null,
+    }))
+  );
 
-  const updateValue = (index: number, newValue: any) => {
-    value[index] = newValue;
-    setValue([...value]);
+  const isAnyFieldNull = () => {
+    return items.find((item) => !item.key || !item.value) != null;
+  };
+
+  const updateKey = (index: number, key: any) => {
+    items[index].key = key;
+    setItems([...items]);
+  };
+
+  const updateValue = (index: number, value: any) => {
+    items[index].value = value;
+    setItems([...items]);
   };
 
   const add = () => {
-    value.push(null);
-    setValue([...value]);
+    items.push({
+      key: null,
+      value: null,
+    });
+    setItems([...items]);
   };
 
   const remove = (index: number) => {
-    value.splice(index, 1);
-    setValue([...value]);
+    items.splice(index, 1);
+    setItems([...items]);
   };
 
   return (
@@ -52,15 +73,25 @@ export default function FieldRendererArray(props: FieldRendererArrayProps) {
         padding={"14px 20px"}
         direction={"column"}
       >
-        {value.map((item, index) => (
+        {items.map((item, index) => (
           <Flex key={index} gap={"5px"} alignItems={"center"}>
             <FieldRenderer
-              value={item}
+              value={item.key}
+              setValue={(newKey) => updateKey(index, newKey)}
+              field={{
+                id: "dummy",
+                _internalId: "dummy",
+                type: opts?.key || "string",
+              }}
+            />
+
+            <FieldRenderer
+              value={item.value}
               setValue={(newValue) => updateValue(index, newValue)}
               field={{
                 id: "dummy",
                 _internalId: "dummy",
-                type: opts?.type || "string",
+                type: opts?.value || "string",
               }}
             />
 
@@ -80,7 +111,8 @@ export default function FieldRendererArray(props: FieldRendererArrayProps) {
           onClick={add}
           size={"xs"}
           disabled={
-            opts?.maxItems != undefined && value.length >= opts?.maxItems
+            isAnyFieldNull() ||
+            (opts?.maxItems != undefined && opts?.maxItems >= items.length)
           }
         >
           Add

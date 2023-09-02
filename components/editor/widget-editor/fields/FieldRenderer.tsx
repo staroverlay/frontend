@@ -5,6 +5,7 @@ import { ValueOf } from "next/dist/shared/lib/constants";
 import FieldRendererArray from "./FieldRendererArray";
 
 import FieldRendererBoolean from "./FieldRendererBoolean";
+import FieldRendererMap from "./FieldRendererMap";
 import FieldRendererNumber from "./FieldRendererNumber";
 import FieldRendererString from "./FieldRendererString";
 
@@ -21,6 +22,7 @@ export const RENDER_MAP: {
   number: FieldRendererNumber,
   boolean: FieldRendererBoolean,
   array: FieldRendererArray,
+  map: FieldRendererMap,
 };
 
 export default function FieldRenderer({
