@@ -1,10 +1,13 @@
 import client from "../graphql/client";
 import CreateWidgetMutation from "../graphql/mutations/createWidgetMutation";
 import DeleteWidgetMutation from "../graphql/mutations/deleteWidgetMutation";
+import UpdateWidgetMutation from "../graphql/mutations/updateWidgetMutation";
 import GetWidgetsQuery from "../graphql/queries/getWidgetsQuery";
+import IDictionary from "../interfaces/shared/IDictionary";
 import ITemplate from "../interfaces/template";
 import IWidget from "../interfaces/widget";
 import WidgetCreatePayload from "./dtos/widget-create-payload";
+import WidgetUpdatePayload from "./dtos/widget-update-payload";
 
 function fixWidget(widget: IWidget) {
   // Fix settings
@@ -42,4 +45,22 @@ export async function deleteWidget(widget: IWidget): Promise<boolean> {
 export async function getMyWidgets(): Promise<IWidget[]> {
   const widgets = await client.fetch(GetWidgetsQuery);
   return widgets.map(fixWidget) as IWidget[];
+}
+
+export async function updateWidget(
+  widget: IWidget,
+  update: WidgetUpdatePayload
+) {
+  const payload: IDictionary = { ...update };
+
+  if (payload.settings && typeof payload.settings != "string") {
+    payload.settings = JSON.stringify(payload.settings);
+  }
+
+  const newWidget = await client.fetch(UpdateWidgetMutation, {
+    id: widget._id,
+    payload,
+  });
+
+  return fixWidget(newWidget as IWidget);
 }

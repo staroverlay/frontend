@@ -2,19 +2,16 @@ import {
   Badge,
   Box,
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
-  IconButton,
-  Switch,
+  Image,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 
 import ITemplateField from "@/lib/interfaces/template-field";
-import Image from "next/image";
 import useMedia from "@/hooks/useMedia";
 import { getMediaThumbnail } from "@/lib/utils/media";
 import { useEffect, useState } from "react";
@@ -79,12 +76,14 @@ export default function FieldRendererMedia({
             <Image
               alt="Selected media"
               src={`${thumbnail}`}
-              width={40}
-              height={40}
+              height={"100%"}
+              maxWidth={"40px"}
             />
 
             <Box>
-              <Text fontWeight={"bold"}>{media?.name}</Text>
+              <Text fontWeight={"bold"} fontSize={"14px"}>
+                {media?.name}
+              </Text>
               <Badge variant={"outline"} colorScheme={"pink"} mr={"5px"}>
                 {((media?.size || 0) / 1024 / 1024).toFixed(2)} MB
               </Badge>

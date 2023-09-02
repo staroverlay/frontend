@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   Flex,
@@ -8,6 +8,7 @@ import {
   TabList,
   Tab,
   TabPanels,
+  Spinner,
 } from "@chakra-ui/react";
 
 import useWidgets from "@/hooks/useWidgets";
@@ -19,10 +20,12 @@ import Error404 from "../404";
 import WidgetOverviewTab from "@/components/editor/widget-editor/WidgetOverviewTab";
 import WidgetSettingsTab from "@/components/editor/widget-editor/WidgetSettingsTab";
 import IDictionary from "@/lib/interfaces/shared/IDictionary";
+import { updateWidget } from "@/lib/services/widget-service";
+import TemplateScope from "@/lib/interfaces/template-scope";
 
 export default function WidgetPage() {
-  const { widgets, updateWidget } = useWidgets();
-  const { query } = useRouter();
+  const { widgets, updateWidget: updateWidgetHook } = useWidgets();
+  const { query, isReady } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   // Find widget by ID in query.
@@ -33,16 +36,35 @@ export default function WidgetPage() {
   const cachedTemplate = widget?.template as ITemplate;
 
   // Input fields.
-  const [name, setName] = useState(widget?.displayName || "");
-  const [scopes, setScopes] = useState(widget?.scopes || []);
-  const [settings, setSettings] = useState<IDictionary>(widget?.settings || {});
+  const [displayName, setDisplayName] = useState("");
+  const [scopes, setScopes] = useState<TemplateScope[]>([]);
+  const [settings, setSettings] = useState<IDictionary>({});
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    if (widget) {
+      setDisplayName(widget.displayName);
+      setScopes(widget.scopes);
+      setSettings(widget.settings || {});
+      setEnabled(widget.enabled);
+    }
+  }, [widget]);
 
   // Payload.
   const updatePayload = {
-    name,
+    displayName,
     scopes,
+    settings,
+    enabled,
   };
-  const hasChanges = hasObjectChanged(widget, updatePayload);
+
+  const hasChanges = hasObjectChanged(
+    {
+      ...widget,
+      settings: widget?.settings || {},
+    },
+    updatePayload
+  );
 
   // If widget not found, render 404 error page.
   if (!widget) {
@@ -50,7 +72,10 @@ export default function WidgetPage() {
   }
 
   // Handlers
-  const handleSaveWidget = async () => {};
+  const handleSaveWidget = async () => {
+    const newWidget = await updateWidget(widget, updatePayload);
+    updateWidgetHook(newWidget);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -84,9 +109,9 @@ export default function WidgetPage() {
 
         <TabPanels>
           <WidgetOverviewTab
-            name={name}
+            name={displayName}
             scopes={scopes}
-            setName={setName}
+            setName={setDisplayName}
             setScopes={setScopes}
             template={cachedTemplate}
             widget={widget}

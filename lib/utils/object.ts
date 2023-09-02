@@ -18,9 +18,20 @@ export function hasObjectChanged(
   }
 
   for (const key in newObject) {
-    if (original[key] != newObject[key]) {
+    const originalValue = original[key];
+    const newValue = newObject[key];
+
+    if (typeof originalValue == "object" && typeof originalValue == "object") {
+      const originalRaw = JSON.stringify(originalValue);
+      const newRaw = JSON.stringify(newValue);
+
+      if (originalRaw != newRaw) {
+        return true;
+      }
+    } else if (originalValue != newValue) {
       return true;
     }
   }
+
   return false;
 }

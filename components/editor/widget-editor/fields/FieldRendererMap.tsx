@@ -14,7 +14,8 @@ import {
 import ITemplateField from "@/lib/interfaces/template-field";
 import FieldRenderer from "./FieldRenderer";
 import { FaTrash } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import IDictionary from "@/lib/interfaces/shared/IDictionary";
 
 export interface FieldRendererMapProps {
   field: ITemplateField;
@@ -28,25 +29,33 @@ export default function FieldRendererMap({
   setValue,
 }: FieldRendererMapProps) {
   const opts = field.map;
-  const [items, setItems] = useState<{ key: any; value: any }[]>(
-    Object.keys(value || {}).map((key) => ({
-      key,
-      value: null,
-    }))
-  );
+
+  const [items, setItems] = useState<{ key: any; value: any }[]>([]);
 
   const isAnyFieldNull = () => {
     return items.find((item) => !item.key || !item.value) != null;
   };
 
+  const update = () => {
+    if (!isAnyFieldNull()) {
+      const map: IDictionary = {};
+      for (const item of items) {
+        map[item.key] = item.value;
+      }
+      setValue(map);
+    }
+  };
+
   const updateKey = (index: number, key: any) => {
     items[index].key = key;
     setItems([...items]);
+    update();
   };
 
   const updateValue = (index: number, value: any) => {
     items[index].value = value;
     setItems([...items]);
+    update();
   };
 
   const add = () => {
@@ -62,6 +71,15 @@ export default function FieldRendererMap({
     setItems([...items]);
   };
 
+  useEffect(() => {
+    setItems(
+      Object.keys(value || {}).map((key) => ({
+        key,
+        value: value[key],
+      }))
+    );
+  }, [value]);
+
   return (
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
@@ -74,7 +92,7 @@ export default function FieldRendererMap({
         direction={"column"}
       >
         {items.map((item, index) => (
-          <Flex key={index} gap={"5px"} alignItems={"center"}>
+          <Flex key={index} gap={"10px"} alignItems={"center"}>
             <FieldRenderer
               value={item.key}
               setValue={(newKey) => updateKey(index, newKey)}

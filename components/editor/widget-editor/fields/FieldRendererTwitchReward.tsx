@@ -70,7 +70,7 @@ export default function FieldRendererTwitchReward({
         borderRadius={"7px"}
         cursor={"pointer"}
         gap={"10px"}
-        padding={"5px"}
+        padding={"10px"}
         transition={"all 90ms ease-in-out"}
         onClick={onOpen}
         _hover={{

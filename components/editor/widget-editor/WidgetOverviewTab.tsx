@@ -106,7 +106,6 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
         <Flex flexDirection={"column"} gap={"20px"} maxWidth={"70%"}>
           <iframe
             src={link}
-            sandbox={"true"}
             width={"100%"}
             height={"200px"}
             style={{
