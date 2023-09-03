@@ -1,8 +1,3 @@
-import { IntegrationType } from "@/lib/interfaces/integration";
-import IUser from "@/lib/interfaces/user";
-import { createUser } from "@/lib/services/user-service";
-import { oauthRegister } from "@/lib/utils/oauth";
-import { handlePromise } from "@/lib/utils/promise";
 import {
   Alert,
   AlertDescription,
@@ -16,21 +11,27 @@ import {
   IconButton,
   Input,
   useColorMode,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { FaKickstarter, FaTwitch, FaYoutube } from "react-icons/fa";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
+
+import { IntegrationType } from '@/lib/interfaces/integration';
+import IUser from '@/lib/interfaces/user';
+import { createUser } from '@/lib/services/user-service';
+import { oauthRegister } from '@/lib/utils/oauth';
+import { handlePromise } from '@/lib/utils/promise';
 
 export default function Register() {
   const { colorMode } = useColorMode();
-  const mainColor = colorMode === "light" ? "white" : "black";
+  const mainColor = colorMode === 'light' ? 'white' : 'black';
 
   const { push: navigateTo } = useRouter();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -39,18 +40,18 @@ export default function Register() {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match.");
+      setError('Passwords do not match.');
       return;
     }
 
     if (password.length < 8) {
-      setError("Password must be at least 8 characters long.");
+      setError('Password must be at least 8 characters long.');
       return;
     }
 
     setLoading(true);
 
-    const payload = { email, password, username: email.split("@")[0] };
+    const payload = { email, password, username: email.split('@')[0] };
     const user = await createUser(payload)
       .catch((e) => {
         setError(e.message);
@@ -59,7 +60,7 @@ export default function Register() {
       .finally(() => setLoading(false));
 
     if (user) {
-      navigateTo("/auth/login");
+      navigateTo('/auth/login');
     }
   };
 
@@ -71,28 +72,28 @@ export default function Register() {
     setLoading(true);
 
     const user = await handlePromise<IUser | null>(oauthRegister(type)).finally(
-      () => setLoading(false)
+      () => setLoading(false),
     );
 
-    if (user) navigateTo("/login");
+    if (user) navigateTo('/login');
   };
 
   return (
     <Flex
-      alignItems={"center"}
-      justifyContent={"center"}
-      width={"100%"}
-      height={"100vh"}
+      alignItems={'center'}
+      justifyContent={'center'}
+      width={'100%'}
+      height={'100vh'}
     >
       <form onSubmit={handleSubmit}>
         <Flex
           bg={mainColor}
-          borderRadius={"10px"}
-          padding={"10px 20px"}
-          flexDirection={"column"}
-          gap={"15px"}
+          borderRadius={'10px'}
+          padding={'10px 20px'}
+          flexDirection={'column'}
+          gap={'15px'}
         >
-          <Heading size={"lg"}>Sign up</Heading>
+          <Heading size={'lg'}>Sign up</Heading>
 
           {error != null && (
             <Alert status="error">
@@ -141,33 +142,33 @@ export default function Register() {
             />
           </FormControl>
 
-          <Flex flexDirection={"column"} gap={"10px"}>
+          <Flex flexDirection={'column'} gap={'10px'}>
             <Button type="submit">Register</Button>
 
-            <Flex justifyContent={"center"}>
-              <Link href={"/auth/login"} style={{ fontSize: "12px" }}>
+            <Flex justifyContent={'center'}>
+              <Link href={'/auth/login'} style={{ fontSize: '12px' }}>
                 Already registered? Sign in here.
               </Link>
             </Flex>
 
-            <Flex justifyContent={"space-around"}>
+            <Flex justifyContent={'space-around'}>
               <IconButton
                 aria-label="Login with Kick"
-                colorScheme={"green"}
+                colorScheme={'green'}
                 icon={<FaKickstarter />}
-                onClick={() => handleOAuthRegister("kick")}
+                onClick={() => handleOAuthRegister('kick')}
               />
               <IconButton
                 aria-label="Login with Twitch"
-                colorScheme={"purple"}
+                colorScheme={'purple'}
                 icon={<FaTwitch />}
-                onClick={() => handleOAuthRegister("twitch")}
+                onClick={() => handleOAuthRegister('twitch')}
               />
               <IconButton
                 aria-label="Login with YouTube"
-                colorScheme={"red"}
+                colorScheme={'red'}
                 icon={<FaYoutube />}
-                onClick={() => handleOAuthRegister("youtube")}
+                onClick={() => handleOAuthRegister('youtube')}
               />
             </Flex>
           </Flex>

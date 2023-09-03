@@ -1,12 +1,11 @@
-import R2 from "../clients/r2";
-import client from "../graphql/client";
-import CompleteMediaMutation from "../graphql/mutations/completeMediaMutation";
-import CreateMediaMutation from "../graphql/mutations/createMediaMutation";
-import DeleteMediaMutation from "../graphql/mutations/deleteMediaMutation";
-import GetAllMediaQuery from "../graphql/queries/getAllMediaQuery";
-
-import IMedia from "../interfaces/media";
-import IMediaPart from "../interfaces/media-part";
+import R2 from '../clients/r2';
+import client from '../graphql/client';
+import CompleteMediaMutation from '../graphql/mutations/completeMediaMutation';
+import CreateMediaMutation from '../graphql/mutations/createMediaMutation';
+import DeleteMediaMutation from '../graphql/mutations/deleteMediaMutation';
+import GetAllMediaQuery from '../graphql/queries/getAllMediaQuery';
+import IMedia from '../interfaces/media';
+import IMediaPart from '../interfaces/media-part';
 
 export async function createMedia(payload: {
   contentType: string;
@@ -21,9 +20,9 @@ export async function uploadPart(
   id: string,
   uploadId: string,
   part: number,
-  partBuffer: ArrayBuffer
+  partBuffer: ArrayBuffer,
 ) {
-  const buffer = Buffer.from(partBuffer).toString("binary");
+  const buffer = Buffer.from(partBuffer).toString('binary');
   const payload = { uploadId, part, buffer };
   const { data } = await R2.put(`/${id}`, payload);
   return data as IMediaPart;

@@ -1,12 +1,12 @@
-import { PropsWithChildren, useEffect, useState } from "react";
-import Loading from "../../components/layout/loading";
-import useAuth from "../../hooks/useAuth";
-import ITemplate from "../../lib/interfaces/template";
+import { PropsWithChildren, useEffect, useState } from 'react';
+import Loading from '../../components/layout/loading';
+import useAuth from '../../hooks/useAuth';
+import ITemplate from '../../lib/interfaces/template';
 import {
   getMyTemplates,
   getSharedTemplates,
-} from "../../lib/services/template-service";
-import { TemplatesContext } from "./templates-context";
+} from '../../lib/services/template-service';
+import { TemplatesContext } from './templates-context';
 
 export function TemplatesProvider({ children }: PropsWithChildren) {
   const { user } = useAuth();
@@ -15,7 +15,7 @@ export function TemplatesProvider({ children }: PropsWithChildren) {
   const [fetched, setFetched] = useState(false);
 
   const removeTemplate = (template: ITemplate | string) => {
-    const id = typeof template === "string" ? template : template._id;
+    const id = typeof template === 'string' ? template : template._id;
     setUserTemplates(userTemplates.filter((t) => t._id !== id));
   };
 
@@ -25,7 +25,7 @@ export function TemplatesProvider({ children }: PropsWithChildren) {
 
   const updateTemplate = (template: ITemplate) => {
     setUserTemplates(
-      userTemplates.map((t) => (t._id === template._id ? template : t))
+      userTemplates.map((t) => (t._id === template._id ? template : t)),
     );
   };
 
@@ -58,7 +58,7 @@ export function TemplatesProvider({ children }: PropsWithChildren) {
         updateTemplate,
       }}
     >
-      <Loading loaded={fetched} message={"Loading templates"}>
+      <Loading loaded={fetched} message={'Loading templates'}>
         {children}
       </Loading>
     </TemplatesContext.Provider>

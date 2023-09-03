@@ -1,8 +1,8 @@
-import { Flex } from "@chakra-ui/react";
-import IMedia from "../../../lib/interfaces/media";
-import { getMediaURL } from "../../../lib/utils/media";
+import { Flex } from '@chakra-ui/react';
 
-import styles from "./FilePreview.module.css";
+import IMedia from '../../../lib/interfaces/media';
+import { getMediaURL } from '../../../lib/utils/media';
+import styles from './FilePreview.module.css';
 
 interface InternalFilePreviewProps {
   uri: string;
@@ -10,7 +10,7 @@ interface InternalFilePreviewProps {
 
 function ImageFilePreview({ uri }: InternalFilePreviewProps) {
   // eslint-disable-next-line @next/next/no-img-element
-  return <img className={styles.image} src={uri} alt={"Image Preview"} />;
+  return <img className={styles.image} src={uri} alt={'Image Preview'} />;
 }
 
 function VideoFilePreview({ uri }: InternalFilePreviewProps) {
@@ -29,9 +29,9 @@ interface FilePreviewProps {
 }
 
 export default function FilePreview({ file, media }: FilePreviewProps) {
-  const isImage = file?.type.startsWith("image/") || media?.type === "image";
-  const isVideo = file?.type.startsWith("video/") || media?.type === "video";
-  const isAudio = file?.type.startsWith("audio/") || media?.type === "audio";
+  const isImage = file?.type.startsWith('image/') || media?.type === 'image';
+  const isVideo = file?.type.startsWith('video/') || media?.type === 'video';
+  const isAudio = file?.type.startsWith('audio/') || media?.type === 'audio';
 
   if (!file && !media) return null;
 

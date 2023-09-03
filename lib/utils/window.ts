@@ -15,7 +15,7 @@ export class PopupWindow {
   }
 
   open() {
-    this.window = window.open(this.url, "_blank", "width=480,height=766");
+    this.window = window.open(this.url, '_blank', 'width=480,height=766');
   }
 
   waitMessage<T>(channel: string): Promise<T | null> {
@@ -24,7 +24,7 @@ export class PopupWindow {
 
       if (!this.window) {
         resolved = true;
-        reject("not_opened");
+        reject('not_opened');
         return;
       }
 
@@ -43,13 +43,13 @@ export class PopupWindow {
         if (resolved) return;
 
         if (event.data.channel === channel) {
-          this.window?.removeEventListener("message", listener);
+          this.window?.removeEventListener('message', listener);
           resolved = true;
           resolve(event.data.data as T);
         }
       };
 
-      window.addEventListener("message", listener);
+      window.addEventListener('message', listener);
     });
   }
 

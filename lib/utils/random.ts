@@ -1,8 +1,8 @@
 const CHARACTERS =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 export const randomString = (length: number) => {
-  let result = "";
+  let result = '';
   let counter = 0;
 
   while (counter < length) {

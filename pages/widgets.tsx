@@ -1,16 +1,16 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react";
+import { Box, Flex, Heading, Text } from '@chakra-ui/react';
 
-import WidgetsGrid from "@/components/content/widgets-grid/WidgetsGrid";
-import StatsCard from "@/components/cards/stats/StatsCard";
-import usePlan from "@/hooks/usePlan";
-import useWidgets from "@/hooks/useWidgets";
+import StatsCard from '@/components/cards/stats/StatsCard';
+import WidgetsGrid from '@/components/content/widgets-grid/WidgetsGrid';
+import usePlan from '@/hooks/usePlan';
+import useWidgets from '@/hooks/useWidgets';
 
 export default function Widgets() {
   const { activePlan } = usePlan();
   const { widgets } = useWidgets();
 
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Box>
         <Heading>Widgets</Heading>
         <Text>
@@ -20,7 +20,7 @@ export default function Widgets() {
         </Text>
       </Box>
 
-      <Flex gap={"10px"}>
+      <Flex gap={'10px'}>
         <StatsCard
           title="Widgets"
           value={`${widgets.length}`}

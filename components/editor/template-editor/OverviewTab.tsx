@@ -8,16 +8,16 @@ import {
   Input,
   Textarea,
   Select,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useState } from 'react';
 
-import useAuth from "@/hooks/useAuth";
-import ServiceType, { ServiceTypes } from "@/lib/interfaces/service-type";
-import TemplateScope, { TemplateScopes } from "@/lib/interfaces/template-scope";
+import TemplateCard from '@/components/cards/template/TemplateCard';
+import useAuth from '@/hooks/useAuth';
+import ServiceType, { ServiceTypes } from '@/lib/interfaces/service-type';
+import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
 import TemplateVisibility, {
   TemplateVisibilities,
-} from "@/lib/interfaces/template-visibility";
-import TemplateCard from "@/components/cards/template/TemplateCard";
-import { useState } from "react";
+} from '@/lib/interfaces/template-visibility';
 
 interface OverviewTabProps {
   name: string;
@@ -42,7 +42,7 @@ interface ScopeCheckboxProps {
 const ScopeCheckbox = ({ id, name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
-      width={"100%"}
+      width={'100%'}
       defaultChecked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
@@ -61,7 +61,7 @@ interface ScopeListProps {
 
 const ScopeList = ({ service, scopes, setScopes }: ScopeListProps) => {
   const scopeList = TemplateScopes.filter(
-    (s) => s.id.startsWith("platform:") || s.id.startsWith(service)
+    (s) => s.id.startsWith('platform:') || s.id.startsWith(service),
   );
 
   return (
@@ -90,14 +90,14 @@ export default function OverviewTab(props: OverviewTabProps) {
 
   return (
     <TabPanel>
-      <Flex justifyContent={"space-evenly"}>
-        <Flex flexDirection={"column"} gap={"20px"} maxWidth={"70%"}>
+      <Flex justifyContent={'space-evenly'}>
+        <Flex flexDirection={'column'} gap={'20px'} maxWidth={'70%'}>
           <FormControl>
             <FormLabel>Name</FormLabel>
             <Input
               isRequired={true}
-              width={"container.sm"}
-              placeholder={"My cool template"}
+              width={'container.sm'}
+              placeholder={'My cool template'}
               value={props.name}
               onChange={(e) => props.setName(e.target.value)}
             />
@@ -107,8 +107,8 @@ export default function OverviewTab(props: OverviewTabProps) {
             <FormLabel>Description</FormLabel>
             <Textarea
               isRequired={true}
-              width={"container.sm"}
-              placeholder={"My cool template"}
+              width={'container.sm'}
+              placeholder={'My cool template'}
               value={props.description}
               onChange={(e) => props.setDescription(e.target.value)}
             />
@@ -117,7 +117,7 @@ export default function OverviewTab(props: OverviewTabProps) {
           <FormControl>
             <FormLabel>Visibility</FormLabel>
             <Select
-              width={"container.sm"}
+              width={'container.sm'}
               value={props.visibility}
               onChange={(e) => {
                 props.setVisibility(e.target.value as TemplateVisibility);
@@ -134,7 +134,7 @@ export default function OverviewTab(props: OverviewTabProps) {
           <FormControl>
             <FormLabel>Service (Streaming Platform)</FormLabel>
             <Select
-              width={"container.sm"}
+              width={'container.sm'}
               value={props.service}
               onChange={(e) => {
                 props.setService(e.target.value as ServiceType);
@@ -158,15 +158,15 @@ export default function OverviewTab(props: OverviewTabProps) {
           </FormControl>
         </Flex>
 
-        <Box maxWidth={"350px"} width={"100%"} mt={"30px"}>
+        <Box maxWidth={'350px'} width={'100%'} mt={'30px'}>
           <TemplateCard
             context="editor"
             onCreateWidget={() => {}}
             onDelete={() => {}}
             template={{
-              _id: user?._id || "",
-              author: user?.username || "",
-              html: "",
+              _id: user?._id || '',
+              author: user?.username || '',
+              html: '',
               name: props.name,
               visibility: props.visibility,
               description: props.description,

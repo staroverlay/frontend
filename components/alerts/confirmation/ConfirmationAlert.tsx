@@ -7,8 +7,8 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-} from "@chakra-ui/react";
-import { MutableRefObject, PropsWithChildren, useRef } from "react";
+} from '@chakra-ui/react';
+import { MutableRefObject, PropsWithChildren, useRef } from 'react';
 
 interface ConfirmationAlertProps extends PropsWithChildren {
   title?: string;

@@ -6,9 +6,9 @@ import {
   RadioGroup,
   Select,
   Stack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
+import ITemplateField from '@/lib/interfaces/template-field';
 
 export interface FieldRendererEnumProps {
   field: ITemplateField;
@@ -68,7 +68,7 @@ export default function FieldRendererEnum(props: FieldRendererEnumProps) {
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
 
-      {opts?.display == "radio" ? (
+      {opts?.display == 'radio' ? (
         <FieldRendererEnumRadio {...props} />
       ) : (
         <FieldRendererEnumSelect {...props} />

@@ -9,14 +9,14 @@ import {
   Image,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
-import useMedia from "@/hooks/useMedia";
-import { getMediaThumbnail } from "@/lib/utils/media";
-import { useEffect, useState } from "react";
-import MediaSelectModal from "@/components/modals/media-select-modal/MediaSelectModal";
-import { FileType } from "@/lib/interfaces/media";
+import MediaSelectModal from '@/components/modals/media-select-modal/MediaSelectModal';
+import useMedia from '@/hooks/useMedia';
+import { FileType } from '@/lib/interfaces/media';
+import ITemplateField from '@/lib/interfaces/template-field';
+import { getMediaThumbnail } from '@/lib/utils/media';
 
 export interface FieldRendererMediaProps {
   field: ITemplateField;
@@ -59,35 +59,35 @@ export default function FieldRendererMedia({
       <FormLabel>{field.label}</FormLabel>
 
       <Flex
-        bg={"Background"}
-        borderRadius={"7px"}
-        cursor={"pointer"}
-        gap={"10px"}
-        padding={"5px"}
-        transition={"all 90ms ease-in-out"}
+        bg={'Background'}
+        borderRadius={'7px'}
+        cursor={'pointer'}
+        gap={'10px'}
+        padding={'5px'}
+        transition={'all 90ms ease-in-out'}
         onClick={onOpen}
         _hover={{
-          transform: "scale(1.05)",
+          transform: 'scale(1.05)',
         }}
       >
-        {thumbnail == null && <Button size={"sm"}>Select media</Button>}
+        {thumbnail == null && <Button size={'sm'}>Select media</Button>}
         {thumbnail != null && (
           <>
             <Image
               alt="Selected media"
               src={`${thumbnail}`}
-              height={"100%"}
-              maxWidth={"40px"}
+              height={'100%'}
+              maxWidth={'40px'}
             />
 
             <Box>
-              <Text fontWeight={"bold"} fontSize={"14px"}>
+              <Text fontWeight={'bold'} fontSize={'14px'}>
                 {media?.name}
               </Text>
-              <Badge variant={"outline"} colorScheme={"pink"} mr={"5px"}>
+              <Badge variant={'outline'} colorScheme={'pink'} mr={'5px'}>
                 {((media?.size || 0) / 1024 / 1024).toFixed(2)} MB
               </Badge>
-              <Badge variant={"outline"} colorScheme={"blue"} mr={"5px"}>
+              <Badge variant={'outline'} colorScheme={'blue'} mr={'5px'}>
                 {media?.type}
               </Badge>
             </Box>

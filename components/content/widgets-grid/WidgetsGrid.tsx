@@ -1,11 +1,12 @@
-import ConfirmationAlert from "@/components/alerts/confirmation/ConfirmationAlert";
-import WidgetCard from "@/components/cards/widget/WidgetCard";
-import useWidgets from "@/hooks/useWidgets";
-import IWidget from "@/lib/interfaces/widget";
-import { deleteWidget } from "@/lib/services/widget-service";
-import { toastPending } from "@/lib/utils/toasts";
-import { Flex, Heading, SimpleGrid, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { useState } from 'react';
+
+import ConfirmationAlert from '@/components/alerts/confirmation/ConfirmationAlert';
+import WidgetCard from '@/components/cards/widget/WidgetCard';
+import useWidgets from '@/hooks/useWidgets';
+import IWidget from '@/lib/interfaces/widget';
+import { deleteWidget } from '@/lib/services/widget-service';
+import { toastPending } from '@/lib/utils/toasts';
 
 interface WidgetsGridProps {
   search?: string;
@@ -14,9 +15,9 @@ interface WidgetsGridProps {
 
 function NoWidgets({ message }: { message?: string }) {
   return (
-    <Flex alignContent={"center"} justifyContent={"center"}>
-      <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-        <Heading>{message ? message : "No widgets"}</Heading>
+    <Flex alignContent={'center'} justifyContent={'center'}>
+      <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
+        <Heading>{message ? message : 'No widgets'}</Heading>
       </Flex>
     </Flex>
   );
@@ -36,8 +37,8 @@ function WidgetsRender({ widgets }: { widgets: IWidget[] }) {
   const handleDeleteWidget = () => {
     setLoading(true);
     toastPending(deleteWidget(selectedWidget as IWidget), {
-      pending: "Deleting widget",
-      success: "Widget deleted",
+      pending: 'Deleting widget',
+      success: 'Widget deleted',
     })
       .then(() => {
         onDeleteClose();
@@ -60,7 +61,7 @@ function WidgetsRender({ widgets }: { widgets: IWidget[] }) {
       </ConfirmationAlert>
 
       <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
+        gridTemplateColumns={'repeat(auto-fit, 300px)'}
         spacing="40px"
       >
         {widgets.map((widget) => (
@@ -88,7 +89,7 @@ export default function WidgetsGrid({ search, widgets }: WidgetsGridProps) {
     .filter((widget) =>
       widget.displayName
         .toLowerCase()
-        .includes(search ? search.toLowerCase() : "")
+        .includes(search ? search.toLowerCase() : ''),
     )
     .sort((a, b) => a.displayName.localeCompare(b.displayName));
 

@@ -1,8 +1,8 @@
-import { TwitchOAuth } from "twitch-oauth";
+import { TwitchOAuth } from 'twitch-oauth';
 
 const isBrowser =
-  typeof globalThis !== "undefined" &&
-  typeof globalThis["window"] !== "undefined";
+  typeof globalThis !== 'undefined' &&
+  typeof globalThis['window'] !== 'undefined';
 
 const getRedirectURI = () => {
   if (isBrowser) {
@@ -19,28 +19,28 @@ const twitch = new TwitchOAuth({
   clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
   redirectUri: getRedirectURI(),
   scope: [
-    "bits:read",
-    "channel:edit:commercial",
-    "channel:manage:broadcast",
-    "channel:manage:moderators",
-    "channel:manage:polls",
-    "channel:manage:predictions",
-    "channel:manage:raids",
-    "channel:manage:redemptions",
-    "channel:manage:vips",
-    "channel:read:goals",
-    "channel:read:hype_train",
-    "channel:read:polls",
-    "channel:read:predictions",
-    "channel:read:redemptions",
-    "channel:read:subscriptions",
-    "chat:read",
-    "moderation:read",
-    "moderator:manage:shoutouts",
-    "user:read:broadcast",
-    "user:read:email",
+    'bits:read',
+    'channel:edit:commercial',
+    'channel:manage:broadcast',
+    'channel:manage:moderators',
+    'channel:manage:polls',
+    'channel:manage:predictions',
+    'channel:manage:raids',
+    'channel:manage:redemptions',
+    'channel:manage:vips',
+    'channel:read:goals',
+    'channel:read:hype_train',
+    'channel:read:polls',
+    'channel:read:predictions',
+    'channel:read:redemptions',
+    'channel:read:subscriptions',
+    'chat:read',
+    'moderation:read',
+    'moderator:manage:shoutouts',
+    'user:read:broadcast',
+    'user:read:email',
   ],
-  method: "code",
+  method: 'code',
 });
 
 export default twitch;

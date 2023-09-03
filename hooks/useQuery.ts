@@ -1,8 +1,8 @@
-import { GraphQLRequest } from "astraql";
-import { useEffect, useState } from "react";
+import { GraphQLRequest } from 'astraql';
+import { useEffect, useState } from 'react';
 
-import client from "@/lib/graphql/client";
-import { IDictionary } from "astraql/lib/dictionary";
+import client from '@/lib/graphql/client';
+import { IDictionary } from 'astraql/lib/dictionary';
 
 type UseQueryHook<T> = {
   data: T | null;
@@ -12,7 +12,7 @@ type UseQueryHook<T> = {
 
 const useQuery = <T>(
   request: GraphQLRequest,
-  variables?: IDictionary
+  variables?: IDictionary,
 ): UseQueryHook<T> => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<T | null>(null);

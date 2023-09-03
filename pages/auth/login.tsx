@@ -1,10 +1,3 @@
-import useAuth from "@/hooks/useAuth";
-import { IntegrationType } from "@/lib/interfaces/integration";
-import ISessionAndUser from "@/lib/interfaces/session-and-user";
-import IUser from "@/lib/interfaces/user";
-import { createSession } from "@/lib/services/session-service";
-import { oauthLogin } from "@/lib/utils/oauth";
-import { handlePromise } from "@/lib/utils/promise";
 import {
   Alert,
   AlertDescription,
@@ -18,19 +11,27 @@ import {
   IconButton,
   Input,
   useColorMode,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaKickstarter, FaTwitch, FaYoutube } from "react-icons/fa";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
+
+import useAuth from '@/hooks/useAuth';
+import { IntegrationType } from '@/lib/interfaces/integration';
+import ISessionAndUser from '@/lib/interfaces/session-and-user';
+import IUser from '@/lib/interfaces/user';
+import { createSession } from '@/lib/services/session-service';
+import { oauthLogin } from '@/lib/utils/oauth';
+import { handlePromise } from '@/lib/utils/promise';
 
 export default function Login() {
   const { colorMode } = useColorMode();
-  const mainColor = colorMode === "light" ? "white" : "black";
+  const mainColor = colorMode === 'light' ? 'white' : 'black';
 
   const { login } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -56,7 +57,7 @@ export default function Login() {
     setLoading(true);
 
     const session = await handlePromise<ISessionAndUser | null>(
-      oauthLogin(type)
+      oauthLogin(type),
     ).finally(() => setLoading(false));
 
     if (session) login(session);
@@ -68,20 +69,20 @@ export default function Login() {
 
   return (
     <Flex
-      alignItems={"center"}
-      justifyContent={"center"}
-      width={"100%"}
-      height={"100vh"}
+      alignItems={'center'}
+      justifyContent={'center'}
+      width={'100%'}
+      height={'100vh'}
     >
       <form onSubmit={handleSubmit}>
         <Flex
           bg={mainColor}
-          borderRadius={"10px"}
-          padding={"10px 20px"}
-          flexDirection={"column"}
-          gap={"15px"}
+          borderRadius={'10px'}
+          padding={'10px 20px'}
+          flexDirection={'column'}
+          gap={'15px'}
         >
-          <Heading size={"lg"}>Sign in</Heading>
+          <Heading size={'lg'}>Sign in</Heading>
 
           {error != null && (
             <Alert status="error">
@@ -119,48 +120,48 @@ export default function Login() {
             />
           </FormControl>
 
-          <Flex flexDirection={"column"} gap={"10px"}>
+          <Flex flexDirection={'column'} gap={'10px'}>
             <Button type="submit" disabled={loading} isLoading={loading}>
               Login
             </Button>
 
-            <Flex justifyContent={"space-between"}>
+            <Flex justifyContent={'space-between'}>
               <Link
-                href={"/auth/recovery"}
-                style={{ fontSize: "12px", marginRight: "8px" }}
+                href={'/auth/recovery'}
+                style={{ fontSize: '12px', marginRight: '8px' }}
               >
                 Forgot your password?
               </Link>
 
               <Link
-                href={"/auth/register"}
-                style={{ fontSize: "12px", marginLeft: "8px" }}
+                href={'/auth/register'}
+                style={{ fontSize: '12px', marginLeft: '8px' }}
               >
                 Register an account.
               </Link>
             </Flex>
 
-            <Flex justifyContent={"space-around"}>
+            <Flex justifyContent={'space-around'}>
               <IconButton
                 aria-label="Login with Kick"
-                colorScheme={"green"}
+                colorScheme={'green'}
                 icon={<FaKickstarter />}
                 disabled={loading}
-                onClick={() => handleOAuthLogin("kick")}
+                onClick={() => handleOAuthLogin('kick')}
               />
               <IconButton
                 aria-label="Login with Twitch"
-                colorScheme={"purple"}
+                colorScheme={'purple'}
                 icon={<FaTwitch />}
                 disabled={loading}
-                onClick={() => handleOAuthLogin("twitch")}
+                onClick={() => handleOAuthLogin('twitch')}
               />
               <IconButton
                 aria-label="Login with YouTube"
-                colorScheme={"red"}
+                colorScheme={'red'}
                 icon={<FaYoutube />}
                 disabled={loading}
-                onClick={() => handleOAuthLogin("youtube")}
+                onClick={() => handleOAuthLogin('youtube')}
               />
             </Flex>
           </Flex>

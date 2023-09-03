@@ -1,18 +1,18 @@
 import ITemplateField, {
   TemplateFieldType,
-} from "@/lib/interfaces/template-field";
+} from '@/lib/interfaces/template-field';
 
-import FieldRendererArray from "./FieldRendererArray";
-import FieldRendererBoolean from "./FieldRendererBoolean";
-import FieldRendererEnum from "./FieldRendererEnum";
-import FieldRendererMap from "./FieldRendererMap";
-import FieldRendererMedia from "./FieldRendererMedia";
-import FieldRendererMediaAudio from "./FieldRendererMediaAudio";
-import FieldRendererMediaImage from "./FieldRendererMediaImage";
-import FieldRendererMediaVideo from "./FieldRendererMediaVideo";
-import FieldRendererNumber from "./FieldRendererNumber";
-import FieldRendererString from "./FieldRendererString";
-import FieldRendererTwitchReward from "./FieldRendererTwitchReward";
+import FieldRendererArray from './FieldRendererArray';
+import FieldRendererBoolean from './FieldRendererBoolean';
+import FieldRendererEnum from './FieldRendererEnum';
+import FieldRendererMap from './FieldRendererMap';
+import FieldRendererMedia from './FieldRendererMedia';
+import FieldRendererMediaAudio from './FieldRendererMediaAudio';
+import FieldRendererMediaImage from './FieldRendererMediaImage';
+import FieldRendererMediaVideo from './FieldRendererMediaVideo';
+import FieldRendererNumber from './FieldRendererNumber';
+import FieldRendererString from './FieldRendererString';
+import FieldRendererTwitchReward from './FieldRendererTwitchReward';
 
 export interface FieldRendererProps {
   field: ITemplateField;
@@ -29,11 +29,11 @@ export const RENDER_MAP: {
   array: FieldRendererArray,
   map: FieldRendererMap,
   enum: FieldRendererEnum,
-  "platform:media": FieldRendererMedia,
-  "platform:media.audio": FieldRendererMediaAudio,
-  "platform:media.image": FieldRendererMediaImage,
-  "platform:media.video": FieldRendererMediaVideo,
-  "twitch:reward": FieldRendererTwitchReward,
+  'platform:media': FieldRendererMedia,
+  'platform:media.audio': FieldRendererMediaAudio,
+  'platform:media.image': FieldRendererMediaImage,
+  'platform:media.video': FieldRendererMediaVideo,
+  'twitch:reward': FieldRendererTwitchReward,
 };
 
 export default function FieldRenderer({

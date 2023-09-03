@@ -1,15 +1,15 @@
 export type TemplateScope =
-  | "platform:storage"
-  | "twitch:chat"
-  | "twitch:emotes"
-  | "twitch:subscription"
-  | "twitch:sub-gift"
-  | "twitch:bits"
-  | "twitch:follow"
-  | "twitch:points_redemption"
-  | "twitch:pool"
-  | "twitch:prediction"
-  | "twitch:stream-up";
+  | 'platform:storage'
+  | 'twitch:chat'
+  | 'twitch:emotes'
+  | 'twitch:subscription'
+  | 'twitch:sub-gift'
+  | 'twitch:bits'
+  | 'twitch:follow'
+  | 'twitch:points_redemption'
+  | 'twitch:pool'
+  | 'twitch:prediction'
+  | 'twitch:stream-up';
 
 export type TemplateScopeData = {
   id: TemplateScope;
@@ -19,67 +19,67 @@ export type TemplateScopeData = {
 
 export const TemplateScopes: TemplateScopeData[] = [
   {
-    id: "platform:storage",
-    name: "Extension Storage",
+    id: 'platform:storage',
+    name: 'Extension Storage',
   },
 
   {
-    id: "twitch:chat",
-    name: "Chat",
+    id: 'twitch:chat',
+    name: 'Chat',
     debuggable: true,
   },
 
   {
-    id: "twitch:emotes",
-    name: "Emotes",
+    id: 'twitch:emotes',
+    name: 'Emotes',
     debuggable: true,
   },
 
   {
-    id: "twitch:subscription",
-    name: "Subscription",
+    id: 'twitch:subscription',
+    name: 'Subscription',
     debuggable: true,
   },
 
   {
-    id: "twitch:sub-gift",
-    name: "Sub Gift",
+    id: 'twitch:sub-gift',
+    name: 'Sub Gift',
     debuggable: true,
   },
 
   {
-    id: "twitch:bits",
-    name: "Bits",
+    id: 'twitch:bits',
+    name: 'Bits',
     debuggable: true,
   },
 
   {
-    id: "twitch:follow",
-    name: "Follow",
+    id: 'twitch:follow',
+    name: 'Follow',
     debuggable: true,
   },
 
   {
-    id: "twitch:points_redemption",
-    name: "Points Redemption",
+    id: 'twitch:points_redemption',
+    name: 'Points Redemption',
     debuggable: true,
   },
 
   {
-    id: "twitch:pool",
-    name: "Pool",
+    id: 'twitch:pool',
+    name: 'Pool',
     debuggable: true,
   },
 
   {
-    id: "twitch:prediction",
-    name: "Prediction",
+    id: 'twitch:prediction',
+    name: 'Prediction',
     debuggable: true,
   },
 
   {
-    id: "twitch:stream-up",
-    name: "Stream Up",
+    id: 'twitch:stream-up',
+    name: 'Stream Up',
     debuggable: true,
   },
 ];

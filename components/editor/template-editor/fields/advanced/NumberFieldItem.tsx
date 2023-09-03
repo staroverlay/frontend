@@ -1,12 +1,13 @@
-import { FieldNumberSettings } from "@/lib/interfaces/template-field";
 import {
   FormControl,
   FormLabel,
   Input,
   Select,
   SimpleGrid,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import { FieldNumberSettings } from '@/lib/interfaces/template-field';
 
 interface NumberFieldItemProps {
   settings?: FieldNumberSettings;
@@ -29,36 +30,36 @@ export default function NumberFieldItem({
 
   return (
     <>
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
         <FormControl>
           <FormLabel>Min value</FormLabel>
           <Input
-            placeholder={"0"}
+            placeholder={'0'}
             value={settingsState?.min}
-            type={"number"}
+            type={'number'}
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
                 min: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
         <FormControl>
           <FormLabel>Max value</FormLabel>
           <Input
-            placeholder={"9999"}
+            placeholder={'9999'}
             value={settingsState?.max}
-            type={"number"}
+            type={'number'}
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
                 max: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
@@ -69,13 +70,13 @@ export default function NumberFieldItem({
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
-                display: e.target.value as "input" | "range",
+                display: e.target.value as 'input' | 'range',
               })
             }
-            size={"sm"}
+            size={'sm'}
           >
-            <option value={"input"}>Input</option>
-            <option value={"range"}>Range</option>
+            <option value={'input'}>Input</option>
+            <option value={'range'}>Range</option>
           </Select>
         </FormControl>
 
@@ -86,21 +87,21 @@ export default function NumberFieldItem({
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
-                type: e.target.value as "float" | "integer",
+                type: e.target.value as 'float' | 'integer',
               })
             }
-            size={"sm"}
+            size={'sm'}
           >
-            <option value={"float"}>Float</option>
-            <option value={"integer"}>Integer</option>
+            <option value={'float'}>Float</option>
+            <option value={'integer'}>Integer</option>
           </Select>
         </FormControl>
       </SimpleGrid>
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
         <FormControl>
           <FormLabel>Range steps</FormLabel>
           <Input
-            placeholder={"0"}
+            placeholder={'0'}
             value={settingsState?.rangeSteps || 1}
             onChange={(e) =>
               setSettingsState({
@@ -108,23 +109,23 @@ export default function NumberFieldItem({
                 rangeSteps: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
         <FormControl>
           <FormLabel>Default value</FormLabel>
           <Input
-            placeholder={"12345"}
+            placeholder={'12345'}
             value={settingsState?.default}
-            type={"number"}
+            type={'number'}
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
                 default: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
       </SimpleGrid>

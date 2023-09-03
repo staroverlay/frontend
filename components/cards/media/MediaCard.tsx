@@ -9,24 +9,23 @@ import {
   useDisclosure,
   Skeleton,
   Button,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FiTrash, FiEdit, FiDownload } from "react-icons/fi";
-import useMedia from "../../../hooks/useMedia";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FiTrash, FiEdit, FiDownload } from 'react-icons/fi';
 
-import IMedia from "../../../lib/interfaces/media";
-import { deleteMedia } from "../../../lib/services/media-service";
-import { downloadURL } from "../../../lib/utils/files";
-import { getMediaThumbnail, getMediaURL } from "../../../lib/utils/media";
-import { toastPending } from "../../../lib/utils/toasts";
-import ConfirmationAlert from "../../alerts/confirmation/ConfirmationAlert";
-import MediaPreviewModal from "../../modals/media-preview-modal/MediaPreviewModal";
-
-import styles from "./MediaCard.module.css";
+import useMedia from '../../../hooks/useMedia';
+import IMedia from '../../../lib/interfaces/media';
+import { deleteMedia } from '../../../lib/services/media-service';
+import { downloadURL } from '../../../lib/utils/files';
+import { getMediaThumbnail, getMediaURL } from '../../../lib/utils/media';
+import { toastPending } from '../../../lib/utils/toasts';
+import ConfirmationAlert from '../../alerts/confirmation/ConfirmationAlert';
+import MediaPreviewModal from '../../modals/media-preview-modal/MediaPreviewModal';
+import styles from './MediaCard.module.css';
 
 interface MediaCardProps {
   media: IMedia;
-  size?: "lg" | "md" | "sm";
+  size?: 'lg' | 'md' | 'sm';
   onSelect?: (media: IMedia) => void;
 }
 
@@ -37,7 +36,7 @@ function DeleteButton({ media, size }: MediaCardProps) {
 
   const handleDelete = async () => {
     const result = await deleteMedia(media);
-    if (!result) throw new Error("Failed to delete media");
+    if (!result) throw new Error('Failed to delete media');
     onClose();
     removeMedia(media);
   };
@@ -50,8 +49,8 @@ function DeleteButton({ media, size }: MediaCardProps) {
         onAccept={async () => {
           setIsDeleting(true);
           await toastPending(handleDelete, {
-            pending: "Deleting media",
-            success: "Media deleted",
+            pending: 'Deleting media',
+            success: 'Media deleted',
           });
           setIsDeleting(false);
         }}
@@ -64,7 +63,7 @@ function DeleteButton({ media, size }: MediaCardProps) {
 
       <IconButton
         aria-label="Delete"
-        colorScheme={"red"}
+        colorScheme={'red'}
         icon={<FiTrash />}
         onClick={onOpen}
         size={size}
@@ -84,7 +83,7 @@ function DownloadButton({ media, size }: MediaCardProps) {
     <>
       <IconButton
         aria-label="Edit"
-        colorScheme={"cyan"}
+        colorScheme={'cyan'}
         icon={<FiDownload />}
         onClick={handleDownload}
         size={size}
@@ -100,7 +99,7 @@ function EditButton({ media, size }: MediaCardProps) {
     <>
       <IconButton
         aria-label="Edit"
-        colorScheme={"green"}
+        colorScheme={'green'}
         icon={<FiEdit />}
         size={size}
       />
@@ -123,7 +122,7 @@ export default function MediaCard({ media, size, onSelect }: MediaCardProps) {
   }
 
   return (
-    <div className={styles[`card-${size || "lg"}`]}>
+    <div className={styles[`card-${size || 'lg'}`]}>
       <div
         style={{ backgroundImage: `url(${thumbnail})` }}
         className={styles.container}
@@ -131,18 +130,18 @@ export default function MediaCard({ media, size, onSelect }: MediaCardProps) {
         <MediaPreviewModal isOpen={isOpen} onClose={onClose} media={media} />
 
         <Card
-          backgroundColor={"transparent"}
+          backgroundColor={'transparent'}
           backgroundImage={`url(${thumbnail})`}
           className={styles.card}
           onClick={() => {
             onSelect ? onSelect(media) : onOpen();
           }}
         >
-          <CardBody padding={"10px"}>
-            <Flex justifyContent={"space-between"} width={"100%"}>
-              <Tag variant={"solid"}>{media.name}</Tag>
+          <CardBody padding={'10px'}>
+            <Flex justifyContent={'space-between'} width={'100%'}>
+              <Tag variant={'solid'}>{media.name}</Tag>
 
-              <Badge variant={"solid"} colorScheme={"pink"}>
+              <Badge variant={'solid'} colorScheme={'pink'}>
                 {(media.size / 1024 / 1024).toFixed(2)} MB
               </Badge>
             </Flex>
@@ -151,8 +150,8 @@ export default function MediaCard({ media, size, onSelect }: MediaCardProps) {
           <CardFooter className={styles.footer}>
             {onSelect && (
               <Button
-                colorScheme={"purple"}
-                size={"xs"}
+                colorScheme={'purple'}
+                size={'xs'}
                 onClick={(e) => {
                   e.stopPropagation();
                   onOpen();
@@ -163,7 +162,7 @@ export default function MediaCard({ media, size, onSelect }: MediaCardProps) {
             )}
 
             {!onSelect && (
-              <Flex gap={"4px"}>
+              <Flex gap={'4px'}>
                 <EditButton media={media} size={size} />
                 <DownloadButton media={media} size={size} />
                 <DeleteButton media={media} size={size} />

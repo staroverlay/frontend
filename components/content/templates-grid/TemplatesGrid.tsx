@@ -1,15 +1,15 @@
-import { Flex, Heading, SimpleGrid, useDisclosure } from "@chakra-ui/react";
+import { Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { useState } from 'react';
 
-import ITemplate from "@/lib/interfaces/template";
-import TemplateCard from "@/components/cards/template/TemplateCard";
-import { useState } from "react";
-import ConfirmationAlert from "@/components/alerts/confirmation/ConfirmationAlert";
-import { toastPending } from "@/lib/utils/toasts";
-import { deleteTemplate } from "@/lib/services/template-service";
-import { createWidget } from "@/lib/services/widget-service";
-import useTemplates from "@/hooks/useTemplates";
-import InputAlert from "@/components/alerts/input/InputAlert";
-import useWidgets from "@/hooks/useWidgets";
+import ConfirmationAlert from '@/components/alerts/confirmation/ConfirmationAlert';
+import InputAlert from '@/components/alerts/input/InputAlert';
+import TemplateCard from '@/components/cards/template/TemplateCard';
+import useTemplates from '@/hooks/useTemplates';
+import useWidgets from '@/hooks/useWidgets';
+import ITemplate from '@/lib/interfaces/template';
+import { deleteTemplate } from '@/lib/services/template-service';
+import { createWidget } from '@/lib/services/widget-service';
+import { toastPending } from '@/lib/utils/toasts';
 
 interface TemplatesGridProps {
   search?: string;
@@ -18,9 +18,9 @@ interface TemplatesGridProps {
 
 function NoTemplates({ message }: { message?: string }) {
   return (
-    <Flex alignContent={"center"} justifyContent={"center"}>
-      <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-        <Heading>{message ? message : "No templates"}</Heading>
+    <Flex alignContent={'center'} justifyContent={'center'}>
+      <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
+        <Heading>{message ? message : 'No templates'}</Heading>
       </Flex>
     </Flex>
   );
@@ -42,7 +42,7 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
   const { removeTemplate } = useTemplates();
   const [loading, setLoading] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<ITemplate | null>(
-    null
+    null,
   );
 
   const handleCreateWidget = (name: string) => {
@@ -53,9 +53,9 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
         template: selectedTemplate?._id as string,
       }),
       {
-        pending: "Creating widget",
-        success: "Widget created",
-      }
+        pending: 'Creating widget',
+        success: 'Widget created',
+      },
     )
       .then((widget) => {
         onCreateClose();
@@ -69,8 +69,8 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
   const handleDeleteTemplate = () => {
     setLoading(true);
     toastPending(deleteTemplate(selectedTemplate as ITemplate), {
-      pending: "Deleting template",
-      success: "Template deleted",
+      pending: 'Deleting template',
+      success: 'Template deleted',
     })
       .then(() => {
         onDeleteClose();
@@ -104,14 +104,14 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
       </ConfirmationAlert>
 
       <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
+        gridTemplateColumns={'repeat(auto-fit, 300px)'}
         spacing="40px"
       >
         {templates.map((template) => (
           <TemplateCard
             key={template._id}
             template={template}
-            context={"creator"}
+            context={'creator'}
             onCreateWidget={() => {
               onCreateOpen();
               setSelectedTemplate(template);
@@ -137,7 +137,7 @@ export default function TemplatesGrid({
 
   const templatesQuery = templates
     .filter((template) =>
-      template.name.toLowerCase().includes(search ? search.toLowerCase() : "")
+      template.name.toLowerCase().includes(search ? search.toLowerCase() : ''),
     )
     .sort((a, b) => a.name.localeCompare(b.name));
 

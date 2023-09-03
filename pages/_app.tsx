@@ -1,35 +1,34 @@
-import { useEffect, useState } from "react";
-import type { AppProps } from "next/app";
-import Head from "next/head";
-import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { Analytics } from "@vercel/analytics/react";
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { Analytics } from '@vercel/analytics/react';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify';
 
-import Layout from "../components/layout";
+import { IntegrationsProvider } from '@/contexts/integrations';
+import { MembershipProvider } from '@/contexts/membership';
+import { PlanProvider } from '@/contexts/plan/plan-provider';
+import { WidgetsProvider } from '@/contexts/widgets';
 
-import { AuthProvider } from "../contexts/auth";
-import User from "../lib/interfaces/user";
-import { MediaProvider } from "../contexts/media/media-provider";
-import { ToastContainer } from "react-toastify";
+import Layout from '../components/layout';
+import { AuthProvider } from '../contexts/auth';
+import { MediaProvider } from '../contexts/media/media-provider';
+import { TemplatesProvider } from '../contexts/templates';
+import User from '../lib/interfaces/user';
 
-import "react-toastify/dist/ReactToastify.css";
-import { TemplatesProvider } from "../contexts/templates";
-import { IntegrationsProvider } from "@/contexts/integrations";
-import { useRouter } from "next/router";
-import path from "path";
-import { MembershipContext, MembershipProvider } from "@/contexts/membership";
-import { PlanProvider } from "@/contexts/plan/plan-provider";
-import { WidgetsProvider } from "@/contexts/widgets";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Theme
 const colors = {
-  transparent: "transparent",
+  transparent: 'transparent',
   gray: {
-    800: "#0B0916",
+    800: '#0B0916',
   },
 };
 
 const config = {
-  initialColorMode: "dark",
+  initialColorMode: 'dark',
   useSystemColorMode: false,
 };
 
@@ -62,7 +61,7 @@ export default function App({ Component, pageProps }: InitialAppProps) {
   {
     /* Don't render layout on oauth */
   }
-  if (pathname.startsWith("/oauth")) {
+  if (pathname.startsWith('/oauth')) {
     return (
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
@@ -82,7 +81,7 @@ export default function App({ Component, pageProps }: InitialAppProps) {
         <link rel="icon" href="/icon@32.png" />
       </Head>
 
-      {process.env.NODE_ENV === "production" && <Analytics />}
+      {process.env.NODE_ENV === 'production' && <Analytics />}
       <ToastContainer />
 
       {/* TODO: Use fetch in pages instead global contexts. */}

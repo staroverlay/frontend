@@ -1,5 +1,3 @@
-import MediasGrid from "@/components/content/medias-grid/MediasGrid";
-import usePlan from "@/hooks/usePlan";
 import {
   Box,
   Flex,
@@ -11,10 +9,14 @@ import {
   Heading,
   Text,
   Button,
-} from "@chakra-ui/react";
-import StatsCard from "../components/cards/stats/StatsCard";
-import useMedia from "../hooks/useMedia";
-import IMedia, { FileType } from "../lib/interfaces/media";
+} from '@chakra-ui/react';
+
+import MediasGrid from '@/components/content/medias-grid/MediasGrid';
+import usePlan from '@/hooks/usePlan';
+
+import StatsCard from '../components/cards/stats/StatsCard';
+import useMedia from '../hooks/useMedia';
+import IMedia, { FileType } from '../lib/interfaces/media';
 
 interface MediaFilesProps {
   files: IMedia[];
@@ -39,7 +41,7 @@ export default function Media() {
   const { activePlan } = usePlan();
 
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Box>
         <Heading>Media</Heading>
         <Text>
@@ -48,7 +50,7 @@ export default function Media() {
         </Text>
       </Box>
 
-      <Flex gap={"10px"}>
+      <Flex gap={'10px'}>
         <StatsCard
           title="Storage Quota"
           value={`${(storageUsage / 1024 / 1024).toFixed(2)}`}
@@ -65,8 +67,8 @@ export default function Media() {
       </Flex>
 
       <Tabs variant="soft-rounded">
-        <Flex justifyContent={"space-between"}>
-          <TabList gap={"10px"}>
+        <Flex justifyContent={'space-between'}>
+          <TabList gap={'10px'}>
             <Tab>Image</Tab>
             <Tab>Sounds</Tab>
             <Tab>Video</Tab>
@@ -75,10 +77,10 @@ export default function Media() {
           <UploadContentButton />
         </Flex>
 
-        <TabPanels mt={"20px"}>
-          <MediaFilesTab files={medias} filter={"image"} />
-          <MediaFilesTab files={medias} filter={"audio"} />
-          <MediaFilesTab files={medias} filter={"video"} />
+        <TabPanels mt={'20px'}>
+          <MediaFilesTab files={medias} filter={'image'} />
+          <MediaFilesTab files={medias} filter={'audio'} />
+          <MediaFilesTab files={medias} filter={'video'} />
         </TabPanels>
       </Tabs>
     </Flex>

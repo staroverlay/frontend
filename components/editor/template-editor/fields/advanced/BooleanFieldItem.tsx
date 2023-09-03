@@ -1,16 +1,17 @@
 import {
-  FieldBooleanSettings,
-  FieldStringSettings,
-} from "@/lib/interfaces/template-field";
-import {
   Checkbox,
   FormControl,
   FormLabel,
   Input,
   Select,
   SimpleGrid,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import {
+  FieldBooleanSettings,
+  FieldStringSettings,
+} from '@/lib/interfaces/template-field';
 
 interface BooleanFieldItemProps {
   settings?: FieldBooleanSettings;
@@ -32,7 +33,7 @@ export default function BooleanFieldItem({
   }, [onUpdate, settingsState]);
 
   return (
-    <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+    <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
       <FormControl>
         <FormLabel>Display</FormLabel>
         <Select
@@ -40,13 +41,13 @@ export default function BooleanFieldItem({
           onChange={(e) =>
             setSettingsState({
               ...settingsState,
-              display: e.target.value as "checkbox" | "slider",
+              display: e.target.value as 'checkbox' | 'slider',
             })
           }
-          size={"sm"}
+          size={'sm'}
         >
-          <option value={"checkbox"}>Checkbox</option>
-          <option value={"slider"}>Slider</option>
+          <option value={'checkbox'}>Checkbox</option>
+          <option value={'slider'}>Slider</option>
         </Select>
       </FormControl>
 
@@ -60,7 +61,7 @@ export default function BooleanFieldItem({
               default: e.target.checked,
             })
           }
-          size={"lg"}
+          size={'lg'}
         />
       </FormControl>
     </SimpleGrid>

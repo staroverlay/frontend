@@ -1,9 +1,3 @@
-import ITemplateField, {
-  FieldStringSettings,
-  ITemplateAdvancedField,
-  TemplateFieldType,
-  TemplateFieldTypes,
-} from "@/lib/interfaces/template-field";
 import {
   Flex,
   IconButton,
@@ -13,11 +7,19 @@ import {
   Input,
   Select,
   Divider,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { FaTrash } from "react-icons/fa";
-import StringFieldItem from "./advanced/StringFieldItem";
-import FieldItemAdvanced from "./FieldItemAdvanced";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
+
+import ITemplateField, {
+  FieldStringSettings,
+  ITemplateAdvancedField,
+  TemplateFieldType,
+  TemplateFieldTypes,
+} from '@/lib/interfaces/template-field';
+
+import StringFieldItem from './advanced/StringFieldItem';
+import FieldItemAdvanced from './FieldItemAdvanced';
 
 interface FieldItemProps {
   field: ITemplateField;
@@ -57,49 +59,49 @@ export default function FieldItem({
 
   return (
     <Flex
-      border={"1px solid"}
-      borderColor={"chakra-border-color"}
-      borderRadius={"7px"}
-      padding={"14px 20px"}
-      direction={"column"}
-      gap={"20px"}
-      alignItems={"flex-end"}
+      border={'1px solid'}
+      borderColor={'chakra-border-color'}
+      borderRadius={'7px'}
+      padding={'14px 20px'}
+      direction={'column'}
+      gap={'20px'}
+      alignItems={'flex-end'}
     >
       <IconButton
         icon={<FaTrash />}
-        aria-label={"dasdad"}
-        float={"right"}
-        position={"absolute"}
-        variant={"solid"}
-        colorScheme={"red"}
-        zIndex={"1"}
-        size={"xs"}
+        aria-label={'dasdad'}
+        float={'right'}
+        position={'absolute'}
+        variant={'solid'}
+        colorScheme={'red'}
+        zIndex={'1'}
+        size={'xs'}
         onClick={() => onRemove(field)}
       />
 
       <SimpleGrid
         minChildWidth="120px"
         spacing="10px"
-        width={"100%"}
-        mt={"10px"}
+        width={'100%'}
+        mt={'10px'}
       >
         <FormControl>
           <FormLabel>ID</FormLabel>
           <Input
-            placeholder={"example-field"}
+            placeholder={'example-field'}
             value={id}
             onChange={(e) => setID(e.target.value)}
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
         <FormControl>
           <FormLabel>Category</FormLabel>
           <Input
-            placeholder={"category-name"}
+            placeholder={'category-name'}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
@@ -108,7 +110,7 @@ export default function FieldItem({
           <Select
             value={type}
             onChange={(e) => setType(e.target.value as TemplateFieldType)}
-            size={"sm"}
+            size={'sm'}
           >
             {TemplateFieldTypes.map((type) => (
               <option key={type.id} value={type.id}>
@@ -119,24 +121,24 @@ export default function FieldItem({
         </FormControl>
       </SimpleGrid>
 
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
         <FormControl>
           <FormLabel>Label</FormLabel>
           <Input
-            placeholder={"Example Field"}
+            placeholder={'Example Field'}
             value={label}
             onChange={(e) => setLabel(e.target.value)}
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
         <FormControl>
           <FormLabel>Description</FormLabel>
           <Input
-            placeholder={"A sort description"}
+            placeholder={'A sort description'}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
       </SimpleGrid>

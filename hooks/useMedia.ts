@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { MediaContext } from "../contexts/media";
+import { MediaContext } from '../contexts/media';
 
 const useMedia = () => React.useContext(MediaContext);
 

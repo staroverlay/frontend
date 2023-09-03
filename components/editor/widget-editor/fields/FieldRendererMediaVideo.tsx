@@ -1,9 +1,9 @@
 import FieldRendererMedia, {
   FieldRendererMediaProps,
-} from "./FieldRendererMedia";
+} from './FieldRendererMedia';
 
 export default function FieldRendererMediaVideo(
-  props: FieldRendererMediaProps
+  props: FieldRendererMediaProps,
 ) {
   return <FieldRendererMedia {...props} filter="video" />;
 }

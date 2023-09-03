@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import IIntegration, { IntegrationType } from "@/lib/interfaces/integration";
-import { IntegrationsHook } from "./integrations-hook";
+import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
+import { IntegrationsHook } from './integrations-hook';
 
 export const IntegrationsContext = React.createContext<IntegrationsHook>({
   integrations: [],

@@ -1,12 +1,11 @@
-import client from "../graphql/client";
-import CreateUserMutation from "../graphql/mutations/createUserMutation";
-import CreateUserWithTwitchMutation from "../graphql/mutations/createUserWithTwitchMutation";
-import UpdatePasswordMutation from "../graphql/mutations/updatePasswordMutation";
-import UpdateUserMutation from "../graphql/mutations/updateUserMutation";
-import VerifyEmailMutation from "../graphql/mutations/verifyEmailMutation";
-import getCurrentUserQuery from "../graphql/queries/getCurrentUserQuery";
-
-import IUser from "../interfaces/user";
+import client from '../graphql/client';
+import CreateUserMutation from '../graphql/mutations/createUserMutation';
+import CreateUserWithTwitchMutation from '../graphql/mutations/createUserWithTwitchMutation';
+import UpdatePasswordMutation from '../graphql/mutations/updatePasswordMutation';
+import UpdateUserMutation from '../graphql/mutations/updateUserMutation';
+import VerifyEmailMutation from '../graphql/mutations/verifyEmailMutation';
+import getCurrentUserQuery from '../graphql/queries/getCurrentUserQuery';
+import IUser from '../interfaces/user';
 
 export async function getCurrentUser(): Promise<IUser> {
   const user = await client.fetch(getCurrentUserQuery);

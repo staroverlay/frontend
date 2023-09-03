@@ -5,9 +5,9 @@ import {
   FormLabel,
   Switch,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
+import ITemplateField from '@/lib/interfaces/template-field';
 
 export interface FieldRendererBooleanProps {
   field: ITemplateField;
@@ -26,7 +26,7 @@ export default function FieldRendererBoolean({
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
 
-      {(!opts?.display || opts?.display == "checkbox") && (
+      {(!opts?.display || opts?.display == 'checkbox') && (
         <Checkbox
           checked={value || opts?.default || false}
           onChange={(e) => setValue(e.target.checked)}
@@ -35,13 +35,13 @@ export default function FieldRendererBoolean({
         </Checkbox>
       )}
 
-      {opts?.display == "slider" && (
-        <Flex alignItems={"center"} gap={"5px"}>
+      {opts?.display == 'slider' && (
+        <Flex alignItems={'center'} gap={'5px'}>
           <Switch
             checked={value || opts?.default || false}
             onChange={(e) => setValue(e.target.checked)}
           ></Switch>
-          <Text fontSize={"13px"} color={"gray"}>
+          <Text fontSize={'13px'} color={'gray'}>
             {field.description}
           </Text>
         </Flex>

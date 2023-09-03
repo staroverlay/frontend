@@ -1,6 +1,6 @@
-import IMedia from "../../../lib/interfaces/media";
-import FilePreview from "../../content/file-preview/FilePreview";
-import BaseModal from "../base-modal/BaseModal";
+import IMedia from '../../../lib/interfaces/media';
+import FilePreview from '../../content/file-preview/FilePreview';
+import BaseModal from '../base-modal/BaseModal';
 
 interface MediaPreviewModalProps {
   isOpen: boolean;

@@ -1,6 +1,7 @@
-import TwitchRewardsGrid from "@/components/content/twitch-rewards-grid/TwitchRewardsGrid";
-import { ITwitchCustomReward } from "@/lib/interfaces/twitch/custom-reward";
-import BaseModal from "../base-modal/BaseModal";
+import TwitchRewardsGrid from '@/components/content/twitch-rewards-grid/TwitchRewardsGrid';
+import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+
+import BaseModal from '../base-modal/BaseModal';
 
 interface TwitchRewardSelectModalProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ export default function TwitchRewardSelectModal({
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
-      size={"lg"}
+      size={'lg'}
       title={`Select a Twitch Reward`}
     >
       <TwitchRewardsGrid cardSize="md" rewards={rewards} onSelect={onSelect} />

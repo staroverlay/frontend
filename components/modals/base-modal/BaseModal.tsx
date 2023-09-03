@@ -6,7 +6,7 @@ import {
   ModalHeader,
   ModalOverlay,
   ModalProps,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 interface BaseModalProps extends ModalProps {
   title: string;

@@ -1,16 +1,16 @@
-import IPlan from "@/lib/interfaces/plan";
-import React from "react";
-import { PlanHook } from "./plan-hook";
+import IPlan from '@/lib/interfaces/plan';
+import React from 'react';
+import { PlanHook } from './plan-hook';
 
 const DUMMY_PLAN: IPlan = {
-  _id: "",
+  _id: '',
   discountYearly: 0,
   isDefault: false,
   maxEditors: 0,
   maxStorageItems: 0,
   maxStorageSize: 0,
   maxWidgets: 0,
-  name: "",
+  name: '',
   perkDesignLibrary: false,
   perkModChat: false,
   price: 0,

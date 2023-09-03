@@ -1,13 +1,14 @@
-import MediaCard from "@/components/cards/media/MediaCard";
-import useMedia from "@/hooks/useMedia";
-import IMedia, { FileType } from "@/lib/interfaces/media";
-import { Button, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Button, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 
-import styles from "./MediasGrid.module.css";
+import MediaCard from '@/components/cards/media/MediaCard';
+import useMedia from '@/hooks/useMedia';
+import IMedia, { FileType } from '@/lib/interfaces/media';
+
+import styles from './MediasGrid.module.css';
 
 interface MediasGridProps {
   medias: IMedia[];
-  cardSize?: "sm" | "md" | "lg";
+  cardSize?: 'sm' | 'md' | 'lg';
   filter?: FileType | FileType[];
   onSelect?: (media: IMedia) => void;
 }
@@ -18,7 +19,7 @@ function UploadContentButton() {
 }
 
 export default function MediasGrid(props: MediasGridProps) {
-  const rawFilter = props.filter || ["audio", "image", "video"];
+  const rawFilter = props.filter || ['audio', 'image', 'video'];
   const filter = Array.isArray(rawFilter) ? rawFilter : [rawFilter];
   const filtered = props.medias.filter((media) => filter.includes(media.type));
   const isEmpty = filtered.length === 0;
@@ -26,7 +27,7 @@ export default function MediasGrid(props: MediasGridProps) {
   return (
     <>
       <SimpleGrid
-        className={styles[`grid-${props.cardSize || "lg"}`]}
+        className={styles[`grid-${props.cardSize || 'lg'}`]}
         spacing="40px"
       >
         {filtered.map((media) => (
@@ -40,8 +41,8 @@ export default function MediasGrid(props: MediasGridProps) {
       </SimpleGrid>
 
       {isEmpty && (
-        <Flex alignContent={"center"} justifyContent={"center"}>
-          <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
+        <Flex alignContent={'center'} justifyContent={'center'}>
+          <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
             <Heading>No media files</Heading>
             <UploadContentButton />
           </Flex>

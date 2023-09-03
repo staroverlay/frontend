@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import {
   Flex,
   Heading,
@@ -9,19 +7,21 @@ import {
   Tab,
   TabPanels,
   Spinner,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import useWidgets from "@/hooks/useWidgets";
-import ITemplate from "@/lib/interfaces/template";
-import { hasObjectChanged } from "@/lib/utils/object";
-import { toastPending } from "@/lib/utils/toasts";
+import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
+import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
+import useWidgets from '@/hooks/useWidgets';
+import IDictionary from '@/lib/interfaces/shared/IDictionary';
+import ITemplate from '@/lib/interfaces/template';
+import TemplateScope from '@/lib/interfaces/template-scope';
+import { updateWidget } from '@/lib/services/widget-service';
+import { hasObjectChanged } from '@/lib/utils/object';
+import { toastPending } from '@/lib/utils/toasts';
 
-import Error404 from "../404";
-import WidgetOverviewTab from "@/components/editor/widget-editor/WidgetOverviewTab";
-import WidgetSettingsTab from "@/components/editor/widget-editor/WidgetSettingsTab";
-import IDictionary from "@/lib/interfaces/shared/IDictionary";
-import { updateWidget } from "@/lib/services/widget-service";
-import TemplateScope from "@/lib/interfaces/template-scope";
+import Error404 from '../404';
 
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
@@ -36,7 +36,7 @@ export default function WidgetPage() {
   const cachedTemplate = widget?.template as ITemplate;
 
   // Input fields.
-  const [displayName, setDisplayName] = useState("");
+  const [displayName, setDisplayName] = useState('');
   const [scopes, setScopes] = useState<TemplateScope[]>([]);
   const [settings, setSettings] = useState<IDictionary>({});
   const [enabled, setEnabled] = useState(false);
@@ -63,7 +63,7 @@ export default function WidgetPage() {
       ...widget,
       settings: widget?.settings || {},
     },
-    updatePayload
+    updatePayload,
   );
 
   // If widget not found, render 404 error page.
@@ -80,19 +80,19 @@ export default function WidgetPage() {
   const handleSave = async () => {
     setIsSaving(true);
     await toastPending(handleSaveWidget, {
-      success: "Widget updated successfully!",
-      pending: "Updating widget...",
+      success: 'Widget updated successfully!',
+      pending: 'Updating widget...',
     });
     setIsSaving(false);
   };
 
   // Otherwise, render widget editor.
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
-      <Flex alignItems={"center"} justifyContent={"space-between"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
+      <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Editing widget</Heading>
         <Button
-          colorScheme={"green"}
+          colorScheme={'green'}
           onClick={handleSave}
           isLoading={isSaving}
           disabled={isSaving || !hasChanges}
@@ -101,7 +101,7 @@ export default function WidgetPage() {
         </Button>
       </Flex>
 
-      <Tabs variant={"enclosed"}>
+      <Tabs variant={'enclosed'}>
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Settings</Tab>

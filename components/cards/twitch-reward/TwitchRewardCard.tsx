@@ -1,12 +1,13 @@
-import { ITwitchCustomReward } from "@/lib/interfaces/twitch/custom-reward";
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
-import styles from "./TwitchRewardCard.module.css";
+import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+
+import styles from './TwitchRewardCard.module.css';
 
 export interface TwitchRewardCardProps {
   reward: ITwitchCustomReward;
-  variant?: "horizontal" | "vertical";
-  size?: "lg" | "md" | "sm";
+  variant?: 'horizontal' | 'vertical';
+  size?: 'lg' | 'md' | 'sm';
   onSelect?: (reward: ITwitchCustomReward) => void;
 }
 
@@ -17,10 +18,10 @@ export default function TwitchRewardCard({
   variant,
 }: TwitchRewardCardProps) {
   return (
-    <Box className={styles[`card-${size || "lg"}`]}>
+    <Box className={styles[`card-${size || 'lg'}`]}>
       <Flex
         className={styles.card}
-        flexDirection={variant == "horizontal" ? "row" : "column"}
+        flexDirection={variant == 'horizontal' ? 'row' : 'column'}
         onClick={() => {
           onSelect && onSelect(reward);
         }}

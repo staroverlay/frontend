@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { WidgetsContext } from "../contexts/widgets";
+import { WidgetsContext } from '../contexts/widgets';
 
 const useWidgets = () => React.useContext(WidgetsContext);
 

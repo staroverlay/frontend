@@ -1,4 +1,3 @@
-import TemplatesGrid from "@/components/content/templates-grid/TemplatesGrid";
 import {
   Box,
   Flex,
@@ -8,15 +7,18 @@ import {
   Button,
   SimpleGrid,
   useDisclosure,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import InputAlert from "../../components/alerts/input/InputAlert";
-import StatsCard from "../../components/cards/stats/StatsCard";
-import TemplateCard from "../../components/cards/template/TemplateCard";
-import useTemplates from "../../hooks/useTemplates";
-import ITemplate from "../../lib/interfaces/template";
-import { createTemplate } from "../../lib/services/template-service";
-import { toastPending } from "../../lib/utils/toasts";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+
+import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
+
+import InputAlert from '../../components/alerts/input/InputAlert';
+import StatsCard from '../../components/cards/stats/StatsCard';
+import TemplateCard from '../../components/cards/template/TemplateCard';
+import useTemplates from '../../hooks/useTemplates';
+import ITemplate from '../../lib/interfaces/template';
+import { createTemplate } from '../../lib/services/template-service';
+import { toastPending } from '../../lib/utils/toasts';
 
 function CreateTemplateButton() {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -25,7 +27,7 @@ function CreateTemplateButton() {
 
   const handleCreateTemplate = async (input: string) => {
     const template = await createTemplate(input);
-    if (!template) throw new Error("Template not created");
+    if (!template) throw new Error('Template not created');
     addTemplate(template);
     onClose();
   };
@@ -33,8 +35,8 @@ function CreateTemplateButton() {
   const handleCreate = async (input: string) => {
     setIsCreating(true);
     await toastPending(handleCreateTemplate(input), {
-      pending: "Creating template...",
-      success: "Template created!",
+      pending: 'Creating template...',
+      success: 'Template created!',
     });
     setIsCreating(false);
   };
@@ -64,9 +66,9 @@ function CreateTemplateButton() {
 
 function NoTemplates({ message }: { message?: string }) {
   return (
-    <Flex alignContent={"center"} justifyContent={"center"}>
-      <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-        <Heading>{message ? message : "No templates"}</Heading>
+    <Flex alignContent={'center'} justifyContent={'center'}>
+      <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
+        <Heading>{message ? message : 'No templates'}</Heading>
         <CreateTemplateButton />
       </Flex>
     </Flex>
@@ -75,19 +77,19 @@ function NoTemplates({ message }: { message?: string }) {
 
 export default function Templates() {
   const { userTemplates } = useTemplates();
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const publics = userTemplates.filter(
-    (template) => template.visibility == "public"
+    (template) => template.visibility == 'public',
   ).length;
 
   const privates = userTemplates.filter(
     (template) =>
-      template.visibility == "private" || template.visibility == "unlisted"
+      template.visibility == 'private' || template.visibility == 'unlisted',
   ).length;
 
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Box>
         <Heading>My templates</Heading>
         <Text>
@@ -95,7 +97,7 @@ export default function Templates() {
           or sell them on the marketplace.
         </Text>
       </Box>
-      <Flex gap={"10px"}>
+      <Flex gap={'10px'}>
         <StatsCard
           title="Private"
           value={privates.toString()}
@@ -110,13 +112,13 @@ export default function Templates() {
         />
       </Flex>
 
-      <Flex direction={"column"} gap={"10px"}>
-        <Flex gap={"5px"}>
+      <Flex direction={'column'} gap={'10px'}>
+        <Flex gap={'5px'}>
           <CreateTemplateButton />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            width={"initial"}
+            width={'initial'}
           />
         </Flex>
 

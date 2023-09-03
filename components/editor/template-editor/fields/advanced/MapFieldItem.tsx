@@ -1,18 +1,19 @@
 import {
-  FieldArraySettings,
-  FieldMapSettings,
-  FieldStringSettings,
-  TemplateFieldType,
-  TemplateFieldTypes,
-} from "@/lib/interfaces/template-field";
-import {
   FormControl,
   FormLabel,
   Input,
   Select,
   SimpleGrid,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import {
+  FieldArraySettings,
+  FieldMapSettings,
+  FieldStringSettings,
+  TemplateFieldType,
+  TemplateFieldTypes,
+} from '@/lib/interfaces/template-field';
 
 interface MapFieldItemProps {
   settings: FieldMapSettings;
@@ -34,41 +35,41 @@ export default function MapFieldItem({
 
   return (
     <>
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
         <FormControl>
           <FormLabel>Min Items</FormLabel>
           <Input
-            placeholder={"0"}
+            placeholder={'0'}
             value={settingsState?.minItems}
-            type={"number"}
+            type={'number'}
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
                 minItems: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
 
         <FormControl>
           <FormLabel>Max Items</FormLabel>
           <Input
-            placeholder={"9999"}
+            placeholder={'9999'}
             value={settingsState?.maxItems}
-            type={"number"}
+            type={'number'}
             onChange={(e) =>
               setSettingsState({
                 ...settingsState,
                 maxItems: parseInt(e.target.value),
               })
             }
-            size={"sm"}
+            size={'sm'}
           />
         </FormControl>
       </SimpleGrid>
 
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
         <FormControl>
           <FormLabel>Key type</FormLabel>
           <Select
@@ -79,7 +80,7 @@ export default function MapFieldItem({
                 key: e.target.value as TemplateFieldType,
               })
             }
-            size={"sm"}
+            size={'sm'}
           >
             {TemplateFieldTypes.map((type) => (
               <option key={type.id} value={type.id}>
@@ -98,7 +99,7 @@ export default function MapFieldItem({
                 value: e.target.value as TemplateFieldType,
               })
             }
-            size={"sm"}
+            size={'sm'}
           >
             {TemplateFieldTypes.map((type) => (
               <option key={type.id} value={type.id}>

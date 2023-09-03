@@ -1,6 +1,3 @@
-import useIntegrations from "@/hooks/useIntegrations";
-import IIntegration, { IntegrationType } from "@/lib/interfaces/integration";
-import { capitalize } from "@/lib/utils/strings";
 import {
   Avatar,
   Box,
@@ -10,35 +7,39 @@ import {
   TabPanel,
   Text,
   useColorMode,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import { IconType } from "react-icons";
-import { FaKickstarter } from "react-icons/fa";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { IconType } from 'react-icons';
 import {
   BsCheck,
   BsTrash,
   BsTwitch,
   BsPlusLg,
   BsYoutube,
-} from "react-icons/bs";
-import { toastError, toastSuccess } from "@/lib/utils/toasts";
-import { oauthIntegration } from "@/lib/utils/oauth";
+} from 'react-icons/bs';
+import { FaKickstarter } from 'react-icons/fa';
+
+import useAuth from '@/hooks/useAuth';
+import useIntegrations from '@/hooks/useIntegrations';
+import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
 import {
   disconnectIntegration,
   syncProfileWithIntegration,
-} from "@/lib/services/integration-service";
-import useAuth from "@/hooks/useAuth";
+} from '@/lib/services/integration-service';
+import { oauthIntegration } from '@/lib/utils/oauth';
+import { capitalize } from '@/lib/utils/strings';
+import { toastError, toastSuccess } from '@/lib/utils/toasts';
 
 const URLS: Record<IntegrationType, string> = {
-  kick: "https://kick.com/",
-  twitch: "https://twitch.tv/",
-  youtube: "https://youtube.com/c/",
+  kick: 'https://kick.com/',
+  twitch: 'https://twitch.tv/',
+  youtube: 'https://youtube.com/c/',
 };
 
 const COLORS: Record<IntegrationType, string> = {
-  kick: "green",
-  twitch: "purple",
-  youtube: "red",
+  kick: 'green',
+  twitch: 'purple',
+  youtube: 'red',
 };
 
 const ConnectionButton = ({
@@ -53,8 +54,8 @@ const ConnectionButton = ({
   const { colorMode } = useColorMode();
   const [loading, setLoading] = useState(false);
 
-  const bg = colorMode == "dark" ? "blackAlpha.500" : "blackAlpha.300";
-  const fg = colorMode == "dark" ? "whiteAlpha.500" : "blackAlpha.900";
+  const bg = colorMode == 'dark' ? 'blackAlpha.500' : 'blackAlpha.300';
+  const fg = colorMode == 'dark' ? 'whiteAlpha.500' : 'blackAlpha.900';
 
   const handleConnect = async () => {
     setLoading(true);
@@ -69,18 +70,18 @@ const ConnectionButton = ({
   return (
     <Flex
       bg={bg}
-      p={"14px 28px"}
-      borderRadius={"10px"}
+      p={'14px 28px'}
+      borderRadius={'10px'}
       alignItems="center"
       justifyContent="space-between"
-      width={"100%"}
+      width={'100%'}
       color={fg}
     >
-      <Flex alignItems={"center"} gap={"8px"}>
-        <Icon fontSize={"40px"} />
+      <Flex alignItems={'center'} gap={'8px'}>
+        <Icon fontSize={'40px'} />
 
         <Box>
-          <Text fontSize={"md"} fontWeight={"bold"}>
+          <Text fontSize={'md'} fontWeight={'bold'}>
             {capitalize(type)}
           </Text>
           <Text fontSize="sm">No connected</Text>
@@ -89,14 +90,14 @@ const ConnectionButton = ({
 
       <Box>
         <Button
-          colorScheme={"pink"}
+          colorScheme={'pink'}
           size="sm"
           disabled={loading}
           isLoading={loading}
           onClick={handleConnect}
         >
           <BsPlusLg />
-          <Text ml={"5px"}>Connect</Text>
+          <Text ml={'5px'}>Connect</Text>
         </Button>
       </Box>
     </Flex>
@@ -115,8 +116,8 @@ const ConnectionItem = ({
   const { colorMode } = useColorMode();
   const { setUser } = useAuth();
 
-  const bg = colorMode == "dark" ? "blackAlpha.700" : "blackAlpha.200";
-  const accent = colorMode == "dark" ? "purple.200" : "purple.500";
+  const bg = colorMode == 'dark' ? 'blackAlpha.700' : 'blackAlpha.200';
+  const accent = colorMode == 'dark' ? 'purple.200' : 'purple.500';
   const link = URLS[integration.type] + integration.username;
 
   const [loading, setLoading] = useState(false);
@@ -135,7 +136,7 @@ const ConnectionItem = ({
     syncProfileWithIntegration(integration)
       .then((user) => {
         setUser(user);
-        toastSuccess("Successfully synced profile");
+        toastSuccess('Successfully synced profile');
       })
       .catch((e) => toastError(e.message))
       .finally(() => setSyncing(false));
@@ -144,35 +145,35 @@ const ConnectionItem = ({
   return (
     <Flex
       bg={bg}
-      p={"14px 28px"}
-      borderRadius={"10px"}
+      p={'14px 28px'}
+      borderRadius={'10px'}
       alignItems="center"
       justifyContent="space-between"
-      width={"100%"}
+      width={'100%'}
     >
-      <Flex alignItems={"center"} gap={"8px"}>
-        <Icon fill={COLORS[integration.type]} fontSize={"30px"} />
-        <Avatar size={"md"} src={integration.avatar} />
+      <Flex alignItems={'center'} gap={'8px'}>
+        <Icon fill={COLORS[integration.type]} fontSize={'30px'} />
+        <Avatar size={'md'} src={integration.avatar} />
 
         <Box>
-          <Text fontSize={"md"} fontWeight={"bold"}>
+          <Text fontSize={'md'} fontWeight={'bold'}>
             {integration.username}
           </Text>
 
-          <Text fontSize={"sm"}>
+          <Text fontSize={'sm'}>
             <Link
               color={accent}
               target="_blank"
               referrerPolicy="no-referrer"
               href={link}
             >
-              {link.split("://")[1]}
+              {link.split('://')[1]}
             </Link>
           </Text>
         </Box>
       </Flex>
 
-      <Flex alignItems={"center"} gap={"7px"}>
+      <Flex alignItems={'center'} gap={'7px'}>
         <Button
           onClick={handleSync}
           size="sm"
@@ -183,7 +184,7 @@ const ConnectionItem = ({
         </Button>
 
         <Button
-          colorScheme={hover ? "red" : "green"}
+          colorScheme={hover ? 'red' : 'green'}
           size="sm"
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -192,7 +193,7 @@ const ConnectionItem = ({
           disabled={loading}
         >
           {hover ? <BsTrash /> : <BsCheck />}
-          {hover ? "Disconnect" : "Connected"}
+          {hover ? 'Disconnect' : 'Connected'}
         </Button>
       </Flex>
     </Flex>
@@ -233,7 +234,7 @@ export default function ConnectionsTab() {
     const integration = await oauthIntegration(type);
     if (integration) {
       addIntegration(integration);
-      toastSuccess("Successfully connected " + capitalize(type));
+      toastSuccess('Successfully connected ' + capitalize(type));
     }
   };
 
@@ -241,30 +242,30 @@ export default function ConnectionsTab() {
     const success = await disconnectIntegration(integration._id);
     if (success) {
       removeIntegration(integration);
-      toastSuccess("Successfully disconnected " + capitalize(integration.type));
+      toastSuccess('Successfully disconnected ' + capitalize(integration.type));
     }
   };
 
   return (
     <TabPanel>
-      <Flex flexDir={"column"} gap={"10px"}>
+      <Flex flexDir={'column'} gap={'10px'}>
         <ConnectionProvider
           onConnect={onConnect}
           onDisconnect={onDisconnect}
           Icon={FaKickstarter}
-          type={"kick"}
+          type={'kick'}
         />
         <ConnectionProvider
           onConnect={onConnect}
           onDisconnect={onDisconnect}
           Icon={BsTwitch}
-          type={"twitch"}
+          type={'twitch'}
         />
         <ConnectionProvider
           onConnect={onConnect}
           onDisconnect={onDisconnect}
           Icon={BsYoutube}
-          type={"youtube"}
+          type={'youtube'}
         />
       </Flex>
     </TabPanel>

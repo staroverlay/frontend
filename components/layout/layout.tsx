@@ -1,11 +1,10 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Box, Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
-import useAuth from "../../hooks/useAuth";
-import Navbar from "../navigation/navbar";
-import Sidebar from "../navigation/sidebar";
-
-import styles from "./layout.module.css";
+import useAuth from '../../hooks/useAuth';
+import Navbar from '../navigation/navbar';
+import Sidebar from '../navigation/sidebar';
+import styles from './layout.module.css';
 
 interface LayoutProps {
   children: React.ReactElement;
@@ -14,15 +13,15 @@ interface LayoutProps {
 function AuthenticatedLayout({ children }: LayoutProps) {
   const { pathname, push } = useRouter();
 
-  if (pathname.startsWith("/auth")) {
-    push("/");
+  if (pathname.startsWith('/auth')) {
+    push('/');
     return <></>;
   }
 
   return (
     <Box>
       <Navbar />
-      <Flex height={"calc(100vh - 65px)"} width={"100%"} padding={"10px"}>
+      <Flex height={'calc(100vh - 65px)'} width={'100%'} padding={'10px'}>
         <Sidebar />
         {children}
       </Flex>
@@ -35,21 +34,21 @@ function GuestLayout({ children }: LayoutProps) {
   const { isLogged, user } = useAuth();
   const isEmailVerified = user?.isEmailVerified;
 
-  if (!pathname.startsWith("/auth/verify") && isLogged() && !isEmailVerified) {
-    push("/auth/verify");
+  if (!pathname.startsWith('/auth/verify') && isLogged() && !isEmailVerified) {
+    push('/auth/verify');
     return <></>;
   }
 
-  if (pathname.startsWith("/auth/verify") && !isLogged()) {
-    push("/auth/login");
+  if (pathname.startsWith('/auth/verify') && !isLogged()) {
+    push('/auth/login');
     return <></>;
   }
 
-  if (pathname.startsWith("/auth")) {
-    return <Box className={styles["guess-bg"]}>{children}</Box>;
+  if (pathname.startsWith('/auth')) {
+    return <Box className={styles['guess-bg']}>{children}</Box>;
   }
 
-  push("/auth/login");
+  push('/auth/login');
   return <></>;
 }
 

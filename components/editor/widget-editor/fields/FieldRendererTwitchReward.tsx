@@ -8,20 +8,20 @@ import {
   FormLabel,
   Text,
   useDisclosure,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
-import Image from "next/image";
-import useMedia from "@/hooks/useMedia";
-import { getMediaThumbnail } from "@/lib/utils/media";
-import { useEffect, useState } from "react";
-import MediaSelectModal from "@/components/modals/media-select-modal/MediaSelectModal";
-import useQuery from "@/hooks/useQuery";
-import GetTwitchCustomRewardsQuery from "@/lib/graphql/queries/getTwitchCustomRewardsQuery";
-import { toastError } from "@/lib/utils/toasts";
-import TwitchRewardSelectModal from "@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal";
-import { ITwitchCustomReward } from "@/lib/interfaces/twitch/custom-reward";
-import TwitchRewardCard from "@/components/cards/twitch-reward/TwitchRewardCard";
+import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
+import MediaSelectModal from '@/components/modals/media-select-modal/MediaSelectModal';
+import TwitchRewardSelectModal from '@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal';
+import useMedia from '@/hooks/useMedia';
+import useQuery from '@/hooks/useQuery';
+import GetTwitchCustomRewardsQuery from '@/lib/graphql/queries/getTwitchCustomRewardsQuery';
+import ITemplateField from '@/lib/interfaces/template-field';
+import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+import { getMediaThumbnail } from '@/lib/utils/media';
+import { toastError } from '@/lib/utils/toasts';
 
 export interface FieldRendererTwitchRewardProps {
   field: ITemplateField;
@@ -42,7 +42,7 @@ export default function FieldRendererTwitchReward({
 
   const { isOpen, onClose, onOpen } = useDisclosure();
   const selectedReward = ((rewards || []) as ITwitchCustomReward[]).find(
-    (r) => r.id === value
+    (r) => r.id === value,
   );
 
   useEffect(() => {
@@ -66,18 +66,18 @@ export default function FieldRendererTwitchReward({
       <FormLabel>{field.label}</FormLabel>
 
       <Flex
-        bg={"Background"}
-        borderRadius={"7px"}
-        cursor={"pointer"}
-        gap={"10px"}
-        padding={"10px"}
-        transition={"all 90ms ease-in-out"}
+        bg={'Background'}
+        borderRadius={'7px'}
+        cursor={'pointer'}
+        gap={'10px'}
+        padding={'10px'}
+        transition={'all 90ms ease-in-out'}
         onClick={onOpen}
         _hover={{
-          transform: "scale(1.05)",
+          transform: 'scale(1.05)',
         }}
       >
-        {selectedReward == null && <Button size={"sm"}>Select reward</Button>}
+        {selectedReward == null && <Button size={'sm'}>Select reward</Button>}
         {selectedReward != null && (
           <TwitchRewardCard
             reward={selectedReward as ITwitchCustomReward}

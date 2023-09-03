@@ -1,6 +1,7 @@
-import { Flex, Spinner, Text } from "@chakra-ui/react";
-import { PropsWithChildren } from "react";
-import ErrorPage from "../error/error";
+import { Flex, Spinner, Text } from '@chakra-ui/react';
+import { PropsWithChildren } from 'react';
+
+import ErrorPage from '../error/error';
 
 interface LoadingProps extends PropsWithChildren {
   loaded: boolean;
@@ -19,15 +20,15 @@ export default function Loading({
 
   return (
     <Flex
-      alignItems={"center"}
-      direction={"column"}
-      justifyContent={"center"}
-      gap={"20px"}
-      width={"100%"}
-      height={"100vh"}
+      alignItems={'center'}
+      direction={'column'}
+      justifyContent={'center'}
+      gap={'20px'}
+      width={'100%'}
+      height={'100vh'}
     >
-      <Spinner size={"lg"} />
-      <Text fontSize={"22px"}>{message}</Text>
+      <Spinner size={'lg'} />
+      <Text fontSize={'22px'}>{message}</Text>
     </Flex>
   );
 }

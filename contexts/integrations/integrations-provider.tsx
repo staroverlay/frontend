@@ -1,9 +1,9 @@
-import Loading from "@/components/layout/loading";
-import useAuth from "@/hooks/useAuth";
-import IIntegration, { IntegrationType } from "@/lib/interfaces/integration";
-import { getUserIntegrations } from "@/lib/services/integration-service";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { IntegrationsContext } from "./integrations-context";
+import Loading from '@/components/layout/loading';
+import useAuth from '@/hooks/useAuth';
+import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
+import { getUserIntegrations } from '@/lib/services/integration-service';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { IntegrationsContext } from './integrations-context';
 
 export function IntegrationsProvider({ children }: PropsWithChildren) {
   const { user } = useAuth();
@@ -11,7 +11,7 @@ export function IntegrationsProvider({ children }: PropsWithChildren) {
   const [fetched, setFetched] = useState(false);
 
   const removeIntegration = (integration: IIntegration | string) => {
-    const id = typeof integration === "string" ? integration : integration._id;
+    const id = typeof integration === 'string' ? integration : integration._id;
     setIntegrations(integrations.filter((m) => m._id !== id));
   };
 
@@ -21,7 +21,7 @@ export function IntegrationsProvider({ children }: PropsWithChildren) {
 
   const updateIntegration = (integration: IIntegration) => {
     setIntegrations(
-      integrations.map((m) => (m._id === integration._id ? integration : m))
+      integrations.map((m) => (m._id === integration._id ? integration : m)),
     );
   };
 
@@ -53,7 +53,7 @@ export function IntegrationsProvider({ children }: PropsWithChildren) {
         getIntegration,
       }}
     >
-      <Loading loaded={fetched} message={"Loading integrations"}>
+      <Loading loaded={fetched} message={'Loading integrations'}>
         {children}
       </Loading>
     </IntegrationsContext.Provider>

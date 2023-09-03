@@ -1,13 +1,14 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { Button, Flex, Input, chakra } from "@chakra-ui/react";
-import { FileUploader } from "react-drag-drop-files";
-import BaseModal from "../base-modal/BaseModal";
-import FilePreview from "../../content/file-preview/FilePreview";
-import { uploadFile } from "../../../lib/utils/storage";
-import useMedia from "../../../hooks/useMedia";
-import { toastPending } from "../../../lib/utils/toasts";
+import { Button, Flex, Input, chakra } from '@chakra-ui/react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { FileUploader } from 'react-drag-drop-files';
 
-const fileTypes = ["JPG", "PNG", "GIF", "WEBP", "MP3", "MP4", "WEBM"];
+import useMedia from '../../../hooks/useMedia';
+import { uploadFile } from '../../../lib/utils/storage';
+import { toastPending } from '../../../lib/utils/toasts';
+import FilePreview from '../../content/file-preview/FilePreview';
+import BaseModal from '../base-modal/BaseModal';
+
+const fileTypes = ['JPG', 'PNG', 'GIF', 'WEBP', 'MP3', 'MP4', 'WEBM'];
 
 interface UploadModalProps {
   isOpen: boolean;
@@ -27,18 +28,18 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
   };
 
   const getName = () => {
-    return nameInputRef.current?.value || "";
+    return nameInputRef.current?.value || '';
   };
 
   const handleClose = () => {
     setFile(null);
-    setName("");
+    setName('');
     onClose();
   };
 
   const handleUploadFile = async () => {
     if (!file) {
-      throw new Error("File are required");
+      throw new Error('File are required');
     }
 
     const media = await uploadFile(file, getName());
@@ -57,19 +58,19 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
 
     setUploading(true);
     await toastPending(handleUploadFile, {
-      pending: "Uploading file",
-      success: "File uploaded",
+      pending: 'Uploading file',
+      success: 'File uploaded',
     });
     setUploading(false);
     handleClose();
   };
 
   return (
-    <BaseModal title={"Upload a file"} isOpen={isOpen} onClose={handleClose}>
+    <BaseModal title={'Upload a file'} isOpen={isOpen} onClose={handleClose}>
       <Flex
         as={chakra.form}
-        direction={"column"}
-        gap={"10px"}
+        direction={'column'}
+        gap={'10px'}
         onSubmit={handleSubmit}
       >
         <FileUploader
@@ -86,7 +87,7 @@ export default function UploadModal({ isOpen, onClose }: UploadModalProps) {
           <>
             <Input ref={nameInputRef} placeholder="File name" required />
 
-            <Button disabled={uploading} type={"submit"}>
+            <Button disabled={uploading} type={'submit'}>
               Upload
             </Button>
           </>

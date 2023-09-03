@@ -1,23 +1,23 @@
-import { toast, ToastOptions, ToastPromiseParams } from "react-toastify";
+import { toast, ToastOptions, ToastPromiseParams } from 'react-toastify';
 
 const DEFAULT: ToastOptions = {
-  position: "bottom-right",
+  position: 'bottom-right',
   autoClose: 5000,
   hideProgressBar: false,
   closeOnClick: true,
   pauseOnHover: true,
   draggable: false,
-  theme: "dark",
+  theme: 'dark',
 };
 
 export function toastPending<T>(
   promise: Promise<T> | (() => Promise<T>),
-  messages: ToastPromiseParams<T, string, unknown>
+  messages: ToastPromiseParams<T, string, unknown>,
 ): Promise<T | null> {
   if (!messages.error) {
     messages.error = {
       render: ({ data }: any) => {
-        return data?.message || "Unknown error";
+        return data?.message || 'Unknown error';
       },
     };
   }

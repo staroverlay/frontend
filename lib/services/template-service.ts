@@ -1,15 +1,15 @@
-import client from "../graphql/client";
-import CreateTemplateMutation from "../graphql/mutations/createTemplateMutation";
-import DeleteTemplateMutation from "../graphql/mutations/deleteTemplateMutation";
-import UpdateTemplateMutation from "../graphql/mutations/updateTemplateMutation";
-import GetMyTemplatesQuery from "../graphql/queries/getMyTemplatesQuery";
-import GetTemplateByIDQuery from "../graphql/queries/getTemplateByIdQuery";
-import GetTemplatesByAuthorQuery from "../graphql/queries/getTemplatesByAuthorQuery";
-import ITemplate, { ITemplateRaw } from "../interfaces/template";
-import ITemplateField from "../interfaces/template-field";
-import { cleanEquals } from "../utils/object";
-import { randomString } from "../utils/random";
-import TemplateUpdate from "./dtos/template-update";
+import client from '../graphql/client';
+import CreateTemplateMutation from '../graphql/mutations/createTemplateMutation';
+import DeleteTemplateMutation from '../graphql/mutations/deleteTemplateMutation';
+import UpdateTemplateMutation from '../graphql/mutations/updateTemplateMutation';
+import GetMyTemplatesQuery from '../graphql/queries/getMyTemplatesQuery';
+import GetTemplateByIDQuery from '../graphql/queries/getTemplateByIdQuery';
+import GetTemplatesByAuthorQuery from '../graphql/queries/getTemplatesByAuthorQuery';
+import ITemplate, { ITemplateRaw } from '../interfaces/template';
+import ITemplateField from '../interfaces/template-field';
+import { cleanEquals } from '../utils/object';
+import { randomString } from '../utils/random';
+import TemplateUpdate from './dtos/template-update';
 
 // Aux functions.
 function fixTemplate(raw: ITemplateRaw) {
@@ -31,7 +31,7 @@ function fixTemplates(raws: ITemplateRaw[]) {
 
 // Service.
 export async function createTemplate(name: string) {
-  const payload = { name, visibility: "private" };
+  const payload = { name, visibility: 'private' };
   const raw = await client.fetch(CreateTemplateMutation, { payload });
   return fixTemplate(raw as ITemplateRaw);
 }
@@ -53,7 +53,7 @@ export async function getMyTemplates(): Promise<ITemplate[]> {
 }
 
 export async function getTemplatesByAuthor(
-  authorId: string
+  authorId: string,
 ): Promise<ITemplate[]> {
   const raws = await client.fetch(GetTemplatesByAuthorQuery, { authorId });
   return fixTemplates(raws as ITemplateRaw[]);
@@ -70,7 +70,7 @@ export async function getSharedTemplates() {
 
 export async function updateTemplate(
   template: ITemplate,
-  update: TemplateUpdate
+  update: TemplateUpdate,
 ) {
   const payload = cleanEquals(template, update);
   const fields: ITemplateField[] = payload.fields || [];

@@ -1,9 +1,9 @@
-import Loading from "@/components/layout/loading";
-import useMembership from "@/hooks/useMembership";
-import IPlan from "@/lib/interfaces/plan";
-import { getPlans } from "@/lib/services/plan-service";
-import { PropsWithChildren, useEffect, useState } from "react";
-import { PlanContext } from "./plan-context";
+import Loading from '@/components/layout/loading';
+import useMembership from '@/hooks/useMembership';
+import IPlan from '@/lib/interfaces/plan';
+import { getPlans } from '@/lib/services/plan-service';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { PlanContext } from './plan-context';
 
 export function PlanProvider({ children }: PropsWithChildren) {
   const { membership } = useMembership();
@@ -34,7 +34,7 @@ export function PlanProvider({ children }: PropsWithChildren) {
         plans,
       }}
     >
-      <Loading loaded={fetched} message={"Loading plans"}>
+      <Loading loaded={fetched} message={'Loading plans'}>
         {children}
       </Loading>
     </PlanContext.Provider>

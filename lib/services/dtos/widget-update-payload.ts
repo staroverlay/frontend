@@ -1,4 +1,4 @@
-import IDictionary from "@/lib/interfaces/shared/IDictionary";
+import IDictionary from '@/lib/interfaces/shared/IDictionary';
 
 type WidgetUpdatePayload = {
   displayName?: string;

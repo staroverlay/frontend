@@ -1,8 +1,8 @@
-import { Box, Flex } from "@chakra-ui/react";
-import React from "react";
-import { getGradient, Gradient } from "../../../theme/gradients";
+import { Box, Flex } from '@chakra-ui/react';
+import React from 'react';
 
-import styles from "./StatsCard.module.css";
+import { getGradient, Gradient } from '../../../theme/gradients';
+import styles from './StatsCard.module.css';
 
 interface StatsCardProps {
   title: string;

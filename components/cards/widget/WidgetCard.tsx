@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   Badge,
   Box,
@@ -13,13 +12,14 @@ import {
   MenuItem,
   MenuList,
   Stack,
-} from "@chakra-ui/react";
-import { FaEllipsisV } from "react-icons/fa";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { FaEllipsisV } from 'react-icons/fa';
 
-import IWidget from "@/lib/interfaces/widget";
+import ITemplate from '@/lib/interfaces/template';
+import IWidget from '@/lib/interfaces/widget';
 
-import styles from "./WidgetCard.module.css";
-import ITemplate from "@/lib/interfaces/template";
+import styles from './WidgetCard.module.css';
 
 export interface WidgetCardProps {
   widget: IWidget;
@@ -36,19 +36,19 @@ export default function WidgetCard({
 
   const OptionsButton = () => (
     <Menu>
-      <MenuButton as={IconButton} icon={<FaEllipsisV />} variant={"ghost"} />
+      <MenuButton as={IconButton} icon={<FaEllipsisV />} variant={'ghost'} />
       <MenuList>
         {/* Streamer menu */}
         <Link href={`/widgets/${widget._id}`}>
-          <MenuItem color={"green.400"}>Edit</MenuItem>
+          <MenuItem color={'green.400'}>Edit</MenuItem>
         </Link>
-        <MenuItem color={"cyan.400"}>Copy link</MenuItem>
+        <MenuItem color={'cyan.400'}>Copy link</MenuItem>
 
         <MenuDivider />
 
         {/* Quick actions menu */}
         <MenuItem onClick={() => onClone(widget)}>Clone</MenuItem>
-        <MenuItem color={"red.400"} onClick={() => onDelete(widget)}>
+        <MenuItem color={'red.400'} onClick={() => onDelete(widget)}>
           Delete
         </MenuItem>
       </MenuList>
@@ -59,19 +59,19 @@ export default function WidgetCard({
     <Card className={styles.card}>
       <CardBody>
         <Stack spacing="2">
-          <Flex className={styles.flex} justifyContent={"space-between"}>
+          <Flex className={styles.flex} justifyContent={'space-between'}>
             <Heading size="md">
-              {widget.displayName || "Unnamed Widget"}
+              {widget.displayName || 'Unnamed Widget'}
 
-              <Badge ml={"10px"} colorScheme={widget.enabled ? "green" : "red"}>
-                {widget.enabled ? "Enabled" : "Disabled"}
+              <Badge ml={'10px'} colorScheme={widget.enabled ? 'green' : 'red'}>
+                {widget.enabled ? 'Enabled' : 'Disabled'}
               </Badge>
             </Heading>
             <OptionsButton />
           </Flex>
 
           <Box className={styles.author}>
-            From{" "}
+            From{' '}
             <Link href={`/store/templates/${widget.templateId}`}>
               {template.name}
             </Link>

@@ -1,13 +1,14 @@
-import MediaCard from "@/components/cards/media/MediaCard";
-import TwitchRewardCard from "@/components/cards/twitch-reward/TwitchRewardCard";
-import useMedia from "@/hooks/useMedia";
-import IMedia, { FileType } from "@/lib/interfaces/media";
-import { ITwitchCustomReward } from "@/lib/interfaces/twitch/custom-reward";
-import { Button, Flex, Heading, SimpleGrid } from "@chakra-ui/react";
+import { Button, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
+
+import MediaCard from '@/components/cards/media/MediaCard';
+import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
+import useMedia from '@/hooks/useMedia';
+import IMedia, { FileType } from '@/lib/interfaces/media';
+import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
 
 interface MediasGridProps {
   rewards: ITwitchCustomReward[];
-  cardSize?: "sm" | "md" | "lg";
+  cardSize?: 'sm' | 'md' | 'lg';
   onSelect?: (reward: ITwitchCustomReward) => void;
 }
 
@@ -25,7 +26,7 @@ export default function TwitchRewardsGrid({
 
   return (
     <>
-      <SimpleGrid gridTemplateColumns={"repeat(auto-fit, 70px)"} spacing="40px">
+      <SimpleGrid gridTemplateColumns={'repeat(auto-fit, 70px)'} spacing="40px">
         {rewards.map((reward) => (
           <TwitchRewardCard
             key={reward.id}
@@ -37,8 +38,8 @@ export default function TwitchRewardsGrid({
       </SimpleGrid>
 
       {isEmpty && (
-        <Flex alignContent={"center"} justifyContent={"center"}>
-          <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
+        <Flex alignContent={'center'} justifyContent={'center'}>
+          <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
             <Heading>No custom rewards</Heading>
             <CreateCustomRewardButton />
           </Flex>

@@ -9,13 +9,15 @@ import {
   IconButton,
   Switch,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
 
-import ITemplateField from "@/lib/interfaces/template-field";
-import FieldRenderer from "./FieldRenderer";
-import { FaTrash } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import IDictionary from "@/lib/interfaces/shared/IDictionary";
+import IDictionary from '@/lib/interfaces/shared/IDictionary';
+import ITemplateField from '@/lib/interfaces/template-field';
+
+import FieldRenderer from './FieldRenderer';
+
 
 export interface FieldRendererMapProps {
   field: ITemplateField;
@@ -76,7 +78,7 @@ export default function FieldRendererMap({
       Object.keys(value || {}).map((key) => ({
         key,
         value: value[key],
-      }))
+      })),
     );
   }, [value]);
 
@@ -85,21 +87,21 @@ export default function FieldRendererMap({
       <FormLabel>{field.label}</FormLabel>
 
       <Flex
-        border={"1px solid"}
-        borderColor={"chakra-border-color"}
-        borderRadius={"7px"}
-        padding={"14px 20px"}
-        direction={"column"}
+        border={'1px solid'}
+        borderColor={'chakra-border-color'}
+        borderRadius={'7px'}
+        padding={'14px 20px'}
+        direction={'column'}
       >
         {items.map((item, index) => (
-          <Flex key={index} gap={"10px"} alignItems={"center"}>
+          <Flex key={index} gap={'10px'} alignItems={'center'}>
             <FieldRenderer
               value={item.key}
               setValue={(newKey) => updateKey(index, newKey)}
               field={{
-                id: "dummy",
-                _internalId: "dummy",
-                type: opts?.key || "string",
+                id: 'dummy',
+                _internalId: 'dummy',
+                type: opts?.key || 'string',
               }}
             />
 
@@ -107,19 +109,19 @@ export default function FieldRendererMap({
               value={item.value}
               setValue={(newValue) => updateValue(index, newValue)}
               field={{
-                id: "dummy",
-                _internalId: "dummy",
-                type: opts?.value || "string",
+                id: 'dummy',
+                _internalId: 'dummy',
+                type: opts?.value || 'string',
               }}
             />
 
             <IconButton
               icon={<FaTrash />}
-              aria-label={"dasdad"}
-              variant={"solid"}
-              colorScheme={"red"}
-              zIndex={"1"}
-              size={"xs"}
+              aria-label={'dasdad'}
+              variant={'solid'}
+              colorScheme={'red'}
+              zIndex={'1'}
+              size={'xs'}
               onClick={() => remove(index)}
             />
           </Flex>
@@ -127,7 +129,7 @@ export default function FieldRendererMap({
 
         <Button
           onClick={add}
-          size={"xs"}
+          size={'xs'}
           disabled={
             isAnyFieldNull() ||
             (opts?.maxItems != undefined && items.length >= opts?.maxItems)
