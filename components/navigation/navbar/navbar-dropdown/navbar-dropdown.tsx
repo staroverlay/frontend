@@ -8,18 +8,18 @@ import {
   MenuList,
   Text,
   useColorMode,
-} from "@chakra-ui/react";
-import Link from "next/link";
-import { PropsWithChildren } from "react";
-import { IconType } from "react-icons";
-import { BiChevronDown } from "react-icons/bi";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
+import { IconType } from 'react-icons';
+import { BiChevronDown } from 'react-icons/bi';
 
 interface NavbarDropdownItem {
   icon?: IconType;
   label: string;
   link?: string;
   onClick?: () => unknown;
-  color?: "normal" | "critical";
+  color?: 'normal' | 'critical';
 }
 
 export interface NavbarDropdown extends PropsWithChildren {
@@ -34,28 +34,28 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
       <MenuButton
         as={Button}
         rightIcon={<BiChevronDown />}
-        variant={"unstyled"}
-        textAlign={"center"}
-        height={"100%"}
-        color={"#777"}
+        variant={'unstyled'}
+        textAlign={'center'}
+        height={'100%'}
+        color={'#777'}
       >
         {children}
       </MenuButton>
       <MenuList
-        display={"block"}
-        bg={colorMode === "dark" ? "blackAlpha.500" : "blackAlpha.100"}
+        display={'block'}
+        bg={colorMode === 'dark' ? 'blackAlpha.500' : 'blackAlpha.100'}
       >
         {content.map(
           ({ link, icon: IconElement, label, color, onClick }, key) => (
             <MenuItem
               key={key}
-              bg={"transparent"}
-              color={(color || "normal") === "normal" ? "inherit" : "red.500"}
+              bg={'transparent'}
+              color={(color || 'normal') === 'normal' ? 'inherit' : 'red.500'}
             >
-              <Link href={link || "#"} onClick={onClick}>
+              <Link href={link || '#'} onClick={onClick}>
                 <Text>
                   {IconElement && (
-                    <Icon fontSize={"20px"} mr={"5px"}>
+                    <Icon fontSize={'20px'} mr={'5px'}>
                       <IconElement />
                     </Icon>
                   )}
@@ -63,7 +63,7 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
                 </Text>
               </Link>
             </MenuItem>
-          )
+          ),
         )}
       </MenuList>
     </Menu>

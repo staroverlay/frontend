@@ -1,5 +1,3 @@
-import { updatePassword } from "@/lib/services/user-service";
-import { toastError, toastSuccess } from "@/lib/utils/toasts";
 import {
   Box,
   Button,
@@ -10,17 +8,20 @@ import {
   Input,
   TabPanel,
   useColorMode,
-} from "@chakra-ui/react";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+
+import { updatePassword } from '@/lib/services/user-service';
+import { toastError, toastSuccess } from '@/lib/utils/toasts';
 
 const ChangePassword = () => {
   const { colorMode } = useColorMode();
-  const bg = colorMode === "light" ? "white" : "black";
+  const bg = colorMode === 'light' ? 'white' : 'black';
 
   const [loading, setLoading] = useState(false);
 
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,31 +36,31 @@ const ChangePassword = () => {
       .finally(() => setLoading(false));
 
     if (result) {
-      toastSuccess("Password updated successfully");
+      toastSuccess('Password updated successfully');
 
-      setOldPassword("");
-      setNewPassword("");
+      setOldPassword('');
+      setNewPassword('');
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Box bg={bg} borderRadius={"12px"} p={"7px"}>
+      <Box bg={bg} borderRadius={'12px'} p={'7px'}>
         <Flex
-          border={"1px solid #f55f"}
-          borderRadius={"12px"}
-          flexDir={"column"}
-          gap={"20px"}
-          p={"14px 14px"}
+          border={'1px solid #f55f'}
+          borderRadius={'12px'}
+          flexDir={'column'}
+          gap={'20px'}
+          p={'14px 14px'}
         >
-          <Heading fontSize={"xl"}>Change Password</Heading>
+          <Heading fontSize={'xl'}>Change Password</Heading>
 
           <FormControl>
-            <FormLabel fontSize={"md"}>Old password</FormLabel>
+            <FormLabel fontSize={'md'}>Old password</FormLabel>
             <Input
-              type={"password"}
-              placeholder={"Old password"}
-              size={"md"}
+              type={'password'}
+              placeholder={'Old password'}
+              size={'md'}
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
               required
@@ -67,11 +68,11 @@ const ChangePassword = () => {
           </FormControl>
 
           <FormControl>
-            <FormLabel fontSize={"md"}>New password</FormLabel>
+            <FormLabel fontSize={'md'}>New password</FormLabel>
             <Input
-              type={"password"}
-              placeholder={"New password"}
-              size={"md"}
+              type={'password'}
+              placeholder={'New password'}
+              size={'md'}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
@@ -80,8 +81,8 @@ const ChangePassword = () => {
 
           <FormControl>
             <Button
-              type={"submit"}
-              colorScheme={"red"}
+              type={'submit'}
+              colorScheme={'red'}
               isDisabled={!oldPassword || !newPassword || loading}
               isLoading={loading}
             >
@@ -97,7 +98,7 @@ const ChangePassword = () => {
 export default function DangerZoneTab() {
   return (
     <TabPanel>
-      <Flex flexDir={"column"} gap={"20px"}>
+      <Flex flexDir={'column'} gap={'20px'}>
         <ChangePassword />
       </Flex>
     </TabPanel>

@@ -1,19 +1,19 @@
-type TemplateVisibility = "public" | "unlisted" | "private";
+type TemplateVisibility = 'public' | 'unlisted' | 'private';
 
 export const TemplateVisibilities = [
   {
-    id: "public",
-    name: "Public",
+    id: 'public',
+    name: 'Public',
   },
 
   {
-    id: "unlisted",
-    name: "Unlisted",
+    id: 'unlisted',
+    name: 'Unlisted',
   },
 
   {
-    id: "private",
-    name: "Private",
+    id: 'private',
+    name: 'Private',
   },
 ];
 

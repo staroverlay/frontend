@@ -1,4 +1,3 @@
-import usePlan from "@/hooks/usePlan";
 import {
   Box,
   Flex,
@@ -10,16 +9,14 @@ import {
   Heading,
   Text,
   Button,
-  Toast,
-  SimpleGrid,
-  Card,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import MediaCard from "../components/cards/media/MediaCard";
-import StatsCard from "../components/cards/stats/StatsCard";
-import MediaPreviewModal from "../components/modals/media-preview-modal/MediaPreviewModal";
-import useMedia from "../hooks/useMedia";
-import IMedia, { FileType } from "../lib/interfaces/media";
+} from '@chakra-ui/react';
+
+import MediasGrid from '@/components/content/medias-grid/MediasGrid';
+import usePlan from '@/hooks/usePlan';
+
+import StatsCard from '../components/cards/stats/StatsCard';
+import useMedia from '../hooks/useMedia';
+import IMedia, { FileType } from '../lib/interfaces/media';
 
 interface MediaFilesProps {
   files: IMedia[];
@@ -31,37 +28,10 @@ function UploadContentButton() {
   return <Button onClick={openUploadModal}>Upload content</Button>;
 }
 
-function NoMediaTab() {
-  return (
-    <TabPanel>
-      <Flex alignContent={"center"} justifyContent={"center"}>
-        <Flex direction={"column"} alignContent={"center"} gap={"10px"}>
-          <Heading>No media files</Heading>
-          <UploadContentButton />
-        </Flex>
-      </Flex>
-    </TabPanel>
-  );
-}
-
 function MediaFilesTab({ files, filter }: MediaFilesProps) {
-  const filteredFiles = files.filter((file) =>
-    filter ? file.type == filter : true
-  );
-  const isEmpty = filteredFiles.length === 0;
-
   return (
     <TabPanel>
-      <SimpleGrid
-        gridTemplateColumns={"repeat(auto-fit, 300px)"}
-        spacing="40px"
-      >
-        {filteredFiles.map((file) => (
-          <MediaCard key={file.resourceId} media={file} />
-        ))}
-      </SimpleGrid>
-
-      {isEmpty && <NoMediaTab />}
+      <MediasGrid medias={files} filter={filter} />
     </TabPanel>
   );
 }
@@ -71,7 +41,7 @@ export default function Media() {
   const { activePlan } = usePlan();
 
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Box>
         <Heading>Media</Heading>
         <Text>
@@ -80,7 +50,7 @@ export default function Media() {
         </Text>
       </Box>
 
-      <Flex gap={"10px"}>
+      <Flex gap={'10px'}>
         <StatsCard
           title="Storage Quota"
           value={`${(storageUsage / 1024 / 1024).toFixed(2)}`}
@@ -97,8 +67,8 @@ export default function Media() {
       </Flex>
 
       <Tabs variant="soft-rounded">
-        <Flex justifyContent={"space-between"}>
-          <TabList gap={"10px"}>
+        <Flex justifyContent={'space-between'}>
+          <TabList gap={'10px'}>
             <Tab>Image</Tab>
             <Tab>Sounds</Tab>
             <Tab>Video</Tab>
@@ -107,10 +77,10 @@ export default function Media() {
           <UploadContentButton />
         </Flex>
 
-        <TabPanels mt={"20px"}>
-          <MediaFilesTab files={medias} filter={"image"} />
-          <MediaFilesTab files={medias} filter={"audio"} />
-          <MediaFilesTab files={medias} filter={"video"} />
+        <TabPanels mt={'20px'}>
+          <MediaFilesTab files={medias} filter={'image'} />
+          <MediaFilesTab files={medias} filter={'audio'} />
+          <MediaFilesTab files={medias} filter={'video'} />
         </TabPanels>
       </Tabs>
     </Flex>

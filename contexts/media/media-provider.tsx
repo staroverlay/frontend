@@ -1,12 +1,12 @@
-import useAuth from "@/hooks/useAuth";
-import { useDisclosure } from "@chakra-ui/react";
-import { PropsWithChildren, useEffect, useState } from "react";
-import Loading from "../../components/layout/loading";
-import UploadModal from "../../components/modals/upload-modal/UploadModal";
+import useAuth from '@/hooks/useAuth';
+import { useDisclosure } from '@chakra-ui/react';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import Loading from '../../components/layout/loading';
+import UploadModal from '../../components/modals/upload-modal/UploadModal';
 
-import IMedia from "../../lib/interfaces/media";
-import { getAllMedia } from "../../lib/services/media-service";
-import { MediaContext } from "./media-context";
+import IMedia from '../../lib/interfaces/media';
+import { getAllMedia } from '../../lib/services/media-service';
+import { MediaContext } from './media-context';
 
 function getStorageUsage(medias: IMedia[]) {
   let storage = 0;
@@ -26,7 +26,7 @@ export function MediaProvider({ children }: PropsWithChildren) {
   const [fetched, setFetched] = useState(false);
 
   const removeMedia = (media: IMedia | string) => {
-    const id = typeof media === "string" ? media : media._id;
+    const id = typeof media === 'string' ? media : media._id;
     setMedias(medias.filter((m) => m._id !== id));
   };
 
@@ -36,6 +36,10 @@ export function MediaProvider({ children }: PropsWithChildren) {
 
   const updateMedia = (media: IMedia) => {
     setMedias(medias.map((m) => (m._id === media._id ? media : m)));
+  };
+
+  const getMedia = (id: string) => {
+    return medias.find((m) => m._id === id);
   };
 
   const openUploadModal = () => {
@@ -63,13 +67,14 @@ export function MediaProvider({ children }: PropsWithChildren) {
         removeMedia,
         addMedia,
         updateMedia,
+        getMedia,
         storageUsage,
         isUploadModalOpen: isOpen,
         openUploadModal,
       }}
     >
       <UploadModal isOpen={isOpen} onClose={onClose} />
-      <Loading loaded={fetched} message={"Loading media"}>
+      <Loading loaded={fetched} message={'Loading media'}>
         {children}
       </Loading>
     </MediaContext.Provider>

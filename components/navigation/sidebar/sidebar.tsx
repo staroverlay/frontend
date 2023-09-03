@@ -1,5 +1,8 @@
-import { PropsWithChildren } from "react";
-import { Box, Flex, Icon, Text, useColorMode } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text, useColorMode } from '@chakra-ui/react';
+import Link from 'next/link';
+import { PropsWithChildren } from 'react';
+import { IconType } from 'react-icons';
+import { BiBot } from 'react-icons/bi';
 import {
   BsHouse,
   BsStar,
@@ -11,11 +14,9 @@ import {
   BsImage,
   BsShield,
   BsPaintBucket,
-} from "react-icons/bs";
-import { BiBot } from "react-icons/bi";
-import { IconType } from "react-icons";
-import Link from "next/link";
-import useAuth from "../../../hooks/useAuth";
+} from 'react-icons/bs';
+
+import useAuth from '../../../hooks/useAuth';
 
 interface SidebarItemProps {
   icon: IconType;
@@ -24,18 +25,18 @@ interface SidebarItemProps {
 }
 
 function SidebarSection({ children }: PropsWithChildren) {
-  return <Box marginBottom={"22px"}>{children}</Box>;
+  return <Box marginBottom={'22px'}>{children}</Box>;
 }
 
 function SidebarHeader({ children }: PropsWithChildren) {
   const { colorMode } = useColorMode();
   return (
     <Text
-      color={colorMode === "dark" ? "gray.300" : "gray.800"}
-      display={"block"}
-      fontSize={"14px"}
-      fontWeight={"bold"}
-      padding={"5px 15px"}
+      color={colorMode === 'dark' ? 'gray.300' : 'gray.800'}
+      display={'block'}
+      fontSize={'14px'}
+      fontWeight={'bold'}
+      padding={'5px 15px'}
     >
       {children}
     </Text>
@@ -48,15 +49,15 @@ function SidebarItem({ icon: IconElement, to, label }: SidebarItemProps) {
     <Text
       as={Link}
       href={to}
-      color={colorMode === "dark" ? "gray.400" : "gray.700"}
-      _hover={{ color: colorMode === "dark" ? "white" : "black" }}
-      display={"block"}
-      fontSize={"14px"}
-      padding={"5px 15px"}
+      color={colorMode === 'dark' ? 'gray.400' : 'gray.700'}
+      _hover={{ color: colorMode === 'dark' ? 'white' : 'black' }}
+      display={'block'}
+      fontSize={'14px'}
+      padding={'5px 15px'}
     >
-      <Flex alignItems={"center"} gap={"6px"}>
+      <Flex alignItems={'center'} gap={'6px'}>
         {IconElement != null && (
-          <Box fontSize={"16px"}>
+          <Box fontSize={'16px'}>
             <IconElement />
           </Box>
         )}
@@ -71,10 +72,10 @@ export function Sidebar() {
 
   return (
     <Box
-      borderRadius={"7px"}
-      padding={"5px"}
-      marginRight={"15px"}
-      minWidth={"180px"}
+      borderRadius={'7px'}
+      padding={'5px'}
+      marginRight={'15px'}
+      minWidth={'180px'}
     >
       <SidebarSection>
         <SidebarHeader>Overview</SidebarHeader>

@@ -1,4 +1,4 @@
-import { query } from "astraql";
+import { query } from 'astraql';
 
 const GetTemplateByIDQuery = query`
     getTemplateById($id: String!) {

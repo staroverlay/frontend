@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import { PlanContext } from "@/contexts/plan/plan-context";
+import { PlanContext } from '@/contexts/plan/plan-context';
 
 const usePlan = () => useContext(PlanContext);
 

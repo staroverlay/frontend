@@ -1,4 +1,4 @@
-import { mutation } from "astraql";
+import { mutation } from 'astraql';
 
 const DeleteMediaMutation = mutation`
     deleteMedia($id: String!) {

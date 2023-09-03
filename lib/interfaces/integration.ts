@@ -1,4 +1,4 @@
-export type IntegrationType = "kick" | "twitch" | "youtube";
+export type IntegrationType = 'kick' | 'twitch' | 'youtube';
 
 export default interface IIntegration {
   _id: string;

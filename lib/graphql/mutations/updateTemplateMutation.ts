@@ -1,4 +1,4 @@
-import { mutation } from "astraql";
+import { mutation } from 'astraql';
 
 const UpdateTemplateMutation = mutation`
     updateTemplate($id: String!, $payload: UpdateTemplateDTO!) {

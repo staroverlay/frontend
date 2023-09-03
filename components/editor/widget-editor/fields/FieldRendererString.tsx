@@ -3,9 +3,9 @@ import {
   FormHelperText,
   FormLabel,
   Input,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
+import ITemplateField from '@/lib/interfaces/template-field';
 
 export interface FieldRendererStringProps {
   field: ITemplateField;
@@ -22,7 +22,7 @@ export default function FieldRendererString({
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
       <Input
-        value={value || ""}
+        value={value || ''}
         minLength={field.string?.minLength}
         maxLength={field.string?.maxLength}
         onChange={(e) => {

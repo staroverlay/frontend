@@ -9,9 +9,9 @@ import {
   SliderThumb,
   SliderTrack,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import ITemplateField from "@/lib/interfaces/template-field";
+import ITemplateField from '@/lib/interfaces/template-field';
 
 export interface FieldRendererNumberProps {
   field: ITemplateField;
@@ -23,7 +23,7 @@ function NumberSlider({ field, value, setValue }: FieldRendererNumberProps) {
   const opts = field.number;
 
   return (
-    <Flex gap={"10px"}>
+    <Flex gap={'10px'}>
       <Slider
         value={value}
         onChange={setValue}
@@ -54,11 +54,11 @@ export default function FieldRendererNumber({
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
 
-      {opts?.display == "range" && (
+      {opts?.display == 'range' && (
         <NumberSlider field={field} setValue={setValue} value={value} />
       )}
 
-      {opts?.display && opts?.display == "input" && (
+      {opts?.display && opts?.display == 'input' && (
         <Input
           type="number"
           min={opts?.max}

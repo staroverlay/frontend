@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { useRouter } from "next/router";
 import {
   Flex,
   Heading,
@@ -8,21 +6,26 @@ import {
   TabList,
   Tab,
   TabPanels,
-} from "@chakra-ui/react";
+  Spinner,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
-import useWidgets from "@/hooks/useWidgets";
-import ITemplate from "@/lib/interfaces/template";
-import { hasObjectChanged } from "@/lib/utils/object";
-import { toastPending } from "@/lib/utils/toasts";
+import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
+import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
+import useWidgets from '@/hooks/useWidgets';
+import IDictionary from '@/lib/interfaces/shared/IDictionary';
+import ITemplate from '@/lib/interfaces/template';
+import TemplateScope from '@/lib/interfaces/template-scope';
+import { updateWidget } from '@/lib/services/widget-service';
+import { hasObjectChanged } from '@/lib/utils/object';
+import { toastPending } from '@/lib/utils/toasts';
 
-import Error404 from "../404";
-import WidgetOverviewTab from "@/components/editor/widget-editor/WidgetOverviewTab";
-import WidgetSettingsTab from "@/components/editor/widget-editor/WidgetSettingsTab";
-import IDictionary from "@/lib/interfaces/shared/IDictionary";
+import Error404 from '../404';
 
 export default function WidgetPage() {
-  const { widgets, updateWidget } = useWidgets();
-  const { query } = useRouter();
+  const { widgets, updateWidget: updateWidgetHook } = useWidgets();
+  const { query, isReady } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   // Find widget by ID in query.
@@ -30,19 +33,38 @@ export default function WidgetPage() {
   const widget = widgets.find((w) => w._id === widgetId);
 
   // Find template by widget.
-  const currentTemplate = JSON.parse(widget?.templateRaw || "{}") as ITemplate;
+  const cachedTemplate = widget?.template as ITemplate;
 
   // Input fields.
-  const [name, setName] = useState(widget?.displayName || "");
-  const [scopes, setScopes] = useState(widget?.scopes || []);
-  const [settings, setSettings] = useState<IDictionary>(widget?.settings || {});
+  const [displayName, setDisplayName] = useState('');
+  const [scopes, setScopes] = useState<TemplateScope[]>([]);
+  const [settings, setSettings] = useState<IDictionary>({});
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    if (widget) {
+      setDisplayName(widget.displayName);
+      setScopes(widget.scopes);
+      setSettings(widget.settings || {});
+      setEnabled(widget.enabled);
+    }
+  }, [widget]);
 
   // Payload.
   const updatePayload = {
-    name,
+    displayName,
     scopes,
+    settings,
+    enabled,
   };
-  const hasChanges = hasObjectChanged(widget, updatePayload);
+
+  const hasChanges = hasObjectChanged(
+    {
+      ...widget,
+      settings: widget?.settings || {},
+    },
+    updatePayload,
+  );
 
   // If widget not found, render 404 error page.
   if (!widget) {
@@ -50,24 +72,27 @@ export default function WidgetPage() {
   }
 
   // Handlers
-  const handleSaveWidget = async () => {};
+  const handleSaveWidget = async () => {
+    const newWidget = await updateWidget(widget, updatePayload);
+    updateWidgetHook(newWidget);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
     await toastPending(handleSaveWidget, {
-      success: "Widget updated successfully!",
-      pending: "Updating widget...",
+      success: 'Widget updated successfully!',
+      pending: 'Updating widget...',
     });
     setIsSaving(false);
   };
 
   // Otherwise, render widget editor.
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
-      <Flex alignItems={"center"} justifyContent={"space-between"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
+      <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Editing widget</Heading>
         <Button
-          colorScheme={"green"}
+          colorScheme={'green'}
           onClick={handleSave}
           isLoading={isSaving}
           disabled={isSaving || !hasChanges}
@@ -76,7 +101,7 @@ export default function WidgetPage() {
         </Button>
       </Flex>
 
-      <Tabs variant={"enclosed"}>
+      <Tabs variant={'enclosed'}>
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Settings</Tab>
@@ -84,18 +109,18 @@ export default function WidgetPage() {
 
         <TabPanels>
           <WidgetOverviewTab
-            name={name}
+            name={displayName}
             scopes={scopes}
-            setName={setName}
+            setName={setDisplayName}
             setScopes={setScopes}
-            template={currentTemplate}
+            template={cachedTemplate}
             widget={widget}
           />
 
           <WidgetSettingsTab
             setSettings={setSettings}
             settings={settings}
-            template={currentTemplate}
+            template={cachedTemplate}
             widget={widget}
           />
         </TabPanels>

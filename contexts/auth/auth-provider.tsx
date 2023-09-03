@@ -1,13 +1,13 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from 'react';
 
-import { AuthContext } from "./auth-context";
-import User from "../../lib/interfaces/user";
-import { removeBearerToken, setBearerToken } from "../../lib/graphql/client";
-import { getCurrentUser } from "../../lib/services/user-service";
-import { toastError } from "../../lib/utils/toasts";
-import Loading from "../../components/layout/loading";
-import ISessionAndUser from "@/lib/interfaces/session-and-user";
-import { invalidateSession } from "@/lib/services/session-service";
+import { AuthContext } from './auth-context';
+import User from '../../lib/interfaces/user';
+import { removeBearerToken, setBearerToken } from '../../lib/graphql/client';
+import { getCurrentUser } from '../../lib/services/user-service';
+import { toastError } from '../../lib/utils/toasts';
+import Loading from '../../components/layout/loading';
+import ISessionAndUser from '@/lib/interfaces/session-and-user';
+import { invalidateSession } from '@/lib/services/session-service';
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
@@ -25,8 +25,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
       await invalidateSession().catch(() => null);
     }
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("ssid");
+    localStorage.removeItem('token');
+    localStorage.removeItem('ssid');
 
     if (user != null) {
       setUser(null);
@@ -51,15 +51,15 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setUser(user);
     setSessionId(session._id);
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("ssid", session._id);
+    localStorage.setItem('token', token);
+    localStorage.setItem('ssid', session._id);
 
     return user;
   }
 
   async function loginWithPreviousToken(): Promise<User | null> {
-    const token = localStorage.getItem("token");
-    const ssid = localStorage.getItem("ssid");
+    const token = localStorage.getItem('token');
+    const ssid = localStorage.getItem('ssid');
 
     if (!token || !ssid) return null;
 
@@ -81,7 +81,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       .catch((e) => {
         const error = e.message;
 
-        if (error == "INVALID_SESSION") {
+        if (error == 'INVALID_SESSION') {
           logout();
         }
 
@@ -102,7 +102,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
         logout,
       }}
     >
-      <Loading loaded={fetched} message={"Logging in"}>
+      <Loading loaded={fetched} message={'Logging in'}>
         {children}
       </Loading>
     </AuthContext.Provider>

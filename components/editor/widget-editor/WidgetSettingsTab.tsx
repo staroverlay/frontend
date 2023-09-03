@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { TabPanel, Flex } from "@chakra-ui/react";
+import { TabPanel, Flex } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-import ITemplate from "@/lib/interfaces/template";
-import IWidget from "@/lib/interfaces/widget";
-import IDictionary from "@/lib/interfaces/shared/IDictionary";
-import FieldRenderer from "./fields/FieldRenderer";
+import IDictionary from '@/lib/interfaces/shared/IDictionary';
+import ITemplate from '@/lib/interfaces/template';
+import IWidget from '@/lib/interfaces/widget';
+
+import FieldRenderer from './fields/FieldRenderer';
 
 interface WidgetSettingsTab {
   widget: IWidget;
@@ -13,16 +14,24 @@ interface WidgetSettingsTab {
   setSettings: (settings: IDictionary) => void;
 }
 
-export default function WidgetSettingsTab(props: WidgetSettingsTab) {
-  const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${props.widget.token}`;
-
-  const [settings, setSettings] = useState(props.settings || []);
-  const fields = props.template.fields || [];
+export default function WidgetSettingsTab({
+  setSettings,
+  settings,
+  template,
+  widget,
+}: WidgetSettingsTab) {
+  const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
+  const fields = template.fields || [];
 
   return (
     <TabPanel>
-      <Flex justifyContent={"space-evenly"}>
-        <Flex flexDirection={"column"} gap={"20px"} width={"30%"}>
+      <Flex justifyContent={'space-evenly'}>
+        <Flex
+          flexDirection={'column'}
+          gap={'20px'}
+          width={'50%'}
+          maxWidth={'650px'}
+        >
           {fields.map((field, index) => (
             <FieldRenderer
               key={index}
@@ -37,14 +46,13 @@ export default function WidgetSettingsTab(props: WidgetSettingsTab) {
           ))}
         </Flex>
 
-        <Flex width={"40%"}>
+        <Flex width={'40%'}>
           <iframe
             src={link}
-            sandbox={"true"}
-            width={"100%"}
-            height={"500"}
+            width={'100%'}
+            height={'500'}
             style={{
-              borderRadius: "7px",
+              borderRadius: '7px',
             }}
           ></iframe>
         </Flex>

@@ -1,5 +1,5 @@
-import React from "react";
-import { TemplatesHook } from "./templates-hook";
+import React from 'react';
+import { TemplatesHook } from './templates-hook';
 
 export const TemplatesContext = React.createContext<TemplatesHook>({
   sharedTemplates: [],

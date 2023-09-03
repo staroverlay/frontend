@@ -5,23 +5,20 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
-} from "@chakra-ui/react";
-import { PropsWithChildren } from "react";
+  ModalProps,
+} from '@chakra-ui/react';
 
-interface BaseModalProps extends PropsWithChildren {
-  isOpen: boolean;
-  onClose: () => void;
+interface BaseModalProps extends ModalProps {
   title: string;
 }
 
 export default function BaseModal({
-  isOpen,
-  onClose,
   title,
   children,
+  ...props
 }: BaseModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal {...props}>
       <ModalOverlay />
 
       <ModalContent>

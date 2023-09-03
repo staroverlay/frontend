@@ -1,7 +1,3 @@
-import useAuth from "@/hooks/useAuth";
-import { updateUser } from "@/lib/services/user-service";
-import { hideEmail } from "@/lib/utils/strings";
-import { toastError, toastSuccess } from "@/lib/utils/toasts";
 import {
   Button,
   Flex,
@@ -9,14 +5,19 @@ import {
   FormLabel,
   Input,
   TabPanel,
-} from "@chakra-ui/react";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+
+import useAuth from '@/hooks/useAuth';
+import { updateUser } from '@/lib/services/user-service';
+import { hideEmail } from '@/lib/utils/strings';
+import { toastError, toastSuccess } from '@/lib/utils/toasts';
 
 export default function OverviewTab() {
   const { user, setUser } = useAuth();
 
-  const [username, setUsername] = useState(user?.username || "");
-  const [email, setEmail] = useState(user?.email || "");
+  const [username, setUsername] = useState(user?.username || '');
+  const [email, setEmail] = useState(user?.email || '');
 
   const [displayEmail, setDisplayEmail] = useState(false);
 
@@ -43,19 +44,19 @@ export default function OverviewTab() {
 
     if (newUser) {
       setUser(newUser);
-      toastSuccess("User updated successfully");
+      toastSuccess('User updated successfully');
     }
   };
 
   return (
     <TabPanel>
       <form onSubmit={handleSubmit}>
-        <Flex flexDir={"column"} gap={"20px"}>
+        <Flex flexDir={'column'} gap={'20px'}>
           <FormControl>
-            <FormLabel fontSize={"md"}>Username</FormLabel>
+            <FormLabel fontSize={'md'}>Username</FormLabel>
             <Input
-              placeholder={"Username"}
-              size={"md"}
+              placeholder={'Username'}
+              size={'md'}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -63,30 +64,30 @@ export default function OverviewTab() {
           </FormControl>
 
           <FormControl>
-            <Flex alignItems={"center"} gap={"7px"} mb={"5px"}>
-              <FormLabel fontSize="md" m={"0"}>
+            <Flex alignItems={'center'} gap={'7px'} mb={'5px'}>
+              <FormLabel fontSize="md" m={'0'}>
                 Email
               </FormLabel>
 
               <Button
-                variant={"outline"}
-                size={"sm"}
-                fontSize={"12px"}
+                variant={'outline'}
+                size={'sm'}
+                fontSize={'12px'}
                 onClick={() => {
                   if (displayEmail) {
-                    setEmail(user?.email || "");
+                    setEmail(user?.email || '');
                   }
                   setDisplayEmail(!displayEmail);
                 }}
               >
-                {displayEmail ? "Discard" : "Edit"}
+                {displayEmail ? 'Discard' : 'Edit'}
               </Button>
             </Flex>
 
             <Input
-              placeholder={"john@doe.com"}
-              size={"md"}
-              type={"email"}
+              placeholder={'john@doe.com'}
+              size={'md'}
+              type={'email'}
               value={displayEmail ? email : hideEmail(email)}
               onChange={(e) => setEmail(e.target.value)}
               disabled={!displayEmail}

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import {
   FieldArraySettings,
   FieldBooleanSettings,
@@ -7,13 +9,13 @@ import {
   FieldStringSettings,
   ITemplateAdvancedField,
   TemplateFieldType,
-} from "@/lib/interfaces/template-field";
-import { useEffect, useState } from "react";
-import ArrayFieldItem from "./advanced/ArrayFieldItem";
-import BooleanFieldItem from "./advanced/BooleanFieldItem";
-import MapFieldItem from "./advanced/MapFieldItem";
-import NumberFieldItem from "./advanced/NumberFieldItem";
-import StringFieldItem from "./advanced/StringFieldItem";
+} from '@/lib/interfaces/template-field';
+
+import ArrayFieldItem from './advanced/ArrayFieldItem';
+import BooleanFieldItem from './advanced/BooleanFieldItem';
+import MapFieldItem from './advanced/MapFieldItem';
+import NumberFieldItem from './advanced/NumberFieldItem';
+import StringFieldItem from './advanced/StringFieldItem';
 
 interface FieldItemAdvancedProps {
   type: TemplateFieldType;
@@ -31,15 +33,15 @@ export default function FieldItemAdvanced({
   setValue,
   ...props
 }: FieldItemAdvancedProps) {
-  const [cacheType, setCacheType] = useState<TemplateFieldType>("string");
+  const [cacheType, setCacheType] = useState<TemplateFieldType>('string');
   const [string, setString] = useState(props.stringOptions || {});
   const [number, setNumber] = useState(props.numberOptions || {});
   const [boolean, setBoolean] = useState(props.booleanOptions || {});
   const [map, setMap] = useState<FieldMapSettings>(
-    props.mapOptions || { key: "string", value: "string" }
+    props.mapOptions || { key: 'string', value: 'string' },
   );
   const [array, setArray] = useState<FieldArraySettings>(
-    props.arrayOptions || { type: "string" }
+    props.arrayOptions || { type: 'string' },
   );
   const [_enum, setEnum] = useState(props.enumOptions || {});
 
@@ -52,17 +54,17 @@ export default function FieldItemAdvanced({
   useEffect(() => {
     const getSelected = () => {
       switch (cacheType) {
-        case "array":
+        case 'array':
           return array;
-        case "boolean":
+        case 'boolean':
           return boolean;
-        case "enum":
+        case 'enum':
           return _enum;
-        case "map":
+        case 'map':
           return map;
-        case "number":
+        case 'number':
           return number;
-        case "string":
+        case 'string':
           return string;
         default:
           return null;
@@ -79,15 +81,15 @@ export default function FieldItemAdvanced({
     }
   }, [cacheType, string, number, boolean, map, array, _enum, setValue]);
 
-  if (type == "string") {
+  if (type == 'string') {
     return <StringFieldItem settings={string} onUpdate={setString} />;
-  } else if (type == "array") {
+  } else if (type == 'array') {
     return <ArrayFieldItem settings={array} onUpdate={setArray} />;
-  } else if (type == "number") {
+  } else if (type == 'number') {
     return <NumberFieldItem settings={number} onUpdate={setNumber} />;
-  } else if (type == "boolean") {
+  } else if (type == 'boolean') {
     return <BooleanFieldItem settings={boolean} onUpdate={setBoolean} />;
-  } else if (type == "map") {
+  } else if (type == 'map') {
     return <MapFieldItem settings={map} onUpdate={setMap} />;
   } else {
     return <></>;

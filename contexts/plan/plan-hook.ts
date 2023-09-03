@@ -1,4 +1,4 @@
-import IPlan from "@/lib/interfaces/plan";
+import IPlan from '@/lib/interfaces/plan';
 
 export interface PlanHook {
   plans: IPlan[];

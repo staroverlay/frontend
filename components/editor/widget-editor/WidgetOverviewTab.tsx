@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   TabPanel,
   Flex,
@@ -8,12 +7,13 @@ import {
   Checkbox,
   Button,
   FormHelperText,
-} from "@chakra-ui/react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-import ITemplate from "@/lib/interfaces/template";
-import TemplateScope, { TemplateScopes } from "@/lib/interfaces/template-scope";
-import IWidget from "@/lib/interfaces/widget";
+import ITemplate from '@/lib/interfaces/template';
+import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
+import IWidget from '@/lib/interfaces/widget';
 
 interface ScopeCheckboxProps {
   id: string;
@@ -25,7 +25,7 @@ interface ScopeCheckboxProps {
 const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
-      width={"100%"}
+      width={'100%'}
       defaultChecked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
@@ -38,7 +38,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
 
 function getScopes(templateScopes: TemplateScope[]) {
   return TemplateScopes.filter((s) =>
-    templateScopes.includes(s.id as TemplateScope)
+    templateScopes.includes(s.id as TemplateScope),
   );
 }
 
@@ -50,6 +50,7 @@ interface ScopeListProps {
 
 const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
   const scopeList = getScopes(templateScopes);
+
   return (
     <>
       {scopeList.map((scope) => (
@@ -101,33 +102,32 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
 
   return (
     <TabPanel>
-      <Flex justifyContent={"space-evenly"}>
-        <Flex flexDirection={"column"} gap={"20px"} maxWidth={"70%"}>
+      <Flex justifyContent={'space-evenly'}>
+        <Flex flexDirection={'column'} gap={'20px'} maxWidth={'70%'}>
           <iframe
             src={link}
-            sandbox={"true"}
-            width={"100%"}
-            height={"200px"}
+            width={'100%'}
+            height={'200px'}
             style={{
-              borderRadius: "7px",
+              borderRadius: '7px',
             }}
           ></iframe>
 
           <FormControl>
             <FormLabel>URL (Do not show on stream)</FormLabel>
-            <Flex gap={"5px"}>
+            <Flex gap={'5px'}>
               <Input
-                type={showLink ? "text" : "password"}
+                type={showLink ? 'text' : 'password'}
                 value={link}
                 disabled={true}
               />
-              <Button colorScheme={"red"} onClick={toggleShowLink}>
-                {showLink ? "Hide" : "Show"}
+              <Button colorScheme={'red'} onClick={toggleShowLink}>
+                {showLink ? 'Hide' : 'Show'}
               </Button>
-              <Button colorScheme={"orange"}>Reset</Button>
+              <Button colorScheme={'orange'}>Reset</Button>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
-                <Button colorScheme={copied ? "green" : "gray"}>
-                  {copied ? "Copied" : "Copy"}
+                <Button colorScheme={copied ? 'green' : 'gray'}>
+                  {copied ? 'Copied' : 'Copy'}
                 </Button>
               </CopyToClipboard>
             </Flex>
@@ -141,7 +141,7 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             <FormLabel>Debug</FormLabel>
 
             {scopeList.map((scope, index) => (
-              <Button key={index} colorScheme={"cyan"} size={"xs"} mr={"5px"}>
+              <Button key={index} colorScheme={'cyan'} size={'xs'} mr={'5px'}>
                 {scope.name}
               </Button>
             ))}
@@ -151,8 +151,8 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             <FormLabel>Display name</FormLabel>
             <Input
               isRequired={true}
-              width={"container.sm"}
-              placeholder={"My cool widget"}
+              width={'container.sm'}
+              placeholder={'My cool widget'}
               value={props.name}
               onChange={(e) => props.setName(e.target.value)}
             />

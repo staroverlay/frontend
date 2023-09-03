@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,18 +6,19 @@ import {
   TabPanel,
   Text,
   useColorMode,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import { BsTrash } from 'react-icons/bs';
+import { UAParser } from 'ua-parser-js';
 
-import ISession from "@/lib/interfaces/session";
+import useAuth from '@/hooks/useAuth';
+import ISession from '@/lib/interfaces/session';
 import {
   getSessions,
   invalidateAllSessions,
   invalidateSessionByID,
-} from "@/lib/services/session-service";
-import { BsTrash } from "react-icons/bs";
-import { UAParser } from "ua-parser-js";
-import useAuth from "@/hooks/useAuth";
-import { toastError } from "@/lib/utils/toasts";
+} from '@/lib/services/session-service';
+import { toastError } from '@/lib/utils/toasts';
 
 const SessionItem = ({
   session,
@@ -33,7 +33,7 @@ const SessionItem = ({
 
   const same = session._id == sessionId;
 
-  const bg = colorMode == "dark" ? "blackAlpha.700" : "blackAlpha.200";
+  const bg = colorMode == 'dark' ? 'blackAlpha.700' : 'blackAlpha.200';
 
   const parser = new UAParser(session.device);
   const device = parser.getResult();
@@ -50,23 +50,23 @@ const SessionItem = ({
   return (
     <Flex
       bg={bg}
-      p={"7px 14px"}
-      borderRadius={same ? "0 10px 10px 0" : "10px"}
+      p={'7px 14px'}
+      borderRadius={same ? '0 10px 10px 0' : '10px'}
       alignItems="center"
       justifyContent="space-between"
-      width={"100%"}
-      borderLeft={same ? "4px solid green" : "none"}
+      width={'100%'}
+      borderLeft={same ? '4px solid green' : 'none'}
     >
-      <Flex alignItems={"center"} gap={"8px"}>
+      <Flex alignItems={'center'} gap={'8px'}>
         <Box>
-          <Text fontSize={"md"} fontWeight={"bold"}>
+          <Text fontSize={'md'} fontWeight={'bold'}>
             {device.browser.name} for {device.os.name} {device.os.version}
           </Text>
 
-          <Text fontSize={"sm"}>From Argentina, Buenos Aires.</Text>
+          <Text fontSize={'sm'}>From Argentina, Buenos Aires.</Text>
 
-          <Text fontSize={"xs"}>
-            Using {session.method || "password"} at{" "}
+          <Text fontSize={'xs'}>
+            Using {session.method || 'password'} at{' '}
             {new Date(session.date).toLocaleString()}
           </Text>
         </Box>
@@ -74,7 +74,7 @@ const SessionItem = ({
 
       <Box>
         <Button
-          colorScheme={same ? "orange" : "red"}
+          colorScheme={same ? 'orange' : 'red'}
           size="xs"
           disabled={isLoading}
           isLoading={isLoading}
@@ -86,7 +86,7 @@ const SessionItem = ({
             </>
           )}
 
-          {same && "Logout"}
+          {same && 'Logout'}
         </Button>
       </Box>
     </Flex>
@@ -121,15 +121,15 @@ export default function SessionsTab() {
 
   return (
     <TabPanel>
-      <Flex alignItems={"center"} gap={"10px"} mb={"20px"}>
-        <Heading size={"md"}>Active Sessions ({sessions.length})</Heading>
+      <Flex alignItems={'center'} gap={'10px'} mb={'20px'}>
+        <Heading size={'md'}>Active Sessions ({sessions.length})</Heading>
 
-        <Button colorScheme={"red"} size={"xs"} onClick={logoutAll}>
+        <Button colorScheme={'red'} size={'xs'} onClick={logoutAll}>
           Disconnect all
         </Button>
       </Flex>
 
-      <Flex flexDir={"column-reverse"} gap={"10px"}>
+      <Flex flexDir={'column-reverse'} gap={'10px'}>
         {sessions.map((session, index) => (
           <SessionItem
             key={index}

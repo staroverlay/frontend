@@ -1,4 +1,4 @@
-import { mutation } from "astraql";
+import { mutation } from 'astraql';
 
 const CreateWidgetMutation = mutation`
     createWidget($payload: CreateWidgetDTO!) {
@@ -10,7 +10,6 @@ const CreateWidgetMutation = mutation`
             token
             templateId
             templateRaw
-            templateVersion
             scopes
             settings
         }

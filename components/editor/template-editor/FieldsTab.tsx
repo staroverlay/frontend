@@ -1,11 +1,14 @@
-import ITemplateField from "@/lib/interfaces/template-field";
-import { randomString } from "@/lib/utils/random";
-import { Button } from "@chakra-ui/react";
-import { Flex } from "@chakra-ui/react";
-import { TabPanel } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { useState } from "react";
-import FieldItem from "./fields/FieldItem";
+import { Button, Heading } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
+import { TabPanel } from '@chakra-ui/react';
+import { useEffect } from 'react';
+import { useState } from 'react';
+
+import ITemplateField from '@/lib/interfaces/template-field';
+import { randomString } from '@/lib/utils/random';
+
+import FieldRenderer from '../widget-editor/fields/FieldRenderer';
+import FieldItem from './fields/FieldItem';
 
 interface FieldsTabProps {
   fields: ITemplateField[] | null | undefined;
@@ -15,7 +18,7 @@ interface FieldsTabProps {
 export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
   const [generatedFields, setGeneratedFields] = useState(1);
   const [savedFields, setSavedFields] = useState<ITemplateField[]>(
-    fields || []
+    fields || [],
   );
 
   useEffect(() => {
@@ -25,9 +28,9 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
   const addField = () => {
     const newField: ITemplateField = {
       _internalId: randomString(6),
-      id: "new-field-" + generatedFields,
-      label: "New Field",
-      type: "string",
+      id: 'new-field-' + generatedFields,
+      label: 'New Field',
+      type: 'string',
       required: false,
     };
     setSavedFields([...savedFields, newField]);
@@ -36,7 +39,7 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
 
   const upFieldIndex = (field: ITemplateField) => {
     const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId
+      (f) => f._internalId === field._internalId,
     );
     if (index === 0) return;
     const updatedFields = [...savedFields];
@@ -47,7 +50,7 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
 
   const downFieldIndex = (field: ITemplateField) => {
     const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId
+      (f) => f._internalId === field._internalId,
     );
     if (index === savedFields.length - 1) return;
     const updatedFields = [...savedFields];
@@ -58,7 +61,7 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
 
   const updateField = (field: ITemplateField) => {
     const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId
+      (f) => f._internalId === field._internalId,
     );
     const updatedFields = [...savedFields];
     updatedFields[index] = field;
@@ -72,19 +75,43 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
 
   return (
     <TabPanel>
-      <Flex direction={"column-reverse"} gap={"10px"} width={"50%"}>
-        <Button onClick={addField}>Add</Button>
+      <Flex justifyContent={'space-between'} gap={'20px'}>
+        <Flex direction={'column'} gap={'10px'} width={'50%'}>
+          {savedFields.map((field) => (
+            <FieldItem
+              key={field._internalId}
+              field={field}
+              onDown={(field) => downFieldIndex(field)}
+              onUp={(field) => upFieldIndex(field)}
+              onRemove={(field) => removeField(field)}
+              onUpdate={(field) => updateField(field)}
+            />
+          ))}
 
-        {savedFields.map((field) => (
-          <FieldItem
-            key={field._internalId}
-            field={field}
-            onDown={(field) => downFieldIndex(field)}
-            onUp={(field) => upFieldIndex(field)}
-            onRemove={(field) => removeField(field)}
-            onUpdate={(field) => updateField(field)}
-          />
-        ))}
+          <Button onClick={addField}>Add</Button>
+        </Flex>
+
+        <Flex
+          background={'Background'}
+          border={'1px solid'}
+          borderColor={'chakra-border-color'}
+          borderRadius={'10px'}
+          direction={'column'}
+          gap={'10px'}
+          padding={'10px 20px'}
+          width={'40%'}
+        >
+          <Heading>Preview</Heading>
+
+          {savedFields.map((field, index) => (
+            <FieldRenderer
+              key={index}
+              field={field}
+              value={null}
+              setValue={(value) => {}}
+            />
+          ))}
+        </Flex>
       </Flex>
     </TabPanel>
   );

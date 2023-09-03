@@ -1,14 +1,14 @@
-import IMediaPart from "../interfaces/media-part";
+import IMediaPart from '../interfaces/media-part';
 import {
   completeMedia,
   createMedia,
   uploadPart,
-} from "../services/media-service";
-import { readFileAsArrayBuffer } from "./files";
+} from '../services/media-service';
+import { readFileAsArrayBuffer } from './files';
 
 export function splitBufferInChunks(
   buffer: ArrayBuffer,
-  maxChunkSize: number
+  maxChunkSize: number,
 ): ArrayBuffer[] {
   const chunks: ArrayBuffer[] = [];
 

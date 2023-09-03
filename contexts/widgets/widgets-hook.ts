@@ -1,4 +1,4 @@
-import IWidget from "@/lib/interfaces/widget";
+import IWidget from '@/lib/interfaces/widget';
 
 export interface WidgetHook {
   widgets: IWidget[];

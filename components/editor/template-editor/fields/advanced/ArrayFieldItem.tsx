@@ -1,17 +1,18 @@
 import {
-  FieldArraySettings,
-  FieldStringSettings,
-  TemplateFieldType,
-  TemplateFieldTypes,
-} from "@/lib/interfaces/template-field";
-import {
   FormControl,
   FormLabel,
   Input,
   Select,
   SimpleGrid,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+
+import {
+  FieldArraySettings,
+  FieldStringSettings,
+  TemplateFieldType,
+  TemplateFieldTypes,
+} from '@/lib/interfaces/template-field';
 
 interface ArrayFieldItemProps {
   settings: FieldArraySettings;
@@ -32,53 +33,37 @@ export default function ArrayFieldItem({
   }, [onUpdate, settingsState]);
 
   return (
-    <SimpleGrid minChildWidth="120px" spacing="10px" width={"100%"}>
+    <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
       <FormControl>
         <FormLabel>Min Items</FormLabel>
         <Input
-          placeholder={"0"}
+          placeholder={'0'}
           value={settingsState?.minItems}
-          type={"number"}
+          type={'number'}
           onChange={(e) =>
             setSettingsState({
               ...settingsState,
               minItems: parseInt(e.target.value),
             })
           }
-          size={"sm"}
+          size={'sm'}
         />
       </FormControl>
 
       <FormControl>
         <FormLabel>Max Items</FormLabel>
         <Input
-          placeholder={"9999"}
+          placeholder={'9999'}
           value={settingsState?.maxItems}
-          type={"number"}
+          type={'number'}
           onChange={(e) =>
             setSettingsState({
               ...settingsState,
               maxItems: parseInt(e.target.value),
             })
           }
-          size={"sm"}
+          size={'sm'}
         />
-      </FormControl>
-      <FormControl>
-        <FormLabel>Display</FormLabel>
-        <Select
-          value={settings?.display}
-          onChange={(e) =>
-            setSettingsState({
-              ...settingsState,
-              display: e.target.value as "list" | "table",
-            })
-          }
-          size={"sm"}
-        >
-          <option value={"list"}>List</option>
-          <option value={"table"}>Table</option>
-        </Select>
       </FormControl>
       <FormControl>
         <FormLabel>Type</FormLabel>
@@ -90,7 +75,7 @@ export default function ArrayFieldItem({
               type: e.target.value as TemplateFieldType,
             })
           }
-          size={"sm"}
+          size={'sm'}
         >
           {TemplateFieldTypes.map((type) => (
             <option key={type.id} value={type.id}>

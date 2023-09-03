@@ -1,42 +1,50 @@
-import ITemplateField from "@/lib/interfaces/template-field";
-import FieldRendererBoolean from "./FieldRendererBoolean";
-import FieldRendererNumber from "./FieldRendererNumber";
-import FieldRendererString from "./FieldRendererString";
+import ITemplateField, {
+  TemplateFieldType,
+} from '@/lib/interfaces/template-field';
+
+import FieldRendererArray from './FieldRendererArray';
+import FieldRendererBoolean from './FieldRendererBoolean';
+import FieldRendererEnum from './FieldRendererEnum';
+import FieldRendererMap from './FieldRendererMap';
+import FieldRendererMedia from './FieldRendererMedia';
+import FieldRendererMediaAudio from './FieldRendererMediaAudio';
+import FieldRendererMediaImage from './FieldRendererMediaImage';
+import FieldRendererMediaVideo from './FieldRendererMediaVideo';
+import FieldRendererNumber from './FieldRendererNumber';
+import FieldRendererString from './FieldRendererString';
+import FieldRendererTwitchReward from './FieldRendererTwitchReward';
 
 export interface FieldRendererProps {
   field: ITemplateField;
-  value: unknown;
-  setValue: (value: unknown) => void;
+  value: any;
+  setValue: (value: any) => void;
 }
+
+export const RENDER_MAP: {
+  [k in TemplateFieldType]: (props: FieldRendererProps) => JSX.Element;
+} = {
+  string: FieldRendererString,
+  number: FieldRendererNumber,
+  boolean: FieldRendererBoolean,
+  array: FieldRendererArray,
+  map: FieldRendererMap,
+  enum: FieldRendererEnum,
+  'platform:media': FieldRendererMedia,
+  'platform:media.audio': FieldRendererMediaAudio,
+  'platform:media.image': FieldRendererMediaImage,
+  'platform:media.video': FieldRendererMediaVideo,
+  'twitch:reward': FieldRendererTwitchReward,
+};
 
 export default function FieldRenderer({
   field,
   value,
   setValue,
 }: FieldRendererProps) {
-  if (field.type == "string") {
-    return (
-      <FieldRendererString
-        field={field}
-        value={value as string}
-        setValue={setValue}
-      />
-    );
-  } else if (field.type == "number") {
-    return (
-      <FieldRendererNumber
-        field={field}
-        value={value as number}
-        setValue={setValue}
-      />
-    );
-  } else if (field.type == "boolean") {
-    return (
-      <FieldRendererBoolean
-        field={field}
-        value={value as boolean}
-        setValue={setValue}
-      />
-    );
+  const Renderer = RENDER_MAP[field.type];
+  if (Renderer != null) {
+    return <Renderer field={field} value={value} setValue={setValue} />;
   }
+
+  return <></>;
 }

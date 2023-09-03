@@ -1,4 +1,4 @@
-import ITemplate from "../../lib/interfaces/template";
+import ITemplate from '../../lib/interfaces/template';
 
 export interface TemplatesHook {
   sharedTemplates: ITemplate[];

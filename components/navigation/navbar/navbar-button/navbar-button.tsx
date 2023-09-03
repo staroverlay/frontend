@@ -1,5 +1,5 @@
-import { Box, IconButton } from "@chakra-ui/react";
-import { ReactElement } from "react";
+import { Box, IconButton } from '@chakra-ui/react';
+import { ReactElement } from 'react';
 
 interface NavbarButtonProps {
   icon: ReactElement;
@@ -15,7 +15,7 @@ export default function NavbarButton(props: NavbarButtonProps) {
         aria-label={props.label}
         icon={props.icon}
         onClick={props.onClick}
-        variant={"ghost"}
+        variant={'ghost'}
       />
       {props.children !== undefined && props.children}
     </Box>

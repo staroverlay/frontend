@@ -10,14 +10,14 @@ import {
   Button,
   Flex,
   Input,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import {
   MutableRefObject,
   PropsWithChildren,
   useEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 interface InputAlertProps extends PropsWithChildren {
   title?: string;
@@ -30,7 +30,7 @@ interface InputAlertProps extends PropsWithChildren {
 
 export default function InputAlert(props: InputAlertProps) {
   const cancelRef = useRef() as MutableRefObject<null>;
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const trimmedInput = input.trim();
 
   const handleClick = () => {
@@ -39,7 +39,7 @@ export default function InputAlert(props: InputAlertProps) {
 
   useEffect(() => {
     if (props.isOpen) {
-      setInput("");
+      setInput('');
     }
   }, [props.isOpen]);
 
@@ -56,7 +56,7 @@ export default function InputAlert(props: InputAlertProps) {
         <AlertDialogHeader>{props.title}</AlertDialogHeader>
         <AlertDialogCloseButton />
         <AlertDialogBody>
-          <Flex direction={"column"} gap={"10px"}>
+          <Flex direction={'column'} gap={'10px'}>
             <Box>{props.children}</Box>
             <Box>
               <Input
@@ -75,7 +75,7 @@ export default function InputAlert(props: InputAlertProps) {
             colorScheme="green"
             ml={3}
             onClick={handleClick}
-            disabled={props.isLoading || trimmedInput === ""}
+            disabled={props.isLoading || trimmedInput === ''}
             isLoading={props.isLoading}
           >
             Save

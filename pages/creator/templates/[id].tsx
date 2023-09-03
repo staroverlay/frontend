@@ -6,20 +6,20 @@ import {
   TabList,
   TabPanels,
   Tabs,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useState } from "react";
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
-import { updateTemplate } from "@/lib/services/template-service";
-import OverviewTab from "../../../components/editor/template-editor/OverviewTab";
+import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
+import FieldsTab from '@/components/editor/template-editor/FieldsTab';
+import { updateTemplate } from '@/lib/services/template-service';
+import { hasObjectChanged } from '@/lib/utils/object';
+import { toastPending } from '@/lib/utils/toasts';
 
-import useTemplates from "../../../hooks/useTemplates";
+import OverviewTab from '../../../components/editor/template-editor/OverviewTab';
+import useTemplates from '../../../hooks/useTemplates';
+import Error404 from '../../404';
 
-import Error404 from "../../404";
-import { toastPending } from "@/lib/utils/toasts";
-import { hasObjectChanged } from "@/lib/utils/object";
-import CodeEditorTab from "@/components/editor/template-editor/CodeEditorTab";
-import FieldsTab from "@/components/editor/template-editor/FieldsTab";
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
@@ -38,7 +38,7 @@ export default function CreatorTemplatePage() {
   const [html, setHTML] = useState(template?.html);
   const [fields, setFields] = useState(template?.fields);
   const [visibility, setVisibility] = useState(
-    template?.visibility || "public"
+    template?.visibility || 'public',
   );
 
   // Payload.
@@ -75,19 +75,19 @@ export default function CreatorTemplatePage() {
   const handleSave = async () => {
     setIsSaving(true);
     await toastPending(handleSaveTemplate, {
-      success: "Template updated successfully!",
-      pending: "Updating template...",
+      success: 'Template updated successfully!',
+      pending: 'Updating template...',
     });
     setIsSaving(false);
   };
 
   // Otherwise, render template editor.
   return (
-    <Flex flexDirection={"column"} gap={"30px"} width={"100%"}>
-      <Flex alignItems={"center"} justifyContent={"space-between"}>
+    <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
+      <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Editing template</Heading>
         <Button
-          colorScheme={"green"}
+          colorScheme={'green'}
           onClick={handleSave}
           isLoading={isSaving}
           disabled={isSaving || !hasChanges}
@@ -96,7 +96,7 @@ export default function CreatorTemplatePage() {
         </Button>
       </Flex>
 
-      <Tabs variant={"enclosed"}>
+      <Tabs variant={'enclosed'}>
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Code editor</Tab>
@@ -105,19 +105,19 @@ export default function CreatorTemplatePage() {
 
         <TabPanels>
           <OverviewTab
-            name={name || ""}
+            name={name || ''}
             setName={setName}
-            description={description || ""}
+            description={description || ''}
             setDescription={setDescription}
             scopes={scopes || []}
             setScopes={setScopes}
-            service={service || "twitch"}
+            service={service || 'twitch'}
             setService={setService}
             visibility={visibility}
             setVisibility={setVisibility}
           />
 
-          <CodeEditorTab code={html || ""} setCode={setHTML} />
+          <CodeEditorTab code={html || ''} setCode={setHTML} />
           <FieldsTab fields={fields || []} setFields={setFields} />
         </TabPanels>
       </Tabs>

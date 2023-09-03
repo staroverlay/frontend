@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { IntegrationsContext } from "@/contexts/integrations";
+import { IntegrationsContext } from '@/contexts/integrations';
 
 const useIntegrations = () => React.useContext(IntegrationsContext);
 

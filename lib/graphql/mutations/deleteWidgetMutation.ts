@@ -1,4 +1,4 @@
-import { mutation } from "astraql";
+import { mutation } from 'astraql';
 
 const DeleteWidgetMutation = mutation`
     deleteWidget($id: String!) {

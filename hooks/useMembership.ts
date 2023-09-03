@@ -1,6 +1,6 @@
-import { useContext } from "react";
+import { useContext } from 'react';
 
-import { MembershipContext } from "@/contexts/membership";
+import { MembershipContext } from '@/contexts/membership';
 
 const useMembership = () => useContext(MembershipContext);
 

@@ -1,10 +1,10 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useEffect, useState } from 'react';
 
-import IMembership from "@/lib/interfaces/membership";
-import { WidgetsContext } from "./widgets-context";
-import Loading from "@/components/layout/loading";
-import { getMyWidgets } from "@/lib/services/widget-service";
-import IWidget from "@/lib/interfaces/widget";
+import IMembership from '@/lib/interfaces/membership';
+import { WidgetsContext } from './widgets-context';
+import Loading from '@/components/layout/loading';
+import { getMyWidgets } from '@/lib/services/widget-service';
+import IWidget from '@/lib/interfaces/widget';
 
 export function WidgetsProvider({ children }: PropsWithChildren) {
   const [widgets, setWidgets] = useState<IWidget[]>([]);
@@ -39,7 +39,7 @@ export function WidgetsProvider({ children }: PropsWithChildren) {
     <WidgetsContext.Provider
       value={{ addWidget, removeWidget, updateWidget, widgets }}
     >
-      <Loading loaded={fetched} message={"Loading membership"}>
+      <Loading loaded={fetched} message={'Loading membership'}>
         {children}
       </Loading>
     </WidgetsContext.Provider>

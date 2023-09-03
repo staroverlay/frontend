@@ -6,14 +6,14 @@ import {
   Heading,
   Image,
   useColorMode,
-} from "@chakra-ui/react";
-import { BiBell, BiMoon, BiSun, BiCog, BiExit } from "react-icons/bi";
+} from '@chakra-ui/react';
+import Link from 'next/link';
+import { BiBell, BiMoon, BiSun, BiCog, BiExit } from 'react-icons/bi';
 
-import NavbarButton from "./navbar-button/navbar-button";
-import NavbarDropdown from "./navbar-dropdown/navbar-dropdown";
+import useAuth from '../../../hooks/useAuth';
+import NavbarButton from './navbar-button/navbar-button';
+import NavbarDropdown from './navbar-dropdown/navbar-dropdown';
 
-import useAuth from "../../../hooks/useAuth";
-import Link from "next/link";
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -22,26 +22,26 @@ export function Navbar() {
   if (!user) return <></>;
 
   return (
-    <Box width={"100%"} height={"65px"} padding={"15px 30px"}>
-      <Flex alignItems={"center"} justifyContent={"space-between"}>
+    <Box width={'100%'} height={'65px'} padding={'15px 30px'}>
+      <Flex alignItems={'center'} justifyContent={'space-between'}>
         {/* Branding */}
         <Link href="/">
-          <Flex alignItems={"center"}>
+          <Flex alignItems={'center'}>
             <Image
-              src={colorMode === "dark" ? "/icon@32.png" : "/black@64.png"}
-              alt={"Logo"}
-              height={"32px"}
-              marginRight={"5px"}
+              src={colorMode === 'dark' ? '/icon@32.png' : '/black@64.png'}
+              alt={'Logo'}
+              height={'32px'}
+              marginRight={'5px'}
             />
-            <Heading fontSize={"2xl"}>StarOverlay</Heading>
+            <Heading fontSize={'2xl'}>StarOverlay</Heading>
           </Flex>
         </Link>
 
         {/* Buttons */}
-        <Flex alignItems={"center"} gap={"8px"}>
+        <Flex alignItems={'center'} gap={'8px'}>
           <NavbarButton
             label="Toggle color mode"
-            icon={colorMode === "dark" ? <BiMoon /> : <BiSun />}
+            icon={colorMode === 'dark' ? <BiMoon /> : <BiSun />}
             onClick={toggleColorMode}
           />
 
@@ -50,19 +50,19 @@ export function Navbar() {
           <NavbarDropdown
             content={[
               {
-                label: "Settings",
+                label: 'Settings',
                 icon: BiCog,
-                link: "/settings",
+                link: '/settings',
               },
               {
-                label: "Logout",
+                label: 'Logout',
                 icon: BiExit,
                 onClick: () => logout(true),
-                color: "critical",
+                color: 'critical',
               },
             ]}
           >
-            <Avatar name={user.username} size={"sm"} src={user.avatar} />
+            <Avatar name={user.username} size={'sm'} src={user.avatar} />
           </NavbarDropdown>
         </Flex>
       </Flex>

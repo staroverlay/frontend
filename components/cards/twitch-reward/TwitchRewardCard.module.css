@@ -1,0 +1,35 @@
+.card {
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 90ms ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-lg .icon {
+  width: 50px;
+  height: 50px;
+}
+
+.card-md .icon {
+  width: 40px;
+  height: 40px;
+}
+
+.card-sm .icon {
+  width: 30px;
+  height: 30px;
+}
+
+.icon {
+  border-radius: 12px;
+  padding: 5px;
+}
+
+.title {
+  font-size: 13px;
+  text-align: center;
+}
