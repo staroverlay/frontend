@@ -24,7 +24,7 @@ import Error404 from '../404';
 
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
-  const { query, isReady } = useRouter();
+  const { query } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   // Find widget by ID in query.

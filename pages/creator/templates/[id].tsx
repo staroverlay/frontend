@@ -20,7 +20,6 @@ import OverviewTab from '../../../components/editor/template-editor/OverviewTab'
 import useTemplates from '../../../hooks/useTemplates';
 import Error404 from '../../404';
 
-
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
   const { query } = useRouter();
@@ -34,7 +33,7 @@ export default function CreatorTemplatePage() {
   const [name, setName] = useState(template?.name);
   const [description, setDescription] = useState(template?.description);
   const [scopes, setScopes] = useState(template?.scopes);
-  const [service, setService] = useState(template?.service);
+  const [service, setService] = useState(template?.service || 'twitch');
   const [html, setHTML] = useState(template?.html);
   const [fields, setFields] = useState(template?.fields);
   const [visibility, setVisibility] = useState(
