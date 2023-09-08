@@ -1,11 +1,10 @@
 import {
   Box,
+  Button,
   Flex,
   Heading,
   Input,
   Text,
-  Button,
-  SimpleGrid,
   useDisclosure,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -14,9 +13,7 @@ import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
 
 import InputAlert from '../../components/alerts/input/InputAlert';
 import StatsCard from '../../components/cards/stats/StatsCard';
-import TemplateCard from '../../components/cards/template/TemplateCard';
 import useTemplates from '../../hooks/useTemplates';
-import ITemplate from '../../lib/interfaces/template';
 import { createTemplate } from '../../lib/services/template-service';
 import { toastPending } from '../../lib/utils/toasts';
 

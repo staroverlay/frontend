@@ -1,12 +1,11 @@
 import {
+  Button,
   Flex,
   Heading,
-  Button,
-  Tabs,
-  TabList,
   Tab,
+  TabList,
   TabPanels,
-  Spinner,
+  Tabs,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -25,7 +24,7 @@ import Error404 from '../404';
 
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
-  const { query, isReady } = useRouter();
+  const { query } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
 
   // Find widget by ID in query.
@@ -44,7 +43,7 @@ export default function WidgetPage() {
   useEffect(() => {
     if (widget) {
       setDisplayName(widget.displayName);
-      setScopes(widget.scopes);
+      setScopes(widget.scopes || []);
       setSettings(widget.settings || {});
       setEnabled(widget.enabled);
     }

@@ -1,12 +1,12 @@
 import {
-  TabPanel,
+  Button,
+  Checkbox,
   Flex,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
-  Checkbox,
-  Button,
-  FormHelperText,
+  TabPanel,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -14,6 +14,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import ITemplate from '@/lib/interfaces/template';
 import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
 import IWidget from '@/lib/interfaces/widget';
+import { emitDebugEvent } from '@/lib/services/events-service';
 
 interface ScopeCheckboxProps {
   id: string;
@@ -26,7 +27,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
       width={'100%'}
-      defaultChecked={checked}
+      isChecked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
       }}
@@ -140,11 +141,21 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
           <FormControl>
             <FormLabel>Debug</FormLabel>
 
-            {scopeList.map((scope, index) => (
-              <Button key={index} colorScheme={'cyan'} size={'xs'} mr={'5px'}>
-                {scope.name}
-              </Button>
-            ))}
+            {scopeList
+              .filter((scope) => scope.debuggable)
+              .map((scope, index) => (
+                <Button
+                  key={index}
+                  colorScheme={'cyan'}
+                  size={'xs'}
+                  mr={'5px'}
+                  onClick={() => {
+                    emitDebugEvent(props.widget, scope.id);
+                  }}
+                >
+                  {scope.name}
+                </Button>
+              ))}
           </FormControl>
 
           <FormControl>

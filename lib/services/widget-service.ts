@@ -8,6 +8,7 @@ import ITemplate from '../interfaces/template';
 import IWidget from '../interfaces/widget';
 import WidgetCreatePayload from './dtos/widget-create-payload';
 import WidgetUpdatePayload from './dtos/widget-update-payload';
+import { emitSettingsUpdate } from './events-service';
 
 function fixWidget(widget: IWidget) {
   // Fix settings
@@ -62,5 +63,7 @@ export async function updateWidget(
     payload,
   });
 
-  return fixWidget(newWidget as IWidget);
+  const updatedWidget = fixWidget(newWidget as IWidget);
+  await emitSettingsUpdate(updatedWidget);
+  return updatedWidget;
 }
