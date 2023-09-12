@@ -11,10 +11,13 @@ import {
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import useWidgets from '@/hooks/useWidgets';
 import ITemplate from '@/lib/interfaces/template';
 import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
 import IWidget from '@/lib/interfaces/widget';
 import { emitDebugEvent } from '@/lib/services/events-service';
+import { resetWidgetToken } from '@/lib/services/widget-service';
+import { toastPending } from '@/lib/utils/toasts';
 
 interface ScopeCheckboxProps {
   id: string;
@@ -83,6 +86,8 @@ interface WidgetOverviewTabProps {
 }
 
 export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
+  const { updateWidget } = useWidgets();
+
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${props.widget.token}`;
   const scopeList = getScopes(props.template.scopes || []);
 
@@ -90,6 +95,24 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
   const toggleShowLink = () => setShowLink(!showLink);
 
   const [copied, setCopied] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  const handleResetToken = () => {
+    setResetting(true);
+    toastPending(
+      async () => {
+        const newWidget = await resetWidgetToken(props.widget);
+        updateWidget(newWidget);
+      },
+      {
+        pending: 'Resetting token...',
+        success: 'Token reset!',
+        error: 'Failed to reset token.',
+      },
+    ).finally(() => {
+      setResetting(false);
+    });
+  };
 
   useEffect(() => {
     if (copied) {
@@ -125,7 +148,14 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               <Button colorScheme={'red'} onClick={toggleShowLink}>
                 {showLink ? 'Hide' : 'Show'}
               </Button>
-              <Button colorScheme={'orange'}>Reset</Button>
+              <Button
+                colorScheme={'orange'}
+                onClick={handleResetToken}
+                disabled={resetting}
+                isLoading={resetting}
+              >
+                Reset
+              </Button>
               <CopyToClipboard text={link} onCopy={() => setCopied(true)}>
                 <Button colorScheme={copied ? 'green' : 'gray'}>
                   {copied ? 'Copied' : 'Copy'}
