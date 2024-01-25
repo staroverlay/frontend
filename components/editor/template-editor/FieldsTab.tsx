@@ -1,8 +1,5 @@
-import { Button, Heading } from '@chakra-ui/react';
-import { Flex } from '@chakra-ui/react';
-import { TabPanel } from '@chakra-ui/react';
-import { useEffect } from 'react';
-import { useState } from 'react';
+import { Button, Flex, Heading, TabPanel } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 import ITemplateField from '@/lib/interfaces/template-field';
 import { randomString } from '@/lib/utils/random';
