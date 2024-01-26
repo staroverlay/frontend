@@ -6,7 +6,7 @@ import InputAlert from '@/components/alerts/input/InputAlert';
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useTemplates from '@/hooks/useTemplates';
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
 import { deleteTemplate } from '@/lib/services/template-service';
 import { createWidget } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';

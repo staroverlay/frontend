@@ -9,7 +9,7 @@ import {
   FieldStringSettings,
   ITemplateAdvancedField,
   TemplateFieldType,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
 import ArrayFieldItem from './advanced/ArrayFieldItem';
 import BooleanFieldItem from './advanced/BooleanFieldItem';

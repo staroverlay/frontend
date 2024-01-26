@@ -16,7 +16,7 @@ import {
 import Link from 'next/link';
 import { FaEllipsisV } from 'react-icons/fa';
 
-import ITemplate from '@/lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
 import IWidget from '@/lib/interfaces/widget';
 
 import styles from './WidgetCard.module.css';

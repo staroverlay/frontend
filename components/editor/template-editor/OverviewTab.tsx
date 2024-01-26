@@ -1,23 +1,24 @@
 import {
   Box,
   Checkbox,
-  TabPanel,
   Flex,
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   Select,
+  TabPanel,
+  Textarea,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useAuth from '@/hooks/useAuth';
 import ServiceType, { ServiceTypes } from '@/lib/interfaces/service-type';
-import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
+import TemplateScope, {
+  TemplateScopes,
+} from '@/lib/interfaces/templates/template-scope';
 import TemplateVisibility, {
   TemplateVisibilities,
-} from '@/lib/interfaces/template-visibility';
+} from '@/lib/interfaces/templates/template-visibility';
 
 interface OverviewTabProps {
   name: string;

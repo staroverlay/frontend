@@ -14,8 +14,8 @@ import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewT
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
 import useWidgets from '@/hooks/useWidgets';
 import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplate from '@/lib/interfaces/template';
-import TemplateScope from '@/lib/interfaces/template-scope';
+import ITemplate from '@/lib/interfaces/templates/template';
+import TemplateScope from '@/lib/interfaces/templates/template-scope';
 import { updateWidget } from '@/lib/services/widget-service';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';

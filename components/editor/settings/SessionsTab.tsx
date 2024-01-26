@@ -12,7 +12,7 @@ import { BsTrash } from 'react-icons/bs';
 import { UAParser } from 'ua-parser-js';
 
 import useAuth from '@/hooks/useAuth';
-import ISession from '@/lib/interfaces/session';
+import ISession from '@/lib/interfaces/sessions/session';
 import {
   getSessions,
   invalidateAllSessions,

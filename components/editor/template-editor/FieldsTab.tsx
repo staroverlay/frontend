@@ -1,91 +1,109 @@
 import { Button, Flex, Heading, TabPanel } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 
-import ITemplateField from '@/lib/interfaces/template-field';
-import { randomString } from '@/lib/utils/random';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
+import ITemplateFieldGroup from '@/lib/interfaces/templates/template-field-group';
 
 import FieldRenderer from '../widget-editor/fields/FieldRenderer';
 import FieldItem from './fields/FieldItem';
+import SideFieldCategory from './side/SideFieldCategory';
 
 interface FieldsTabProps {
-  fields: ITemplateField[] | null | undefined;
-  setFields: (fields: ITemplateField[]) => void;
+  categories: ITemplateFieldGroup[] | null | undefined;
+  setCategories: (fields: ITemplateFieldGroup[]) => void;
 }
 
-export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
-  const [generatedFields, setGeneratedFields] = useState(1);
-  const [savedFields, setSavedFields] = useState<ITemplateField[]>(
-    fields || [],
+export default function FieldsTab({
+  categories,
+  setCategories,
+}: FieldsTabProps) {
+  // State.
+  const [savedCategories, setSavedCategories] = useState<ITemplateFieldGroup[]>(
+    categories || [],
   );
+  const [selectedCategory, setSelectedCategory] =
+    useState<ITemplateFieldGroup | null>(null);
+  const [selectedField, setSelectedField] = useState<ITemplateField | null>(
+    null,
+  );
+  const [generatedCategories, setGeneratedCategories] = useState(1);
 
+  // Update on state change.
   useEffect(() => {
-    setFields(savedFields);
-  }, [savedFields, setFields]);
+    setCategories(savedCategories);
+  }, [savedCategories, setCategories]);
 
-  const addField = () => {
-    const newField: ITemplateField = {
-      _internalId: randomString(6),
-      id: 'new-field-' + generatedFields,
-      label: 'New Field',
-      type: 'string',
-      required: false,
+  // Handlers.
+  const handleRemove = (group: ITemplateFieldGroup) => {
+    const categories = [...savedCategories].filter((c) => c != group);
+    setSavedCategories(categories);
+  };
+
+  const handleUpdate = (category: ITemplateFieldGroup) => {
+    const categories = [...savedCategories].map((c) =>
+      c === category ? category : c,
+    );
+    setSavedCategories(categories);
+  };
+
+  const handleUpdateField = (field: ITemplateField) => {
+    const category = savedCategories.find(
+      (c) =>
+        c.children.find((f) => f._internalId === field._internalId) != null,
+    );
+
+    if (category) {
+      const newChildren = category.children.map((f) =>
+        f._internalId === field._internalId ? field : f,
+      );
+
+      category.children = newChildren;
+      handleUpdate(category);
+      setSelectedField(field);
+    }
+  };
+
+  const handleAddCategory = () => {
+    const category = {
+      id: 'category-' + generatedCategories,
+      label: 'New Category ' + generatedCategories,
+      children: [],
     };
-    setSavedFields([...savedFields, newField]);
-    setGeneratedFields(generatedFields + 1);
-  };
-
-  const upFieldIndex = (field: ITemplateField) => {
-    const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId,
-    );
-    if (index === 0) return;
-    const updatedFields = [...savedFields];
-    updatedFields[index] = savedFields[index - 1];
-    updatedFields[index - 1] = field;
-    setSavedFields([...updatedFields]);
-  };
-
-  const downFieldIndex = (field: ITemplateField) => {
-    const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId,
-    );
-    if (index === savedFields.length - 1) return;
-    const updatedFields = [...savedFields];
-    updatedFields[index] = savedFields[index + 1];
-    updatedFields[index + 1] = field;
-    setSavedFields([...updatedFields]);
-  };
-
-  const updateField = (field: ITemplateField) => {
-    const index = savedFields.findIndex(
-      (f) => f._internalId === field._internalId,
-    );
-    const updatedFields = [...savedFields];
-    updatedFields[index] = field;
-    setSavedFields([...updatedFields]);
-  };
-
-  const removeField = (field: ITemplateField) => {
-    const updatedFields = savedFields.filter((f) => f != field);
-    setSavedFields([...updatedFields]);
+    setSavedCategories([...savedCategories, category]);
+    setGeneratedCategories(generatedCategories + 1);
   };
 
   return (
     <TabPanel>
       <Flex justifyContent={'space-between'} gap={'20px'}>
-        <Flex direction={'column'} gap={'10px'} width={'50%'}>
-          {savedFields.map((field) => (
-            <FieldItem
-              key={field._internalId}
-              field={field}
-              onDown={(field) => downFieldIndex(field)}
-              onUp={(field) => upFieldIndex(field)}
-              onRemove={(field) => removeField(field)}
-              onUpdate={(field) => updateField(field)}
+        <Flex direction={'column'} gap={'25px'} minWidth={'250px'}>
+          {savedCategories.map((group, i) => (
+            <SideFieldCategory
+              key={i}
+              category={group}
+              onRemove={() => handleRemove(group)}
+              onSelect={(field) => {
+                setSelectedField(field);
+                setSelectedCategory(group);
+              }}
+              selected={selectedField}
+              onUpdate={handleUpdate}
             />
           ))}
 
-          <Button onClick={addField}>Add</Button>
+          <Button leftIcon={<FaPlus />} onClick={handleAddCategory} size={'sm'}>
+            Add Category
+          </Button>
+        </Flex>
+
+        <Flex direction={'column'} gap={'10px'} width={'50%'}>
+          {selectedField && (
+            <FieldItem
+              field={selectedField}
+              onUpdate={(field) => handleUpdateField(field)}
+            />
+          )}
         </Flex>
 
         <Flex
@@ -100,13 +118,17 @@ export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
         >
           <Heading>Preview</Heading>
 
-          {savedFields.map((field, index) => (
-            <FieldRenderer
-              key={index}
-              field={field}
-              value={null}
-              setValue={(value) => {}}
-            />
+          {savedCategories.map((category, index) => (
+            <Flex key={index} flexDir={'column'} gap={'5px'}>
+              {category.children.map((field) => (
+                <FieldRenderer
+                  key={field._internalId}
+                  field={field}
+                  value={null}
+                  setValue={(value) => {}}
+                />
+              ))}
+            </Flex>
           ))}
         </Flex>
       </Flex>

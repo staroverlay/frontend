@@ -1,23 +1,18 @@
 import {
-  Box,
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   IconButton,
-  Switch,
-  Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
 import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplateField from '@/lib/interfaces/template-field';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 
 import FieldRenderer from './FieldRenderer';
-
 
 export interface FieldRendererMapProps {
   field: ITemplateField;

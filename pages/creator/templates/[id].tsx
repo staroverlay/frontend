@@ -117,7 +117,7 @@ export default function CreatorTemplatePage() {
           />
 
           <CodeEditorTab code={html || ''} setCode={setHTML} />
-          <FieldsTab fields={fields || []} setFields={setFields} />
+          <FieldsTab categories={fields || []} setCategories={setFields} />
         </TabPanels>
       </Tabs>
     </Flex>

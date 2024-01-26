@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import MediaSelectModal from '@/components/modals/media-select-modal/MediaSelectModal';
 import useMedia from '@/hooks/useMedia';
 import { FileType } from '@/lib/interfaces/media';
-import ITemplateField from '@/lib/interfaces/template-field';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 import { getMediaThumbnail } from '@/lib/utils/media';
 
 export interface FieldRendererMediaProps {

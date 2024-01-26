@@ -1,31 +1,30 @@
 import {
+  Badge,
+  Button,
   Card,
   CardBody,
   Flex,
   Heading,
-  Stack,
-  Text,
-  Badge,
   IconButton,
-  Button,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
   MenuDivider,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import React from 'react';
 import {
-  FaEye,
-  FaLock,
-  FaLink,
-  FaEllipsisV,
   FaDollarSign,
   FaDownload,
+  FaEllipsisV,
+  FaEye,
+  FaLink,
+  FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '../../../lib/interfaces/template';
+import ITemplate from '../../../lib/interfaces/templates/template';
 import styles from './TemplateCard.module.css';
 
 export interface TemplateCardProps {

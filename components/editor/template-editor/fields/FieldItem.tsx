@@ -1,61 +1,48 @@
 import {
+  Divider,
   Flex,
-  IconButton,
-  SimpleGrid,
   FormControl,
   FormLabel,
   Input,
   Select,
-  Divider,
+  SimpleGrid,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { FaTrash } from 'react-icons/fa';
 
 import ITemplateField, {
-  FieldStringSettings,
   ITemplateAdvancedField,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
-import StringFieldItem from './advanced/StringFieldItem';
 import FieldItemAdvanced from './FieldItemAdvanced';
 
 interface FieldItemProps {
   field: ITemplateField;
   onUpdate: (field: ITemplateField) => void;
-  onRemove: (field: ITemplateField) => void;
-  onUp: (field: ITemplateField) => void;
-  onDown: (field: ITemplateField) => void;
 }
 
-export default function FieldItem({
-  field,
-  onUpdate,
-  onRemove,
-  onUp,
-  onDown,
-}: FieldItemProps) {
-  const [id, setID] = useState(field.id);
-  const [label, setLabel] = useState(field.label);
-  const [type, setType] = useState<TemplateFieldType>(field.type);
-  const [category, setCategory] = useState(field.category);
-  const [description, setDescription] = useState(field.description);
-  const [advanced, setAdvanced] = useState<ITemplateAdvancedField>({});
+export default function FieldItem({ field, onUpdate }: FieldItemProps) {
+  const { id, label, type, description } = field;
 
-  useEffect(() => {
-    const data = {
-      ...advanced,
-      _internalId: field._internalId,
-      id,
-      label,
-      type,
-      category,
-      description,
-    };
-    onUpdate(data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, advanced, description, id, label, type]);
+  const setAdvanced = (advanced: ITemplateAdvancedField) => {
+    onUpdate({ ...field, ...advanced });
+  };
+
+  const setID = (id: string) => {
+    onUpdate({ ...field, id });
+  };
+
+  const setLabel = (label: string) => {
+    onUpdate({ ...field, label });
+  };
+
+  const setType = (type: TemplateFieldType) => {
+    onUpdate({ ...field, type });
+  };
+
+  const setDescription = (description: string) => {
+    onUpdate({ ...field, description });
+  };
 
   return (
     <Flex
@@ -67,18 +54,6 @@ export default function FieldItem({
       gap={'20px'}
       alignItems={'flex-end'}
     >
-      <IconButton
-        icon={<FaTrash />}
-        aria-label={'dasdad'}
-        float={'right'}
-        position={'absolute'}
-        variant={'solid'}
-        colorScheme={'red'}
-        zIndex={'1'}
-        size={'xs'}
-        onClick={() => onRemove(field)}
-      />
-
       <SimpleGrid
         minChildWidth="120px"
         spacing="10px"
@@ -91,16 +66,6 @@ export default function FieldItem({
             placeholder={'example-field'}
             value={id}
             onChange={(e) => setID(e.target.value)}
-            size={'sm'}
-          />
-        </FormControl>
-
-        <FormControl>
-          <FormLabel>Category</FormLabel>
-          <Input
-            placeholder={'category-name'}
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
             size={'sm'}
           />
         </FormControl>

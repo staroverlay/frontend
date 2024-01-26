@@ -1,13 +1,13 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import { AuthContext } from './auth-context';
-import User from '../../lib/interfaces/user';
+import ISessionAndUser from '@/lib/interfaces/sessions/session-and-user';
+import { invalidateSession } from '@/lib/services/session-service';
+import Loading from '../../components/layout/loading';
 import { removeBearerToken, setBearerToken } from '../../lib/graphql/client';
+import User from '../../lib/interfaces/user';
 import { getCurrentUser } from '../../lib/services/user-service';
 import { toastError } from '../../lib/utils/toasts';
-import Loading from '../../components/layout/loading';
-import ISessionAndUser from '@/lib/interfaces/session-and-user';
-import { invalidateSession } from '@/lib/services/session-service';
+import { AuthContext } from './auth-context';
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();

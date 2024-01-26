@@ -12,8 +12,10 @@ import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/template';
-import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
+import ITemplate from '@/lib/interfaces/templates/template';
+import TemplateScope, {
+  TemplateScopes,
+} from '@/lib/interfaces/templates/template-scope';
 import IWidget from '@/lib/interfaces/widget';
 import { emitDebugEvent } from '@/lib/services/events-service';
 import { resetWidgetToken } from '@/lib/services/widget-service';

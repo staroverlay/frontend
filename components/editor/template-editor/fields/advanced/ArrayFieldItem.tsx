@@ -9,10 +9,9 @@ import { useEffect, useState } from 'react';
 
 import {
   FieldArraySettings,
-  FieldStringSettings,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
 interface ArrayFieldItemProps {
   settings: FieldArraySettings;

@@ -5,7 +5,7 @@ import ResetWidgetTokenMutation from '../graphql/mutations/resetWidgetTokenMutat
 import UpdateWidgetMutation from '../graphql/mutations/updateWidgetMutation';
 import GetWidgetsQuery from '../graphql/queries/getWidgetsQuery';
 import IDictionary from '../interfaces/shared/IDictionary';
-import ITemplate from '../interfaces/template';
+import ITemplate from '../interfaces/templates/template';
 import IWidget from '../interfaces/widget';
 import WidgetCreatePayload from './dtos/widget-create-payload';
 import WidgetUpdatePayload from './dtos/widget-update-payload';

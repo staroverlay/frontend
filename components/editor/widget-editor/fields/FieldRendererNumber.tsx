@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import ITemplateField from '@/lib/interfaces/template-field';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 
 export interface FieldRendererNumberProps {
   field: ITemplateField;
