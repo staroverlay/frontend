@@ -77,59 +77,105 @@ export default function FieldsTab({
   return (
     <TabPanel>
       <Flex justifyContent={'space-between'} gap={'20px'}>
-        <Flex direction={'column'} gap={'25px'} minWidth={'250px'}>
-          {savedCategories.map((group, i) => (
-            <SideFieldCategory
-              key={i}
-              category={group}
-              onRemove={() => handleRemove(group)}
-              onSelect={(field) => {
-                setSelectedField(field);
-                setSelectedCategory(group);
-              }}
-              selected={selectedField}
-              onUpdate={handleUpdate}
-            />
-          ))}
+        <Flex
+          maxWidth={'300px'}
+          width={'100%'}
+          flexDir={'column'}
+          alignItems={'center'}
+          gap={'10px'}
+        >
+          <Heading color={'gray.500'} size={'sm'}>
+            Template Settings
+          </Heading>
 
-          <Button leftIcon={<FaPlus />} onClick={handleAddCategory} size={'sm'}>
-            Add Category
-          </Button>
-        </Flex>
+          <Flex direction={'column'} gap={'25px'} width={'100%'}>
+            {savedCategories.map((group, i) => (
+              <SideFieldCategory
+                key={i}
+                category={group}
+                onRemove={() => handleRemove(group)}
+                onSelect={(field) => {
+                  setSelectedField(field);
+                  setSelectedCategory(group);
+                }}
+                onRenameField={(field, name) => {
+                  field.id = name;
+                  handleUpdateField(field);
+                }}
+                selected={selectedField}
+                onUpdate={handleUpdate}
+              />
+            ))}
 
-        <Flex direction={'column'} gap={'10px'} width={'50%'}>
-          {selectedField && (
-            <FieldItem
-              field={selectedField}
-              onUpdate={(field) => handleUpdateField(field)}
-            />
-          )}
+            <Button
+              leftIcon={<FaPlus />}
+              onClick={handleAddCategory}
+              size={'sm'}
+            >
+              Add Category
+            </Button>
+          </Flex>
         </Flex>
 
         <Flex
-          background={'Background'}
-          border={'1px solid'}
-          borderColor={'chakra-border-color'}
-          borderRadius={'10px'}
-          direction={'column'}
+          width={'50%'}
+          flexDir={'column'}
+          alignItems={'center'}
           gap={'10px'}
-          padding={'10px 20px'}
-          width={'40%'}
         >
-          <Heading>Preview</Heading>
+          <Heading color={'gray.500'} size={'sm'}>
+            {selectedCategory &&
+              selectedCategory.id != '' &&
+              `${selectedCategory?.id}.`}
+            {selectedField && selectedField.id}
+          </Heading>
 
-          {savedCategories.map((category, index) => (
-            <Flex key={index} flexDir={'column'} gap={'5px'}>
-              {category.children.map((field) => (
-                <FieldRenderer
-                  key={field._internalId}
-                  field={field}
-                  value={null}
-                  setValue={(value) => {}}
-                />
-              ))}
-            </Flex>
-          ))}
+          <Flex direction={'column'} gap={'10px'} width={'100%'}>
+            {selectedField && selectedCategory && (
+              <FieldItem
+                field={selectedField}
+                categoryId={selectedCategory.id}
+                onUpdate={(field) => handleUpdateField(field)}
+              />
+            )}
+          </Flex>
+        </Flex>
+
+        <Flex
+          width={'40%'}
+          flexDir={'column'}
+          alignItems={'center'}
+          gap={'10px'}
+        >
+          <Heading color={'gray.500'} size={'sm'}>
+            Preview
+          </Heading>
+
+          <Flex
+            background={'Background'}
+            border={'1px solid'}
+            borderColor={'chakra-border-color'}
+            borderRadius={'10px'}
+            direction={'column'}
+            gap={'30px'}
+            padding={'10px 20px'}
+            width={'100%'}
+          >
+            {savedCategories.map((category, index) => (
+              <Flex key={index} flexDir={'column'} gap={'10px'}>
+                <Heading size={'lg'}>{category.label}</Heading>
+
+                {category.children.map((field) => (
+                  <FieldRenderer
+                    key={field._internalId}
+                    field={field}
+                    value={null}
+                    setValue={(value) => {}}
+                  />
+                ))}
+              </Flex>
+            ))}
+          </Flex>
         </Flex>
       </Flex>
     </TabPanel>

@@ -13,6 +13,7 @@ export interface SideFieldCategoryProps {
   onUpdate: (category: ITemplateFieldGroup) => unknown;
   onRemove: () => unknown;
   onSelect: (field: ITemplateField | null) => unknown;
+  onRenameField: (field: ITemplateField, newName: string) => unknown;
   selected: ITemplateField | null | undefined;
 }
 
@@ -20,6 +21,7 @@ export default function SideFieldCategory({
   category,
   onUpdate,
   onRemove,
+  onRenameField,
   onSelect,
   selected,
 }: SideFieldCategoryProps) {
@@ -44,6 +46,7 @@ export default function SideFieldCategory({
       label: 'New Field',
       type: 'string',
       required: false,
+      description: '',
     };
     category.children.push(item);
     onUpdate(category);
@@ -86,11 +89,12 @@ export default function SideFieldCategory({
           type="category"
           onRemove={onRemove}
           onRename={(newName) => {
-            category.id = newName;
+            category.id = newName.toLowerCase().replace(/ /g, '_');
+            category.label = newName;
             onUpdate(category);
           }}
         >
-          {category.id}
+          {category.label}
         </SideField>
       )}
 
@@ -99,6 +103,9 @@ export default function SideFieldCategory({
           key={field._internalId}
           onSelect={() => onSelect(field)}
           onRemove={() => handleRemove(field)}
+          onRename={(name: string) => {
+            onRenameField(field, name);
+          }}
           selected={selected === field}
           type="item"
         >

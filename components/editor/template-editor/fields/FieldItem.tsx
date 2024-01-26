@@ -1,4 +1,5 @@
 import {
+  Box,
   Divider,
   Flex,
   FormControl,
@@ -17,19 +18,21 @@ import ITemplateField, {
 import FieldItemAdvanced from './FieldItemAdvanced';
 
 interface FieldItemProps {
+  categoryId: string;
   field: ITemplateField;
   onUpdate: (field: ITemplateField) => void;
 }
 
-export default function FieldItem({ field, onUpdate }: FieldItemProps) {
-  const { id, label, type, description } = field;
+export default function FieldItem({
+  categoryId,
+  field,
+  onUpdate,
+}: FieldItemProps) {
+  const { label, type, description } = field;
+  const path = categoryId ? `${categoryId}.${field.id}` : field.id;
 
   const setAdvanced = (advanced: ITemplateAdvancedField) => {
     onUpdate({ ...field, ...advanced });
-  };
-
-  const setID = (id: string) => {
-    onUpdate({ ...field, id });
   };
 
   const setLabel = (label: string) => {
@@ -45,81 +48,72 @@ export default function FieldItem({ field, onUpdate }: FieldItemProps) {
   };
 
   return (
-    <Flex
-      border={'1px solid'}
-      borderColor={'chakra-border-color'}
-      borderRadius={'7px'}
-      padding={'14px 20px'}
-      direction={'column'}
-      gap={'20px'}
-      alignItems={'flex-end'}
-    >
-      <SimpleGrid
-        minChildWidth="120px"
-        spacing="10px"
-        width={'100%'}
-        mt={'10px'}
+    <Box>
+      <Flex
+        border={'1px solid'}
+        borderColor={'chakra-border-color'}
+        borderRadius={'7px'}
+        padding={'14px 20px'}
+        direction={'column'}
+        gap={'20px'}
+        alignItems={'flex-end'}
       >
-        <FormControl>
-          <FormLabel>ID</FormLabel>
-          <Input
-            placeholder={'example-field'}
-            value={id}
-            onChange={(e) => setID(e.target.value)}
-            size={'sm'}
-          />
-        </FormControl>
+        <SimpleGrid
+          minChildWidth="120px"
+          spacing="10px"
+          width={'100%'}
+          mt={'10px'}
+        >
+          <FormControl>
+            <FormLabel>Label</FormLabel>
+            <Input
+              placeholder={'Example Field'}
+              value={label}
+              onChange={(e) => setLabel(e.target.value)}
+              size={'sm'}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Type</FormLabel>
+            <Select
+              value={type}
+              onChange={(e) => setType(e.target.value as TemplateFieldType)}
+              size={'sm'}
+            >
+              {TemplateFieldTypes.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </SimpleGrid>
 
-        <FormControl>
-          <FormLabel>Type</FormLabel>
-          <Select
-            value={type}
-            onChange={(e) => setType(e.target.value as TemplateFieldType)}
-            size={'sm'}
-          >
-            {TemplateFieldTypes.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.label}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-      </SimpleGrid>
+        <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <Input
+              placeholder={'A sort description'}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              size={'sm'}
+            />
+          </FormControl>
+        </SimpleGrid>
 
-      <SimpleGrid minChildWidth="120px" spacing="10px" width={'100%'}>
-        <FormControl>
-          <FormLabel>Label</FormLabel>
-          <Input
-            placeholder={'Example Field'}
-            value={label}
-            onChange={(e) => setLabel(e.target.value)}
-            size={'sm'}
-          />
-        </FormControl>
+        <Divider />
 
-        <FormControl>
-          <FormLabel>Description</FormLabel>
-          <Input
-            placeholder={'A sort description'}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            size={'sm'}
-          />
-        </FormControl>
-      </SimpleGrid>
-
-      <Divider />
-
-      <FieldItemAdvanced
-        type={type}
-        setValue={setAdvanced}
-        arrayOptions={field.array}
-        booleanOptions={field.boolean}
-        enumOptions={field.enum}
-        mapOptions={field.map}
-        numberOptions={field.number}
-        stringOptions={field.string}
-      />
-    </Flex>
+        <FieldItemAdvanced
+          type={type}
+          setValue={setAdvanced}
+          arrayOptions={field.array}
+          booleanOptions={field.boolean}
+          enumOptions={field.enum}
+          mapOptions={field.map}
+          numberOptions={field.number}
+          stringOptions={field.string}
+        />
+      </Flex>
+    </Box>
   );
 }

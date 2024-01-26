@@ -96,17 +96,18 @@ export default function SideField({
 
       {(type === 'category' || isHover || isMobile) && (
         <Flex gap={'5px'}>
-          {type === 'category' && (
-            <IconButton
-              icon={isEditMode ? <FaSave /> : <FaPen />}
-              aria-label={'Edit / Save'}
-              variant={'solid'}
-              colorScheme={isEditMode ? 'green' : 'blue'}
-              size={'xs'}
-              onClick={isEditMode ? handleSave : toggleEditMode}
-              disabled={id.trim() === ''}
-            />
-          )}
+          <IconButton
+            icon={isEditMode ? <FaSave /> : <FaPen />}
+            aria-label={'Edit / Save'}
+            variant={'solid'}
+            colorScheme={isEditMode ? 'green' : 'blue'}
+            size={'xs'}
+            onClick={(e) => {
+              e.stopPropagation();
+              isEditMode ? handleSave() : toggleEditMode();
+            }}
+            disabled={id.trim() === ''}
+          />
 
           <IconButton
             icon={isEditMode ? <FaEraser /> : <FaTrash />}

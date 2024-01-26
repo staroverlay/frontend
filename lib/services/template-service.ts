@@ -78,11 +78,15 @@ export async function updateTemplate(
   template: ITemplate,
   update: TemplateUpdate,
 ) {
-  const payload = cleanEquals(template, update);
-  const fields: ITemplateField[] = payload.fields || [];
+  const refPayload = cleanEquals(template, update);
+  const payload = structuredClone(refPayload);
 
-  fields.map((field: Partial<ITemplateField>) => {
-    delete field._internalId;
+  const fields: ITemplateFieldGroup[] = payload.fields || [];
+
+  fields.forEach((field: ITemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<ITemplateField>) => {
+      delete child._internalId;
+    });
   });
 
   const raw = await client.fetch(UpdateTemplateMutation, {
