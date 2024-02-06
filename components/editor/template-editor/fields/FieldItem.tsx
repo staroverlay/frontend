@@ -29,7 +29,6 @@ export default function FieldItem({
   onUpdate,
 }: FieldItemProps) {
   const { label, type, description } = field;
-  const path = categoryId ? `${categoryId}.${field.id}` : field.id;
 
   const setAdvanced = (advanced: ITemplateAdvancedField) => {
     onUpdate({ ...field, ...advanced });

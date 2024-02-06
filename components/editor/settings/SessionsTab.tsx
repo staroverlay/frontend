@@ -63,7 +63,7 @@ const SessionItem = ({
             {device.browser.name} for {device.os.name} {device.os.version}
           </Text>
 
-          <Text fontSize={'sm'}>From Argentina, Buenos Aires.</Text>
+          <Text fontSize={'sm'}>From {session.location}.</Text>
 
           <Text fontSize={'xs'}>
             Using {session.method || 'password'} at{' '}
