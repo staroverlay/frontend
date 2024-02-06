@@ -124,12 +124,12 @@ export default function TemplateCard(props: TemplateCardProps) {
 
           <Flex className={styles.author}>
             {isExplorer && (
-              <Link href={`/creators/${template.author.toLowerCase()}`}>
-                By {template.author}
+              <Link href={`/creators/${template.author.id}`}>
+                By {template.author.username}
               </Link>
             )}
 
-            {isEditor && <Text>By you ({template.author})</Text>}
+            {isEditor && <Text>By you ({template.author.username})</Text>}
 
             <Flex className={styles.flex} gap={'10px'}>
               <Flex className={styles.flex}>

@@ -14,6 +14,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import { FaEllipsisV } from 'react-icons/fa';
 
 import ITemplate from '@/lib/interfaces/templates/template';
@@ -33,6 +34,7 @@ export default function WidgetCard({
   onDelete,
 }: WidgetCardProps) {
   const template = JSON.parse(widget.templateRaw) as ITemplate;
+  const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
 
   const OptionsButton = () => (
     <Menu>
@@ -42,7 +44,10 @@ export default function WidgetCard({
         <Link href={`/widgets/${widget._id}`}>
           <MenuItem color={'green.400'}>Edit</MenuItem>
         </Link>
-        <MenuItem color={'cyan.400'}>Copy link</MenuItem>
+
+        <CopyToClipboard text={link}>
+          <MenuItem color={'cyan.400'}>Copy</MenuItem>
+        </CopyToClipboard>
 
         <MenuDivider />
 

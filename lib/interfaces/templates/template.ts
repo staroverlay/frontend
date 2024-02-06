@@ -5,7 +5,11 @@ import TemplateVisibility from './template-visibility';
 
 export default interface ITemplate {
   _id: string;
-  author: string;
+  author: {
+    id: string;
+    username: string;
+    avatar: string;
+  };
   name: string;
   description?: string;
   scopes?: TemplateScope[];

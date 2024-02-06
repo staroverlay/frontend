@@ -4,7 +4,11 @@ const GetTemplateByIDQuery = query`
     getTemplateById($id: String!) {
         getTemplateById(id: $id) {
             _id
-            author
+            author {
+                id
+                username
+                avatar
+            }
             name
             description
             scopes
