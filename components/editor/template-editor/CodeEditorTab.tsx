@@ -1,8 +1,5 @@
 import { Flex, TabPanel } from '@chakra-ui/react';
-import a, { highlight, languages } from 'prismjs';
-import Editor from 'react-simple-code-editor';
-
-import 'prismjs/themes/prism.css';
+import Editor from '@monaco-editor/react';
 
 interface CodeEditorTabProps {
   code: string;
@@ -15,49 +12,31 @@ export default function CodeEditorTab({ code, setCode }: CodeEditorTabProps) {
       <Flex flexDirection={'column'} gap={'20px'}>
         <Editor
           value={code}
-          onValueChange={setCode}
-          highlight={(code) =>
-            highlight(
-              code,
-              {
-                ...languages.extend('html', {
-                  script: {
-                    pattern: /<script[\w\W]*?>[\w\W]*?<\/script>/g,
-                    inside: {
-                      tag: {
-                        pattern: /<script[\w\W]*?>|<\/script>/g,
-                      },
-                      rest: languages.extend('javascript', {
-                        operator: {
-                          pattern:
-                            /==================================================/g,
-                          alias: 'punctuation',
-                        },
-                      }),
-                    },
-
-                    alias: 'language-javascript',
-                  },
-                }),
-              },
-              'html',
-            )
-          }
-          padding={10}
-          tabSize={2}
-          insertSpaces={true}
-          style={{
-            backgroundColor: '#000',
-            borderRadius: '10px',
-            fontFamily: '"Fira code", "Fira Mono", monospace',
-            fontSize: 18,
-            height: '65vh',
-            overflowY: 'auto',
-            outline: 'none',
-            border: 'none',
+          language="html"
+          theme="vs-dark"
+          options={{
+            inlineSuggest: true,
+            fontSize: '16px',
+            formatOnType: true,
+            autoClosingBrackets: true,
+            minimap: { scale: 10 },
           }}
+          height="75vh"
+          onChange={(value) => setCode(value || '')}
         />
       </Flex>
     </TabPanel>
   );
 }
+
+/**
+ *           style={{
+            backgroundColor: '#000',
+            borderRadius: '10px',
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 18,
+            height: '75vh',
+            outline: 'none',
+            border: 'none',
+          }}
+ */

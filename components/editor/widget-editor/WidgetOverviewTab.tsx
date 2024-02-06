@@ -1,4 +1,8 @@
 import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
   Button,
   Checkbox,
   Flex,
@@ -6,6 +10,7 @@ import {
   FormHelperText,
   FormLabel,
   Input,
+  Switch,
   TabPanel,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
@@ -82,9 +87,11 @@ interface WidgetOverviewTabProps {
   widget: IWidget;
   template: ITemplate;
   name: string;
+  autoUpdate: boolean;
   setName: (name: string) => void;
   scopes: TemplateScope[];
   setScopes: (scopes: TemplateScope[]) => void;
+  setAutoUpdate: (autoUpdate: boolean) => void;
 }
 
 export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
@@ -199,6 +206,26 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               value={props.name}
               onChange={(e) => props.setName(e.target.value)}
             />
+          </FormControl>
+
+          <FormControl>
+            <FormLabel>Auto Update</FormLabel>
+            <Switch
+              isRequired={true}
+              width={'container.sm'}
+              isChecked={props.autoUpdate}
+              onChange={(e) => props.setAutoUpdate(e.target.checked)}
+            />
+            <FormHelperText>
+              Automatically upgrade the widget when the Template is updated.
+            </FormHelperText>
+            <Alert status="warning" mt={'3px'}>
+              <AlertIcon />
+              <AlertTitle>Be careful</AlertTitle>
+              <AlertDescription>
+                Only enable this if you trust on the template owner.
+              </AlertDescription>
+            </Alert>
           </FormControl>
 
           <FormControl>

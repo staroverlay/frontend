@@ -13,4 +13,5 @@ export default interface IWidget {
   templateRaw: string;
   settings?: IDictionary;
   scopes: TemplateScope[];
+  autoUpdate: boolean;
 }

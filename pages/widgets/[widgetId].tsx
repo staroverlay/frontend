@@ -39,6 +39,7 @@ export default function WidgetPage() {
   const [scopes, setScopes] = useState<TemplateScope[]>([]);
   const [settings, setSettings] = useState<IDictionary>({});
   const [enabled, setEnabled] = useState(false);
+  const [autoUpdate, setAutoUpdate] = useState(false);
 
   useEffect(() => {
     if (widget) {
@@ -46,6 +47,7 @@ export default function WidgetPage() {
       setScopes(widget.scopes || []);
       setSettings(widget.settings || {});
       setEnabled(widget.enabled);
+      setAutoUpdate(widget.autoUpdate);
     }
   }, [widget]);
 
@@ -55,6 +57,7 @@ export default function WidgetPage() {
     scopes,
     settings,
     enabled,
+    autoUpdate,
   };
 
   const hasChanges = hasObjectChanged(
@@ -110,8 +113,10 @@ export default function WidgetPage() {
           <WidgetOverviewTab
             name={displayName}
             scopes={scopes}
+            autoUpdate={autoUpdate}
             setName={setDisplayName}
             setScopes={setScopes}
+            setAutoUpdate={setAutoUpdate}
             template={cachedTemplate}
             widget={widget}
           />

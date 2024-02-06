@@ -67,7 +67,6 @@ export default function FieldItemAdvanced({
     const value = getSelected();
 
     if (value != undefined && value != null) {
-      console.log(value);
       const obj: { [key: string]: unknown } = {};
       obj[type] = value;
       setValue(obj);

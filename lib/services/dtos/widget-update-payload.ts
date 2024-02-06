@@ -4,6 +4,7 @@ type WidgetUpdatePayload = {
   displayName?: string;
   settings?: IDictionary;
   enabled?: boolean;
+  autoUpdate?: boolean;
 };
 
 export default WidgetUpdatePayload;

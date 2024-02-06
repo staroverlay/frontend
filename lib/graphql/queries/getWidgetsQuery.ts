@@ -12,6 +12,7 @@ const GetWidgetsQuery = query`
             templateRaw
             settings
             scopes
+            autoUpdate
         }
     }
 `;

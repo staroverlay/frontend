@@ -20,7 +20,7 @@ export function hasObjectChanged(
   const keys = Object.keys(original);
   for (const key of keys) {
     if (
-      newObject[key] &&
+      newObject[key] !== undefined &&
       JSON.stringify(original[key]) !== JSON.stringify(newObject[key])
     ) {
       return true;
