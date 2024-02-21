@@ -55,8 +55,16 @@ export default function App({ Component, pageProps }: InitialAppProps) {
   const { pathname } = useRouter();
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (!mounted) {
+      const interval = setInterval(() => {
+        if (window) {
+          setMounted(true);
+        }
+      }, 5);
+
+      return () => clearInterval(interval);
+    }
+  }, [mounted]);
 
   {
     /* Don't render layout on oauth */

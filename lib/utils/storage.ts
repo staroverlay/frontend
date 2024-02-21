@@ -5,6 +5,7 @@ import {
   uploadPart,
 } from '../services/media-service';
 import { readFileAsArrayBuffer } from './files';
+import { generateMediaThumbnail } from './media';
 
 export function splitBufferInChunks(
   buffer: ArrayBuffer,
@@ -34,6 +35,8 @@ export async function uploadFile(file: File, name?: string) {
     name: name || file.name,
     size: file.size,
   });
+
+  // Upload file.
   const buffer = await readFileAsArrayBuffer(file);
   const chunks = splitBufferInChunks(buffer, 5 * 1024 * 1024);
   const parts: IMediaPart[] = [];
@@ -47,5 +50,23 @@ export async function uploadFile(file: File, name?: string) {
     parts.push(part);
   }
 
-  return await completeMedia({ id: media._id, parts });
+  // Upload thumbnail.
+  const thumbnailUploadId = media.thumbnailUploadId as string;
+  const thumbnailBlob = await generateMediaThumbnail(file);
+  const thumbnailBuffer = await readFileAsArrayBuffer(thumbnailBlob);
+  const thumbnailChunks = splitBufferInChunks(thumbnailBuffer, 1024 * 256);
+  let thumbnailParts = [];
+
+  if (thumbnailChunks.length == 1) {
+    const thumbId = `${media.resourceId}/thumbnail`;
+    const part = await uploadPart(
+      thumbId,
+      thumbnailUploadId,
+      1,
+      thumbnailChunks[0],
+    );
+    thumbnailParts.push(part);
+  }
+
+  return await completeMedia({ id: media._id, parts, thumbnailParts });
 }

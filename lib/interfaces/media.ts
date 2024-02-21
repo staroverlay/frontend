@@ -7,5 +7,6 @@ export default interface IMedia {
   size: number;
   type: FileType;
   uploadId?: string;
+  thumbnailUploadId?: string;
   userId: string;
 }

@@ -9,6 +9,7 @@ const CreateMediaMutation = mutation`
             size
             type
             uploadId
+            thumbnailUploadId
         }
     }
 `;

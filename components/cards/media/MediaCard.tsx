@@ -1,23 +1,22 @@
 import {
-  Card,
-  IconButton,
-  Flex,
-  CardBody,
-  Tag,
   Badge,
-  CardFooter,
-  useDisclosure,
-  Skeleton,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Flex,
+  IconButton,
+  Tag,
+  useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-import { FiTrash, FiEdit, FiDownload } from 'react-icons/fi';
+import { useState } from 'react';
+import { FiDownload, FiEdit, FiTrash } from 'react-icons/fi';
 
 import useMedia from '../../../hooks/useMedia';
 import IMedia from '../../../lib/interfaces/media';
 import { deleteMedia } from '../../../lib/services/media-service';
 import { downloadURL } from '../../../lib/utils/files';
-import { getMediaThumbnail, getMediaURL } from '../../../lib/utils/media';
+import { getMediaThumbnailURL, getMediaURL } from '../../../lib/utils/media';
 import { toastPending } from '../../../lib/utils/toasts';
 import ConfirmationAlert from '../../alerts/confirmation/ConfirmationAlert';
 import MediaPreviewModal from '../../modals/media-preview-modal/MediaPreviewModal';
@@ -108,18 +107,8 @@ function EditButton({ media, size }: MediaCardProps) {
 }
 
 export default function MediaCard({ media, size, onSelect }: MediaCardProps) {
-  const [thumbnail, setThumbnail] = useState<string | null>(null);
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-  useEffect(() => {
-    if (media) {
-      getMediaThumbnail(media).then(setThumbnail);
-    }
-  }, [media]);
-
-  if (!thumbnail) {
-    return <Skeleton />;
-  }
+  const thumbnail = getMediaThumbnailURL(media);
 
   return (
     <div className={styles[`card-${size || 'lg'}`]}>

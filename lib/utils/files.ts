@@ -5,7 +5,7 @@ export function downloadURL(url: string, name: string) {
   link.click();
 }
 
-export function readFileAsArrayBuffer(file: File): Promise<ArrayBuffer> {
+export function readFileAsArrayBuffer(file: File | Blob): Promise<ArrayBuffer> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = function () {

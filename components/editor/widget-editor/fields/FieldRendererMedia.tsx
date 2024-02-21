@@ -10,13 +10,12 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 
 import MediaSelectModal from '@/components/modals/media-select-modal/MediaSelectModal';
 import useMedia from '@/hooks/useMedia';
 import { FileType } from '@/lib/interfaces/media';
 import ITemplateField from '@/lib/interfaces/templates/template-field';
-import { getMediaThumbnail } from '@/lib/utils/media';
+import { getMediaThumbnailURL } from '@/lib/utils/media';
 
 export interface FieldRendererMediaProps {
   field: ITemplateField;
@@ -35,13 +34,7 @@ export default function FieldRendererMedia({
   const { getMedia, medias } = useMedia();
 
   const media = value ? getMedia(value as string) : null;
-  const [thumbnail, setThumbnail] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (media) {
-      getMediaThumbnail(media).then(setThumbnail);
-    }
-  }, [media]);
+  const thumbnail = media ? getMediaThumbnailURL(media) : null;
 
   return (
     <FormControl>
