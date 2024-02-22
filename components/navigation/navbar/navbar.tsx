@@ -1,19 +1,18 @@
 import {
   Avatar,
   Box,
-  Button,
   Flex,
   Heading,
   Image,
   useColorMode,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { BiBell, BiMoon, BiSun, BiCog, BiExit } from 'react-icons/bi';
+import { BiBell, BiCog, BiExit, BiMoon, BiSun } from 'react-icons/bi';
 
-import useAuth from '../../../hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
+
 import NavbarButton from './navbar-button/navbar-button';
 import NavbarDropdown from './navbar-dropdown/navbar-dropdown';
-
 
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();

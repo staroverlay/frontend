@@ -1,7 +1,6 @@
 import MediasGrid from '@/components/content/medias-grid/MediasGrid';
+import IMedia, { FileType } from '@/lib/interfaces/media';
 
-import IMedia, { FileType } from '../../../lib/interfaces/media';
-import FilePreview from '../../content/file-preview/FilePreview';
 import BaseModal from '../base-modal/BaseModal';
 
 interface MediaSelectModalProps {

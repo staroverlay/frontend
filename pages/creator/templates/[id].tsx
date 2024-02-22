@@ -13,13 +13,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-editor/FieldsTab';
+import OverviewTab from '@/components/editor/template-editor/OverviewTab';
+import useTemplates from '@/hooks/useTemplates';
 import { updateTemplate } from '@/lib/services/template-service';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
-
-import OverviewTab from '../../../components/editor/template-editor/OverviewTab';
-import useTemplates from '../../../hooks/useTemplates';
-import Error404 from '../../404';
+import Error404 from '@/pages/404';
 
 const TabIndexes: { [key in string]: number } = {
   overview: 0,

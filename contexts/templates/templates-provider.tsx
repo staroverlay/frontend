@@ -1,12 +1,13 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import Loading from '../../components/layout/loading';
-import useAuth from '../../hooks/useAuth';
-import ITemplate from '../../lib/interfaces/templates/template';
+import Loading from '@/components/layout/loading';
+import useAuth from '@/hooks/useAuth';
+import ITemplate from '@/lib/interfaces/templates/template';
 import {
   getMyTemplates,
   getSharedTemplates,
-} from '../../lib/services/template-service';
+} from '@/lib/services/template-service';
+
 import { TemplatesContext } from './templates-context';
 
 export function TemplatesProvider({ children }: PropsWithChildren) {

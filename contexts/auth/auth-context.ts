@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { AuthHook } from './auth-hook';
+import User from '@/lib/interfaces/user';
 
-import User from '../../lib/interfaces/user';
+import { AuthHook } from './auth-hook';
 
 export const AuthContext = React.createContext<AuthHook>({
   sessionId: null,

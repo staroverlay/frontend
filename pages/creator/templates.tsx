@@ -9,13 +9,12 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
+import InputAlert from '@/components/alerts/input/InputAlert';
+import StatsCard from '@/components/cards/stats/StatsCard';
 import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
-
-import InputAlert from '../../components/alerts/input/InputAlert';
-import StatsCard from '../../components/cards/stats/StatsCard';
-import useTemplates from '../../hooks/useTemplates';
-import { createTemplate } from '../../lib/services/template-service';
-import { toastPending } from '../../lib/utils/toasts';
+import useTemplates from '@/hooks/useTemplates';
+import { createTemplate } from '@/lib/services/template-service';
+import { toastPending } from '@/lib/utils/toasts';
 
 function CreateTemplateButton() {
   const { isOpen, onClose, onOpen } = useDisclosure();

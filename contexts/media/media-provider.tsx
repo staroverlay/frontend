@@ -1,11 +1,12 @@
-import useAuth from '@/hooks/useAuth';
 import { useDisclosure } from '@chakra-ui/react';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import Loading from '../../components/layout/loading';
-import UploadModal from '../../components/modals/upload-modal/UploadModal';
 
-import IMedia from '../../lib/interfaces/media';
-import { getAllMedia } from '../../lib/services/media-service';
+import Loading from '@/components/layout/loading';
+import UploadModal from '@/components/modals/upload-modal/UploadModal';
+import useAuth from '@/hooks/useAuth';
+import IMedia from '@/lib/interfaces/media';
+import { getAllMedia } from '@/lib/services/media-service';
+
 import { MediaContext } from './media-context';
 
 function getStorageUsage(medias: IMedia[]) {

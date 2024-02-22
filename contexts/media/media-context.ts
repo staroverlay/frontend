@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { MediaHook } from './media-hook';
+import IMedia from '@/lib/interfaces/media';
 
-import IMedia from '../../lib/interfaces/media';
+import { MediaHook } from './media-hook';
 
 export const MediaContext = React.createContext<MediaHook>({
   medias: [],

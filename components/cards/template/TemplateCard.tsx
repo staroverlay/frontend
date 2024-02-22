@@ -24,7 +24,8 @@ import {
   FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '../../../lib/interfaces/templates/template';
+import ITemplate from '@/lib/interfaces/templates/template';
+
 import styles from './TemplateCard.module.css';
 
 export interface TemplateCardProps {

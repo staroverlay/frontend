@@ -5,7 +5,7 @@ import { PropsWithChildren } from 'react';
 import { IconType } from 'react-icons';
 import { BsHouse, BsImage, BsPalette, BsWindowSidebar } from 'react-icons/bs';
 
-import useAuth from '../../../hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 
 interface SidebarItemProps {
   icon: IconType;

@@ -1,7 +1,8 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
-import useAuth from '../../hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
+
 import Navbar from '../navigation/navbar';
 import Sidebar from '../navigation/sidebar';
 import styles from './layout.module.css';
