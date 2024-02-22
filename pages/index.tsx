@@ -1,10 +1,11 @@
-import { Flex, Heading } from '@chakra-ui/react';
+import { Flex, Heading, useColorMode } from '@chakra-ui/react';
 
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useTemplates from '@/hooks/useTemplates';
 
 export default function Home() {
   const { sharedTemplates } = useTemplates();
+  const { colorMode } = useColorMode();
 
   return (
     <Flex flexDir={'column'} gap={'50px'} width={'100%'}>
@@ -17,7 +18,7 @@ export default function Home() {
         padding={'40px 20px'}
         borderRadius={'25px'}
         width={'100%'}
-        bg={'whiteAlpha.200'}
+        bg={colorMode === 'light' ? 'blackAlpha.200' : 'whiteAlpha.100'}
       >
         <Heading>Welcome to StarOverlay</Heading>
         <Heading size={'md'}>

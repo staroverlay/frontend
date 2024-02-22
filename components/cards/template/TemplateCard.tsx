@@ -105,7 +105,7 @@ export default function TemplateCard(props: TemplateCardProps) {
   );
 
   return (
-    <Card className={styles.card}>
+    <Card>
       <CardBody>
         <Stack spacing="2">
           <Flex className={styles.flex} justifyContent={'space-between'}>

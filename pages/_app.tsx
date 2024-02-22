@@ -1,4 +1,4 @@
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -10,6 +10,7 @@ import { IntegrationsProvider } from '@/contexts/integrations';
 import { MembershipProvider } from '@/contexts/membership';
 import { PlanProvider } from '@/contexts/plan/plan-provider';
 import { WidgetsProvider } from '@/contexts/widgets';
+import Theme from '@/theme/theme';
 
 import Layout from '../components/layout';
 import { AuthProvider } from '../contexts/auth';
@@ -18,29 +19,6 @@ import { TemplatesProvider } from '../contexts/templates';
 import User from '../lib/interfaces/user';
 
 import 'react-toastify/dist/ReactToastify.css';
-
-// Theme
-const colors = {
-  transparent: 'transparent',
-  gray: {
-    800: '#0B0916',
-  },
-};
-
-const config = {
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-};
-
-const styles = {
-  global: {},
-};
-
-const theme = extendTheme({
-  colors,
-  config,
-  styles,
-});
 
 // App
 interface InitialAppProps extends AppProps {
@@ -71,14 +49,14 @@ export default function App({ Component, pageProps }: InitialAppProps) {
   }
   if (pathname.startsWith('/oauth')) {
     return (
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={Theme}>
         <Component {...pageProps} />
       </ChakraProvider>
     );
   }
 
   return (
-    <ChakraProvider theme={theme}>
+    <ChakraProvider theme={Theme}>
       <Head>
         <title>StarOverlay</title>
         <meta
