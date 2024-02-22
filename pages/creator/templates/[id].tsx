@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from 'react';
 import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-editor/FieldsTab';
 import OverviewTab from '@/components/editor/template-editor/OverviewTab';
+import StoreTab from '@/components/editor/template-editor/StoreTab';
 import useTemplates from '@/hooks/useTemplates';
 import { updateTemplate } from '@/lib/services/template-service';
 import { hasObjectChanged } from '@/lib/utils/object';
@@ -22,8 +23,9 @@ import Error404 from '@/pages/404';
 
 const TabIndexes: { [key in string]: number } = {
   overview: 0,
-  code: 1,
-  fields: 2,
+  store: 1,
+  code: 2,
+  fields: 3,
 };
 
 export default function CreatorTemplatePage() {
@@ -78,6 +80,9 @@ export default function CreatorTemplatePage() {
   // Input fields.
   const [name, setName] = useState(template?.name);
   const [description, setDescription] = useState(template?.description);
+  const [storeDescription, setStoreDescription] = useState(
+    template?.storeDescription,
+  );
   const [scopes, setScopes] = useState(template?.scopes);
   const [service, setService] = useState(template?.service || 'twitch');
   const [html, setHTML] = useState(template?.html);
@@ -90,6 +95,7 @@ export default function CreatorTemplatePage() {
   const updatePayload = {
     name,
     description,
+    storeDescription,
     scopes,
     service,
     html,
@@ -105,15 +111,7 @@ export default function CreatorTemplatePage() {
 
   // Handlers
   const handleSaveTemplate = async () => {
-    const newTemplate = await updateTemplate(template, {
-      name,
-      description,
-      scopes,
-      service,
-      html,
-      fields,
-      visibility,
-    });
+    const newTemplate = await updateTemplate(template, updatePayload);
     updateUserTemplate(newTemplate);
   };
 
@@ -148,6 +146,7 @@ export default function CreatorTemplatePage() {
       >
         <TabList>
           <Tab>Overview</Tab>
+          <Tab>Store Page</Tab>
           <Tab>Code editor</Tab>
           <Tab>Fields</Tab>
         </TabList>
@@ -164,6 +163,11 @@ export default function CreatorTemplatePage() {
             setService={setService}
             visibility={visibility}
             setVisibility={setVisibility}
+          />
+
+          <StoreTab
+            storeDescription={storeDescription || ''}
+            setStoreDescription={setStoreDescription}
           />
 
           <CodeEditorTab code={html || ''} setCode={setHTML} />

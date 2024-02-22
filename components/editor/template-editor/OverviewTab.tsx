@@ -166,7 +166,11 @@ export default function OverviewTab(props: OverviewTabProps) {
             onDelete={() => {}}
             template={{
               _id: user?._id || '',
-              author: user?.username || '',
+              author: {
+                username: user?.username || 'You',
+                avatar: user?.avatar || '',
+                id: user?._id || '',
+              },
               html: '',
               name: props.name,
               visibility: props.visibility,

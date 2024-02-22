@@ -4,9 +4,14 @@ const UpdateTemplateMutation = mutation`
     updateTemplate($id: String!, $payload: UpdateTemplateDTO!) {
         updateTemplate(id: $id, payload: $payload) {
             _id
-            author
+            author {
+                id
+                username
+                avatar
+            }
             name
             description
+            storeDescription
             scopes
             service
             html

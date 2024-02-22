@@ -5,6 +5,7 @@ import TemplateScope from '@/lib/interfaces/templates/template-scope';
 export default interface TemplateUpdate {
   name?: string;
   description?: string;
+  storeDescription?: string;
   scopes?: TemplateScope[];
   service?: ServiceType;
   html?: string;

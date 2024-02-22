@@ -12,6 +12,7 @@ export default interface ITemplate {
   };
   name: string;
   description?: string;
+  storeDescription?: string;
   scopes?: TemplateScope[];
   service?: ServiceType;
   html: string;

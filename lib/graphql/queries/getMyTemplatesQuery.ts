@@ -11,6 +11,7 @@ const GetMyTemplatesQuery = query`
             }
             name
             description
+            storeDescription
             scopes
             service
             html
