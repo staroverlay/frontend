@@ -7,8 +7,9 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
@@ -22,10 +23,55 @@ import { toastPending } from '@/lib/utils/toasts';
 
 import Error404 from '../404';
 
+const TabIndexes: { [key in string]: number } = {
+  overview: 0,
+  settings: 1,
+};
+
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const { query, push: navigateTo } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  // Control query.
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      const newIndex = TabIndexes[tab] || 0;
+      setTabIndex(newIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(TabIndexes)) {
+      if (value === tabIndex) {
+        const newQuery = createQueryString(
+          'tab',
+          key === 'overview' ? null : key,
+        );
+        navigateTo({ search: newQuery });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabIndex]);
 
   // Find widget by ID in query.
   const widgetId = query.widgetId as string;
@@ -103,7 +149,11 @@ export default function WidgetPage() {
         </Button>
       </Flex>
 
-      <Tabs variant={'enclosed'}>
+      <Tabs
+        variant={'enclosed'}
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}
+      >
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Settings</Tab>

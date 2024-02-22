@@ -7,8 +7,9 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-editor/FieldsTab';
@@ -20,10 +21,56 @@ import OverviewTab from '../../../components/editor/template-editor/OverviewTab'
 import useTemplates from '../../../hooks/useTemplates';
 import Error404 from '../../404';
 
+const TabIndexes: { [key in string]: number } = {
+  overview: 0,
+  code: 1,
+  fields: 2,
+};
+
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const { query, push: navigateTo } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  // Control query.
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      const newIndex = TabIndexes[tab] || 0;
+      setTabIndex(newIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(TabIndexes)) {
+      if (value === tabIndex) {
+        const newQuery = createQueryString(
+          'tab',
+          key === 'overview' ? null : key,
+        );
+        navigateTo({ search: newQuery });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabIndex]);
 
   // Find template by ID in query.
   const templateId = query.id as string;
@@ -95,7 +142,11 @@ export default function CreatorTemplatePage() {
         </Button>
       </Flex>
 
-      <Tabs variant={'enclosed'}>
+      <Tabs
+        variant={'enclosed'}
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}
+      >
         <TabList>
           <Tab>Overview</Tab>
           <Tab>Code editor</Tab>
