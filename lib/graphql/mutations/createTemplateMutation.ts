@@ -12,6 +12,9 @@ const CreateTemplateMutation = mutation`
             name
             description
             storeDescription
+            thumbnail
+            thumbnailResourceId
+            price
             scopes
             service
             html

@@ -12,6 +12,9 @@ const GetTemplatesByAuthorQuery = query`
             name
             description
             storeDescription
+            price
+            thumbnail
+            thumbnailResourceId
             scopes
             service
             html

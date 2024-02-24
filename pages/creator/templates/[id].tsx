@@ -83,6 +83,8 @@ export default function CreatorTemplatePage() {
   const [storeDescription, setStoreDescription] = useState(
     template?.storeDescription,
   );
+  const [price, setPrice] = useState(template?.price || 0);
+  const [thumbnail, setThumbnail] = useState(template?.thumbnail);
   const [scopes, setScopes] = useState(template?.scopes);
   const [service, setService] = useState(template?.service || 'twitch');
   const [html, setHTML] = useState(template?.html);
@@ -101,6 +103,8 @@ export default function CreatorTemplatePage() {
     html,
     fields,
     visibility,
+    price,
+    thumbnail,
   };
   const hasChanges = hasObjectChanged(template, updatePayload);
 
@@ -153,6 +157,7 @@ export default function CreatorTemplatePage() {
 
         <TabPanels>
           <OverviewTab
+            // Editable
             name={name || ''}
             setName={setName}
             description={description || ''}
@@ -161,13 +166,25 @@ export default function CreatorTemplatePage() {
             setScopes={setScopes}
             service={service || 'twitch'}
             setService={setService}
+            // Information
+            id={templateId}
             visibility={visibility}
-            setVisibility={setVisibility}
+            price={price}
           />
 
           <StoreTab
+            // Information
+            name={name || ''}
+            description={description || ''}
+            // Editable
             storeDescription={storeDescription || ''}
             setStoreDescription={setStoreDescription}
+            visibility={visibility}
+            setVisibility={setVisibility}
+            price={price}
+            setPrice={setPrice}
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
           />
 
           <CodeEditorTab code={html || ''} setCode={setHTML} />

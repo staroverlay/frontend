@@ -6,6 +6,7 @@ export default interface TemplateUpdate {
   name?: string;
   description?: string;
   storeDescription?: string;
+  thumbnail?: string;
   scopes?: TemplateScope[];
   service?: ServiceType;
   html?: string;

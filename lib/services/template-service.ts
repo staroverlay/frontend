@@ -50,6 +50,9 @@ export async function deleteTemplate(template: ITemplate): Promise<boolean> {
 
 export async function getTemplateByID(id: string): Promise<ITemplate | null> {
   const template = await client.fetch(GetTemplateByIDQuery, { id });
+  if (!template) {
+    return null;
+  }
   return fixTemplate(template as ITemplateRaw);
 }
 

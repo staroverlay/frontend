@@ -40,14 +40,12 @@ export default function MediasGrid(props: MediasGridProps) {
         ))}
       </SimpleGrid>
 
-      {isEmpty && (
-        <Flex alignContent={'center'} justifyContent={'center'}>
-          <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
-            <Heading>No media files</Heading>
-            <UploadContentButton />
-          </Flex>
+      <Flex alignContent={'center'} justifyContent={'center'}>
+        <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
+          {isEmpty && <Heading>No media files</Heading>}
+          <UploadContentButton />
         </Flex>
-      )}
+      </Flex>
     </>
   );
 }

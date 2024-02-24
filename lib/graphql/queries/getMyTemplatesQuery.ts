@@ -12,6 +12,9 @@ const GetMyTemplatesQuery = query`
             name
             description
             storeDescription
+            price
+            thumbnail
+            thumbnailResourceId
             scopes
             service
             html

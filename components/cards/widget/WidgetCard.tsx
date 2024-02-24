@@ -76,8 +76,8 @@ export default function WidgetCard({
           </Flex>
 
           <Box className={styles.author}>
-            From{' '}
-            <Link href={`/store/templates/${widget.templateId}`}>
+            Created from{' '}
+            <Link href={`/marketplace/${widget.templateId}`}>
               {template.name}
             </Link>
           </Box>

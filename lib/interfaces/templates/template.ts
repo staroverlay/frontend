@@ -13,6 +13,9 @@ export default interface ITemplate {
   name: string;
   description?: string;
   storeDescription?: string;
+  price?: number;
+  thumbnail?: string;
+  thumbnailResourceId?: string;
   scopes?: TemplateScope[];
   service?: ServiceType;
   html: string;
