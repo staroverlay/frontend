@@ -17,18 +17,12 @@ export function hasObjectChanged(
     return false;
   }
 
-  for (const key in newObject) {
-    const originalValue = original[key];
-    const newValue = newObject[key];
-
-    if (typeof originalValue == 'object' && typeof originalValue == 'object') {
-      const originalRaw = JSON.stringify(originalValue);
-      const newRaw = JSON.stringify(newValue);
-
-      if (originalRaw != newRaw) {
-        return true;
-      }
-    } else if (originalValue != newValue) {
+  const keys = Object.keys(original);
+  for (const key of keys) {
+    if (
+      newObject[key] !== undefined &&
+      JSON.stringify(original[key]) !== JSON.stringify(newObject[key])
+    ) {
       return true;
     }
   }

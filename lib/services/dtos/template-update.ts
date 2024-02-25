@@ -1,13 +1,15 @@
 import ServiceType from '@/lib/interfaces/service-type';
-import ITemplateField from '@/lib/interfaces/template-field';
-import TemplateScope from '@/lib/interfaces/template-scope';
+import ITemplateFieldGroup from '@/lib/interfaces/templates/template-field-group';
+import TemplateScope from '@/lib/interfaces/templates/template-scope';
 
 export default interface TemplateUpdate {
   name?: string;
   description?: string;
+  storeDescription?: string;
+  thumbnail?: string;
   scopes?: TemplateScope[];
   service?: ServiceType;
   html?: string;
-  fields?: ITemplateField[];
+  fields?: ITemplateFieldGroup[];
   visibility?: string;
 }

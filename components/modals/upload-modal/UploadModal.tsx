@@ -1,10 +1,11 @@
-import { Button, Flex, Input, chakra } from '@chakra-ui/react';
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
+import { Button, chakra, Flex, Input } from '@chakra-ui/react';
+import { FormEvent, useRef, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 
-import useMedia from '../../../hooks/useMedia';
-import { uploadFile } from '../../../lib/utils/storage';
-import { toastPending } from '../../../lib/utils/toasts';
+import useMedia from '@/hooks/useMedia';
+import { uploadFile } from '@/lib/utils/storage';
+import { toastPending } from '@/lib/utils/toasts';
+
 import FilePreview from '../../content/file-preview/FilePreview';
 import BaseModal from '../base-modal/BaseModal';
 

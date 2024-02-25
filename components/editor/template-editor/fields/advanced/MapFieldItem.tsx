@@ -8,12 +8,10 @@ import {
 import { useEffect, useState } from 'react';
 
 import {
-  FieldArraySettings,
   FieldMapSettings,
-  FieldStringSettings,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
 interface MapFieldItemProps {
   settings: FieldMapSettings;

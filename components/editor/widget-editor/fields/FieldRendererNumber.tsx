@@ -11,7 +11,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import ITemplateField from '@/lib/interfaces/template-field';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 
 export interface FieldRendererNumberProps {
   field: ITemplateField;
@@ -49,21 +49,26 @@ export default function FieldRendererNumber({
   setValue,
 }: FieldRendererNumberProps) {
   const opts = field.number;
+  const display = opts?.display || 'number';
+  const defaultValue =
+    opts?.default === undefined || opts?.default === null ? 0 : opts?.default;
+  const inputValue =
+    value === undefined || value === null ? defaultValue || 0 : value;
 
   return (
     <FormControl>
       <FormLabel>{field.label}</FormLabel>
 
-      {opts?.display == 'range' && (
-        <NumberSlider field={field} setValue={setValue} value={value} />
+      {display == 'range' && (
+        <NumberSlider field={field} setValue={setValue} value={inputValue} />
       )}
 
-      {opts?.display && opts?.display == 'input' && (
+      {display == 'input' && (
         <Input
           type="number"
           min={opts?.max}
           max={opts?.max}
-          value={value || opts?.default || 0}
+          value={inputValue}
           onChange={(e) => {
             const newValue = parseInt(e.target.value);
             if (!isNaN(newValue)) {

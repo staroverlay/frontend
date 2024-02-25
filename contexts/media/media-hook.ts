@@ -1,4 +1,4 @@
-import IMedia from '../../lib/interfaces/media';
+import IMedia from '@/lib/interfaces/media';
 
 export interface MediaHook {
   medias: IMedia[];

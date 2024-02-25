@@ -1,7 +1,7 @@
-import { GraphQLClient, CacheLoader } from 'astraql';
+import { CacheLoader, GraphQLClient } from 'astraql';
 
 const cache = new CacheLoader({
-  expiresIn: 60 * 10,
+  expiresIn: 3,
 });
 
 const client = new GraphQLClient({

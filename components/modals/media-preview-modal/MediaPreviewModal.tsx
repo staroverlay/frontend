@@ -1,4 +1,5 @@
-import IMedia from '../../../lib/interfaces/media';
+import IMedia from '@/lib/interfaces/media';
+
 import FilePreview from '../../content/file-preview/FilePreview';
 import BaseModal from '../base-modal/BaseModal';
 

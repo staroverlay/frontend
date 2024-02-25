@@ -4,9 +4,17 @@ const GetMyTemplatesQuery = query`
     getMyTemplates {
         getMyTemplates {
             _id
-            author
+            author {
+                id
+                username
+                avatar
+            }
             name
             description
+            storeDescription
+            price
+            thumbnail
+            thumbnailResourceId
             scopes
             service
             html

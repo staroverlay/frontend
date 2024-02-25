@@ -7,6 +7,7 @@ const GetSessionsQuery = query`
             device
             date
             method
+            location
         }
     }
 `;

@@ -12,7 +12,7 @@ import { BsTrash } from 'react-icons/bs';
 import { UAParser } from 'ua-parser-js';
 
 import useAuth from '@/hooks/useAuth';
-import ISession from '@/lib/interfaces/session';
+import ISession from '@/lib/interfaces/sessions/session';
 import {
   getSessions,
   invalidateAllSessions,
@@ -63,7 +63,7 @@ const SessionItem = ({
             {device.browser.name} for {device.os.name} {device.os.version}
           </Text>
 
-          <Text fontSize={'sm'}>From Argentina, Buenos Aires.</Text>
+          <Text fontSize={'sm'}>From {session.location}.</Text>
 
           <Text fontSize={'xs'}>
             Using {session.method || 'password'} at{' '}

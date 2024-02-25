@@ -1,9 +1,8 @@
 import { GraphQLRequest } from 'astraql';
 import { ReactNode, useEffect, useState } from 'react';
 
+import client from '@/lib/graphql/client';
 import IDictionary from '@/lib/interfaces/shared/IDictionary';
-
-import client from '../../lib/graphql/client';
 
 export interface QueryRendererProps {
   query: GraphQLRequest;

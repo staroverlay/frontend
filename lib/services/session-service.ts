@@ -5,8 +5,8 @@ import InvalidateAllSessionsMutation from '../graphql/mutations/invalidateAllSes
 import InvalidateSessionByIDMutation from '../graphql/mutations/invalidateSessionByIDMutation';
 import InvalidateSessionMutation from '../graphql/mutations/invalidateSessionMutation';
 import GetSessionsQuery from '../graphql/queries/getSessionsQuery';
-import ISession from '../interfaces/session';
-import ISessionAndUser from '../interfaces/session-and-user';
+import ISession from '../interfaces/sessions/session';
+import ISessionAndUser from '../interfaces/sessions/session-and-user';
 
 export async function getSessions(): Promise<ISession[]> {
   const session = await client.fetch(GetSessionsQuery);

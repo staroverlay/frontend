@@ -1,6 +1,6 @@
 import IDictionary from './shared/IDictionary';
-import ITemplate from './template';
-import TemplateScope from './template-scope';
+import ITemplate from './templates/template';
+import TemplateScope from './templates/template-scope';
 
 export default interface IWidget {
   _id: string;
@@ -13,4 +13,5 @@ export default interface IWidget {
   templateRaw: string;
   settings?: IDictionary;
   scopes: TemplateScope[];
+  autoUpdate: boolean;
 }

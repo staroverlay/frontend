@@ -7,25 +7,27 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import InputAlert from '@/components/alerts/input/InputAlert';
+import StatsCard from '@/components/cards/stats/StatsCard';
 import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
-
-import InputAlert from '../../components/alerts/input/InputAlert';
-import StatsCard from '../../components/cards/stats/StatsCard';
-import useTemplates from '../../hooks/useTemplates';
-import { createTemplate } from '../../lib/services/template-service';
-import { toastPending } from '../../lib/utils/toasts';
+import useTemplates from '@/hooks/useTemplates';
+import { createTemplate } from '@/lib/services/template-service';
+import { toastPending } from '@/lib/utils/toasts';
 
 function CreateTemplateButton() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { addTemplate } = useTemplates();
+  const { push: navigateTo } = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateTemplate = async (input: string) => {
     const template = await createTemplate(input);
     if (!template) throw new Error('Template not created');
     addTemplate(template);
+    navigateTo(`/creator/templates/${template._id}`);
     onClose();
   };
 

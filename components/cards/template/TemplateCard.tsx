@@ -1,31 +1,32 @@
 import {
+  Badge,
   Card,
   CardBody,
   Flex,
   Heading,
-  Stack,
-  Text,
-  Badge,
   IconButton,
-  Button,
+  Image,
   Menu,
   MenuButton,
-  MenuList,
-  MenuItem,
   MenuDivider,
+  MenuItem,
+  MenuList,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import React from 'react';
 import {
-  FaEye,
-  FaLock,
-  FaLink,
-  FaEllipsisV,
   FaDollarSign,
   FaDownload,
+  FaEllipsisV,
+  FaEye,
+  FaLink,
+  FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '../../../lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
+import TemplateVisibility from '@/lib/interfaces/templates/template-visibility';
+
 import styles from './TemplateCard.module.css';
 
 export interface TemplateCardProps {
@@ -47,6 +48,32 @@ const colors = {
   unlisted: 'orange',
 };
 
+export const VisibilityBadge = ({
+  visibility,
+}: {
+  visibility: TemplateVisibility;
+}) => (
+  <Badge colorScheme={colors[visibility]}>
+    <Flex className={styles.flex}>
+      {icons[visibility]} {visibility}
+    </Flex>
+  </Badge>
+);
+
+export const PriceBadge = ({ price }: { price: number }) => (
+  <Badge colorScheme={'green'}>
+    <Flex alignItems={'center'}>
+      {price > 0 && (
+        <>
+          <FaDollarSign /> {price.toFixed(2)}
+        </>
+      )}
+
+      {price === 0 && 'Free'}
+    </Flex>
+  </Badge>
+);
+
 export default function TemplateCard(props: TemplateCardProps) {
   const { template } = props;
 
@@ -54,22 +81,6 @@ export default function TemplateCard(props: TemplateCardProps) {
   const isEditor = props.context == 'editor';
   const isExplorer = context === 'explorer';
   const isEditorOrExplorer = isEditor || isExplorer;
-
-  const VisibilityBadge = () => (
-    <Badge colorScheme={colors[template.visibility]}>
-      <Flex className={styles.flex}>
-        {icons[template.visibility]} {template.visibility}
-      </Flex>
-    </Badge>
-  );
-
-  const PriceBadge = () => (
-    <Badge colorScheme={'green'}>
-      <Flex alignItems={'center'}>
-        <FaDollarSign /> 5.00
-      </Flex>
-    </Badge>
-  );
 
   const OptionsButton = () => (
     <Menu>
@@ -94,7 +105,7 @@ export default function TemplateCard(props: TemplateCardProps) {
         <MenuDivider />
 
         {/* Shared menu */}
-        <Link href={`/marketplace/templates/${template._id}`}>
+        <Link href={`/marketplace//${template._id}`}>
           <MenuItem>View store page</MenuItem>
         </Link>
         <MenuItem color={'cyan.400'}>Copy link</MenuItem>
@@ -105,56 +116,73 @@ export default function TemplateCard(props: TemplateCardProps) {
     </Menu>
   );
 
-  return (
-    <Card className={styles.card}>
-      <CardBody>
-        <Stack spacing="2">
-          <Flex className={styles.flex} justifyContent={'space-between'}>
-            <Heading size="md">{template.name || 'Unnamed Template'}</Heading>
-            {!isEditorOrExplorer && <OptionsButton />}
-          </Flex>
+  const CardElement = () => {
+    return (
+      <Card
+        cursor={'pointer'}
+        transition={'all 140ms ease-in-out'}
+        _hover={{
+          boxShadow: '0 0 10px 0 rgba(0,0,0,0.2)',
+          transform: 'scale(1.03)',
+        }}
+      >
+        <Flex className={styles.thumbnail} justifyContent={'center'}>
+          <Image
+            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnailResourceId}`}
+            alt={'Thummbnail'}
+            width={'100%'}
+            height={'100%'}
+          />
+        </Flex>
 
-          {!isExplorer && (
-            <Flex className={styles.flex}>
-              <VisibilityBadge />
-              {!isEditor && <PriceBadge />}
+        <CardBody>
+          <Stack spacing="2">
+            <Flex className={styles.flex} justifyContent={'space-between'}>
+              <Heading size="md">{template.name || 'Unnamed Template'}</Heading>
+              {!isEditorOrExplorer && <OptionsButton />}
             </Flex>
-          )}
 
-          <Text>{template.description || 'No description provided'}</Text>
-
-          <Flex className={styles.author}>
-            {isExplorer && (
-              <Link href={`/creators/${template.author.toLowerCase()}`}>
-                By {template.author}
-              </Link>
+            {!isExplorer && (
+              <Flex className={styles.flex}>
+                <VisibilityBadge visibility={template.visibility} />
+                <PriceBadge price={template.price || 0} />
+              </Flex>
             )}
 
-            {isEditor && <Text>By you ({template.author})</Text>}
+            <Text>{template.description || 'No description provided'}</Text>
 
-            <Flex className={styles.flex} gap={'10px'}>
-              <Flex className={styles.flex}>
-                <FaEye /> 0
-              </Flex>
-              <Flex className={styles.flex}>
-                <FaDownload /> 0
+            <Flex className={styles.author}>
+              {isExplorer && (
+                <Link
+                  href={`/creators/${template.author.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  By {template.author.username}
+                </Link>
+              )}
+
+              {isEditor && <Text>By you ({template.author.username})</Text>}
+
+              <Flex className={styles.flex} gap={'10px'}>
+                <Flex className={styles.flex}>
+                  <FaEye /> 0
+                </Flex>
+                <Flex className={styles.flex}>
+                  <FaDownload /> 0
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
+          </Stack>
+        </CardBody>
+      </Card>
+    );
+  };
 
-          {isEditorOrExplorer && (
-            <Flex className={styles.flex}>
-              <Button size={'xs'} colorScheme={'pink'}>
-                Use
-              </Button>
-
-              <Button size={'xs'} colorScheme={'green'}>
-                Buy $5.00
-              </Button>
-            </Flex>
-          )}
-        </Stack>
-      </CardBody>
-    </Card>
+  return isExplorer ? (
+    <Link href={`/marketplace/${template._id}`}>
+      <CardElement />
+    </Link>
+  ) : (
+    <CardElement />
   );
 }

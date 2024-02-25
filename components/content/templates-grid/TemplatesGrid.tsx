@@ -1,4 +1,5 @@
 import { Flex, Heading, SimpleGrid, useDisclosure } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import ConfirmationAlert from '@/components/alerts/confirmation/ConfirmationAlert';
@@ -6,7 +7,7 @@ import InputAlert from '@/components/alerts/input/InputAlert';
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useTemplates from '@/hooks/useTemplates';
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
 import { deleteTemplate } from '@/lib/services/template-service';
 import { createWidget } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';
@@ -37,7 +38,7 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
     onOpen: onDeleteOpen,
     onClose: onDeleteClose,
   } = useDisclosure();
-
+  const { push: navigateTo } = useRouter();
   const { addWidget } = useWidgets();
   const { removeTemplate } = useTemplates();
   const [loading, setLoading] = useState(false);
@@ -61,6 +62,7 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
         onCreateClose();
         if (widget) {
           addWidget(widget);
+          navigateTo(`/widgets/${widget._id}`);
         }
       })
       .finally(() => setLoading(false));

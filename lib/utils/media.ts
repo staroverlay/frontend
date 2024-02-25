@@ -1,4 +1,8 @@
+import imageCompression from 'browser-image-compression';
+
 import IMedia from '../interfaces/media';
+
+const MAX_COVER_LENGTH = 0.256; // 256KB
 
 export function getMediaURL(media: IMedia) {
   const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
@@ -6,13 +10,16 @@ export function getMediaURL(media: IMedia) {
   return url;
 }
 
-export function getVideoCover(
-  media: IMedia,
-  seekTo = 0.0,
-): Promise<string | null> {
+export function getMediaThumbnailURL(media: IMedia) {
+  const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
+  const url = `${worker}${media.resourceId}/thumbnail`;
+  return url;
+}
+
+export function getVideoCover(file: File, seekTo = 0.0): Promise<Blob> {
   return new Promise((resolve, reject) => {
-    const url = getMediaURL(media);
-    if (!url) return reject('no video url found.');
+    // create a blob url from a file
+    const url = URL.createObjectURL(file);
 
     // load the file to a video player
     const videoPlayer = document.createElement('video');
@@ -48,8 +55,7 @@ export function getVideoCover(
           ctx.canvas.toBlob(
             (blob) => {
               if (blob) {
-                const uri = URL.createObjectURL(blob);
-                resolve(uri);
+                resolve(blob);
               } else {
                 reject('error when getting video thumbnail blob');
               }
@@ -63,10 +69,7 @@ export function getVideoCover(
   });
 }
 
-export async function getAudioThumbnail(media: IMedia): Promise<string | null> {
-  const url = getMediaURL(media);
-  if (!url) return null;
-
+export async function getAudioThumbnail(file: File): Promise<Blob> {
   const WaveSurfer = (await import('wavesurfer.js')).default;
 
   const container = document.createElement('div');
@@ -90,25 +93,82 @@ export async function getAudioThumbnail(media: IMedia): Promise<string | null> {
     closeAudioContext: true,
   });
 
-  wavesurfer.load(url);
+  wavesurfer.loadBlob(file);
 
   return new Promise((resolve) => {
     wavesurfer.on('ready', () => {
       setTimeout(async () => {
-        const uri = await wavesurfer.exportImage('image/jpeg', 0.75, 'dataURL');
+        const data: Blob[] = (await wavesurfer.exportImage(
+          'image/jpeg',
+          0.75,
+          'blob',
+        )) as Blob[];
         container.remove();
-        resolve(uri as string);
+        resolve(data[0]);
       }, 800);
     });
   });
 }
 
-export async function getMediaThumbnail(media: IMedia): Promise<string | null> {
-  if (media.type == 'image') {
-    return getMediaURL(media);
-  } else if (media.type == 'video') {
-    return await getVideoCover(media);
-  } else {
-    return await getAudioThumbnail(media);
+export async function getImageThumbnail(file: File): Promise<Blob> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.src = reader.result as string;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          ctx.canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(blob);
+              }
+            },
+            'image/jpeg',
+            0.75,
+          );
+        }
+      };
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function compressImage(blob: Blob, maxLength: number): Promise<Blob> {
+  // Convert blob to file.
+  const file = new File([blob], 'thumbnail.jpg', { type: 'image/jpeg' });
+
+  // Compress image.
+  const options = {
+    maxSizeMB: maxLength,
+    maxWidthOrHeight: 500,
+    useWebWorker: true,
+  };
+
+  const compressedFile = await imageCompression(file, options);
+  return compressedFile;
+}
+
+export async function generateMediaThumbnail(file: File): Promise<Blob> {
+  const type = file.type.split('/')[0];
+  let thumbnail = null;
+
+  switch (type) {
+    case 'video':
+      thumbnail = await getVideoCover(file);
+      break;
+    case 'audio':
+      thumbnail = await getAudioThumbnail(file);
+      break;
+    case 'image':
+      thumbnail = await getImageThumbnail(file);
+      break;
+    default:
+      throw new Error('Unsupported media type');
   }
+
+  return compressImage(thumbnail, MAX_COVER_LENGTH);
 }

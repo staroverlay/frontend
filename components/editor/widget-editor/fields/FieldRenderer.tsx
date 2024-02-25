@@ -1,6 +1,6 @@
 import ITemplateField, {
   TemplateFieldType,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
 import FieldRendererArray from './FieldRendererArray';
 import FieldRendererBoolean from './FieldRendererBoolean';

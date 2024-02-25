@@ -9,7 +9,7 @@ import {
   FieldStringSettings,
   ITemplateAdvancedField,
   TemplateFieldType,
-} from '@/lib/interfaces/template-field';
+} from '@/lib/interfaces/templates/template-field';
 
 import ArrayFieldItem from './advanced/ArrayFieldItem';
 import BooleanFieldItem from './advanced/BooleanFieldItem';
@@ -33,7 +33,6 @@ export default function FieldItemAdvanced({
   setValue,
   ...props
 }: FieldItemAdvancedProps) {
-  const [cacheType, setCacheType] = useState<TemplateFieldType>('string');
   const [string, setString] = useState(props.stringOptions || {});
   const [number, setNumber] = useState(props.numberOptions || {});
   const [boolean, setBoolean] = useState(props.booleanOptions || {});
@@ -46,14 +45,8 @@ export default function FieldItemAdvanced({
   const [_enum, setEnum] = useState(props.enumOptions || {});
 
   useEffect(() => {
-    if (cacheType != type) {
-      setCacheType(type);
-    }
-  }, [cacheType, type]);
-
-  useEffect(() => {
     const getSelected = () => {
-      switch (cacheType) {
+      switch (type) {
         case 'array':
           return array;
         case 'boolean':
@@ -71,15 +64,15 @@ export default function FieldItemAdvanced({
       }
     };
 
-    const key = cacheType;
     const value = getSelected();
 
     if (value != undefined && value != null) {
       const obj: { [key: string]: unknown } = {};
-      obj[key] = value;
+      obj[type] = value;
       setValue(obj);
     }
-  }, [cacheType, string, number, boolean, map, array, _enum, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, string, number, boolean, map, array, _enum]);
 
   if (type == 'string') {
     return <StringFieldItem settings={string} onUpdate={setString} />;

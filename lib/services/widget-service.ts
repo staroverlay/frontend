@@ -1,10 +1,11 @@
 import client from '../graphql/client';
 import CreateWidgetMutation from '../graphql/mutations/createWidgetMutation';
 import DeleteWidgetMutation from '../graphql/mutations/deleteWidgetMutation';
+import ResetWidgetTokenMutation from '../graphql/mutations/resetWidgetTokenMutation';
 import UpdateWidgetMutation from '../graphql/mutations/updateWidgetMutation';
 import GetWidgetsQuery from '../graphql/queries/getWidgetsQuery';
 import IDictionary from '../interfaces/shared/IDictionary';
-import ITemplate from '../interfaces/template';
+import ITemplate from '../interfaces/templates/template';
 import IWidget from '../interfaces/widget';
 import WidgetCreatePayload from './dtos/widget-create-payload';
 import WidgetUpdatePayload from './dtos/widget-update-payload';
@@ -66,4 +67,10 @@ export async function updateWidget(
   const updatedWidget = fixWidget(newWidget as IWidget);
   await emitSettingsUpdate(updatedWidget);
   return updatedWidget;
+}
+
+export async function resetWidgetToken(widget: IWidget): Promise<IWidget> {
+  const payload = { id: widget._id };
+  const newWidget = await client.fetch(ResetWidgetTokenMutation, payload);
+  return fixWidget(newWidget as IWidget);
 }

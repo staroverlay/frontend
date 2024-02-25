@@ -1,9 +1,9 @@
-import { TabPanel, Flex } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { Flex, Heading, TabPanel } from '@chakra-ui/react';
 
 import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplate from '@/lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
 import IWidget from '@/lib/interfaces/widget';
+import { getFieldPath } from '@/lib/utils/fields';
 
 import FieldRenderer from './fields/FieldRenderer';
 
@@ -33,16 +33,28 @@ export default function WidgetSettingsTab({
           maxWidth={'650px'}
         >
           {fields.map((field, index) => (
-            <FieldRenderer
+            <Flex
               key={index}
-              field={field}
-              value={settings[field.id]}
-              setValue={(value) => {
-                const newSettings = { ...settings };
-                newSettings[field.id] = value;
-                setSettings(newSettings);
-              }}
-            />
+              flexDir={'column'}
+              gap={'5px'}
+              bg={'whiteAlpha.200'}
+              borderRadius={'12px'}
+              padding={'20px'}
+            >
+              <Heading>{field.label}</Heading>
+              {field.children.map((child, childIndex) => (
+                <FieldRenderer
+                  key={`${index}-${childIndex}`}
+                  field={child}
+                  value={settings[getFieldPath(field, child)]}
+                  setValue={(value) => {
+                    const newSettings = { ...settings };
+                    newSettings[getFieldPath(field, child)] = value;
+                    setSettings(newSettings);
+                  }}
+                />
+              ))}
+            </Flex>
           ))}
         </Flex>
 

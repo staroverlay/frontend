@@ -1,25 +1,25 @@
 import {
   Box,
   Checkbox,
-  TabPanel,
   Flex,
   FormControl,
   FormLabel,
   Input,
-  Textarea,
   Select,
+  TabPanel,
+  Textarea,
 } from '@chakra-ui/react';
-import { useState } from 'react';
 
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useAuth from '@/hooks/useAuth';
 import ServiceType, { ServiceTypes } from '@/lib/interfaces/service-type';
-import TemplateScope, { TemplateScopes } from '@/lib/interfaces/template-scope';
-import TemplateVisibility, {
-  TemplateVisibilities,
-} from '@/lib/interfaces/template-visibility';
+import TemplateScope, {
+  TemplateScopes,
+} from '@/lib/interfaces/templates/template-scope';
+import TemplateVisibility from '@/lib/interfaces/templates/template-visibility';
 
 interface OverviewTabProps {
+  id: string;
   name: string;
   setName: (name: string) => void;
   description: string;
@@ -29,7 +29,7 @@ interface OverviewTabProps {
   service: ServiceType;
   setService: (service: ServiceType) => void;
   visibility: TemplateVisibility;
-  setVisibility: (visibility: TemplateVisibility) => void;
+  price: number;
 }
 
 interface ScopeCheckboxProps {
@@ -115,23 +115,6 @@ export default function OverviewTab(props: OverviewTabProps) {
           </FormControl>
 
           <FormControl>
-            <FormLabel>Visibility</FormLabel>
-            <Select
-              width={'container.sm'}
-              value={props.visibility}
-              onChange={(e) => {
-                props.setVisibility(e.target.value as TemplateVisibility);
-              }}
-            >
-              {TemplateVisibilities.map((visibility) => (
-                <option key={visibility.id} value={visibility.id}>
-                  {visibility.name}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl>
             <FormLabel>Service (Streaming Platform)</FormLabel>
             <Select
               width={'container.sm'}
@@ -164,12 +147,17 @@ export default function OverviewTab(props: OverviewTabProps) {
             onCreateWidget={() => {}}
             onDelete={() => {}}
             template={{
-              _id: user?._id || '',
-              author: user?.username || '',
+              _id: props.id,
+              author: {
+                username: user?.username || 'You',
+                avatar: user?.avatar || '',
+                id: user?._id || '',
+              },
               html: '',
               name: props.name,
               visibility: props.visibility,
               description: props.description,
+              price: props.price,
               service: props.service,
               version: 0,
             }}

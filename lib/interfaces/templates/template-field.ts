@@ -126,7 +126,6 @@ export default interface ITemplateField extends ITemplateAdvancedField {
   id: string;
   label?: string;
   description?: string;
-  category?: string;
   type: TemplateFieldType;
   required?: boolean;
 }

@@ -1,5 +1,5 @@
 import IIntegration, { IntegrationType } from '../interfaces/integration';
-import ISessionAndUser from '../interfaces/session-and-user';
+import ISessionAndUser from '../interfaces/sessions/session-and-user';
 import IUser from '../interfaces/user';
 import { createTwitchIntegration } from '../services/integration-service';
 import { createSessionWithTwitch } from '../services/session-service';

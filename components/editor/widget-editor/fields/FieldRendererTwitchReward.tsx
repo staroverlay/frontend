@@ -1,26 +1,19 @@
 import {
-  Badge,
-  Box,
   Button,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
-  Text,
   useDisclosure,
 } from '@chakra-ui/react';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
-import MediaSelectModal from '@/components/modals/media-select-modal/MediaSelectModal';
 import TwitchRewardSelectModal from '@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal';
-import useMedia from '@/hooks/useMedia';
 import useQuery from '@/hooks/useQuery';
 import GetTwitchCustomRewardsQuery from '@/lib/graphql/queries/getTwitchCustomRewardsQuery';
-import ITemplateField from '@/lib/interfaces/template-field';
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
-import { getMediaThumbnail } from '@/lib/utils/media';
 import { toastError } from '@/lib/utils/toasts';
 
 export interface FieldRendererTwitchRewardProps {

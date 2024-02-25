@@ -7,23 +7,71 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-editor/FieldsTab';
+import OverviewTab from '@/components/editor/template-editor/OverviewTab';
+import StoreTab from '@/components/editor/template-editor/StoreTab';
+import useTemplates from '@/hooks/useTemplates';
 import { updateTemplate } from '@/lib/services/template-service';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
+import Error404 from '@/pages/404';
 
-import OverviewTab from '../../../components/editor/template-editor/OverviewTab';
-import useTemplates from '../../../hooks/useTemplates';
-import Error404 from '../../404';
+const TabIndexes: { [key in string]: number } = {
+  overview: 0,
+  store: 1,
+  code: 2,
+  fields: 3,
+};
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const { query, push: navigateTo } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
+  // Control query.
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      const newIndex = TabIndexes[tab] || 0;
+      setTabIndex(newIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(TabIndexes)) {
+      if (value === tabIndex) {
+        const newQuery = createQueryString(
+          'tab',
+          key === 'overview' ? null : key,
+        );
+        navigateTo({ search: newQuery });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabIndex]);
 
   // Find template by ID in query.
   const templateId = query.id as string;
@@ -32,6 +80,11 @@ export default function CreatorTemplatePage() {
   // Input fields.
   const [name, setName] = useState(template?.name);
   const [description, setDescription] = useState(template?.description);
+  const [storeDescription, setStoreDescription] = useState(
+    template?.storeDescription,
+  );
+  const [price, setPrice] = useState(template?.price || 0);
+  const [thumbnail, setThumbnail] = useState(template?.thumbnail);
   const [scopes, setScopes] = useState(template?.scopes);
   const [service, setService] = useState(template?.service || 'twitch');
   const [html, setHTML] = useState(template?.html);
@@ -44,11 +97,14 @@ export default function CreatorTemplatePage() {
   const updatePayload = {
     name,
     description,
+    storeDescription,
     scopes,
     service,
     html,
     fields,
     visibility,
+    price,
+    thumbnail,
   };
   const hasChanges = hasObjectChanged(template, updatePayload);
 
@@ -59,15 +115,7 @@ export default function CreatorTemplatePage() {
 
   // Handlers
   const handleSaveTemplate = async () => {
-    const newTemplate = await updateTemplate(template, {
-      name,
-      description,
-      scopes,
-      service,
-      html,
-      fields,
-      visibility,
-    });
+    const newTemplate = await updateTemplate(template, updatePayload);
     updateUserTemplate(newTemplate);
   };
 
@@ -95,15 +143,21 @@ export default function CreatorTemplatePage() {
         </Button>
       </Flex>
 
-      <Tabs variant={'enclosed'}>
+      <Tabs
+        variant={'enclosed'}
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}
+      >
         <TabList>
           <Tab>Overview</Tab>
+          <Tab>Store Page</Tab>
           <Tab>Code editor</Tab>
           <Tab>Fields</Tab>
         </TabList>
 
         <TabPanels>
           <OverviewTab
+            // Editable
             name={name || ''}
             setName={setName}
             description={description || ''}
@@ -112,12 +166,29 @@ export default function CreatorTemplatePage() {
             setScopes={setScopes}
             service={service || 'twitch'}
             setService={setService}
+            // Information
+            id={templateId}
+            visibility={visibility}
+            price={price}
+          />
+
+          <StoreTab
+            // Information
+            name={name || ''}
+            description={description || ''}
+            // Editable
+            storeDescription={storeDescription || ''}
+            setStoreDescription={setStoreDescription}
             visibility={visibility}
             setVisibility={setVisibility}
+            price={price}
+            setPrice={setPrice}
+            thumbnail={thumbnail}
+            setThumbnail={setThumbnail}
           />
 
           <CodeEditorTab code={html || ''} setCode={setHTML} />
-          <FieldsTab fields={fields || []} setFields={setFields} />
+          <FieldsTab categories={fields || []} setCategories={setFields} />
         </TabPanels>
       </Tabs>
     </Flex>

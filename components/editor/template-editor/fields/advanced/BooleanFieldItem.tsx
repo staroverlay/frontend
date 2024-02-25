@@ -2,16 +2,12 @@ import {
   Checkbox,
   FormControl,
   FormLabel,
-  Input,
   Select,
   SimpleGrid,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import {
-  FieldBooleanSettings,
-  FieldStringSettings,
-} from '@/lib/interfaces/template-field';
+import { FieldBooleanSettings } from '@/lib/interfaces/templates/template-field';
 
 interface BooleanFieldItemProps {
   settings?: FieldBooleanSettings;

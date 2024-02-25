@@ -1,7 +1,7 @@
 {
     "typescript.tsdk": "node_modules\\typescript\\lib",
     "editor.codeActionsOnSave": {
-        "source.organizeImports": true,
+        "source.organizeImports": "explicit"
     },
-    "discord.enabled": false
+    "discord.enabled": true
 }

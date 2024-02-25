@@ -31,6 +31,7 @@ export async function uploadPart(
 export async function completeMedia(payload: {
   id: string;
   parts: IMediaPart[];
+  thumbnailParts: IMediaPart[];
 }) {
   const media = await client.fetch(CompleteMediaMutation, { payload });
   return media as IMedia;

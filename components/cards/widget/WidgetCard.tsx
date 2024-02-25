@@ -14,9 +14,10 @@ import {
   Stack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import CopyToClipboard from 'react-copy-to-clipboard';
 import { FaEllipsisV } from 'react-icons/fa';
 
-import ITemplate from '@/lib/interfaces/template';
+import ITemplate from '@/lib/interfaces/templates/template';
 import IWidget from '@/lib/interfaces/widget';
 
 import styles from './WidgetCard.module.css';
@@ -33,6 +34,7 @@ export default function WidgetCard({
   onDelete,
 }: WidgetCardProps) {
   const template = JSON.parse(widget.templateRaw) as ITemplate;
+  const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
 
   const OptionsButton = () => (
     <Menu>
@@ -42,7 +44,10 @@ export default function WidgetCard({
         <Link href={`/widgets/${widget._id}`}>
           <MenuItem color={'green.400'}>Edit</MenuItem>
         </Link>
-        <MenuItem color={'cyan.400'}>Copy link</MenuItem>
+
+        <CopyToClipboard text={link}>
+          <MenuItem color={'cyan.400'}>Copy</MenuItem>
+        </CopyToClipboard>
 
         <MenuDivider />
 
@@ -56,7 +61,7 @@ export default function WidgetCard({
   );
 
   return (
-    <Card className={styles.card}>
+    <Card>
       <CardBody>
         <Stack spacing="2">
           <Flex className={styles.flex} justifyContent={'space-between'}>
@@ -71,8 +76,8 @@ export default function WidgetCard({
           </Flex>
 
           <Box className={styles.author}>
-            From{' '}
-            <Link href={`/store/templates/${widget.templateId}`}>
+            Created from{' '}
+            <Link href={`/marketplace/${widget.templateId}`}>
               {template.name}
             </Link>
           </Box>

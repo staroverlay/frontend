@@ -1,22 +1,11 @@
-import { Box, Flex, Icon, Text, useColorMode } from '@chakra-ui/react';
+import { Box, Flex, Text, useColorMode } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { PropsWithChildren } from 'react';
 import { IconType } from 'react-icons';
-import { BiBot } from 'react-icons/bi';
-import {
-  BsHouse,
-  BsStar,
-  BsShop,
-  BsPalette,
-  BsAppIndicator,
-  BsClockHistory,
-  BsWindowSidebar,
-  BsImage,
-  BsShield,
-  BsPaintBucket,
-} from 'react-icons/bs';
+import { BsHouse, BsImage, BsPalette, BsWindowSidebar } from 'react-icons/bs';
 
-import useAuth from '../../../hooks/useAuth';
+import useAuth from '@/hooks/useAuth';
 
 interface SidebarItemProps {
   icon: IconType;
@@ -45,12 +34,20 @@ function SidebarHeader({ children }: PropsWithChildren) {
 
 function SidebarItem({ icon: IconElement, to, label }: SidebarItemProps) {
   const { colorMode } = useColorMode();
+  const { pathname } = useRouter();
+  const isActive = pathname === to;
+
+  const hoverColor = colorMode === 'dark' ? 'white' : 'black';
+  const inactiveColor = colorMode === 'dark' ? 'gray.400' : 'gray.500';
+  const activeColor = colorMode === 'dark' ? 'purple.300' : 'purple.500';
+  const color = isActive ? activeColor : inactiveColor;
+
   return (
     <Text
       as={Link}
       href={to}
-      color={colorMode === 'dark' ? 'gray.400' : 'gray.700'}
-      _hover={{ color: colorMode === 'dark' ? 'white' : 'black' }}
+      color={color}
+      _hover={{ color: isActive ? color : hoverColor }}
       display={'block'}
       fontSize={'14px'}
       padding={'5px 15px'}
