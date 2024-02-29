@@ -19,18 +19,16 @@ import {
 } from 'react-icons/bs';
 import { FaKickstarter } from 'react-icons/fa';
 
-import useAuth from '@/hooks/useAuth';
 import useIntegrations from '@/hooks/useIntegrations';
+import useProfile from '@/hooks/useProfile';
 import { oauthIntegration } from '@/lib/utils/oauth';
 import { capitalize } from '@/lib/utils/strings';
 import { toastError, toastSuccess } from '@/lib/utils/toasts';
-import {
-  disconnectIntegration,
-  syncProfileWithIntegration,
-} from '@/services/integrations';
+import { disconnectIntegration } from '@/services/integrations';
 import IIntegration, {
   IntegrationType,
 } from '@/services/integrations/integration';
+import { syncProfileWithIntegration } from '@/services/profile';
 
 const URLS: Record<IntegrationType, string> = {
   kick: 'https://kick.com/',
@@ -116,7 +114,7 @@ const ConnectionItem = ({
   onDisconnect: (integration: IIntegration) => Promise<void>;
 }) => {
   const { colorMode } = useColorMode();
-  const { setUser } = useAuth();
+  const { setProfile } = useProfile();
 
   const bg = colorMode == 'dark' ? 'blackAlpha.700' : 'blackAlpha.200';
   const accent = colorMode == 'dark' ? 'purple.200' : 'purple.500';
@@ -135,9 +133,9 @@ const ConnectionItem = ({
 
   const handleSync = () => {
     setSyncing(true);
-    syncProfileWithIntegration(integration)
-      .then((user) => {
-        setUser(user);
+    syncProfileWithIntegration(integration._id)
+      .then((profile) => {
+        setProfile(profile);
         toastSuccess('Successfully synced profile');
       })
       .catch((e) => toastError(e.message))

@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { IntegrationsProvider } from '@/contexts/integrations';
 import { MembershipProvider } from '@/contexts/membership';
 import { PlanProvider } from '@/contexts/plan/plan-provider';
+import { ProfileProvider } from '@/contexts/profile';
 import { WidgetsProvider } from '@/contexts/widgets';
 import Theme from '@/theme/theme';
 
@@ -76,15 +77,17 @@ export default function App({ Component, pageProps }: InitialAppProps) {
           <MediaProvider>
             <MembershipProvider>
               <PlanProvider>
-                <TemplatesProvider>
-                  <WidgetsProvider>
-                    {mounted && (
-                      <Layout>
-                        <Component {...pageProps} />
-                      </Layout>
-                    )}
-                  </WidgetsProvider>
-                </TemplatesProvider>
+                <ProfileProvider>
+                  <TemplatesProvider>
+                    <WidgetsProvider>
+                      {mounted && (
+                        <Layout>
+                          <Component {...pageProps} />
+                        </Layout>
+                      )}
+                    </WidgetsProvider>
+                  </TemplatesProvider>
+                </ProfileProvider>
               </PlanProvider>
             </MembershipProvider>
           </MediaProvider>

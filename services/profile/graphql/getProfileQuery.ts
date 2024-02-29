@@ -7,7 +7,6 @@ const GetProfileQuery = query`
             avatar
             displayName
             roles
-            userId
         }
     }
 `;

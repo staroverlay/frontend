@@ -10,5 +10,4 @@ export default interface Profile {
   avatar?: string;
   displayName: string;
   roles: ProfileRole[];
-  userId: string;
 }

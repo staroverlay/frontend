@@ -7,7 +7,6 @@ const UpdateProfileMutation = query`
             avatar
             displayName
             roles
-            userId
         }
     }
 `;

@@ -10,6 +10,9 @@ import User from '@/services/users/user';
 
 import { AuthContext } from './auth-context';
 
+/**
+ * Todo: Refactor this.
+ */
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
   const [sessionId, setSessionId] = useState<string | null>(null);

@@ -7,7 +7,6 @@ const SyncProfileWithIntegrationMutation = mutation`
             avatar
             displayName
             roles
-            userId
         }
     }
 `;

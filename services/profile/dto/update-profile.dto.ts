@@ -1,3 +1,3 @@
 export default interface UpdateProfileDTO {
-  displayName: string;
+  displayName?: string;
 }

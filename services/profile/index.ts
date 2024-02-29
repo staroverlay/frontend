@@ -1,8 +1,10 @@
 import client from '@/lib/clients/graphql';
 
+import UpdateProfileDTO from './dto/update-profile.dto';
 import GetMyProfileQuery from './graphql/getMyProfile';
 import GetProfileQuery from './graphql/getProfileQuery';
 import SyncProfileWithIntegrationMutation from './graphql/syncProfileWithIntegrationMutation';
+import UpdateProfileMutation from './graphql/updateProfileMutation';
 import Profile from './profile';
 
 export async function getProfile(id: string): Promise<Profile | null> {
@@ -23,5 +25,10 @@ export async function syncProfileWithIntegration(
     SyncProfileWithIntegrationMutation,
     payload,
   );
+  return profile as Profile;
+}
+
+export async function updateProfile(payload: UpdateProfileDTO) {
+  const profile = await client.fetch(UpdateProfileMutation, { payload });
   return profile as Profile;
 }

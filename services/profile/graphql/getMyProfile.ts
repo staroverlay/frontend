@@ -1,13 +1,12 @@
 import { query } from 'astraql';
 
 const GetMyProfileQuery = query`
-    getMyProfile($id: String!) {
-        getMyProfile(id: $id) {
+    getMyProfile {
+        getMyProfile {
             _id
             avatar
             displayName
             roles
-            userId
         }
     }
 `;

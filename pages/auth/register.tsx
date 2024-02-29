@@ -51,8 +51,7 @@ export default function Register() {
 
     setLoading(true);
 
-    const payload = { email, password, username: email.split('@')[0] };
-    const user = await createUser(payload)
+    const user = await createUser({ email, password })
       .catch((e) => {
         setError(e.message);
         return null;
