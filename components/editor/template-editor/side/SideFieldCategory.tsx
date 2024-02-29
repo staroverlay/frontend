@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import ITemplateField from '@/lib/interfaces/templates/template-field';
-import ITemplateFieldGroup from '@/lib/interfaces/templates/template-field-group';
 import { randomString } from '@/lib/utils/random';
+import ITemplateFieldGroup from '@/services/templates/template-field-group';
 
 import SideField from './SideField';
 

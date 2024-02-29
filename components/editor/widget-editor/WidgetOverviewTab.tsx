@@ -17,14 +17,14 @@ import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/templates/template';
 import TemplateScope, {
   TemplateScopes,
 } from '@/lib/interfaces/templates/template-scope';
-import IWidget from '@/lib/interfaces/widget';
-import { emitDebugEvent } from '@/lib/services/events-service';
-import { resetWidgetToken } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { emitDebugEvent } from '@/services/events';
+import ITemplate from '@/services/templates/template';
+import { resetWidgetToken } from '@/services/widgets';
+import IWidget from '@/services/widgets/widget';
 
 interface ScopeCheckboxProps {
   id: string;

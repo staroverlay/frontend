@@ -1,9 +1,5 @@
-import IMediaPart from '../interfaces/media-part';
-import {
-  completeMedia,
-  createMedia,
-  uploadPart,
-} from '../services/media-service';
+import { completeMedia, createMedia, uploadPart } from '../../services/medias';
+import IMediaPart from '../../services/medias/media-part';
 import { readFileAsArrayBuffer } from './files';
 import { generateMediaThumbnail } from './media';
 

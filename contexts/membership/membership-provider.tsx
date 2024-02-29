@@ -1,9 +1,10 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import IMembership from '@/lib/interfaces/membership';
-import { getMyMembership } from '@/lib/services/membership-service';
-import { MembershipContext } from './membership-context';
 import Loading from '@/components/layout/loading';
+import { getMyMembership } from '@/services/memberships';
+import IMembership from '@/services/memberships/membership';
+
+import { MembershipContext } from './membership-context';
 
 export function MembershipProvider({ children }: PropsWithChildren) {
   const [membership, setMembership] = useState<IMembership | null>(null);

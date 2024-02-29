@@ -12,23 +12,25 @@ import { useState } from 'react';
 import { IconType } from 'react-icons';
 import {
   BsCheck,
+  BsPlusLg,
   BsTrash,
   BsTwitch,
-  BsPlusLg,
   BsYoutube,
 } from 'react-icons/bs';
 import { FaKickstarter } from 'react-icons/fa';
 
 import useAuth from '@/hooks/useAuth';
 import useIntegrations from '@/hooks/useIntegrations';
-import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
-import {
-  disconnectIntegration,
-  syncProfileWithIntegration,
-} from '@/lib/services/integration-service';
 import { oauthIntegration } from '@/lib/utils/oauth';
 import { capitalize } from '@/lib/utils/strings';
 import { toastError, toastSuccess } from '@/lib/utils/toasts';
+import {
+  disconnectIntegration,
+  syncProfileWithIntegration,
+} from '@/services/integrations';
+import IIntegration, {
+  IntegrationType,
+} from '@/services/integrations/integration';
 
 const URLS: Record<IntegrationType, string> = {
   kick: 'https://kick.com/',

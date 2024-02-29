@@ -16,10 +16,10 @@ import FieldsTab from '@/components/editor/template-editor/FieldsTab';
 import OverviewTab from '@/components/editor/template-editor/OverviewTab';
 import StoreTab from '@/components/editor/template-editor/StoreTab';
 import useTemplates from '@/hooks/useTemplates';
-import { updateTemplate } from '@/lib/services/template-service';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
+import { updateTemplate } from '@/services/templates';
 
 const TabIndexes: { [key in string]: number } = {
   overview: 0,

@@ -9,9 +9,9 @@ import {
 import { useState } from 'react';
 
 import useAuth from '@/hooks/useAuth';
-import { updateUser } from '@/lib/services/user-service';
 import { hideEmail } from '@/lib/utils/strings';
 import { toastError, toastSuccess } from '@/lib/utils/toasts';
+import { updateUser } from '@/services/users';
 
 export default function OverviewTab() {
   const { user, setUser } = useAuth();

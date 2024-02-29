@@ -1,10 +1,8 @@
 import { Button, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 
-import MediaCard from '@/components/cards/media/MediaCard';
 import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
 import useMedia from '@/hooks/useMedia';
-import IMedia, { FileType } from '@/lib/interfaces/media';
-import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 
 interface MediasGridProps {
   rewards: ITwitchCustomReward[];

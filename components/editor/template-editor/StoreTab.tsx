@@ -20,7 +20,7 @@ import MediaInput from '@/components/input/MediaInput';
 import MarkdownRenderer from '@/components/utils/MarkdownRenderer';
 import TemplateVisibility, {
   TemplateVisibilities,
-} from '@/lib/interfaces/templates/template-visibility';
+} from '@/services/templates/template-visibility';
 
 interface StoreTabProps {
   storeDescription: string;

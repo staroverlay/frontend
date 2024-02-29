@@ -1,6 +1,6 @@
 import imageCompression from 'browser-image-compression';
 
-import IMedia from '../interfaces/media';
+import IMedia from '../../services/medias/media';
 
 const MAX_COVER_LENGTH = 0.256; // 256KB
 

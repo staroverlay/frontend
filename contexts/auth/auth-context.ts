@@ -1,6 +1,6 @@
 import React from 'react';
 
-import User from '@/lib/interfaces/user';
+import User from '@/services/users/user';
 
 import { AuthHook } from './auth-hook';
 

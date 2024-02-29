@@ -14,8 +14,8 @@ import InputAlert from '@/components/alerts/input/InputAlert';
 import StatsCard from '@/components/cards/stats/StatsCard';
 import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
 import useTemplates from '@/hooks/useTemplates';
-import { createTemplate } from '@/lib/services/template-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { createTemplate } from '@/services/templates';
 
 function CreateTemplateButton() {
   const { isOpen, onClose, onOpen } = useDisclosure();

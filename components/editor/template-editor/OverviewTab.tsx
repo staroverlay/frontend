@@ -12,11 +12,12 @@ import {
 
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useAuth from '@/hooks/useAuth';
-import ServiceType, { ServiceTypes } from '@/lib/interfaces/service-type';
+import ServiceType, { ServiceTypes } from '@/services/shared/service-type';
+import TemplateVisibility from '@/services/templates/template-visibility';
+
 import TemplateScope, {
   TemplateScopes,
 } from '@/lib/interfaces/templates/template-scope';
-import TemplateVisibility from '@/lib/interfaces/templates/template-visibility';
 
 interface OverviewTabProps {
   id: string;

@@ -1,5 +1,5 @@
-import ISessionAndUser from '@/lib/interfaces/sessions/session-and-user';
-import User from '@/lib/interfaces/user';
+import ISessionAndUser from '@/services/sessions/session-and-user';
+import User from '@/services/users/user';
 
 export interface AuthHook {
   sessionId: string | null;

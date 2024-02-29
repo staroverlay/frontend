@@ -1,5 +1,5 @@
 import MediasGrid from '@/components/content/medias-grid/MediasGrid';
-import IMedia, { FileType } from '@/lib/interfaces/media';
+import IMedia, { FileType } from '@/services/medias/media';
 
 import BaseModal from '../base-modal/BaseModal';
 

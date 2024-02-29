@@ -16,7 +16,7 @@ import Layout from '../components/layout';
 import { AuthProvider } from '../contexts/auth';
 import { MediaProvider } from '../contexts/media/media-provider';
 import { TemplatesProvider } from '../contexts/templates';
-import User from '../lib/interfaces/user';
+import User from '../services/users/user';
 
 import 'react-toastify/dist/ReactToastify.css';
 

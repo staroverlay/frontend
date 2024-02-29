@@ -9,8 +9,8 @@ import {
 } from '@chakra-ui/react';
 
 import useMedia from '@/hooks/useMedia';
-import { FileType } from '@/lib/interfaces/media';
 import { getMediaThumbnailURL } from '@/lib/utils/media';
+import { FileType } from '@/services/medias/media';
 
 import MediaSelectModal from '../modals/media-select-modal/MediaSelectModal';
 

@@ -2,7 +2,7 @@ import { Button, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
 
 import MediaCard from '@/components/cards/media/MediaCard';
 import useMedia from '@/hooks/useMedia';
-import IMedia, { FileType } from '@/lib/interfaces/media';
+import IMedia, { FileType } from '@/services/medias/media';
 
 import styles from './MediasGrid.module.css';
 

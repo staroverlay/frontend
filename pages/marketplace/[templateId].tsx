@@ -13,10 +13,10 @@ import { useEffect, useState } from 'react';
 import InputAlert from '@/components/alerts/input/InputAlert';
 import MarkdownRenderer from '@/components/utils/MarkdownRenderer';
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/templates/template';
-import { getTemplateByID } from '@/lib/services/template-service';
-import { createWidget } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { getTemplateByID } from '@/services/templates';
+import ITemplate from '@/services/templates/template';
+import { createWidget } from '@/services/widgets';
 
 import Error404 from '../404';
 

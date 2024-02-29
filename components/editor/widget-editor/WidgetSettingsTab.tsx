@@ -1,9 +1,9 @@
 import { Flex, Heading, TabPanel } from '@chakra-ui/react';
 
-import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplate from '@/lib/interfaces/templates/template';
-import IWidget from '@/lib/interfaces/widget';
+import IDictionary from '@/lib/IDictionary';
 import { getFieldPath } from '@/lib/utils/fields';
+import ITemplate from '@/services/templates/template';
+import IWidget from '@/services/widgets/widget';
 
 import FieldRenderer from './fields/FieldRenderer';
 

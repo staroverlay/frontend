@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import ITemplateField from '@/lib/interfaces/templates/template-field';
-import ITemplateFieldGroup from '@/lib/interfaces/templates/template-field-group';
+import ITemplateFieldGroup from '@/services/templates/template-field-group';
 
 import FieldRenderer from '../widget-editor/fields/FieldRenderer';
 import FieldItem from './fields/FieldItem';

@@ -13,11 +13,11 @@ import { useState } from 'react';
 import { FiDownload, FiEdit, FiTrash } from 'react-icons/fi';
 
 import useMedia from '@/hooks/useMedia';
-import IMedia from '@/lib/interfaces/media';
-import { deleteMedia } from '@/lib/services/media-service';
 import { downloadURL } from '@/lib/utils/files';
 import { getMediaThumbnailURL, getMediaURL } from '@/lib/utils/media';
 import { toastPending } from '@/lib/utils/toasts';
+import { deleteMedia } from '@/services/medias';
+import IMedia from '@/services/medias/media';
 
 import ConfirmationAlert from '../../alerts/confirmation/ConfirmationAlert';
 import MediaPreviewModal from '../../modals/media-preview-modal/MediaPreviewModal';

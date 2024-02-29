@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from 'react';
 
 import useAuth from '@/hooks/useAuth';
-import { verifyEmail } from '@/lib/services/user-service';
+import { verifyEmail } from '@/services/users';
 
 export default function Verify() {
   const { colorMode } = useColorMode();

@@ -24,8 +24,8 @@ import {
   FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '@/lib/interfaces/templates/template';
-import TemplateVisibility from '@/lib/interfaces/templates/template-visibility';
+import ITemplate from '@/services/templates/template';
+import TemplateVisibility from '@/services/templates/template-visibility';
 
 import styles from './TemplateCard.module.css';
 
@@ -154,7 +154,7 @@ export default function TemplateCard(props: TemplateCardProps) {
             <Flex className={styles.author}>
               {isExplorer && (
                 <Link
-                  href={`/creators/${template.author.id}`}
+                  href={`/users/${template.author.id}`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   By {template.author.username}

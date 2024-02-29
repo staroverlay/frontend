@@ -11,10 +11,10 @@ import { useEffect } from 'react';
 import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
 import TwitchRewardSelectModal from '@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal';
 import useQuery from '@/hooks/useQuery';
-import GetTwitchCustomRewardsQuery from '@/lib/graphql/queries/getTwitchCustomRewardsQuery';
-import ITemplateField from '@/lib/interfaces/templates/template-field';
-import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
 import { toastError } from '@/lib/utils/toasts';
+import ITemplateField from '@/services/templates/template-field';
+import GetTwitchCustomRewardsQuery from '@/services/twitch/graphql/getTwitchCustomRewardsQuery';
+import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 
 export interface FieldRendererTwitchRewardProps {
   field: ITemplateField;

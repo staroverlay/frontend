@@ -4,9 +4,9 @@ import { useState } from 'react';
 import ConfirmationAlert from '@/components/alerts/confirmation/ConfirmationAlert';
 import WidgetCard from '@/components/cards/widget/WidgetCard';
 import useWidgets from '@/hooks/useWidgets';
-import IWidget from '@/lib/interfaces/widget';
-import { deleteWidget } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { deleteWidget } from '@/services/widgets';
+import IWidget from '@/services/widgets/widget';
 
 interface WidgetsGridProps {
   search?: string;
