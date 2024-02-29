@@ -1,7 +1,13 @@
 {
-  "name": "frontend",
+  "name": "staroverlay-frontend",
   "version": "0.1.1",
+  "description": "",
+  "author": {
+    "name": "Sammwy",
+    "url": "https://github.com/sammwyy"
+  },
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +17,6 @@
     "format": "prettier --write \"**/**/*.ts\" \"**/**/*.tsx\""
   },
   "dependencies": {
-    "@apollo/client": "^3.7.10",
     "@chakra-ui/next-js": "^2.0.1",
     "@chakra-ui/react": "^2.4.6",
     "@emotion/react": "11",

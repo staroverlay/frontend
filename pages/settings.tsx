@@ -14,6 +14,9 @@ import OverviewTab from '@/components/editor/settings/OverviewTab';
 import ProfileTab from '@/components/editor/settings/ProfileTab';
 import SessionsTab from '@/components/editor/settings/SessionsTab';
 
+/**
+ * Todo: Merge overview and profile tabs into one
+ */
 export default function Settings() {
   const { colorMode } = useColorMode();
   const bg = colorMode === 'light' ? 'blackAlpha.300' : 'blackAlpha.700';
