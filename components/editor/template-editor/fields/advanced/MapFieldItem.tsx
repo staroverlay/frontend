@@ -11,7 +11,7 @@ import {
   FieldMapSettings,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/lib/interfaces/templates/template-field';
+} from '@/services/templates/template-field';
 
 interface MapFieldItemProps {
   settings: FieldMapSettings;

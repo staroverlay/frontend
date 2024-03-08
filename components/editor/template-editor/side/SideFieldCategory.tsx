@@ -2,8 +2,8 @@ import { Button, Flex } from '@chakra-ui/react';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-import ITemplateField from '@/lib/interfaces/templates/template-field';
 import { randomString } from '@/lib/utils/random';
+import ITemplateField from '@/services/templates/template-field';
 import ITemplateFieldGroup from '@/services/templates/template-field-group';
 
 import SideField from './SideField';

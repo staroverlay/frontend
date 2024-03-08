@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import { FieldNumberSettings } from '@/lib/interfaces/templates/template-field';
+import { FieldNumberSettings } from '@/services/templates/template-field';
 
 interface NumberFieldItemProps {
   settings?: FieldNumberSettings;

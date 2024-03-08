@@ -2,7 +2,7 @@ import { Button, Flex, Heading, TabPanel } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
-import ITemplateField from '@/lib/interfaces/templates/template-field';
+import ITemplateField from '@/services/templates/template-field';
 import ITemplateFieldGroup from '@/services/templates/template-field-group';
 
 import FieldRenderer from '../widget-editor/fields/FieldRenderer';

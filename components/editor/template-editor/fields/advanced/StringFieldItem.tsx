@@ -1,7 +1,7 @@
 import { FormControl, FormLabel, Input, SimpleGrid } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import { FieldStringSettings } from '@/lib/interfaces/templates/template-field';
+import { FieldStringSettings } from '@/services/templates/template-field';
 
 interface StringFieldItemProps {
   settings?: FieldStringSettings;

@@ -13,11 +13,10 @@ import {
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import useAuth from '@/hooks/useAuth';
 import ServiceType, { ServiceTypes } from '@/services/shared/service-type';
+import SettingsScope, {
+  SettingsScopes,
+} from '@/services/shared/settings-scope';
 import TemplateVisibility from '@/services/templates/template-visibility';
-
-import TemplateScope, {
-  TemplateScopes,
-} from '@/lib/interfaces/templates/template-scope';
 
 interface OverviewTabProps {
   id: string;
@@ -25,8 +24,8 @@ interface OverviewTabProps {
   setName: (name: string) => void;
   description: string;
   setDescription: (description: string) => void;
-  scopes: TemplateScope[];
-  setScopes: (scopes: TemplateScope[]) => void;
+  scopes: SettingsScope[];
+  setScopes: (scopes: SettingsScope[]) => void;
   service: ServiceType;
   setService: (service: ServiceType) => void;
   visibility: TemplateVisibility;
@@ -40,7 +39,7 @@ interface ScopeCheckboxProps {
   onChange: (value: boolean) => void;
 }
 
-const ScopeCheckbox = ({ id, name, checked, onChange }: ScopeCheckboxProps) => {
+const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
       width={'100%'}
@@ -56,12 +55,12 @@ const ScopeCheckbox = ({ id, name, checked, onChange }: ScopeCheckboxProps) => {
 
 interface ScopeListProps {
   service: ServiceType;
-  scopes: TemplateScope[];
-  setScopes: (scopes: TemplateScope[]) => void;
+  scopes: SettingsScope[];
+  setScopes: (scopes: SettingsScope[]) => void;
 }
 
 const ScopeList = ({ service, scopes, setScopes }: ScopeListProps) => {
-  const scopeList = TemplateScopes.filter(
+  const scopeList = SettingsScopes.filter(
     (s) => s.id.startsWith('platform:') || s.id.startsWith(service),
   );
 
@@ -72,10 +71,10 @@ const ScopeList = ({ service, scopes, setScopes }: ScopeListProps) => {
           key={scope.id}
           id={scope.id}
           name={scope.name}
-          checked={scopes.includes(scope.id as TemplateScope)}
+          checked={scopes.includes(scope.id as SettingsScope)}
           onChange={(value) => {
             if (value) {
-              setScopes([...scopes, scope.id as TemplateScope]);
+              setScopes([...scopes, scope.id as SettingsScope]);
             } else {
               setScopes(scopes.filter((s) => s !== scope.id));
             }
@@ -149,18 +148,14 @@ export default function OverviewTab(props: OverviewTabProps) {
             onDelete={() => {}}
             template={{
               _id: props.id,
-              author: {
-                username: user?.username || 'You',
-                avatar: user?.avatar || '',
-                id: user?._id || '',
-              },
-              html: '',
+              creatorId: user?.profileId || '',
+              lastVersionId: '',
               name: props.name,
               visibility: props.visibility,
               description: props.description,
               price: props.price,
               service: props.service,
-              version: 0,
+              storeDescription: '',
             }}
           />
         </Box>

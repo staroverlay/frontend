@@ -6,14 +6,14 @@ import {
   FormLabel,
   Input,
   Select,
-  SimpleGrid,
+  SimpleGrid
 } from '@chakra-ui/react';
 
 import ITemplateField, {
   ITemplateAdvancedField,
   TemplateFieldType,
-  TemplateFieldTypes,
-} from '@/lib/interfaces/templates/template-field';
+  TemplateFieldTypes
+} from '@/services/templates/template-field';
 
 import FieldItemAdvanced from './FieldItemAdvanced';
 

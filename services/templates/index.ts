@@ -2,7 +2,8 @@ import client from '@/lib/clients/graphql';
 import { cleanEquals } from '@/lib/utils/object';
 import ITemplateField from '@/services/templates/template-field';
 
-import TemplateUpdateDTO from './dto/template-update.dto';
+import CreateTemplateDTO from './dto/create-template.dto';
+import UpdateTemplateDTO from './dto/update-template.dto';
 import CreateTemplateMutation from './graphql/createTemplateMutation';
 import DeleteTemplateMutation from './graphql/deleteTemplateMutation';
 import GetMyTemplatesQuery from './graphql/getMyTemplatesQuery';
@@ -12,8 +13,9 @@ import UpdateTemplateMutation from './graphql/updateTemplateMutation';
 import ITemplate from './template';
 import ITemplateFieldGroup from './template-field-group';
 
-export async function createTemplate(name: string) {
-  const payload = { name };
+export async function createTemplate(
+  payload: CreateTemplateDTO,
+): Promise<ITemplate> {
   const template = await client.fetch(CreateTemplateMutation, { payload });
   return template as ITemplate;
 }
@@ -54,7 +56,7 @@ export async function getSharedTemplates() {
 
 export async function updateTemplate(
   template: ITemplate,
-  update: TemplateUpdateDTO,
+  update: UpdateTemplateDTO,
 ) {
   const refPayload = cleanEquals(template, update);
   const payload = structuredClone(refPayload);

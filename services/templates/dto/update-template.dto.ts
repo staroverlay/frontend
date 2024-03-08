@@ -2,7 +2,7 @@ import ServiceType from '@/services/shared/service-type';
 
 import TemplateVisibility from '../template-visibility';
 
-export default interface TemplateUpdateDTO {
+export default interface UpdateTemplateDTO {
   description?: string;
   name?: string;
   price?: number;

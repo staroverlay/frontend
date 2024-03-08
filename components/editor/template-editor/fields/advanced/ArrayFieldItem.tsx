@@ -11,7 +11,7 @@ import {
   FieldArraySettings,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/lib/interfaces/templates/template-field';
+} from '@/services/templates/template-field';
 
 interface ArrayFieldItemProps {
   settings: FieldArraySettings;
