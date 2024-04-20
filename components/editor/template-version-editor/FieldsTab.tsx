@@ -1,5 +1,5 @@
 import { Button, Flex, Heading, TabPanel } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import ITemplateField from '@/services/templates/template-field';
@@ -10,18 +10,12 @@ import FieldItem from './fields/FieldItem';
 import SideFieldCategory from './side/SideFieldCategory';
 
 interface FieldsTabProps {
-  categories: ITemplateFieldGroup[] | null | undefined;
-  setCategories: (fields: ITemplateFieldGroup[]) => void;
+  fields: ITemplateFieldGroup[];
+  setFields: (fields: ITemplateFieldGroup[]) => void;
 }
 
-export default function FieldsTab({
-  categories,
-  setCategories,
-}: FieldsTabProps) {
+export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
   // State.
-  const [savedCategories, setSavedCategories] = useState<ITemplateFieldGroup[]>(
-    categories || [],
-  );
   const [selectedCategory, setSelectedCategory] =
     useState<ITemplateFieldGroup | null>(null);
   const [selectedField, setSelectedField] = useState<ITemplateField | null>(
@@ -29,26 +23,19 @@ export default function FieldsTab({
   );
   const [generatedCategories, setGeneratedCategories] = useState(1);
 
-  // Update on state change.
-  useEffect(() => {
-    setCategories(savedCategories);
-  }, [savedCategories, setCategories]);
-
   // Handlers.
   const handleRemove = (group: ITemplateFieldGroup) => {
-    const categories = [...savedCategories].filter((c) => c != group);
-    setSavedCategories(categories);
+    const categories = [...fields].filter((c) => c != group);
+    setFields(categories);
   };
 
   const handleUpdate = (category: ITemplateFieldGroup) => {
-    const categories = [...savedCategories].map((c) =>
-      c === category ? category : c,
-    );
-    setSavedCategories(categories);
+    const categories = [...fields].map((c) => (c === category ? category : c));
+    setFields(categories);
   };
 
   const handleUpdateField = (field: ITemplateField) => {
-    const category = savedCategories.find(
+    const category = fields.find(
       (c) =>
         c.children.find((f) => f._internalId === field._internalId) != null,
     );
@@ -70,7 +57,7 @@ export default function FieldsTab({
       label: 'New Category ' + generatedCategories,
       children: [],
     };
-    setSavedCategories([...savedCategories, category]);
+    setFields([...fields, category]);
     setGeneratedCategories(generatedCategories + 1);
   };
 
@@ -89,7 +76,7 @@ export default function FieldsTab({
           </Heading>
 
           <Flex direction={'column'} gap={'25px'} width={'100%'}>
-            {savedCategories.map((group, i) => (
+            {fields.map((group, i) => (
               <SideFieldCategory
                 key={i}
                 category={group}
@@ -161,8 +148,8 @@ export default function FieldsTab({
             padding={'10px 20px'}
             width={'100%'}
           >
-            {savedCategories.map((category, index) => (
-              <Flex key={index} flexDir={'column'} gap={'10px'}>
+            {fields.map((category, i) => (
+              <Flex key={i} flexDir={'column'} gap={'10px'}>
                 <Heading size={'lg'}>{category.label}</Heading>
 
                 {category.children.map((field) => (

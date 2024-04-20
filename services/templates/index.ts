@@ -1,18 +1,24 @@
 import client from '@/lib/clients/graphql';
 import { cleanEquals } from '@/lib/utils/object';
-import ITemplateField from '@/services/templates/template-field';
+import { randomString } from '@/lib/utils/random';
 
 import CreateTemplateDTO from './dto/create-template.dto';
+import PostTemplateVersionDTO from './dto/post-template-version.dto';
 import UpdateTemplateDTO from './dto/update-template.dto';
 import CreateTemplateMutation from './graphql/createTemplateMutation';
 import DeleteTemplateMutation from './graphql/deleteTemplateMutation';
+import GetLastTemplateVersionQuery from './graphql/getLastTemplateVersionQuery';
 import GetMyTemplatesQuery from './graphql/getMyTemplatesQuery';
 import GetTemplateByIDQuery from './graphql/getTemplateByIdQuery';
 import GetTemplatesByCreatorQuery from './graphql/getTemplatesByCreatorQuery';
+import PostTemplateVersionMutation from './graphql/postTemplateVersionMutation';
 import UpdateTemplateMutation from './graphql/updateTemplateMutation';
 import ITemplate from './template';
+import ITemplateField from './template-field';
 import ITemplateFieldGroup from './template-field-group';
+import TemplateVersion from './template-version';
 
+// Template.
 export async function createTemplate(
   payload: CreateTemplateDTO,
 ): Promise<ITemplate> {
@@ -60,13 +66,6 @@ export async function updateTemplate(
 ) {
   const refPayload = cleanEquals(template, update);
   const payload = structuredClone(refPayload);
-  const fields: ITemplateFieldGroup[] = payload.fields || [];
-
-  fields.forEach((field: ITemplateFieldGroup) => {
-    field.children?.forEach((child: Partial<ITemplateField>) => {
-      delete child._internalId;
-    });
-  });
 
   const newTemplate = await client.fetch(UpdateTemplateMutation, {
     id: template._id,
@@ -74,4 +73,53 @@ export async function updateTemplate(
   });
 
   return newTemplate as ITemplate;
+}
+
+// Versions.
+export async function getLastTemplateVersion(template: ITemplate) {
+  const id = template._id;
+  const version = (await client.fetch(GetLastTemplateVersionQuery, {
+    id,
+  })) as TemplateVersion;
+
+  if (!version) {
+    return null;
+  }
+
+  version.fields.forEach((field: ITemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<ITemplateField>) => {
+      child._internalId = randomString(6);
+    });
+  });
+
+  return version;
+}
+
+export async function postTemplateUpdate(
+  template: ITemplate,
+  update: PostTemplateVersionDTO,
+) {
+  const id = template._id;
+  const payload = structuredClone(update);
+  const fields: ITemplateFieldGroup[] = payload.fields || [];
+
+  fields.forEach((field: ITemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<ITemplateField>) => {
+      child._internalId = undefined;
+      delete child._internalId;
+    });
+  });
+
+  const newTemplate = await client.fetch(PostTemplateVersionMutation, {
+    id,
+    payload,
+  });
+
+  newTemplate.fields.forEach((field: ITemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<ITemplateField>) => {
+      child._internalId = randomString(6);
+    });
+  });
+
+  return newTemplate as TemplateVersion;
 }

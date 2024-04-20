@@ -1,109 +1,71 @@
 import {
+  Box,
   Button,
+  chakra,
   Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
   Heading,
+  Input,
+  Select,
   Tab,
   TabList,
+  TabPanel,
   TabPanels,
   Tabs,
+  Textarea,
+  useColorMode,
 } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
-import FieldsTab from '@/components/editor/template-editor/FieldsTab';
-import OverviewTab from '@/components/editor/template-editor/OverviewTab';
-import StoreTab from '@/components/editor/template-editor/StoreTab';
+import TemplateCard from '@/components/cards/template/TemplateCard';
+import MediaInput from '@/components/input/MediaInput';
+import MarkdownRenderer from '@/components/utils/MarkdownRenderer';
 import useTemplates from '@/hooks/useTemplates';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
+import ServiceType, { ServiceTypes } from '@/services/shared/service-type';
 import { updateTemplate } from '@/services/templates';
-
-const TabIndexes: { [key in string]: number } = {
-  overview: 0,
-  store: 1,
-  code: 2,
-  fields: 3,
-};
+import TemplateVisibility, {
+  TemplateVisibilities,
+} from '@/services/templates/template-visibility';
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const searchParams = useSearchParams();
-  const { query, push: navigateTo } = useRouter();
+  const { query } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0);
 
-  // Control query.
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      const newIndex = TabIndexes[tab] || 0;
-      setTabIndex(newIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    for (const [key, value] of Object.entries(TabIndexes)) {
-      if (value === tabIndex) {
-        const newQuery = createQueryString(
-          'tab',
-          key === 'overview' ? null : key,
-        );
-        navigateTo({ search: newQuery });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
+  // Theming.
+  const { colorMode } = useColorMode();
+  const isDark = colorMode === 'dark';
+  const bg = isDark ? 'gray.800' : 'gray.100';
 
   // Find template by ID in query.
   const templateId = query.id as string;
   const template = userTemplates.find((t) => t._id === templateId);
 
-  // Input fields.
-  const [name, setName] = useState(template?.name);
-  const [description, setDescription] = useState(template?.description);
-  const [storeDescription, setStoreDescription] = useState(
-    template?.storeDescription,
-  );
-  const [price, setPrice] = useState(template?.price || 0);
+  // Payload.
   const [thumbnail, setThumbnail] = useState(template?.thumbnail);
-  const [scopes, setScopes] = useState(template?.scopes);
+  const [name, setName] = useState(template?.name || '');
+  const [description, setDescription] = useState(template?.description || '');
   const [service, setService] = useState(template?.service || 'twitch');
-  const [html, setHTML] = useState(template?.html);
-  const [fields, setFields] = useState(template?.fields);
+  const [price, setPrice] = useState(template?.price || 0);
   const [visibility, setVisibility] = useState(
-    template?.visibility || 'public',
+    template?.visibility || 'private',
+  );
+  const [storeDescription, setStoreDescription] = useState(
+    template?.storeDescription || '',
   );
 
-  // Payload.
   const updatePayload = {
     name,
     description,
-    storeDescription,
-    scopes,
     service,
-    html,
-    fields,
     visibility,
-    price,
+    storeDescription,
     thumbnail,
   };
   const hasChanges = hasObjectChanged(template, updatePayload);
@@ -143,52 +105,157 @@ export default function CreatorTemplatePage() {
         </Button>
       </Flex>
 
-      <Tabs
-        variant={'enclosed'}
-        onChange={(index) => setTabIndex(index)}
-        index={tabIndex}
-      >
+      {/* Editor */}
+      <Tabs>
         <TabList>
-          <Tab>Overview</Tab>
+          <Tab>Summary</Tab>
           <Tab>Store Page</Tab>
-          <Tab>Code editor</Tab>
-          <Tab>Fields</Tab>
         </TabList>
 
-        <TabPanels>
-          <OverviewTab
-            // Editable
-            name={name || ''}
-            setName={setName}
-            description={description || ''}
-            setDescription={setDescription}
-            scopes={scopes || []}
-            setScopes={setScopes}
-            service={service || 'twitch'}
-            setService={setService}
-            // Information
-            id={templateId}
-            visibility={visibility}
-            price={price}
-          />
+        <TabPanels mt={'20px'}>
+          {/* Tab: Info */}
+          <TabPanel>
+            <Flex justifyContent={'space-between'} gap={'30px'}>
+              {/* Info Tab: Form */}
+              <Flex flexDirection={'column'} gap={'20px'} w={'40%'}>
+                <FormControl>
+                  <FormLabel>Thumbnail</FormLabel>
+                  <MediaInput
+                    value={thumbnail}
+                    setValue={setThumbnail}
+                    filter={'image'}
+                  />
+                </FormControl>
 
-          <StoreTab
-            // Information
-            name={name || ''}
-            description={description || ''}
-            // Editable
-            storeDescription={storeDescription || ''}
-            setStoreDescription={setStoreDescription}
-            visibility={visibility}
-            setVisibility={setVisibility}
-            price={price}
-            setPrice={setPrice}
-            thumbnail={thumbnail}
-            setThumbnail={setThumbnail}
-          />
+                <FormControl>
+                  <FormLabel>Name</FormLabel>
+                  <Input
+                    isRequired={true}
+                    placeholder={'My cool template'}
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </FormControl>
 
-          <CodeEditorTab code={html || ''} setCode={setHTML} />
-          <FieldsTab categories={fields || []} setCategories={setFields} />
+                <FormControl>
+                  <FormLabel>Description</FormLabel>
+                  <Textarea
+                    isRequired={true}
+                    placeholder={'My cool template'}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </FormControl>
+
+                <Flex justifyContent={'space-between'} gap={'20px'}>
+                  <FormControl>
+                    <FormLabel>Price</FormLabel>
+                    <Input
+                      isRequired={true}
+                      type={'number'}
+                      placeholder={'1.23'}
+                      value={`${price}`}
+                      onChange={(e) => setPrice(parseFloat(e.target.value))}
+                    />
+                    <FormHelperText>
+                      Use 0 to create a free-to-use template.
+                    </FormHelperText>
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>Visibility</FormLabel>
+                    <Select
+                      value={visibility}
+                      onChange={(e) => {
+                        setVisibility(e.target.value as TemplateVisibility);
+                      }}
+                    >
+                      {TemplateVisibilities.map((visibility) => (
+                        <option key={visibility.id} value={visibility.id}>
+                          {visibility.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl>
+                    <FormLabel>Platform</FormLabel>
+                    <Select
+                      value={service}
+                      onChange={(e) => {
+                        setService(e.target.value as ServiceType);
+                      }}
+                    >
+                      {ServiceTypes.map((service) => (
+                        <option key={service.id} value={service.id}>
+                          {service.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Flex>
+              </Flex>
+
+              {/* Info Tab: Preview */}
+              <Flex
+                flexDirection={'column'}
+                gap={'20px'}
+                w={'60%'}
+                alignItems={'center'}
+              >
+                <Box maxWidth={'350px'} width={'100%'} mt={'30px'}>
+                  <TemplateCard
+                    context="editor"
+                    onCreateWidget={() => {}}
+                    onDelete={() => {}}
+                    template={{
+                      ...template,
+                      name,
+                      description,
+                      price,
+                      service,
+                      thumbnail,
+                      visibility,
+                    }}
+                  />
+                </Box>
+              </Flex>
+            </Flex>
+          </TabPanel>
+
+          {/* Tab: Store Page */}
+          <TabPanel>
+            <Flex justifyContent={'space-between'} gap={'30px'}>
+              {/* Store Page: Form */}
+              <Flex flexDirection={'column'} gap={'20px'} w={'40%'}>
+                <Heading as={chakra.h2} size={'lg'}>
+                  Store Page
+                </Heading>
+
+                <FormControl>
+                  <Textarea
+                    isRequired={true}
+                    placeholder={'My cool template'}
+                    value={storeDescription}
+                    noOfLines={20}
+                    onChange={(e) => setStoreDescription(e.target.value)}
+                    minHeight={'50vh'}
+                  />
+                </FormControl>
+              </Flex>
+
+              {/* Info Tab: Preview */}
+              <Flex flexDirection={'column'} w={'60%'} gap={'20px'}>
+                <Heading as={chakra.h2} size={'lg'}>
+                  Preview
+                </Heading>
+
+                <MarkdownRenderer bg={bg} borderRadius={'10px'} p={'10px 20px'}>
+                  {storeDescription}
+                </MarkdownRenderer>
+              </Flex>
+            </Flex>
+          </TabPanel>
         </TabPanels>
       </Tabs>
     </Flex>

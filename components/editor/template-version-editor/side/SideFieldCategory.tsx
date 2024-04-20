@@ -98,7 +98,7 @@ export default function SideFieldCategory({
         </SideField>
       )}
 
-      {category.children.map((field) => (
+      {category.children.map((field, i) => (
         <SideField
           key={field._internalId}
           onSelect={() => onSelect(field)}

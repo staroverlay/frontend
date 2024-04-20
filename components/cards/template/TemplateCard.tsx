@@ -128,7 +128,7 @@ export default function TemplateCard(props: TemplateCardProps) {
       >
         <Flex className={styles.thumbnail} justifyContent={'center'}>
           <Image
-            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnailResourceId}`}
+            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnail}`}
             alt={'Thummbnail'}
             width={'100%'}
             height={'100%'}
@@ -154,14 +154,14 @@ export default function TemplateCard(props: TemplateCardProps) {
             <Flex className={styles.author}>
               {isExplorer && (
                 <Link
-                  href={`/users/${template.author.id}`}
+                  href={`/users/${template.creatorId}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  By {template.author.username}
+                  By {template.creatorId}
                 </Link>
               )}
 
-              {isEditor && <Text>By you ({template.author.username})</Text>}
+              {isEditor && <Text>By you ({template.creatorId})</Text>}
 
               <Flex className={styles.flex} gap={'10px'}>
                 <Flex className={styles.flex}>

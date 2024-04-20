@@ -44,7 +44,7 @@ export default function WidgetSettingsTab({
               <Heading>{field.label}</Heading>
               {field.children.map((child, childIndex) => (
                 <FieldRenderer
-                  key={`${index}-${childIndex}`}
+                  key={childIndex}
                   field={child}
                   value={settings[getFieldPath(field, child)]}
                   setValue={(value) => {
