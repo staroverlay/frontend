@@ -1,18 +1,18 @@
 import imageCompression from 'browser-image-compression';
 
-import IMedia from '../interfaces/media';
+import IMedia from '../../services/medias/media';
 
 const MAX_COVER_LENGTH = 0.256; // 256KB
 
 export function getMediaURL(media: IMedia) {
   const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
-  const url = `${worker}${media.resourceId}`;
+  const url = `${worker}${media._id}`;
   return url;
 }
 
 export function getMediaThumbnailURL(media: IMedia) {
   const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
-  const url = `${worker}${media.resourceId}/thumbnail`;
+  const url = `${worker}${media._id}/thumbnail`;
   return url;
 }
 

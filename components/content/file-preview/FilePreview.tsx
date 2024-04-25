@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 
-import IMedia from '@/lib/interfaces/media';
 import { getMediaURL } from '@/lib/utils/media';
+import IMedia from '@/services/medias/media';
 
 import styles from './FilePreview.module.css';
 

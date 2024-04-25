@@ -9,9 +9,9 @@ import {
 import { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
-import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplateField from '@/lib/interfaces/templates/template-field';
+import IDictionary from '@/lib/IDictionary';
 
+import ITemplateField from '@/lib/interfaces/templates/template-field';
 import FieldRenderer from './FieldRenderer';
 
 export interface FieldRendererMapProps {

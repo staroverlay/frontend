@@ -2,11 +2,8 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 
 import Loading from '@/components/layout/loading';
 import useAuth from '@/hooks/useAuth';
-import ITemplate from '@/lib/interfaces/templates/template';
-import {
-  getMyTemplates,
-  getSharedTemplates,
-} from '@/lib/services/template-service';
+import { getMyTemplates, getSharedTemplates } from '@/services/templates';
+import ITemplate from '@/services/templates/template';
 
 import { TemplatesContext } from './templates-context';
 

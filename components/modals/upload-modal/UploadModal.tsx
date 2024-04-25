@@ -9,7 +9,7 @@ import { toastPending } from '@/lib/utils/toasts';
 import FilePreview from '../../content/file-preview/FilePreview';
 import BaseModal from '../base-modal/BaseModal';
 
-const fileTypes = ['JPG', 'PNG', 'GIF', 'WEBP', 'MP3', 'MP4', 'WEBM'];
+const fileTypes = ['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'MP3', 'MP4', 'WEBM'];
 
 interface UploadModalProps {
   isOpen: boolean;

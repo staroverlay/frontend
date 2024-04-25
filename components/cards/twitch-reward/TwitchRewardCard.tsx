@@ -1,6 +1,6 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
-import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 
 import styles from './TwitchRewardCard.module.css';
 

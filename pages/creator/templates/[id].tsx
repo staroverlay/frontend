@@ -7,103 +7,46 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 
-import CodeEditorTab from '@/components/editor/template-editor/CodeEditorTab';
-import FieldsTab from '@/components/editor/template-editor/FieldsTab';
-import OverviewTab from '@/components/editor/template-editor/OverviewTab';
 import StoreTab from '@/components/editor/template-editor/StoreTab';
+import SummaryTab from '@/components/editor/template-editor/SummaryTab';
 import useTemplates from '@/hooks/useTemplates';
-import { updateTemplate } from '@/lib/services/template-service';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
-
-const TabIndexes: { [key in string]: number } = {
-  overview: 0,
-  store: 1,
-  code: 2,
-  fields: 3,
-};
+import { updateTemplate } from '@/services/templates';
 
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const searchParams = useSearchParams();
-  const { query, push: navigateTo } = useRouter();
+  const { query } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0);
-
-  // Control query.
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      const newIndex = TabIndexes[tab] || 0;
-      setTabIndex(newIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    for (const [key, value] of Object.entries(TabIndexes)) {
-      if (value === tabIndex) {
-        const newQuery = createQueryString(
-          'tab',
-          key === 'overview' ? null : key,
-        );
-        navigateTo({ search: newQuery });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
 
   // Find template by ID in query.
   const templateId = query.id as string;
   const template = userTemplates.find((t) => t._id === templateId);
 
-  // Input fields.
-  const [name, setName] = useState(template?.name);
-  const [description, setDescription] = useState(template?.description);
-  const [storeDescription, setStoreDescription] = useState(
-    template?.storeDescription,
-  );
-  const [price, setPrice] = useState(template?.price || 0);
+  // Payload.
   const [thumbnail, setThumbnail] = useState(template?.thumbnail);
-  const [scopes, setScopes] = useState(template?.scopes);
+  const [name, setName] = useState(template?.name || '');
+  const [description, setDescription] = useState(template?.description || '');
   const [service, setService] = useState(template?.service || 'twitch');
-  const [html, setHTML] = useState(template?.html);
-  const [fields, setFields] = useState(template?.fields);
+  const [price, setPrice] = useState(template?.price || 0);
   const [visibility, setVisibility] = useState(
-    template?.visibility || 'public',
+    template?.visibility || 'private',
+  );
+  const [storeDescription, setStoreDescription] = useState(
+    template?.storeDescription || '',
   );
 
-  // Payload.
   const updatePayload = {
     name,
     description,
-    storeDescription,
-    scopes,
     service,
-    html,
-    fields,
     visibility,
-    price,
+    storeDescription,
     thumbnail,
   };
   const hasChanges = hasObjectChanged(template, updatePayload);
@@ -133,62 +76,52 @@ export default function CreatorTemplatePage() {
     <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Editing template</Heading>
-        <Button
-          colorScheme={'green'}
-          onClick={handleSave}
-          isLoading={isSaving}
-          disabled={isSaving || !hasChanges}
-        >
-          Save
-        </Button>
+
+        <Flex gap={'20px'} alignItems={'center'}>
+          <Link href={`/creator/templates/${templateId}/update`}>
+            <Button variant={'link'}>Edit source code</Button>
+          </Link>
+
+          <Button
+            colorScheme={'green'}
+            onClick={handleSave}
+            isLoading={isSaving}
+            disabled={isSaving || !hasChanges}
+          >
+            Save
+          </Button>
+        </Flex>
       </Flex>
 
-      <Tabs
-        variant={'enclosed'}
-        onChange={(index) => setTabIndex(index)}
-        index={tabIndex}
-      >
+      {/* Editor */}
+      <Tabs>
         <TabList>
-          <Tab>Overview</Tab>
+          <Tab>Summary</Tab>
           <Tab>Store Page</Tab>
-          <Tab>Code editor</Tab>
-          <Tab>Fields</Tab>
         </TabList>
 
-        <TabPanels>
-          <OverviewTab
-            // Editable
-            name={name || ''}
-            setName={setName}
-            description={description || ''}
-            setDescription={setDescription}
-            scopes={scopes || []}
-            setScopes={setScopes}
-            service={service || 'twitch'}
-            setService={setService}
-            // Information
-            id={templateId}
-            visibility={visibility}
+        <TabPanels mt={'20px'}>
+          {/* Tab: Info */}
+          <SummaryTab
+            description={description}
+            name={name}
             price={price}
-          />
-
-          <StoreTab
-            // Information
-            name={name || ''}
-            description={description || ''}
-            // Editable
-            storeDescription={storeDescription || ''}
-            setStoreDescription={setStoreDescription}
-            visibility={visibility}
-            setVisibility={setVisibility}
-            price={price}
-            setPrice={setPrice}
+            service={service}
             thumbnail={thumbnail}
+            visibility={visibility}
+            setName={setName}
+            setDescription={setDescription}
+            setPrice={setPrice}
+            setService={setService}
             setThumbnail={setThumbnail}
+            setVisibility={setVisibility}
           />
 
-          <CodeEditorTab code={html || ''} setCode={setHTML} />
-          <FieldsTab categories={fields || []} setCategories={setFields} />
+          {/* Tab: Store Page */}
+          <StoreTab
+            storeDescription={storeDescription}
+            setStoreDescription={setStoreDescription}
+          />
         </TabPanels>
       </Tabs>
     </Flex>

@@ -1,12 +1,15 @@
 'use client';
 
 import {
+  Flex,
+  FlexProps,
   Heading,
   Image,
   Link,
   Table,
   TableContainer,
   Tbody,
+  Text,
   Th,
   Thead,
   Tr,
@@ -32,6 +35,9 @@ const renderer: CustomReactRenderer = {
         {text}
       </Link>
     );
+  },
+  paragraph(text: string) {
+    return <Text>{text}</Text>;
   },
   table: (children) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -68,11 +74,18 @@ const renderer: CustomReactRenderer = {
   },
 };
 
-export interface MarkdownRendererProps {
+export interface MarkdownRendererProps extends FlexProps {
   children: string;
 }
 
-export default function MarkdownRenderer({ children }: MarkdownRendererProps) {
+export default function MarkdownRenderer({
+  children,
+  ...props
+}: MarkdownRendererProps) {
   const sanitized = DOMPurify.sanitize(children);
-  return <Markdown value={sanitized} renderer={renderer} />;
+  return (
+    <Flex flexDir={'column'} gap={'10px'} {...props}>
+      <Markdown value={sanitized} renderer={renderer} />
+    </Flex>
+  );
 }

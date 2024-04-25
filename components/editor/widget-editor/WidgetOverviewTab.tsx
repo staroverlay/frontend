@@ -17,14 +17,14 @@ import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useWidgets from '@/hooks/useWidgets';
-import ITemplate from '@/lib/interfaces/templates/template';
-import TemplateScope, {
-  TemplateScopes,
-} from '@/lib/interfaces/templates/template-scope';
-import IWidget from '@/lib/interfaces/widget';
-import { emitDebugEvent } from '@/lib/services/events-service';
-import { resetWidgetToken } from '@/lib/services/widget-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { emitDebugEvent } from '@/services/events';
+import SettingsScope, {
+  SettingsScopes,
+} from '@/services/shared/settings-scope';
+import ITemplate from '@/services/templates/template';
+import { resetWidgetToken } from '@/services/widgets';
+import IWidget from '@/services/widgets/widget';
 
 interface ScopeCheckboxProps {
   id: string;
@@ -47,16 +47,16 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   );
 };
 
-function getScopes(templateScopes: TemplateScope[]) {
-  return TemplateScopes.filter((s) =>
-    templateScopes.includes(s.id as TemplateScope),
+function getScopes(templateScopes: SettingsScope[]) {
+  return SettingsScopes.filter((s) =>
+    templateScopes.includes(s.id as SettingsScope),
   );
 }
 
 interface ScopeListProps {
-  templateScopes: TemplateScope[];
-  scopes: TemplateScope[];
-  setScopes: (scopes: TemplateScope[]) => void;
+  templateScopes: SettingsScope[];
+  scopes: SettingsScope[];
+  setScopes: (scopes: SettingsScope[]) => void;
 }
 
 const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
@@ -69,10 +69,10 @@ const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
           key={scope.id}
           id={scope.id}
           name={scope.name}
-          checked={scopes.includes(scope.id as TemplateScope)}
+          checked={scopes.includes(scope.id as SettingsScope)}
           onChange={(value) => {
             if (value) {
-              setScopes([...scopes, scope.id as TemplateScope]);
+              setScopes([...scopes, scope.id as SettingsScope]);
             } else {
               setScopes(scopes.filter((s) => s !== scope.id));
             }
@@ -89,8 +89,8 @@ interface WidgetOverviewTabProps {
   name: string;
   autoUpdate: boolean;
   setName: (name: string) => void;
-  scopes: TemplateScope[];
-  setScopes: (scopes: TemplateScope[]) => void;
+  scopes: SettingsScope[];
+  setScopes: (scopes: SettingsScope[]) => void;
   setAutoUpdate: (autoUpdate: boolean) => void;
 }
 

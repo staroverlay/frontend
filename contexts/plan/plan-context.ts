@@ -1,4 +1,4 @@
-import IPlan from '@/lib/interfaces/plan';
+import IPlan from '@/services/plans/plan';
 import React from 'react';
 import { PlanHook } from './plan-hook';
 

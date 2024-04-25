@@ -12,13 +12,13 @@ import { BsTrash } from 'react-icons/bs';
 import { UAParser } from 'ua-parser-js';
 
 import useAuth from '@/hooks/useAuth';
-import ISession from '@/lib/interfaces/sessions/session';
+import { toastError } from '@/lib/utils/toasts';
 import {
   getSessions,
   invalidateAllSessions,
   invalidateSessionByID,
-} from '@/lib/services/session-service';
-import { toastError } from '@/lib/utils/toasts';
+} from '@/services/sessions';
+import ISession from '@/services/sessions/session';
 
 const SessionItem = ({
   session,

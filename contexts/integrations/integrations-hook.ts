@@ -1,4 +1,6 @@
-import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
+import IIntegration, {
+  IntegrationType,
+} from '@/services/integrations/integration';
 
 export interface IntegrationsHook {
   integrations: IIntegration[];

@@ -1,15 +1,18 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import Loading from '@/components/layout/loading';
-import { removeBearerToken, setBearerToken } from '@/lib/graphql/client';
-import ISessionAndUser from '@/lib/interfaces/sessions/session-and-user';
-import User from '@/lib/interfaces/user';
-import { invalidateSession } from '@/lib/services/session-service';
-import { getCurrentUser } from '@/lib/services/user-service';
+import { removeBearerToken, setBearerToken } from '@/lib/clients/graphql';
 import { toastError } from '@/lib/utils/toasts';
+import { invalidateSession } from '@/services/sessions';
+import ISessionAndUser from '@/services/sessions/session-and-user';
+import { getCurrentUser } from '@/services/users';
+import User from '@/services/users/user';
 
 import { AuthContext } from './auth-context';
 
+/**
+ * Todo: Refactor this.
+ */
 export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>();
   const [sessionId, setSessionId] = useState<string | null>(null);

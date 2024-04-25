@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { BiBell, BiCog, BiExit, BiMoon, BiSun } from 'react-icons/bi';
 
 import useAuth from '@/hooks/useAuth';
+import useProfile from '@/hooks/useProfile';
 
 import NavbarButton from './navbar-button/navbar-button';
 import NavbarDropdown from './navbar-dropdown/navbar-dropdown';
@@ -17,6 +18,7 @@ import NavbarDropdown from './navbar-dropdown/navbar-dropdown';
 export function Navbar() {
   const { colorMode, toggleColorMode } = useColorMode();
   const { user, logout } = useAuth();
+  const { profile } = useProfile();
 
   if (!user) return <></>;
 
@@ -61,7 +63,11 @@ export function Navbar() {
               },
             ]}
           >
-            <Avatar name={user.username} size={'sm'} src={user.avatar} />
+            <Avatar
+              name={profile?.displayName}
+              size={'sm'}
+              src={profile?.avatar}
+            />
           </NavbarDropdown>
         </Flex>
       </Flex>

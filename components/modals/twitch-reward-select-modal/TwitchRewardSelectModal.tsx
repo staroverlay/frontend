@@ -1,5 +1,5 @@
 import TwitchRewardsGrid from '@/components/content/twitch-rewards-grid/TwitchRewardsGrid';
-import { ITwitchCustomReward } from '@/lib/interfaces/twitch/custom-reward';
+import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 
 import BaseModal from '../base-modal/BaseModal';
 

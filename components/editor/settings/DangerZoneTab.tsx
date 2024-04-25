@@ -11,8 +11,8 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 
-import { updatePassword } from '@/lib/services/user-service';
 import { toastError, toastSuccess } from '@/lib/utils/toasts';
+import { updatePassword } from '@/services/users';
 
 const ChangePassword = () => {
   const { colorMode } = useColorMode();

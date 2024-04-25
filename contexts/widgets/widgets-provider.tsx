@@ -1,13 +1,15 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-import IMembership from '@/lib/interfaces/membership';
-import { WidgetsContext } from './widgets-context';
 import Loading from '@/components/layout/loading';
-import { getMyWidgets } from '@/lib/services/widget-service';
-import IWidget from '@/lib/interfaces/widget';
+import useAuth from '@/hooks/useAuth';
+import { getMyWidgets } from '@/services/widgets';
+import IWidget from '@/services/widgets/widget';
+
+import { WidgetsContext } from './widgets-context';
 
 export function WidgetsProvider({ children }: PropsWithChildren) {
   const [widgets, setWidgets] = useState<IWidget[]>([]);
+  const { user } = useAuth();
   const [fetched, setFetched] = useState(false);
 
   const addWidget = (widget: IWidget) => {
@@ -26,20 +28,24 @@ export function WidgetsProvider({ children }: PropsWithChildren) {
   };
 
   useEffect(() => {
-    setFetched(true);
-  }, [widgets]);
+    const fetchWidgets = async () => {
+      const widgets = await getMyWidgets();
+      setWidgets(widgets);
+      setFetched(true);
+    };
 
-  useEffect(() => {
-    if (!fetched) {
-      getMyWidgets().then(setWidgets);
+    if (user) {
+      fetchWidgets();
+    } else if (!fetched) {
+      setFetched(true);
     }
-  }, [fetched]);
+  }, [user, fetched]);
 
   return (
     <WidgetsContext.Provider
       value={{ addWidget, removeWidget, updateWidget, widgets }}
     >
-      <Loading loaded={fetched} message={'Loading membership'}>
+      <Loading loaded={fetched} message={'Loading widgets'}>
         {children}
       </Loading>
     </WidgetsContext.Provider>

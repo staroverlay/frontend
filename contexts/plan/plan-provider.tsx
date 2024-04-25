@@ -1,8 +1,10 @@
+import { PropsWithChildren, useEffect, useState } from 'react';
+
 import Loading from '@/components/layout/loading';
 import useMembership from '@/hooks/useMembership';
-import IPlan from '@/lib/interfaces/plan';
-import { getPlans } from '@/lib/services/plan-service';
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { getPlans } from '@/services/plans';
+import IPlan from '@/services/plans/plan';
+
 import { PlanContext } from './plan-context';
 
 export function PlanProvider({ children }: PropsWithChildren) {

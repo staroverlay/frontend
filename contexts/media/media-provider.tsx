@@ -4,8 +4,8 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import Loading from '@/components/layout/loading';
 import UploadModal from '@/components/modals/upload-modal/UploadModal';
 import useAuth from '@/hooks/useAuth';
-import IMedia from '@/lib/interfaces/media';
-import { getAllMedia } from '@/lib/services/media-service';
+import { getAllMedia } from '@/services/medias';
+import IMedia from '@/services/medias/media';
 
 import { MediaContext } from './media-context';
 

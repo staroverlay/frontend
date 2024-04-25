@@ -17,11 +17,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
 
-import { IntegrationType } from '@/lib/interfaces/integration';
-import IUser from '@/lib/interfaces/user';
-import { createUser } from '@/lib/services/user-service';
 import { oauthRegister } from '@/lib/utils/oauth';
 import { handlePromise } from '@/lib/utils/promise';
+import { IntegrationType } from '@/services/integrations/integration';
+import { createUser } from '@/services/users';
+import IUser from '@/services/users/user';
 
 export default function Register() {
   const { colorMode } = useColorMode();
@@ -51,8 +51,7 @@ export default function Register() {
 
     setLoading(true);
 
-    const payload = { email, password, username: email.split('@')[0] };
-    const user = await createUser(payload)
+    const user = await createUser({ email, password })
       .catch((e) => {
         setError(e.message);
         return null;

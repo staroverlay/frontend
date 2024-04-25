@@ -1,7 +1,9 @@
 import Loading from '@/components/layout/loading';
 import useAuth from '@/hooks/useAuth';
-import IIntegration, { IntegrationType } from '@/lib/interfaces/integration';
-import { getUserIntegrations } from '@/lib/services/integration-service';
+import { getUserIntegrations } from '@/services/integrations';
+import IIntegration, {
+  IntegrationType,
+} from '@/services/integrations/integration';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { IntegrationsContext } from './integrations-context';
 

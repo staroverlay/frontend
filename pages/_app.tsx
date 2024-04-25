@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import { IntegrationsProvider } from '@/contexts/integrations';
 import { MembershipProvider } from '@/contexts/membership';
 import { PlanProvider } from '@/contexts/plan/plan-provider';
+import { ProfileProvider } from '@/contexts/profile';
 import { WidgetsProvider } from '@/contexts/widgets';
 import Theme from '@/theme/theme';
 
@@ -16,7 +17,7 @@ import Layout from '../components/layout';
 import { AuthProvider } from '../contexts/auth';
 import { MediaProvider } from '../contexts/media/media-provider';
 import { TemplatesProvider } from '../contexts/templates';
-import User from '../lib/interfaces/user';
+import User from '../services/users/user';
 
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -76,15 +77,17 @@ export default function App({ Component, pageProps }: InitialAppProps) {
           <MediaProvider>
             <MembershipProvider>
               <PlanProvider>
-                <TemplatesProvider>
-                  <WidgetsProvider>
-                    {mounted && (
-                      <Layout>
-                        <Component {...pageProps} />
-                      </Layout>
-                    )}
-                  </WidgetsProvider>
-                </TemplatesProvider>
+                <ProfileProvider>
+                  <TemplatesProvider>
+                    <WidgetsProvider>
+                      {mounted && (
+                        <Layout>
+                          <Component {...pageProps} />
+                        </Layout>
+                      )}
+                    </WidgetsProvider>
+                  </TemplatesProvider>
+                </ProfileProvider>
               </PlanProvider>
             </MembershipProvider>
           </MediaProvider>

@@ -24,8 +24,8 @@ import {
   FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '@/lib/interfaces/templates/template';
-import TemplateVisibility from '@/lib/interfaces/templates/template-visibility';
+import ITemplate from '@/services/templates/template';
+import TemplateVisibility from '@/services/templates/template-visibility';
 
 import styles from './TemplateCard.module.css';
 
@@ -128,7 +128,7 @@ export default function TemplateCard(props: TemplateCardProps) {
       >
         <Flex className={styles.thumbnail} justifyContent={'center'}>
           <Image
-            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnailResourceId}`}
+            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnail}`}
             alt={'Thummbnail'}
             width={'100%'}
             height={'100%'}
@@ -154,14 +154,14 @@ export default function TemplateCard(props: TemplateCardProps) {
             <Flex className={styles.author}>
               {isExplorer && (
                 <Link
-                  href={`/creators/${template.author.id}`}
+                  href={`/users/${template.creatorId}`}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  By {template.author.username}
+                  By {template.creatorId}
                 </Link>
               )}
 
-              {isEditor && <Text>By you ({template.author.username})</Text>}
+              {isEditor && <Text>By you ({template.creatorId})</Text>}
 
               <Flex className={styles.flex} gap={'10px'}>
                 <Flex className={styles.flex}>

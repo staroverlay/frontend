@@ -17,8 +17,8 @@ import Link from 'next/link';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FaEllipsisV } from 'react-icons/fa';
 
-import ITemplate from '@/lib/interfaces/templates/template';
-import IWidget from '@/lib/interfaces/widget';
+import ITemplate from '@/services/templates/template';
+import IWidget from '@/services/widgets/widget';
 
 import styles from './WidgetCard.module.css';
 

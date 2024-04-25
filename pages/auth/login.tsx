@@ -17,11 +17,11 @@ import { useEffect, useState } from 'react';
 import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
 
 import useAuth from '@/hooks/useAuth';
-import { IntegrationType } from '@/lib/interfaces/integration';
-import ISessionAndUser from '@/lib/interfaces/sessions/session-and-user';
-import { createSession } from '@/lib/services/session-service';
 import { oauthLogin } from '@/lib/utils/oauth';
 import { handlePromise } from '@/lib/utils/promise';
+import { IntegrationType } from '@/services/integrations/integration';
+import { createSession } from '@/services/sessions';
+import ISessionAndUser from '@/services/sessions/session-and-user';
 
 export default function Login() {
   const { colorMode } = useColorMode();

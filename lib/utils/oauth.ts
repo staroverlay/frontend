@@ -1,9 +1,11 @@
-import IIntegration, { IntegrationType } from '../interfaces/integration';
-import ISessionAndUser from '../interfaces/sessions/session-and-user';
-import IUser from '../interfaces/user';
-import { createTwitchIntegration } from '../services/integration-service';
-import { createSessionWithTwitch } from '../services/session-service';
-import { createUserWithTwitch } from '../services/user-service';
+import { createTwitchIntegration } from '../../services/integrations';
+import IIntegration, {
+  IntegrationType,
+} from '../../services/integrations/integration';
+import { createSessionWithTwitch } from '../../services/sessions';
+import ISessionAndUser from '../../services/sessions/session-and-user';
+import { createUserWithTwitch } from '../../services/users';
+import IUser from '../../services/users/user';
 import { openWindow } from './window';
 
 export async function oauthIntegration(

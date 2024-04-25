@@ -14,8 +14,8 @@ import InputAlert from '@/components/alerts/input/InputAlert';
 import StatsCard from '@/components/cards/stats/StatsCard';
 import TemplatesGrid from '@/components/content/templates-grid/TemplatesGrid';
 import useTemplates from '@/hooks/useTemplates';
-import { createTemplate } from '@/lib/services/template-service';
 import { toastPending } from '@/lib/utils/toasts';
+import { createTemplate } from '@/services/templates';
 
 function CreateTemplateButton() {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -24,7 +24,7 @@ function CreateTemplateButton() {
   const [isCreating, setIsCreating] = useState(false);
 
   const handleCreateTemplate = async (input: string) => {
-    const template = await createTemplate(input);
+    const template = await createTemplate({ name: input, service: 'twitch' });
     if (!template) throw new Error('Template not created');
     addTemplate(template);
     navigateTo(`/creator/templates/${template._id}`);
@@ -60,17 +60,6 @@ function CreateTemplateButton() {
         Create template
       </Button>
     </>
-  );
-}
-
-function NoTemplates({ message }: { message?: string }) {
-  return (
-    <Flex alignContent={'center'} justifyContent={'center'}>
-      <Flex direction={'column'} alignContent={'center'} gap={'10px'}>
-        <Heading>{message ? message : 'No templates'}</Heading>
-        <CreateTemplateButton />
-      </Flex>
-    </Flex>
   );
 }
 

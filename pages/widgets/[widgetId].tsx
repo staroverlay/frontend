@@ -14,13 +14,13 @@ import { useCallback, useEffect, useState } from 'react';
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
 import useWidgets from '@/hooks/useWidgets';
-import IDictionary from '@/lib/interfaces/shared/IDictionary';
-import ITemplate from '@/lib/interfaces/templates/template';
-import TemplateScope from '@/lib/interfaces/templates/template-scope';
-import { updateWidget } from '@/lib/services/widget-service';
+import IDictionary from '@/lib/IDictionary';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
+import ITemplate from '@/services/templates/template';
+import { updateWidget } from '@/services/widgets';
 
+import TemplateScope from '@/lib/interfaces/templates/template-scope';
 import Error404 from '../404';
 
 const TabIndexes: { [key in string]: number } = {

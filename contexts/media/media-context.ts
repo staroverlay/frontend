@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IMedia from '@/lib/interfaces/media';
+import IMedia from '@/services/medias/media';
 
 import { MediaHook } from './media-hook';
 
