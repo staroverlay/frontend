@@ -5,7 +5,6 @@ const CompleteMediaMutation = mutation`
         completeMedia(payload: $payload) {
             _id
             name
-            resourceId
             size
             type
             uploadId

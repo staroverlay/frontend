@@ -37,7 +37,7 @@ export async function uploadFile(file: File, name?: string) {
   const chunks = splitBufferInChunks(buffer, 5 * 1024 * 1024);
   const parts: IMediaPart[] = [];
 
-  const id = media.resourceId;
+  const id = media._id;
   const uploadId = media.uploadId as string;
 
   for (let i = 0; i < chunks.length; i++) {
@@ -54,7 +54,7 @@ export async function uploadFile(file: File, name?: string) {
   let thumbnailParts = [];
 
   if (thumbnailChunks.length == 1) {
-    const thumbId = `${media.resourceId}/thumbnail`;
+    const thumbId = `${media._id}/thumbnail`;
     const part = await uploadPart(
       thumbId,
       thumbnailUploadId,

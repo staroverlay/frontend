@@ -32,7 +32,7 @@ export default function MediasGrid(props: MediasGridProps) {
       >
         {filtered.map((media) => (
           <MediaCard
-            key={media.resourceId}
+            key={media._id}
             media={media}
             size={props.cardSize}
             onSelect={props.onSelect}

@@ -5,10 +5,8 @@ const GetAllMediaQuery = query`
         getAllMedia {
             _id
             name
-            resourceId
             size
             type
-            uploadId
             userId
         }
     }

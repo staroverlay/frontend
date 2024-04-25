@@ -5,7 +5,6 @@ const CreateMediaMutation = mutation`
         createMedia(payload: $payload) {
             _id
             name
-            resourceId
             size
             type
             uploadId
