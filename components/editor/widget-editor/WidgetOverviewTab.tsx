@@ -23,6 +23,7 @@ import SettingsScope, {
   SettingsScopes,
 } from '@/services/shared/settings-scope';
 import ITemplate from '@/services/templates/template';
+import TemplateVersion from '@/services/templates/template-version';
 import { resetWidgetToken } from '@/services/widgets';
 import IWidget from '@/services/widgets/widget';
 
@@ -86,6 +87,7 @@ const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
 interface WidgetOverviewTabProps {
   widget: IWidget;
   template: ITemplate;
+  version: TemplateVersion;
   name: string;
   autoUpdate: boolean;
   setName: (name: string) => void;
@@ -96,9 +98,8 @@ interface WidgetOverviewTabProps {
 
 export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
   const { updateWidget } = useWidgets();
-
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${props.widget.token}`;
-  const scopeList = getScopes(props.template.scopes || []);
+  const scopeList = getScopes(props.version.scopes || []);
 
   const [showLink, setShowLink] = useState(false);
   const toggleShowLink = () => setShowLink(!showLink);
@@ -233,7 +234,7 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             <ScopeList
               scopes={props.scopes}
               setScopes={props.setScopes}
-              templateScopes={props.template.scopes || []}
+              templateScopes={props.version.scopes || []}
             />
           </FormControl>
         </Flex>

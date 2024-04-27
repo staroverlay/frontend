@@ -11,6 +11,7 @@ import GetLastTemplateVersionQuery from './graphql/getLastTemplateVersionQuery';
 import GetMyTemplatesQuery from './graphql/getMyTemplatesQuery';
 import GetTemplateByIDQuery from './graphql/getTemplateByIdQuery';
 import GetTemplatesByCreatorQuery from './graphql/getTemplatesByCreatorQuery';
+import GetTemplateVersionQuery from './graphql/getTemplateVersionQuery';
 import PostTemplateVersionMutation from './graphql/postTemplateVersionMutation';
 import UpdateTemplateMutation from './graphql/updateTemplateMutation';
 import ITemplate from './template';
@@ -76,6 +77,15 @@ export async function updateTemplate(
 }
 
 // Versions.
+export async function getTemplateVersion(
+  versionId: string,
+): Promise<TemplateVersion | null> {
+  const version = await client.fetch(GetTemplateVersionQuery, {
+    id: versionId,
+  });
+  return version as TemplateVersion | null;
+}
+
 export async function getLastTemplateVersion(template: ITemplate) {
   const id = template._id;
   const version = (await client.fetch(GetLastTemplateVersionQuery, {

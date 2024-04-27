@@ -31,9 +31,11 @@ export async function updateWidget(
   widget: IWidget,
   payload: WidgetUpdatePayload,
 ): Promise<IWidget> {
+  const newPayload: any = { ...payload };
+  newPayload.settings = JSON.stringify(payload.settings);
   const newWidget = (await client.fetch(UpdateWidgetMutation, {
     id: widget._id,
-    payload,
+    payload: newPayload,
   })) as IWidget;
   await emitSettingsUpdate(newWidget);
   return newWidget;

@@ -17,7 +17,6 @@ import Link from 'next/link';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FaEllipsisV } from 'react-icons/fa';
 
-import ITemplate from '@/services/templates/template';
 import IWidget from '@/services/widgets/widget';
 
 import styles from './WidgetCard.module.css';
@@ -33,7 +32,6 @@ export default function WidgetCard({
   onClone,
   onDelete,
 }: WidgetCardProps) {
-  const template = JSON.parse(widget.templateRaw) as ITemplate;
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
 
   const OptionsButton = () => (
@@ -78,7 +76,7 @@ export default function WidgetCard({
           <Box className={styles.author}>
             Created from{' '}
             <Link href={`/marketplace/${widget.templateId}`}>
-              {template.name}
+              {widget.templateId}
             </Link>
           </Box>
         </Stack>

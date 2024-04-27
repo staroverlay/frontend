@@ -1,7 +1,5 @@
 import SettingsScope from '@/services/shared/settings-scope';
-import TemplateVersion from '@/services/templates/template-version';
 
-import IDictionary from '../../lib/IDictionary';
 import ServiceType from '../shared/service-type';
 
 export default interface IWidget {
@@ -11,9 +9,9 @@ export default interface IWidget {
   enabled: boolean;
   service: ServiceType;
   scopes: SettingsScope[];
-  settings?: IDictionary;
+  settings?: string;
   templateId: string;
-  templateVersion?: TemplateVersion;
+  templateVersion?: string;
   token: string;
   userId: string;
 }
