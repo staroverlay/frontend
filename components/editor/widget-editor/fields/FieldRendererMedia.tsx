@@ -1,8 +1,8 @@
 import { FormControl, FormHelperText, FormLabel } from '@chakra-ui/react';
 
 import MediaInput from '@/components/input/MediaInput';
-import ITemplateField from '@/lib/interfaces/templates/template-field';
 import { FileType } from '@/services/medias/media';
+import ITemplateField from '@/services/templates/template-field';
 
 export interface FieldRendererMediaProps {
   field: ITemplateField;

@@ -8,7 +8,7 @@ import {
   Stack,
 } from '@chakra-ui/react';
 
-import ITemplateField from '@/lib/interfaces/templates/template-field';
+import ITemplateField from '@/services/templates/template-field';
 
 export interface FieldRendererEnumProps {
   field: ITemplateField;

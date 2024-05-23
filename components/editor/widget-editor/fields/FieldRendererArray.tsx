@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { FaTrash } from 'react-icons/fa';
 
-import ITemplateField from '@/lib/interfaces/templates/template-field';
+import ITemplateField from '@/services/templates/template-field';
 
 import FieldRenderer from './FieldRenderer';
 
