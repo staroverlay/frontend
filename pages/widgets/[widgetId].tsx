@@ -92,9 +92,13 @@ export default function WidgetPage() {
 
   useEffect(() => {
     if (template) {
-      getTemplateVersion(
-        widget?.templateVersion || template.lastVersionId,
-      ).then(setTemplateVersion);
+      const widgetLockedVersion = widget?.templateVersion;
+      const templateLastVersion = template.lastVersionId;
+      const desiredVersionId =
+        !widget?.autoUpdate && widgetLockedVersion
+          ? widgetLockedVersion
+          : templateLastVersion;
+      getTemplateVersion(desiredVersionId).then(setTemplateVersion);
     }
   }, [widget, template]);
 

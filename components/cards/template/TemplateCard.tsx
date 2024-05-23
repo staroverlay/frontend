@@ -127,12 +127,33 @@ export default function TemplateCard(props: TemplateCardProps) {
         }}
       >
         <Flex className={styles.thumbnail} justifyContent={'center'}>
-          <Image
-            src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnail}`}
-            alt={'Thummbnail'}
-            width={'100%'}
-            height={'100%'}
-          />
+          {template.thumbnail && (
+            <Image
+              src={`${process.env.NEXT_PUBLIC_R2_WORKER}/${template.thumbnail}`}
+              alt={'Thumbnail'}
+              width={'100%'}
+              height={'100%'}
+            />
+          )}
+
+          {!template.thumbnail && (
+            <Flex
+              bg={'blue.100'}
+              w={'100%'}
+              h={'100%'}
+              alignItems={'center'}
+              justifyContent={'center'}
+            >
+              <Text
+                color={'black'}
+                fontSize={'18px'}
+                fontWeight={'600'}
+                wordBreak={'break-word'}
+              >
+                {template.name}
+              </Text>
+            </Flex>
+          )}
         </Flex>
 
         <CardBody>

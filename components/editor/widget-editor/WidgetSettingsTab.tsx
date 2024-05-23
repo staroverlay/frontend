@@ -23,6 +23,8 @@ export default function WidgetSettingsTab({
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
   const fields = version.fields || [];
 
+  console.log(fields);
+
   return (
     <TabPanel>
       <Flex justifyContent={'space-evenly'}>
