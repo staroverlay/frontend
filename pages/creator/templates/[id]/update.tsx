@@ -20,11 +20,11 @@ import useTemplates from '@/hooks/useTemplates';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
-import TemplateVersion from '@/services/template-versions/template-version';
 import {
   getLastTemplateVersion,
   postTemplateUpdate,
-} from '@/services/templates';
+} from '@/services/template-versions';
+import TemplateVersion from '@/services/template-versions/template-version';
 
 export default function CreatorTemplateUpdateSourcePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
