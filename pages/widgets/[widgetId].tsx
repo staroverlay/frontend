@@ -206,6 +206,8 @@ export default function WidgetPage() {
             template={template}
             widget={widget}
             version={templateVersion}
+            enabled={enabled}
+            setEnabled={setEnabled}
           />
 
           <WidgetSettingsTab

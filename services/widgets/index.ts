@@ -1,6 +1,5 @@
 import client from '@/lib/clients/graphql';
 
-import { emitSettingsUpdate } from '../events';
 import WidgetCreatePayload from './dtos/create-widget.dto';
 import WidgetUpdatePayload from './dtos/update-widget.dto';
 import CreateWidgetMutation from './graphql/createWidgetMutation';
@@ -37,7 +36,6 @@ export async function updateWidget(
     id: widget._id,
     payload: newPayload,
   })) as IWidget;
-  await emitSettingsUpdate(newWidget);
   return newWidget;
 }
 

@@ -27,7 +27,7 @@ export default function Home() {
         <Text size={'md'}>
           Remember that we are in beta phase! Join our Discord server.
         </Text>
-        <Link href={'https://google.com'} target={'_blank'}>
+        <Link href={'https://discord.gg/qh2H8Ws4'} target={'_blank'}>
           <Button colorScheme={'purple'}>Discord</Button>
         </Link>
       </Flex>

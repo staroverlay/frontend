@@ -94,6 +94,8 @@ interface WidgetOverviewTabProps {
   scopes: SettingsScope[];
   setScopes: (scopes: SettingsScope[]) => void;
   setAutoUpdate: (autoUpdate: boolean) => void;
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
 }
 
 export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
@@ -181,21 +183,28 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
           <FormControl>
             <FormLabel>Debug</FormLabel>
 
-            {scopeList
-              .filter((scope) => scope.debuggable)
-              .map((scope, index) => (
-                <Button
-                  key={index}
-                  colorScheme={'cyan'}
-                  size={'xs'}
-                  mr={'5px'}
-                  onClick={() => {
-                    emitDebugEvent(props.widget, scope.id);
-                  }}
-                >
-                  {scope.name}
-                </Button>
-              ))}
+            <Flex
+              border={'1px solid'}
+              borderColor={'chakra-border-color'}
+              borderRadius={'7px'}
+              padding={'7px'}
+            >
+              {scopeList
+                .filter((scope) => scope.debuggable)
+                .map((scope, index) => (
+                  <Button
+                    key={index}
+                    colorScheme={'cyan'}
+                    size={'xs'}
+                    mr={'5px'}
+                    onClick={() => {
+                      emitDebugEvent(props.widget, scope.id);
+                    }}
+                  >
+                    {scope.name}
+                  </Button>
+                ))}
+            </Flex>
           </FormControl>
 
           <FormControl>
@@ -210,16 +219,34 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
           </FormControl>
 
           <FormControl>
+            <FormLabel>Enabled</FormLabel>
+
+            <Flex alignItems={'center'} gap={'5px'} my={'10px'}>
+              <Switch
+                isRequired={true}
+                isChecked={props.enabled}
+                onChange={(e) => props.setEnabled(e.target.checked)}
+              />
+              <FormHelperText m={'0'}>
+                Disabling it will cause the widget to stop working instantly.
+              </FormHelperText>
+            </Flex>
+          </FormControl>
+
+          <FormControl>
             <FormLabel>Auto Update</FormLabel>
-            <Switch
-              isRequired={true}
-              width={'container.sm'}
-              isChecked={props.autoUpdate}
-              onChange={(e) => props.setAutoUpdate(e.target.checked)}
-            />
-            <FormHelperText>
-              Automatically upgrade the widget when the Template is updated.
-            </FormHelperText>
+
+            <Flex alignItems={'center'} gap={'5px'} my={'10px'}>
+              <Switch
+                isRequired={true}
+                isChecked={props.autoUpdate}
+                onChange={(e) => props.setAutoUpdate(e.target.checked)}
+              />
+              <FormHelperText m={'0'}>
+                Automatically upgrade the widget when the Template is updated.
+              </FormHelperText>
+            </Flex>
+
             <Alert status="warning" mt={'3px'}>
               <AlertIcon />
               <AlertTitle>Be careful</AlertTitle>
