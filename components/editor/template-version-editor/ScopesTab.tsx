@@ -2,6 +2,7 @@ import { Box, Checkbox, Flex, Heading, TabPanel } from '@chakra-ui/react';
 
 import ServiceType from '@/services/shared/service-type';
 import SettingsScope, {
+  SettingsScopeData,
   SettingsScopes,
 } from '@/services/shared/settings-scope';
 
@@ -16,7 +17,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
       width={'100%'}
-      defaultChecked={checked}
+      isChecked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
       }}
@@ -37,6 +38,11 @@ const ScopeList = ({ service, scopes, setScopes }: ScopeListProps) => {
     (s) => s.id.startsWith('platform:') || s.id.startsWith(service),
   );
 
+  const isEnabled = (scope: SettingsScopeData) => {
+    const enabled = scopes.includes(scope.id);
+    return enabled;
+  };
+
   return (
     <>
       {scopeList.map((scope) => (
@@ -44,7 +50,7 @@ const ScopeList = ({ service, scopes, setScopes }: ScopeListProps) => {
           key={scope.id}
           id={scope.id}
           name={scope.name}
-          checked={scopes.includes(scope.id as SettingsScope)}
+          checked={isEnabled(scope)}
           onChange={(value) => {
             if (value) {
               setScopes([...scopes, scope.id as SettingsScope]);

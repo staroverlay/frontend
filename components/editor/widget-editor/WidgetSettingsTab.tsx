@@ -2,14 +2,14 @@ import { Flex, Heading, TabPanel } from '@chakra-ui/react';
 
 import IDictionary from '@/lib/IDictionary';
 import { getFieldPath } from '@/lib/utils/fields';
-import ITemplate from '@/services/templates/template';
+import TemplateVersion from '@/services/template-versions/template-version';
 import IWidget from '@/services/widgets/widget';
 
 import FieldRenderer from './fields/FieldRenderer';
 
 interface WidgetSettingsTab {
   widget: IWidget;
-  template: ITemplate;
+  version: TemplateVersion;
   settings: IDictionary;
   setSettings: (settings: IDictionary) => void;
 }
@@ -17,11 +17,13 @@ interface WidgetSettingsTab {
 export default function WidgetSettingsTab({
   setSettings,
   settings,
-  template,
   widget,
+  version,
 }: WidgetSettingsTab) {
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${widget.token}`;
-  const fields = template.fields || [];
+  const fields = version.fields || [];
+
+  console.log(fields);
 
   return (
     <TabPanel>

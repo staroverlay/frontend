@@ -8,13 +8,13 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  IconButton,
   Input,
   useColorMode,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
+import { FaTwitch } from 'react-icons/fa';
 
 import useAuth from '@/hooks/useAuth';
 import { oauthLogin } from '@/lib/utils/oauth';
@@ -28,6 +28,8 @@ export default function Login() {
   const mainColor = colorMode === 'light' ? 'white' : 'black';
 
   const { login } = useAuth();
+  const { query } = useRouter();
+  const registered = query['register'] == 'success';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -91,6 +93,13 @@ export default function Login() {
             </Alert>
           )}
 
+          {error == null && registered && (
+            <Alert status="success">
+              <AlertTitle>Success:</AlertTitle>
+              <AlertDescription>Log in with your new account</AlertDescription>
+            </Alert>
+          )}
+
           <FormControl>
             <FormLabel>Email</FormLabel>
             <Input
@@ -141,6 +150,7 @@ export default function Login() {
             </Flex>
 
             <Flex justifyContent={'space-around'}>
+              {/**
               <IconButton
                 aria-label="Login with Kick"
                 colorScheme={'green'}
@@ -148,20 +158,27 @@ export default function Login() {
                 disabled={loading}
                 onClick={() => handleOAuthLogin('kick')}
               />
-              <IconButton
+               */}
+
+              <Button
                 aria-label="Login with Twitch"
                 colorScheme={'purple'}
-                icon={<FaTwitch />}
+                leftIcon={<FaTwitch />}
                 disabled={loading}
                 onClick={() => handleOAuthLogin('twitch')}
-              />
-              <IconButton
-                aria-label="Login with YouTube"
-                colorScheme={'red'}
-                icon={<FaYoutube />}
-                disabled={loading}
-                onClick={() => handleOAuthLogin('youtube')}
-              />
+              >
+                Log in with Twitch
+              </Button>
+
+              {/**
+                  <IconButton
+                    aria-label="Login with YouTube"
+                    colorScheme={'red'}
+                    icon={<FaYoutube />}
+                    disabled={loading}
+                    onClick={() => handleOAuthLogin('youtube')}
+                  /> 
+                 */}
             </Flex>
           </Flex>
         </Flex>

@@ -4,7 +4,6 @@ This is a list of things that need to be done in the project.
 
 ## ⌛ Pending
 
-- 📂 Refactor widgets and templates to new API implementation.
 - 📨 Invite codes for beta access.
 - 📡 Emit debug events.
 
@@ -19,3 +18,4 @@ This is a list of things that need to be done in the project.
 - 💬 Added store description.
 - 📷 Added template thumbnails.
 - 🧩 Services classes grouped by function instead types.
+- 📂 Refactor widgets and templates to new API implementation.

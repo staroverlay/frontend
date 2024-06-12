@@ -23,8 +23,8 @@ import Error404 from '@/pages/404';
 import {
   getLastTemplateVersion,
   postTemplateUpdate,
-} from '@/services/templates';
-import TemplateVersion from '@/services/templates/template-version';
+} from '@/services/template-versions';
+import TemplateVersion from '@/services/template-versions/template-version';
 
 export default function CreatorTemplateUpdateSourcePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();

@@ -3,9 +3,11 @@ import { Analytics } from '@vercel/analytics/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import ProgressBar from 'nextjs-progressbar';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
+import { AcquisitionsProvider } from '@/contexts/acquisitions';
 import { IntegrationsProvider } from '@/contexts/integrations';
 import { MembershipProvider } from '@/contexts/membership';
 import { PlanProvider } from '@/contexts/plan/plan-provider';
@@ -68,30 +70,44 @@ export default function App({ Component, pageProps }: InitialAppProps) {
         <link rel="icon" href="/icon@32.png" />
       </Head>
 
+      {/* Analytics from Vercel */}
       {process.env.NODE_ENV === 'production' && <Analytics />}
+
+      {/* Notification toasts */}
       <ToastContainer />
+
+      {/* Loading bar for page switch */}
+      <ProgressBar
+        color="#BB86FC"
+        startPosition={0.5}
+        stopDelayMs={200}
+        height={3}
+        showOnShallow={true}
+      />
 
       {/* TODO: Use fetch in pages instead global contexts. */}
       <AuthProvider>
-        <IntegrationsProvider>
-          <MediaProvider>
-            <MembershipProvider>
-              <PlanProvider>
-                <ProfileProvider>
-                  <TemplatesProvider>
-                    <WidgetsProvider>
-                      {mounted && (
-                        <Layout>
-                          <Component {...pageProps} />
-                        </Layout>
-                      )}
-                    </WidgetsProvider>
-                  </TemplatesProvider>
-                </ProfileProvider>
-              </PlanProvider>
-            </MembershipProvider>
-          </MediaProvider>
-        </IntegrationsProvider>
+        <AcquisitionsProvider>
+          <IntegrationsProvider>
+            <MediaProvider>
+              <MembershipProvider>
+                <PlanProvider>
+                  <ProfileProvider>
+                    <TemplatesProvider>
+                      <WidgetsProvider>
+                        {mounted && (
+                          <Layout>
+                            <Component {...pageProps} />
+                          </Layout>
+                        )}
+                      </WidgetsProvider>
+                    </TemplatesProvider>
+                  </ProfileProvider>
+                </PlanProvider>
+              </MembershipProvider>
+            </MediaProvider>
+          </IntegrationsProvider>
+        </AcquisitionsProvider>
       </AuthProvider>
     </ChakraProvider>
   );

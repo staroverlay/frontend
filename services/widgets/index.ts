@@ -1,6 +1,5 @@
 import client from '@/lib/clients/graphql';
 
-import { emitSettingsUpdate } from '../events';
 import WidgetCreatePayload from './dtos/create-widget.dto';
 import WidgetUpdatePayload from './dtos/update-widget.dto';
 import CreateWidgetMutation from './graphql/createWidgetMutation';
@@ -31,11 +30,12 @@ export async function updateWidget(
   widget: IWidget,
   payload: WidgetUpdatePayload,
 ): Promise<IWidget> {
+  const newPayload: any = { ...payload };
+  newPayload.settings = JSON.stringify(payload.settings);
   const newWidget = (await client.fetch(UpdateWidgetMutation, {
     id: widget._id,
-    payload,
+    payload: newPayload,
   })) as IWidget;
-  await emitSettingsUpdate(newWidget);
   return newWidget;
 }
 

@@ -1,6 +1,6 @@
-import { query } from 'astraql';
+import { mutation } from 'astraql';
 
-const UpdateProfileMutation = query`
+const UpdateProfileMutation = mutation`
     updateProfile($payload: UpdateProfileDTO!) {
         updateProfile(payload: $payload) {
             _id

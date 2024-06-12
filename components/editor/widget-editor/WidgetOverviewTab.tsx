@@ -22,6 +22,7 @@ import { emitDebugEvent } from '@/services/events';
 import SettingsScope, {
   SettingsScopes,
 } from '@/services/shared/settings-scope';
+import TemplateVersion from '@/services/template-versions/template-version';
 import ITemplate from '@/services/templates/template';
 import { resetWidgetToken } from '@/services/widgets';
 import IWidget from '@/services/widgets/widget';
@@ -86,19 +87,21 @@ const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
 interface WidgetOverviewTabProps {
   widget: IWidget;
   template: ITemplate;
+  version: TemplateVersion;
   name: string;
   autoUpdate: boolean;
   setName: (name: string) => void;
   scopes: SettingsScope[];
   setScopes: (scopes: SettingsScope[]) => void;
   setAutoUpdate: (autoUpdate: boolean) => void;
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
 }
 
 export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
   const { updateWidget } = useWidgets();
-
   const link = `${process.env.NEXT_PUBLIC_WIDGET_SERVER}${props.widget.token}`;
-  const scopeList = getScopes(props.template.scopes || []);
+  const scopeList = getScopes(props.version.scopes || []);
 
   const [showLink, setShowLink] = useState(false);
   const toggleShowLink = () => setShowLink(!showLink);
@@ -180,21 +183,28 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
           <FormControl>
             <FormLabel>Debug</FormLabel>
 
-            {scopeList
-              .filter((scope) => scope.debuggable)
-              .map((scope, index) => (
-                <Button
-                  key={index}
-                  colorScheme={'cyan'}
-                  size={'xs'}
-                  mr={'5px'}
-                  onClick={() => {
-                    emitDebugEvent(props.widget, scope.id);
-                  }}
-                >
-                  {scope.name}
-                </Button>
-              ))}
+            <Flex
+              border={'1px solid'}
+              borderColor={'chakra-border-color'}
+              borderRadius={'7px'}
+              padding={'7px'}
+            >
+              {scopeList
+                .filter((scope) => scope.debuggable)
+                .map((scope, index) => (
+                  <Button
+                    key={index}
+                    colorScheme={'cyan'}
+                    size={'xs'}
+                    mr={'5px'}
+                    onClick={() => {
+                      emitDebugEvent(props.widget, scope.id);
+                    }}
+                  >
+                    {scope.name}
+                  </Button>
+                ))}
+            </Flex>
           </FormControl>
 
           <FormControl>
@@ -209,16 +219,34 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
           </FormControl>
 
           <FormControl>
+            <FormLabel>Enabled</FormLabel>
+
+            <Flex alignItems={'center'} gap={'5px'} my={'10px'}>
+              <Switch
+                isRequired={true}
+                isChecked={props.enabled}
+                onChange={(e) => props.setEnabled(e.target.checked)}
+              />
+              <FormHelperText m={'0'}>
+                Disabling it will cause the widget to stop working instantly.
+              </FormHelperText>
+            </Flex>
+          </FormControl>
+
+          <FormControl>
             <FormLabel>Auto Update</FormLabel>
-            <Switch
-              isRequired={true}
-              width={'container.sm'}
-              isChecked={props.autoUpdate}
-              onChange={(e) => props.setAutoUpdate(e.target.checked)}
-            />
-            <FormHelperText>
-              Automatically upgrade the widget when the Template is updated.
-            </FormHelperText>
+
+            <Flex alignItems={'center'} gap={'5px'} my={'10px'}>
+              <Switch
+                isRequired={true}
+                isChecked={props.autoUpdate}
+                onChange={(e) => props.setAutoUpdate(e.target.checked)}
+              />
+              <FormHelperText m={'0'}>
+                Automatically upgrade the widget when the Template is updated.
+              </FormHelperText>
+            </Flex>
+
             <Alert status="warning" mt={'3px'}>
               <AlertIcon />
               <AlertTitle>Be careful</AlertTitle>
@@ -233,7 +261,7 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             <ScopeList
               scopes={props.scopes}
               setScopes={props.setScopes}
-              templateScopes={props.template.scopes || []}
+              templateScopes={props.version.scopes || []}
             />
           </FormControl>
         </Flex>

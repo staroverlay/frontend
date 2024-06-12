@@ -8,14 +8,13 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  IconButton,
   Input,
   useColorMode,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { FaKickstarter, FaTwitch, FaYoutube } from 'react-icons/fa';
+import { FaTwitch } from 'react-icons/fa';
 
 import { oauthRegister } from '@/lib/utils/oauth';
 import { handlePromise } from '@/lib/utils/promise';
@@ -59,7 +58,7 @@ export default function Register() {
       .finally(() => setLoading(false));
 
     if (user) {
-      navigateTo('/auth/login');
+      navigateTo('/auth/login?register=success');
     }
   };
 
@@ -151,24 +150,35 @@ export default function Register() {
             </Flex>
 
             <Flex justifyContent={'space-around'}>
+              {/**
               <IconButton
-                aria-label="Login with Kick"
+                aria-label="Register with Kick"
                 colorScheme={'green'}
                 icon={<FaKickstarter />}
+                disabled={loading}
                 onClick={() => handleOAuthRegister('kick')}
               />
-              <IconButton
-                aria-label="Login with Twitch"
+               */}
+
+              <Button
+                aria-label="Register with Twitch"
                 colorScheme={'purple'}
-                icon={<FaTwitch />}
+                leftIcon={<FaTwitch />}
+                disabled={loading}
                 onClick={() => handleOAuthRegister('twitch')}
-              />
-              <IconButton
-                aria-label="Login with YouTube"
-                colorScheme={'red'}
-                icon={<FaYoutube />}
-                onClick={() => handleOAuthRegister('youtube')}
-              />
+              >
+                Register with Twitch
+              </Button>
+
+              {/**
+                  <IconButton
+                    aria-label="Register with YouTube"
+                    colorScheme={'red'}
+                    icon={<FaYoutube />}
+                    disabled={loading}
+                    onClick={() => handleOAuthRegister('youtube')}
+                  /> 
+                 */}
             </Flex>
           </Flex>
         </Flex>

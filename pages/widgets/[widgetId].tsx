@@ -13,14 +13,18 @@ import { useCallback, useEffect, useState } from 'react';
 
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
+import Loading from '@/components/layout/loading';
 import useWidgets from '@/hooks/useWidgets';
 import IDictionary from '@/lib/IDictionary';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
+import SettingsScope from '@/services/shared/settings-scope';
+import { getTemplateVersion } from '@/services/template-versions';
+import TemplateVersion from '@/services/template-versions/template-version';
+import { getTemplateByID } from '@/services/templates';
 import ITemplate from '@/services/templates/template';
 import { updateWidget } from '@/services/widgets';
 
-import TemplateScope from '@/lib/interfaces/templates/template-scope';
 import Error404 from '../404';
 
 const TabIndexes: { [key in string]: number } = {
@@ -33,6 +37,7 @@ export default function WidgetPage() {
   const searchParams = useSearchParams();
   const { query, push: navigateTo } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
 
   // Control query.
@@ -78,11 +83,37 @@ export default function WidgetPage() {
   const widget = widgets.find((w) => w._id === widgetId);
 
   // Find template by widget.
-  const cachedTemplate = widget?.template as ITemplate;
+  const [template, setTemplate] = useState<ITemplate | null>(null);
+  const [templateVersion, setTemplateVersion] =
+    useState<TemplateVersion | null>(null);
+
+  useEffect(() => {
+    if (widgetId && widget) {
+      getTemplateByID(widget.templateId).then(setTemplate);
+    } else {
+      setFetching(false);
+    }
+  }, [widgetId, widget]);
+
+  useEffect(() => {
+    if (template) {
+      const widgetLockedVersion = widget?.templateVersion;
+      const templateLastVersion = template.lastVersionId;
+      const desiredVersionId =
+        !widget?.autoUpdate && widgetLockedVersion
+          ? widgetLockedVersion
+          : templateLastVersion;
+      getTemplateVersion(template, desiredVersionId)
+        .then(setTemplateVersion)
+        .finally(() => {
+          setFetching(false);
+        });
+    }
+  }, [widget, template]);
 
   // Input fields.
   const [displayName, setDisplayName] = useState('');
-  const [scopes, setScopes] = useState<TemplateScope[]>([]);
+  const [scopes, setScopes] = useState<SettingsScope[]>([]);
   const [settings, setSettings] = useState<IDictionary>({});
   const [enabled, setEnabled] = useState(false);
   const [autoUpdate, setAutoUpdate] = useState(false);
@@ -91,7 +122,7 @@ export default function WidgetPage() {
     if (widget) {
       setDisplayName(widget.displayName);
       setScopes(widget.scopes || []);
-      setSettings(widget.settings || {});
+      setSettings(JSON.parse(widget.settings || '{}'));
       setEnabled(widget.enabled);
       setAutoUpdate(widget.autoUpdate);
     }
@@ -114,8 +145,13 @@ export default function WidgetPage() {
     updatePayload,
   );
 
+  // If still fetching.
+  if (fetching) {
+    return <Loading loaded={false} message="Loading widget"></Loading>;
+  }
+
   // If widget not found, render 404 error page.
-  if (!widget) {
+  if (!widget || !template || !templateVersion) {
     return <Error404 />;
   }
 
@@ -167,15 +203,18 @@ export default function WidgetPage() {
             setName={setDisplayName}
             setScopes={setScopes}
             setAutoUpdate={setAutoUpdate}
-            template={cachedTemplate}
+            template={template}
             widget={widget}
+            version={templateVersion}
+            enabled={enabled}
+            setEnabled={setEnabled}
           />
 
           <WidgetSettingsTab
             setSettings={setSettings}
             settings={settings}
-            template={cachedTemplate}
             widget={widget}
+            version={templateVersion}
           />
         </TabPanels>
       </Tabs>

@@ -5,7 +5,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-import ITemplateField from '@/lib/interfaces/templates/template-field';
+import ITemplateField from '@/services/template-versions/template-field';
 
 export interface FieldRendererStringProps {
   field: ITemplateField;
