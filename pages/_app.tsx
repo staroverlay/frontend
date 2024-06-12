@@ -7,6 +7,7 @@ import ProgressBar from 'nextjs-progressbar';
 import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
+import { AcquisitionsProvider } from '@/contexts/acquisitions';
 import { IntegrationsProvider } from '@/contexts/integrations';
 import { MembershipProvider } from '@/contexts/membership';
 import { PlanProvider } from '@/contexts/plan/plan-provider';
@@ -86,25 +87,27 @@ export default function App({ Component, pageProps }: InitialAppProps) {
 
       {/* TODO: Use fetch in pages instead global contexts. */}
       <AuthProvider>
-        <IntegrationsProvider>
-          <MediaProvider>
-            <MembershipProvider>
-              <PlanProvider>
-                <ProfileProvider>
-                  <TemplatesProvider>
-                    <WidgetsProvider>
-                      {mounted && (
-                        <Layout>
-                          <Component {...pageProps} />
-                        </Layout>
-                      )}
-                    </WidgetsProvider>
-                  </TemplatesProvider>
-                </ProfileProvider>
-              </PlanProvider>
-            </MembershipProvider>
-          </MediaProvider>
-        </IntegrationsProvider>
+        <AcquisitionsProvider>
+          <IntegrationsProvider>
+            <MediaProvider>
+              <MembershipProvider>
+                <PlanProvider>
+                  <ProfileProvider>
+                    <TemplatesProvider>
+                      <WidgetsProvider>
+                        {mounted && (
+                          <Layout>
+                            <Component {...pageProps} />
+                          </Layout>
+                        )}
+                      </WidgetsProvider>
+                    </TemplatesProvider>
+                  </ProfileProvider>
+                </PlanProvider>
+              </MembershipProvider>
+            </MediaProvider>
+          </IntegrationsProvider>
+        </AcquisitionsProvider>
       </AuthProvider>
     </ChakraProvider>
   );

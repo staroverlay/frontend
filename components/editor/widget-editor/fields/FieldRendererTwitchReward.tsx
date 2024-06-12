@@ -12,7 +12,7 @@ import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard'
 import TwitchRewardSelectModal from '@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal';
 import useQuery from '@/hooks/useQuery';
 import { toastError } from '@/lib/utils/toasts';
-import ITemplateField from '@/services/templates/template-field';
+import ITemplateField from '@/services/template-versions/template-field';
 import GetTwitchCustomRewardsQuery from '@/services/twitch/graphql/getTwitchCustomRewardsQuery';
 import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 

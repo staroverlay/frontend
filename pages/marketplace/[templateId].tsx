@@ -12,22 +12,15 @@ import { useEffect, useState } from 'react';
 
 import InputAlert from '@/components/alerts/input/InputAlert';
 import MarkdownRenderer from '@/components/utils/MarkdownRenderer';
+import useAcquisitions from '@/hooks/useAcquisitions';
 import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
+import { createAcquisition } from '@/services/acquisition';
 import { getTemplateByID } from '@/services/templates';
 import ITemplate from '@/services/templates/template';
 import { createWidget } from '@/services/widgets';
 
 import Error404 from '../404';
-
-type TemplateStatus = 'unknown' | 'owned' | 'not-owned';
-
-function getTemplateStatus(template: ITemplate | null): TemplateStatus {
-  if (!template) {
-    return 'unknown';
-  }
-  return template.price && template.price > 0 ? 'not-owned' : 'owned';
-}
 
 // Buttons
 function CreateWidgetButton({ templateId }: { templateId: string }) {
@@ -70,6 +63,7 @@ function CreateWidgetButton({ templateId }: { templateId: string }) {
       >
         Choose a name for your widget. You can change it later.
       </InputAlert>
+
       <Button
         onClick={onOpen}
         isLoading={isOpen}
@@ -82,8 +76,32 @@ function CreateWidgetButton({ templateId }: { templateId: string }) {
   );
 }
 
-function BuyTemplateButton({ price }: { price: number }) {
-  return <Button colorScheme={'green'}>Buy for ${price.toFixed(2)}</Button>;
+function BuyTemplateButton({
+  price,
+  templateId,
+}: {
+  price: number;
+  templateId: string;
+}) {
+  const [isAcquiring, setIsAcquiring] = useState(false);
+  const { addAcquisition } = useAcquisitions();
+
+  const acquire = () => {
+    setIsAcquiring(true);
+    createAcquisition({
+      productId: templateId,
+      productType: 'template',
+    })
+      .then(addAcquisition)
+      .finally(() => setIsAcquiring(false));
+  };
+
+  const text = price === 0 ? 'Use Free' : `Buy $${price.toFixed(2)}`;
+  return (
+    <Button colorScheme={'green'} onClick={acquire} isLoading={isAcquiring}>
+      {text}
+    </Button>
+  );
 }
 
 // Page
@@ -91,10 +109,11 @@ export default function StoreTemplatePage() {
   const { query } = useRouter();
   const { colorMode } = useColorMode();
   const templateId = query.templateId as string;
+  const { isAcquired } = useAcquisitions();
+  const isTemplateAcquired = isAcquired('template', templateId);
 
   const [template, setTemplate] = useState<ITemplate | null>(null);
   const [fetching, setFetching] = useState(true);
-  const templateStatus = getTemplateStatus(template);
 
   useEffect(() => {
     getTemplateByID(templateId).then((template) => {
@@ -106,16 +125,6 @@ export default function StoreTemplatePage() {
   if (!fetching && !template) {
     return <Error404 />;
   }
-
-  const handleUse = () => {};
-
-  const handleAction = () => {
-    if (templateStatus === 'owned') {
-      handleUse();
-    } else if (templateStatus === 'not-owned') {
-      // Buy template.
-    }
-  };
 
   return (
     <Flex
@@ -140,12 +149,13 @@ export default function StoreTemplatePage() {
             {template ? <Text>{template.description}</Text> : <Skeleton />}
           </Flex>
 
-          {templateStatus === 'owned' && (
-            <CreateWidgetButton templateId={templateId} />
-          )}
+          {isTemplateAcquired && <CreateWidgetButton templateId={templateId} />}
 
-          {templateStatus === 'not-owned' && (
-            <BuyTemplateButton price={template?.price || 0} />
+          {!isTemplateAcquired && (
+            <BuyTemplateButton
+              price={template?.price || 0}
+              templateId={templateId}
+            />
           )}
         </Flex>
 

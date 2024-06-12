@@ -1,8 +1,8 @@
 import { query } from 'astraql';
 
 const GetTemplateVersionQuery = query`
-    getTemplateVersion($id: String!) {
-        getTemplateVersion(id: $id) {
+    getTemplateVersion($versionId: String!, $templateId: String!) {
+        getTemplateVersion(versionId: $versionId, templateId: $templateId) {
             _id
             templateId
             html

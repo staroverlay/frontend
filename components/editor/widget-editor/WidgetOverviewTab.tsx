@@ -22,8 +22,8 @@ import { emitDebugEvent } from '@/services/events';
 import SettingsScope, {
   SettingsScopes,
 } from '@/services/shared/settings-scope';
+import TemplateVersion from '@/services/template-versions/template-version';
 import ITemplate from '@/services/templates/template';
-import TemplateVersion from '@/services/templates/template-version';
 import { resetWidgetToken } from '@/services/widgets';
 import IWidget from '@/services/widgets/widget';
 

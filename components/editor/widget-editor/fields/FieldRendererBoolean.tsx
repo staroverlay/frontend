@@ -7,7 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import ITemplateField from '@/services/templates/template-field';
+import ITemplateField from '@/services/template-versions/template-field';
 
 export interface FieldRendererBooleanProps {
   field: ITemplateField;

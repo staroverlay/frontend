@@ -7,7 +7,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
-import { FieldBooleanSettings } from '@/services/templates/template-field';
+import { FieldBooleanSettings } from '@/services/template-versions/template-field';
 
 interface BooleanFieldItemProps {
   settings?: FieldBooleanSettings;

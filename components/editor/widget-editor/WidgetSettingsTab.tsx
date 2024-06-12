@@ -2,7 +2,7 @@ import { Flex, Heading, TabPanel } from '@chakra-ui/react';
 
 import IDictionary from '@/lib/IDictionary';
 import { getFieldPath } from '@/lib/utils/fields';
-import TemplateVersion from '@/services/templates/template-version';
+import TemplateVersion from '@/services/template-versions/template-version';
 import IWidget from '@/services/widgets/widget';
 
 import FieldRenderer from './fields/FieldRenderer';

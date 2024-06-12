@@ -13,14 +13,16 @@ import { useCallback, useEffect, useState } from 'react';
 
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
+import Loading from '@/components/layout/loading';
 import useWidgets from '@/hooks/useWidgets';
 import IDictionary from '@/lib/IDictionary';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import SettingsScope from '@/services/shared/settings-scope';
-import { getTemplateByID, getTemplateVersion } from '@/services/templates';
+import { getTemplateVersion } from '@/services/template-versions';
+import TemplateVersion from '@/services/template-versions/template-version';
+import { getTemplateByID } from '@/services/templates';
 import ITemplate from '@/services/templates/template';
-import TemplateVersion from '@/services/templates/template-version';
 import { updateWidget } from '@/services/widgets';
 
 import Error404 from '../404';
@@ -35,6 +37,7 @@ export default function WidgetPage() {
   const searchParams = useSearchParams();
   const { query, push: navigateTo } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [fetching, setFetching] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
 
   // Control query.
@@ -85,10 +88,12 @@ export default function WidgetPage() {
     useState<TemplateVersion | null>(null);
 
   useEffect(() => {
-    if (widget) {
+    if (widgetId && widget) {
       getTemplateByID(widget.templateId).then(setTemplate);
+    } else {
+      setFetching(false);
     }
-  }, [widget]);
+  }, [widgetId, widget]);
 
   useEffect(() => {
     if (template) {
@@ -98,7 +103,11 @@ export default function WidgetPage() {
         !widget?.autoUpdate && widgetLockedVersion
           ? widgetLockedVersion
           : templateLastVersion;
-      getTemplateVersion(desiredVersionId).then(setTemplateVersion);
+      getTemplateVersion(template, desiredVersionId)
+        .then(setTemplateVersion)
+        .finally(() => {
+          setFetching(false);
+        });
     }
   }, [widget, template]);
 
@@ -135,6 +144,11 @@ export default function WidgetPage() {
     },
     updatePayload,
   );
+
+  // If still fetching.
+  if (fetching) {
+    return <Loading loaded={false} message="Loading widget"></Loading>;
+  }
 
   // If widget not found, render 404 error page.
   if (!widget || !template || !templateVersion) {
