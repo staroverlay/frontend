@@ -7,9 +7,8 @@ import {
   TabPanels,
   Tabs
 } from '@chakra-ui/react';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
@@ -25,6 +24,7 @@ import { getTemplateByID } from '@/services/templates';
 import ITemplate from '@/services/templates/template';
 import { updateWidget } from '@/services/widgets';
 
+import useQueryTab from '@/hooks/useQueryTab';
 import Error404 from '../404';
 
 const TabIndexes: { [key in string]: number } = {
@@ -34,27 +34,12 @@ const TabIndexes: { [key in string]: number } = {
 
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
-  const searchParams = useSearchParams();
-  const { query, push: navigateTo, isReady } = useRouter();
+  const router = useRouter();
+  const { query } = router;
   const [isSaving, setIsSaving] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [tabIndex, setTabIndex] = useState(0);
+  const {tabIndex, setTabIndex} = useQueryTab(TabIndexes);
 
-  // Control query.
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
 
   // Find widget by ID in query.
   const widgetId = query.widgetId as string;

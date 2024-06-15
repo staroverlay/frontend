@@ -12,12 +12,13 @@ import {
   useColorMode
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import CodeEditorTab from '@/components/editor/template-version-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-version-editor/FieldsTab';
 import ScopesTab from '@/components/editor/template-version-editor/ScopesTab';
 import Loading from '@/components/layout/loading';
+import useQueryTab from '@/hooks/useQueryTab';
 import useTemplates from '@/hooks/useTemplates';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
@@ -27,7 +28,6 @@ import {
   postTemplateUpdate
 } from '@/services/template-versions';
 import TemplateVersion from '@/services/template-versions/template-version';
-import { useSearchParams } from 'next/navigation';
 
 const TabIndexes: { [key in string]: number } = {
   scopes: 0,
@@ -37,48 +37,9 @@ const TabIndexes: { [key in string]: number } = {
 
 export default function CreatorTemplateUpdateSourcePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const { query, push: navigateTo } = router;
-  const [tabIndex, setTabIndex] = useState(0);
+  const { query } = useRouter();
+  const { tabIndex, setTabIndex } = useQueryTab(TabIndexes);
 
-  // Control query.
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  useEffect(() => {
-    for (const [key, value] of Object.entries(TabIndexes)) {
-      if (value === tabIndex) {
-
-        router.query.tab = key
-        router.push(router)
-
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
-
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      const newIndex = TabIndexes[tab] || 0;
-      setTabIndex(newIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const [isSaving, setIsSaving] = useState(false);
 
@@ -159,7 +120,7 @@ export default function CreatorTemplateUpdateSourcePage() {
     const newVersion = [...currentVerNumbers, newLastNumber].join('.');
 
     setVersion(newVersion);
-};
+  };
 
   // Otherwise, render template editor.
   return (
@@ -174,7 +135,7 @@ export default function CreatorTemplateUpdateSourcePage() {
               onChange={(e) => setVersion(e.target.value)}
               w={'fit-content'}
             />
-            <InputRightAddon onClick={ handleVersionIncrease } userSelect="none" cursor="pointer">+</InputRightAddon>
+            <InputRightAddon onClick={handleVersionIncrease} userSelect="none" cursor="pointer">+</InputRightAddon>
           </InputGroup>
 
           <Button
