@@ -1,36 +1,43 @@
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-type Indexes = { [key in string]: number }
+type Indexes = { [key in string]: number };
 
 const useQueryTab = (indexes: Indexes) => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [tabIndex, setTabIndex] = useState(0);
+    const prevTabIndexRef = useRef<number>(tabIndex);
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(indexes)) {
-            if (value === tabIndex) {
-                if (tabIndex !== 0)
-                    router.query.tab = key
-                else
-                    delete router.query.tab
-                router.push(router)
+        const key = Object.keys(indexes).find(key => indexes[key] === tabIndex);
+
+        if (key !== undefined && prevTabIndexRef.current !== tabIndex) {
+            prevTabIndexRef.current = tabIndex;
+
+            const newQuery = { ...router.query };
+            if (tabIndex !== 0) {
+                newQuery.tab = key;
+            } else {
+                delete newQuery.tab;
             }
+
+            router.push({
+                pathname: router.pathname,
+                query: newQuery,
+            }, undefined, { shallow: true });
         }
     }, [tabIndex]);
 
-
     useEffect(() => {
         const tab = searchParams.get('tab');
-        if (tab) {
-            const newIndex = indexes[tab] || 0;
+        const newIndex = indexes[tab as string] || 0;
+
+        if (newIndex !== tabIndex) {
             setTabIndex(newIndex);
-        } else {
-            setTabIndex(0)
         }
-    }, [router]);
+    }, [searchParams]);
 
     return { tabIndex, setTabIndex };
 };
