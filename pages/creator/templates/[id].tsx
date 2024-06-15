@@ -5,7 +5,7 @@ import {
   Tab,
   TabList,
   TabPanels,
-  Tabs,
+  Tabs
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,15 +13,22 @@ import { useState } from 'react';
 
 import StoreTab from '@/components/editor/template-editor/StoreTab';
 import SummaryTab from '@/components/editor/template-editor/SummaryTab';
+import useQueryTab from '@/hooks/useQueryTab';
 import useTemplates from '@/hooks/useTemplates';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
 import { updateTemplate } from '@/services/templates';
 
+const TabIndexes: { [key in string]: number } = {
+  summary: 0,
+  store: 1,
+};
+
 export default function CreatorTemplatePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
   const { query } = useRouter();
+  const {tabIndex, setTabIndex} = useQueryTab(TabIndexes);
   const [isSaving, setIsSaving] = useState(false);
 
   // Find template by ID in query.
@@ -94,7 +101,9 @@ export default function CreatorTemplatePage() {
       </Flex>
 
       {/* Editor */}
-      <Tabs>
+      <Tabs
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}>
         <TabList>
           <Tab>Summary</Tab>
           <Tab>Store Page</Tab>
