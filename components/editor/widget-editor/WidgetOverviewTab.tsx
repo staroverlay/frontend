@@ -38,7 +38,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
       width={'100%'}
-      checked={checked}
+      isChecked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
       }}
