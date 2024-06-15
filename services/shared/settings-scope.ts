@@ -1,3 +1,5 @@
+import Topic from "@/lib/Topics";
+
 export type SettingsScope =
   | 'twitch:ban'
   | 'twitch:channel_update'
@@ -19,10 +21,12 @@ export type SettingsScopeData = {
   id: SettingsScope;
   name: string;
   debuggable?: boolean;
+  topic?: Topic[];
 };
 
+// TODO: Implement missing topics.
 export const SettingsScopes: SettingsScopeData[] = [
-  { id: 'twitch:ban', name: 'Ban', debuggable: true },
+  { id: 'twitch:ban', name: 'Ban', debuggable: true, topic: ["twitch:ban", "twitch:unban"]},
   { id: 'twitch:channel_update', name: 'Channel Update', debuggable: true },
   { id: 'twitch:charity', name: 'Charity', debuggable: true },
   { id: 'twitch:cheer', name: 'Cheer', debuggable: true },
@@ -32,8 +36,8 @@ export const SettingsScopes: SettingsScopeData[] = [
   { id: 'twitch:mod', name: 'Mod', debuggable: true },
   { id: 'twitch:poll', name: 'Poll', debuggable: true },
   { id: 'twitch:prediction', name: 'Prediction', debuggable: true },
-  { id: 'twitch:raid', name: 'Raid', debuggable: true },
-  { id: 'twitch:channel_points', name: 'Channel Points', debuggable: true },
+  { id: 'twitch:raid', name: 'Raid', debuggable: true, topic: ["twitch:raid", "twitch:raid_to"]},
+  { id: 'twitch:channel_points', name: 'Channel Points', debuggable: true, topic: ["twitch:redemption"]},
   { id: 'twitch:shield', name: 'Shield', debuggable: true },
   { id: 'twitch:shoutout', name: 'Shoutout', debuggable: true },
   { id: 'twitch:subscription', name: 'Subscription', debuggable: true },
