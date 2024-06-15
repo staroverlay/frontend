@@ -11,7 +11,7 @@ import {
   FormLabel,
   Input,
   Switch,
-  TabPanel,
+  TabPanel
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
@@ -20,7 +20,7 @@ import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { emitDebugEvent } from '@/services/events';
 import SettingsScope, {
-  SettingsScopes,
+  SettingsScopes
 } from '@/services/shared/settings-scope';
 import TemplateVersion from '@/services/template-versions/template-version';
 import ITemplate from '@/services/templates/template';
@@ -38,7 +38,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
   return (
     <Checkbox
       width={'100%'}
-      isChecked={checked}
+      checked={checked}
       onChange={(e) => {
         onChange(e.target.checked);
       }}
@@ -225,7 +225,7 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               <Switch
                 isRequired={true}
                 isChecked={props.enabled}
-                onChange={(e) => props.setEnabled(e.target.checked)}
+                onChange={(e: { target: { checked: boolean; }; }) => props.setEnabled(e.target.checked)}
               />
               <FormHelperText m={'0'}>
                 Disabling it will cause the widget to stop working instantly.
@@ -240,7 +240,7 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               <Switch
                 isRequired={true}
                 isChecked={props.autoUpdate}
-                onChange={(e) => props.setAutoUpdate(e.target.checked)}
+                onChange={(e: { target: { checked: boolean; }; }) => props.setAutoUpdate(e.target.checked)}
               />
               <FormHelperText m={'0'}>
                 Automatically upgrade the widget when the Template is updated.

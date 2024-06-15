@@ -5,7 +5,7 @@ import {
   Tab,
   TabList,
   TabPanels,
-  Tabs,
+  Tabs
 } from '@chakra-ui/react';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
@@ -35,7 +35,7 @@ const TabIndexes: { [key in string]: number } = {
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
   const searchParams = useSearchParams();
-  const { query, push: navigateTo } = useRouter();
+  const { query, push: navigateTo, isReady } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [tabIndex, setTabIndex] = useState(0);
@@ -55,28 +55,6 @@ export default function WidgetPage() {
     },
     [searchParams],
   );
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      const newIndex = TabIndexes[tab] || 0;
-      setTabIndex(newIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    for (const [key, value] of Object.entries(TabIndexes)) {
-      if (value === tabIndex) {
-        const newQuery = createQueryString(
-          'tab',
-          key === 'overview' ? null : key,
-        );
-        navigateTo({ search: newQuery });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
 
   // Find widget by ID in query.
   const widgetId = query.widgetId as string;
