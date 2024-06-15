@@ -3,6 +3,8 @@ import {
   Flex,
   Heading,
   Input,
+  InputGroup,
+  InputRightAddon,
   Tab,
   TabList,
   TabPanels,
@@ -149,18 +151,31 @@ export default function CreatorTemplateUpdateSourcePage() {
     setIsSaving(false);
   };
 
+  const handleVersionIncrease = () => {
+    const currentVerNumbers = version.split('.');
+    const lastNumber = currentVerNumbers.pop() || "0";
+
+    const newLastNumber = (parseInt(lastNumber, 10) + 1).toString();
+    const newVersion = [...currentVerNumbers, newLastNumber].join('.');
+
+    setVersion(newVersion);
+};
+
   // Otherwise, render template editor.
   return (
     <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Post a Template Update</Heading>
         <Flex gap={'10px'}>
-          <Input
-            placeholder="0.0.0"
-            value={version}
-            onChange={(e) => setVersion(e.target.value)}
-            w={'fit-content'}
-          />
+          <InputGroup>
+            <Input
+              placeholder="0.0.0"
+              value={version}
+              onChange={(e) => setVersion(e.target.value)}
+              w={'fit-content'}
+            />
+            <InputRightAddon onClick={ handleVersionIncrease } userSelect="none" cursor="pointer">+</InputRightAddon>
+          </InputGroup>
 
           <Button
             colorScheme={'blue'}
