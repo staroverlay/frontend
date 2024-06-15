@@ -7,10 +7,10 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  useColorMode,
+  useColorMode
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import CodeEditorTab from '@/components/editor/template-version-editor/CodeEditorTab';
 import FieldsTab from '@/components/editor/template-version-editor/FieldsTab';
@@ -22,13 +22,62 @@ import { toastPending } from '@/lib/utils/toasts';
 import Error404 from '@/pages/404';
 import {
   getLastTemplateVersion,
-  postTemplateUpdate,
+  postTemplateUpdate
 } from '@/services/template-versions';
 import TemplateVersion from '@/services/template-versions/template-version';
+import { useSearchParams } from 'next/navigation';
+
+const TabIndexes: { [key in string]: number } = {
+  scopes: 0,
+  settings: 1,
+  editor: 2
+};
 
 export default function CreatorTemplateUpdateSourcePage() {
   const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
-  const { query } = useRouter();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const { query, push: navigateTo } = router;
+  const [tabIndex, setTabIndex] = useState(0);
+
+  // Control query.
+  const createQueryString = useCallback(
+    (name: string, value: string | null) => {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (value) {
+        params.set(name, value);
+      } else {
+        params.delete(name);
+      }
+
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  useEffect(() => {
+    for (const [key, value] of Object.entries(TabIndexes)) {
+      if (value === tabIndex) {
+
+        router.query.tab = key
+        router.push(router)
+
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabIndex]);
+
+
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab) {
+      const newIndex = TabIndexes[tab] || 0;
+      setTabIndex(newIndex);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [isSaving, setIsSaving] = useState(false);
 
   // Theming.
@@ -44,6 +93,7 @@ export default function CreatorTemplateUpdateSourcePage() {
   const [lastVersion, setLastVersion] = useState<
     undefined | null | TemplateVersion
   >(undefined);
+
 
   useEffect(() => {
     template
@@ -124,7 +174,9 @@ export default function CreatorTemplateUpdateSourcePage() {
       </Flex>
 
       {/* Editor */}
-      <Tabs>
+      <Tabs
+        onChange={(index) => setTabIndex(index)}
+        index={tabIndex}>
         <TabList>
           <Tab>Scopes</Tab>
           <Tab>Settings</Tab>
