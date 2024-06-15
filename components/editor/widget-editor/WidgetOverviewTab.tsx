@@ -126,6 +126,13 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
     });
   };
 
+  const capitalize = (word: string) => {
+    if (!word) return '';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+
+
   useEffect(() => {
     if (copied) {
       let clearId = setTimeout(() => {
@@ -191,20 +198,41 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             >
               {scopeList
                 .filter((scope) => scope.debuggable)
-                .map((scope, index) => (
-                  <Button
-                    key={index}
-                    colorScheme={'cyan'}
-                    size={'xs'}
-                    mr={'5px'}
-                    onClick={() => {
-                      emitDebugEvent(props.widget, scope.id);
-                    }}
-                  >
-                    {scope.name}
-                  </Button>
-                ))}
+                .flatMap((scope) => {
+                  if (scope.topic && scope.topic.length > 0) {
+                    // Generate one button for each topic in the array
+                    return scope.topic.map((topic, index) => (
+                      <Button
+                        key={`${scope.id}-${index}`}
+                        colorScheme={'cyan'}
+                        size={'xs'}
+                        mr={'5px'}
+                        onClick={() => {
+                          emitDebugEvent(props.widget, topic);
+                        }}
+                      >
+                        {capitalize(topic.split(":")[1]).replace(/\_/g, ' ')}
+                      </Button>
+                    ));
+                  } else {
+                    // Generate a single button for the scope
+                    return (
+                      <Button
+                        key={scope.id}
+                        colorScheme={'cyan'}
+                        size={'xs'}
+                        mr={'5px'}
+                        onClick={() => {
+                          emitDebugEvent(props.widget, scope.id);
+                        }}
+                      >
+                        {scope.name}
+                      </Button>
+                    );
+                  }
+                })}
             </Flex>
+
           </FormControl>
 
           <FormControl>
