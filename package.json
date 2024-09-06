@@ -23,7 +23,7 @@
     "@emotion/styled": "11",
     "@monaco-editor/react": "^4.6.0",
     "@next/font": "13.0.7",
-    "@staroverlay/sdk": "0.0.4",
+    "@staroverlay/sdk": "0.0.5",
     "@vercel/analytics": "^0.1.11",
     "astraql": "^0.1.1",
     "axios": "^1.7.2",
