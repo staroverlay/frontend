@@ -12,7 +12,7 @@ import {
   MenuItem,
   MenuList,
   Stack,
-  Text,
+  Text
 } from '@chakra-ui/react';
 import { Template, TemplateVisibility } from '@staroverlay/sdk';
 import Link from 'next/link';
@@ -22,7 +22,7 @@ import {
   FaEllipsisV,
   FaEye,
   FaLink,
-  FaLock,
+  FaLock
 } from 'react-icons/fa';
 
 import styles from './TemplateCard.module.css';
@@ -97,6 +97,9 @@ export default function TemplateCard(props: TemplateCardProps) {
         {/* Editor menu */}
         <Link href={`/creator/templates/${template._id}`}>
           <MenuItem>Edit</MenuItem>
+        </Link>
+        <Link href={`/creator/templates/${template._id}/update?tab=editor`}>
+          <MenuItem color={'orange.400'}>Source Code</MenuItem>
         </Link>
         <MenuItem>Clone</MenuItem>
 

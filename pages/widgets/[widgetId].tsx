@@ -8,9 +8,8 @@ import {
   Tabs,
 } from '@chakra-ui/react';
 import { SettingsScope, Template, TemplateVersion } from '@staroverlay/sdk';
-import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import WidgetOverviewTab from '@/components/editor/widget-editor/WidgetOverviewTab';
 import WidgetSettingsTab from '@/components/editor/widget-editor/WidgetSettingsTab';
@@ -23,6 +22,7 @@ import { getTemplateVersion } from '@/services/template-versions';
 import { getTemplateByID } from '@/services/templates';
 import { updateWidget } from '@/services/widgets';
 
+import useQueryTab from '@/hooks/useQueryTab';
 import Error404 from '../404';
 
 const TabIndexes: { [key in string]: number } = {
@@ -32,49 +32,11 @@ const TabIndexes: { [key in string]: number } = {
 
 export default function WidgetPage() {
   const { widgets, updateWidget: updateWidgetHook } = useWidgets();
-  const searchParams = useSearchParams();
-  const { query, push: navigateTo } = useRouter();
+  const router = useRouter();
+  const { query } = router;
   const [isSaving, setIsSaving] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [tabIndex, setTabIndex] = useState(0);
-
-  // Control query.
-  const createQueryString = useCallback(
-    (name: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (value) {
-        params.set(name, value);
-      } else {
-        params.delete(name);
-      }
-
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      const newIndex = TabIndexes[tab] || 0;
-      setTabIndex(newIndex);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    for (const [key, value] of Object.entries(TabIndexes)) {
-      if (value === tabIndex) {
-        const newQuery = createQueryString(
-          'tab',
-          key === 'overview' ? null : key,
-        );
-        navigateTo({ search: newQuery });
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabIndex]);
+  const { tabIndex, setTabIndex } = useQueryTab(TabIndexes);
 
   // Find widget by ID in query.
   const widgetId = query.widgetId as string;

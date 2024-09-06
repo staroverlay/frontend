@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react';
 import {
   SettingsScope,
-  SettingsScopes,
   Template,
   TemplateVersion,
   Widget,
@@ -26,6 +25,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { emitDebugEvent } from '@/services/events';
+import { DebuggableSettingsScopes } from '@/services/shared/settings-scope';
 import { resetWidgetToken } from '@/services/widgets';
 
 interface ScopeCheckboxProps {
@@ -50,7 +50,7 @@ const ScopeCheckbox = ({ name, checked, onChange }: ScopeCheckboxProps) => {
 };
 
 function getScopes(templateScopes: SettingsScope[]) {
-  return SettingsScopes.filter((s) =>
+  return DebuggableSettingsScopes.filter((s) =>
     templateScopes.includes(s.id as SettingsScope),
   );
 }
@@ -127,6 +127,11 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
     });
   };
 
+  const capitalize = (word: string) => {
+    if (!word) return '';
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  };
+
   useEffect(() => {
     if (copied) {
       let clearId = setTimeout(() => {
@@ -192,19 +197,39 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
             >
               {scopeList
                 .filter((scope) => scope.debuggable)
-                .map((scope, index) => (
-                  <Button
-                    key={index}
-                    colorScheme={'cyan'}
-                    size={'xs'}
-                    mr={'5px'}
-                    onClick={() => {
-                      emitDebugEvent(props.widget, scope.id);
-                    }}
-                  >
-                    {scope.name}
-                  </Button>
-                ))}
+                .flatMap((scope) => {
+                  if (scope.topic && scope.topic.length > 0) {
+                    // Generate one button for each topic in the array
+                    return scope.topic.map((topic, index) => (
+                      <Button
+                        key={`${scope.id}-${index}`}
+                        colorScheme={'cyan'}
+                        size={'xs'}
+                        mr={'5px'}
+                        onClick={() => {
+                          emitDebugEvent(props.widget, topic);
+                        }}
+                      >
+                        {capitalize(topic.split(':')[1]).replace(/\_/g, ' ')}
+                      </Button>
+                    ));
+                  } else {
+                    // Generate a single button for the scope
+                    return (
+                      <Button
+                        key={scope.id}
+                        colorScheme={'cyan'}
+                        size={'xs'}
+                        mr={'5px'}
+                        onClick={() => {
+                          emitDebugEvent(props.widget, scope.id);
+                        }}
+                      >
+                        {scope.name}
+                      </Button>
+                    );
+                  }
+                })}
             </Flex>
           </FormControl>
 
@@ -226,7 +251,9 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               <Switch
                 isRequired={true}
                 isChecked={props.enabled}
-                onChange={(e) => props.setEnabled(e.target.checked)}
+                onChange={(e: { target: { checked: boolean } }) =>
+                  props.setEnabled(e.target.checked)
+                }
               />
               <FormHelperText m={'0'}>
                 Disabling it will cause the widget to stop working instantly.
@@ -241,7 +268,9 @@ export default function WidgetOverviewTab(props: WidgetOverviewTabProps) {
               <Switch
                 isRequired={true}
                 isChecked={props.autoUpdate}
-                onChange={(e) => props.setAutoUpdate(e.target.checked)}
+                onChange={(e: { target: { checked: boolean } }) =>
+                  props.setAutoUpdate(e.target.checked)
+                }
               />
               <FormHelperText m={'0'}>
                 Automatically upgrade the widget when the Template is updated.

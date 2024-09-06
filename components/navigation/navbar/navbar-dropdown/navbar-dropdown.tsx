@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Icon,
   Menu,
@@ -7,7 +6,7 @@ import {
   MenuItem,
   MenuList,
   Text,
-  useColorMode,
+  useColorMode
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
@@ -47,12 +46,12 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
       >
         {content.map(
           ({ link, icon: IconElement, label, color, onClick }, key) => (
-            <MenuItem
-              key={key}
-              bg={'transparent'}
-              color={(color || 'normal') === 'normal' ? 'inherit' : 'red.500'}
-            >
-              <Link href={link || '#'} onClick={onClick}>
+            <Link href={link || '#'} onClick={onClick}>
+              <MenuItem
+                key={key}
+                bg={'transparent'}
+                color={(color || 'normal') === 'normal' ? 'inherit' : 'red.500'}
+              >
                 <Text>
                   {IconElement && (
                     <Icon fontSize={'20px'} mr={'5px'}>
@@ -61,8 +60,8 @@ export default function NavbarDropdown({ children, content }: NavbarDropdown) {
                   )}
                   {label}
                 </Text>
-              </Link>
-            </MenuItem>
+              </MenuItem>
+            </Link>
           ),
         )}
       </MenuList>

@@ -3,6 +3,8 @@ import {
   Flex,
   Heading,
   Input,
+  InputGroup,
+  InputRightAddon,
   Tab,
   TabList,
   TabPanels,
@@ -16,6 +18,7 @@ import CodeEditorTab from '@/components/editor/template-version-editor/CodeEdito
 import FieldsTab from '@/components/editor/template-version-editor/FieldsTab';
 import ScopesTab from '@/components/editor/template-version-editor/ScopesTab';
 import Loading from '@/components/layout/loading';
+import useQueryTab from '@/hooks/useQueryTab';
 import useTemplates from '@/hooks/useTemplates';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
@@ -25,9 +28,17 @@ import {
   postTemplateUpdate,
 } from '@/services/template-versions';
 
+const TabIndexes: { [key in string]: number } = {
+  scopes: 0,
+  settings: 1,
+  editor: 2,
+};
+
 export default function CreatorTemplateUpdateSourcePage() {
   const { userTemplates } = useTemplates();
   const { query } = useRouter();
+  const { tabIndex, setTabIndex } = useQueryTab(TabIndexes);
+
   const [isSaving, setIsSaving] = useState(false);
 
   // Find template by ID in query.
@@ -93,18 +104,37 @@ export default function CreatorTemplateUpdateSourcePage() {
     setIsSaving(false);
   };
 
+  const handleVersionIncrease = () => {
+    const currentVerNumbers = version.split('.');
+    const lastNumber = currentVerNumbers.pop() || '0';
+
+    const newLastNumber = (parseInt(lastNumber, 10) + 1).toString();
+    const newVersion = [...currentVerNumbers, newLastNumber].join('.');
+
+    setVersion(newVersion);
+  };
+
   // Otherwise, render template editor.
   return (
     <Flex flexDirection={'column'} gap={'30px'} width={'100%'}>
       <Flex alignItems={'center'} justifyContent={'space-between'}>
         <Heading>Post a Template Update</Heading>
         <Flex gap={'10px'}>
-          <Input
-            placeholder="0.0.0"
-            value={version}
-            onChange={(e) => setVersion(e.target.value)}
-            w={'fit-content'}
-          />
+          <InputGroup>
+            <Input
+              placeholder="0.0.0"
+              value={version}
+              onChange={(e) => setVersion(e.target.value)}
+              w={'fit-content'}
+            />
+            <InputRightAddon
+              onClick={handleVersionIncrease}
+              userSelect="none"
+              cursor="pointer"
+            >
+              +
+            </InputRightAddon>
+          </InputGroup>
 
           <Button
             colorScheme={'blue'}
@@ -118,7 +148,7 @@ export default function CreatorTemplateUpdateSourcePage() {
       </Flex>
 
       {/* Editor */}
-      <Tabs>
+      <Tabs onChange={(index) => setTabIndex(index)} index={tabIndex}>
         <TabList>
           <Tab>Scopes</Tab>
           <Tab>Settings</Tab>
