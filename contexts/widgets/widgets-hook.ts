@@ -1,8 +1,8 @@
-import IWidget from '@/services/widgets/widget';
+import { Widget } from '@staroverlay/sdk';
 
 export interface WidgetHook {
-  widgets: IWidget[];
-  addWidget: (widget: IWidget) => void;
-  removeWidget: (widget: IWidget) => void;
-  updateWidget: (widget: IWidget) => void;
+  widgets: Widget[];
+  addWidget: (widget: Widget) => void;
+  removeWidget: (widget: Widget) => void;
+  updateWidget: (widget: Widget) => void;
 }

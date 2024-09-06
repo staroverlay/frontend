@@ -1,10 +1,10 @@
 import { Box, Checkbox, Flex, Heading, TabPanel } from '@chakra-ui/react';
-
-import ServiceType from '@/services/shared/service-type';
-import SettingsScope, {
+import {
+  ServiceType,
+  SettingsScope,
   SettingsScopeData,
   SettingsScopes,
-} from '@/services/shared/settings-scope';
+} from '@staroverlay/sdk';
 
 interface ScopeCheckboxProps {
   id: string;

@@ -9,12 +9,12 @@ import useTemplates from '@/hooks/useTemplates';
 import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { deleteTemplate } from '@/services/templates';
-import ITemplate from '@/services/templates/template';
 import { createWidget } from '@/services/widgets';
+import { Template } from '@staroverlay/sdk';
 
 interface TemplatesGridProps {
   search?: string;
-  templates: ITemplate[];
+  templates: Template[];
 }
 
 function NoTemplates({ message }: { message?: string }) {
@@ -27,7 +27,7 @@ function NoTemplates({ message }: { message?: string }) {
   );
 }
 
-function TemplatesRender({ templates }: { templates: ITemplate[] }) {
+function TemplatesRender({ templates }: { templates: Template[] }) {
   const {
     isOpen: isCreateOpen,
     onClose: onCreateClose,
@@ -42,7 +42,7 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
   const { addWidget } = useWidgets();
   const { removeTemplate } = useTemplates();
   const [loading, setLoading] = useState(false);
-  const [selectedTemplate, setSelectedTemplate] = useState<ITemplate | null>(
+  const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(
     null,
   );
 
@@ -70,13 +70,13 @@ function TemplatesRender({ templates }: { templates: ITemplate[] }) {
 
   const handleDeleteTemplate = () => {
     setLoading(true);
-    toastPending(deleteTemplate(selectedTemplate as ITemplate), {
+    toastPending(deleteTemplate(selectedTemplate as Template), {
       pending: 'Deleting template',
       success: 'Template deleted',
     })
       .then(() => {
         onDeleteClose();
-        removeTemplate(selectedTemplate as ITemplate);
+        removeTemplate(selectedTemplate as Template);
       })
       .finally(() => setLoading(false));
   };

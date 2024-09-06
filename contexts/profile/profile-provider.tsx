@@ -1,9 +1,9 @@
+import { Profile } from '@staroverlay/sdk';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import Loading from '@/components/layout/loading';
 import useAuth from '@/hooks/useAuth';
 import { getMyProfile } from '@/services/profile';
-import Profile from '@/services/profile/profile';
 
 import { ProfileContext } from './profile-context';
 

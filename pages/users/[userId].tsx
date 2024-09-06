@@ -1,13 +1,12 @@
 import { Box, Flex } from '@chakra-ui/react';
+import { User } from '@staroverlay/sdk';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-
-import IUser from '@/services/users/user';
 
 export default function UserPage() {
   const { query } = useRouter();
   const userId = query.userId as string;
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isFetching, setIsFetching] = useState<boolean>(true);
 
   useEffect(() => {}, [userId]);

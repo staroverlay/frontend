@@ -13,18 +13,17 @@ import {
   MenuList,
   Stack,
 } from '@chakra-ui/react';
+import { Widget } from '@staroverlay/sdk';
 import Link from 'next/link';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { FaEllipsisV } from 'react-icons/fa';
 
-import IWidget from '@/services/widgets/widget';
-
 import styles from './WidgetCard.module.css';
 
 export interface WidgetCardProps {
-  widget: IWidget;
-  onClone: (widget: IWidget) => void;
-  onDelete: (widget: IWidget) => void;
+  widget: Widget;
+  onClone: (widget: Widget) => void;
+  onDelete: (widget: Widget) => void;
 }
 
 export default function WidgetCard({

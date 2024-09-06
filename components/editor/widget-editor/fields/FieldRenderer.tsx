@@ -1,6 +1,4 @@
-import ITemplateField, {
-  TemplateFieldType,
-} from '@/services/template-versions/template-field';
+import { TemplateField, TemplateFieldType } from '@staroverlay/sdk';
 
 import FieldRendererArray from './FieldRendererArray';
 import FieldRendererBoolean from './FieldRendererBoolean';
@@ -15,7 +13,7 @@ import FieldRendererString from './FieldRendererString';
 import FieldRendererTwitchReward from './FieldRendererTwitchReward';
 
 export interface FieldRendererProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: any;
   setValue: (value: any) => void;
 }

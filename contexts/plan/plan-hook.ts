@@ -1,7 +1,7 @@
-import IPlan from '@/services/plans/plan';
+import { Plan } from '@staroverlay/sdk';
 
 export interface PlanHook {
-  plans: IPlan[];
-  defaultPlan: IPlan;
-  activePlan: IPlan;
+  plans: Plan[];
+  defaultPlan: Plan;
+  activePlan: Plan;
 }

@@ -1,6 +1,4 @@
-import ServiceType from '@/services/shared/service-type';
-
-import TemplateVisibility from '../template-visibility';
+import { ServiceType, TemplateVisibility } from '@staroverlay/sdk';
 
 export default interface UpdateTemplateDTO {
   description?: string;

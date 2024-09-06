@@ -3,7 +3,7 @@ import { PropsWithChildren, useEffect, useState } from 'react';
 import Loading from '@/components/layout/loading';
 import useAuth from '@/hooks/useAuth';
 import { getAcquisitions } from '@/services/acquisition';
-import Acquisition from '@/services/acquisition/acquisition';
+import { Acquisition } from '@staroverlay/sdk';
 
 import { AcquisitionsContext } from './acquisitions-context';
 

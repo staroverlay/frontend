@@ -10,11 +10,10 @@ import {
   SliderTrack,
   Text,
 } from '@chakra-ui/react';
-
-import ITemplateField from '@/services/template-versions/template-field';
+import { TemplateField } from '@staroverlay/sdk';
 
 export interface FieldRendererNumberProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: number;
   setValue: (value: number) => void;
 }

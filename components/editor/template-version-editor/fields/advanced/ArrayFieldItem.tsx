@@ -5,13 +5,12 @@ import {
   Select,
   SimpleGrid,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-
 import {
   FieldArraySettings,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/services/template-versions/template-field';
+} from '@staroverlay/sdk';
+import { useEffect, useState } from 'react';
 
 interface ArrayFieldItemProps {
   settings: FieldArraySettings;

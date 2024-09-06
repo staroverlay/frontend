@@ -1,5 +1,6 @@
-import client from '@/lib/clients/graphql';
+import { Session, SessionAndUser } from '@staroverlay/sdk';
 
+import client from '@/lib/clients/graphql';
 import CreateSessionDTO from './dto/create-session.dto';
 import CreateSessionMutation from './graphql/createSessionMutation';
 import CreateSessionWithTwitchMutation from './graphql/createSessionWithTwitchMutation';
@@ -7,12 +8,10 @@ import GetSessionsQuery from './graphql/getSessionsQuery';
 import InvalidateAllSessionsMutation from './graphql/invalidateAllSessionsMutation';
 import InvalidateSessionByIDMutation from './graphql/invalidateSessionByIDMutation';
 import InvalidateSessionMutation from './graphql/invalidateSessionMutation';
-import ISession from './session';
-import ISessionAndUser from './session-and-user';
 
-export async function getSessions(): Promise<ISession[]> {
+export async function getSessions(): Promise<Session[]> {
   const session = await client.fetch(GetSessionsQuery);
-  return session as ISession[];
+  return session as Session[];
 }
 
 export async function invalidateSession(): Promise<Boolean> {
@@ -32,14 +31,14 @@ export async function invalidateSessionByID(id: string): Promise<Boolean> {
 
 export async function createSession(
   payload: CreateSessionDTO,
-): Promise<ISessionAndUser> {
+): Promise<SessionAndUser> {
   const session = await client.fetch(CreateSessionMutation, { payload });
-  return session as ISessionAndUser;
+  return session as SessionAndUser;
 }
 
 export async function createSessionWithTwitch(
   code: string,
-): Promise<ISessionAndUser> {
+): Promise<SessionAndUser> {
   const session = await client.fetch(CreateSessionWithTwitchMutation, { code });
-  return session as ISessionAndUser;
+  return session as SessionAndUser;
 }

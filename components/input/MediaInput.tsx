@@ -7,10 +7,10 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
+import { FileType } from '@staroverlay/sdk';
 
 import useMedia from '@/hooks/useMedia';
 import { getMediaThumbnailURL } from '@/lib/utils/media';
-import { FileType } from '@/services/medias/media';
 
 import MediaSelectModal from '../modals/media-select-modal/MediaSelectModal';
 

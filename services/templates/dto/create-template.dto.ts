@@ -1,4 +1,4 @@
-import ServiceType from '@/services/shared/service-type';
+import { ServiceType } from '@staroverlay/sdk';
 
 export default interface CreateTemplateDTO {
   name: string;

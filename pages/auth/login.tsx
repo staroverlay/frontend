@@ -11,6 +11,7 @@ import {
   Input,
   useColorMode,
 } from '@chakra-ui/react';
+import { IntegrationType, SessionAndUser } from '@staroverlay/sdk';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -19,9 +20,7 @@ import { FaTwitch } from 'react-icons/fa';
 import useAuth from '@/hooks/useAuth';
 import { oauthLogin } from '@/lib/utils/oauth';
 import { handlePromise } from '@/lib/utils/promise';
-import { IntegrationType } from '@/services/integrations/integration';
 import { createSession } from '@/services/sessions';
-import ISessionAndUser from '@/services/sessions/session-and-user';
 
 export default function Login() {
   const { colorMode } = useColorMode();
@@ -57,7 +56,7 @@ export default function Login() {
   const handleOAuthLogin = async (type: IntegrationType) => {
     setLoading(true);
 
-    const session = await handlePromise<ISessionAndUser | null>(
+    const session = await handlePromise<SessionAndUser | null>(
       oauthLogin(type),
     ).finally(() => setLoading(false));
 

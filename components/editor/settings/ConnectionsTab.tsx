@@ -25,10 +25,8 @@ import { oauthIntegration } from '@/lib/utils/oauth';
 import { capitalize } from '@/lib/utils/strings';
 import { toastError, toastSuccess } from '@/lib/utils/toasts';
 import { disconnectIntegration } from '@/services/integrations';
-import IIntegration, {
-  IntegrationType,
-} from '@/services/integrations/integration';
 import { syncProfileWithIntegration } from '@/services/profile';
+import { Integration, IntegrationType } from '@staroverlay/sdk';
 
 const URLS: Record<IntegrationType, string> = {
   kick: 'https://kick.com/',
@@ -109,9 +107,9 @@ const ConnectionItem = ({
   Icon,
   onDisconnect,
 }: {
-  integration: IIntegration;
+  integration: Integration;
   Icon: IconType;
-  onDisconnect: (integration: IIntegration) => Promise<void>;
+  onDisconnect: (integration: Integration) => Promise<void>;
 }) => {
   const { colorMode } = useColorMode();
   const { setProfile } = useProfile();
@@ -209,7 +207,7 @@ const ConnectionProvider = ({
   type: IntegrationType;
   Icon: IconType;
   onConnect: (type: IntegrationType) => Promise<void>;
-  onDisconnect: (integration: IIntegration) => Promise<void>;
+  onDisconnect: (integration: Integration) => Promise<void>;
 }) => {
   const { getIntegration } = useIntegrations();
   const integration = getIntegration(type);
@@ -238,7 +236,7 @@ export default function ConnectionsTab() {
     }
   };
 
-  const onDisconnect = async (integration: IIntegration): Promise<void> => {
+  const onDisconnect = async (integration: Integration): Promise<void> => {
     const success = await disconnectIntegration(integration._id);
     if (success) {
       removeIntegration(integration);

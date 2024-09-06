@@ -1,27 +1,25 @@
 import Loading from '@/components/layout/loading';
 import useAuth from '@/hooks/useAuth';
 import { getUserIntegrations } from '@/services/integrations';
-import IIntegration, {
-  IntegrationType,
-} from '@/services/integrations/integration';
+import { Integration, IntegrationType } from '@staroverlay/sdk';
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { IntegrationsContext } from './integrations-context';
 
 export function IntegrationsProvider({ children }: PropsWithChildren) {
   const { user } = useAuth();
-  const [integrations, setIntegrations] = useState<IIntegration[]>([]);
+  const [integrations, setIntegrations] = useState<Integration[]>([]);
   const [fetched, setFetched] = useState(false);
 
-  const removeIntegration = (integration: IIntegration | string) => {
+  const removeIntegration = (integration: Integration | string) => {
     const id = typeof integration === 'string' ? integration : integration._id;
     setIntegrations(integrations.filter((m) => m._id !== id));
   };
 
-  const addIntegration = (integration: IIntegration) => {
+  const addIntegration = (integration: Integration) => {
     setIntegrations([...integrations, integration]);
   };
 
-  const updateIntegration = (integration: IIntegration) => {
+  const updateIntegration = (integration: Integration) => {
     setIntegrations(
       integrations.map((m) => (m._id === integration._id ? integration : m)),
     );

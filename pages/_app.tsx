@@ -19,19 +19,10 @@ import Layout from '../components/layout';
 import { AuthProvider } from '../contexts/auth';
 import { MediaProvider } from '../contexts/media/media-provider';
 import { TemplatesProvider } from '../contexts/templates';
-import User from '../services/users/user';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-// App
-interface InitialAppProps extends AppProps {
-  props: {
-    authURL: string;
-    user: User | null;
-  };
-}
-
-export default function App({ Component, pageProps }: InitialAppProps) {
+export default function App({ Component, pageProps }: AppProps) {
   const [mounted, setMounted] = useState(false);
   const { pathname } = useRouter();
 

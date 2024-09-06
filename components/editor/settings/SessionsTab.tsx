@@ -7,6 +7,7 @@ import {
   Text,
   useColorMode,
 } from '@chakra-ui/react';
+import { Session } from '@staroverlay/sdk';
 import { useEffect, useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import { UAParser } from 'ua-parser-js';
@@ -18,13 +19,12 @@ import {
   invalidateAllSessions,
   invalidateSessionByID,
 } from '@/services/sessions';
-import ISession from '@/services/sessions/session';
 
 const SessionItem = ({
   session,
   onRemove,
 }: {
-  session: ISession;
+  session: Session;
   onRemove: (isSame: boolean) => Promise<unknown>;
 }) => {
   const { colorMode } = useColorMode();
@@ -94,7 +94,7 @@ const SessionItem = ({
 };
 
 export default function SessionsTab() {
-  const [sessions, setSessions] = useState<ISession[]>([]);
+  const [sessions, setSessions] = useState<Session[]>([]);
   const [fetched, setFetched] = useState(false);
   const { logout } = useAuth();
 
@@ -103,7 +103,7 @@ export default function SessionsTab() {
     logout(false);
   };
 
-  const logoutSession = async (same: boolean, session: ISession) => {
+  const logoutSession = async (same: boolean, session: Session) => {
     await invalidateSessionByID(session._id);
 
     if (same) logout(false);

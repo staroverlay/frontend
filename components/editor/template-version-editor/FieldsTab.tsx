@@ -1,40 +1,38 @@
 import { Button, Flex, Heading, TabPanel } from '@chakra-ui/react';
+import { TemplateField, TemplateFieldGroup } from '@staroverlay/sdk';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-
-import ITemplateField from '@/services/template-versions/template-field';
-import ITemplateFieldGroup from '@/services/template-versions/template-field-group';
 
 import FieldRenderer from '../widget-editor/fields/FieldRenderer';
 import FieldItem from './fields/FieldItem';
 import SideFieldCategory from './side/SideFieldCategory';
 
 interface FieldsTabProps {
-  fields: ITemplateFieldGroup[];
-  setFields: (fields: ITemplateFieldGroup[]) => void;
+  fields: TemplateFieldGroup[];
+  setFields: (fields: TemplateFieldGroup[]) => void;
 }
 
 export default function FieldsTab({ fields, setFields }: FieldsTabProps) {
   // State.
   const [selectedCategory, setSelectedCategory] =
-    useState<ITemplateFieldGroup | null>(null);
-  const [selectedField, setSelectedField] = useState<ITemplateField | null>(
+    useState<TemplateFieldGroup | null>(null);
+  const [selectedField, setSelectedField] = useState<TemplateField | null>(
     null,
   );
   const [generatedCategories, setGeneratedCategories] = useState(1);
 
   // Handlers.
-  const handleRemove = (group: ITemplateFieldGroup) => {
+  const handleRemove = (group: TemplateFieldGroup) => {
     const categories = [...fields].filter((c) => c != group);
     setFields(categories);
   };
 
-  const handleUpdate = (category: ITemplateFieldGroup) => {
+  const handleUpdate = (category: TemplateFieldGroup) => {
     const categories = [...fields].map((c) => (c === category ? category : c));
     setFields(categories);
   };
 
-  const handleUpdateField = (field: ITemplateField) => {
+  const handleUpdateField = (field: TemplateField) => {
     const category = fields.find(
       (c) =>
         c.children.find((f) => f._internalId === field._internalId) != null,

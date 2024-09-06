@@ -6,18 +6,17 @@ import {
   FormLabel,
   useDisclosure,
 } from '@chakra-ui/react';
+import { TemplateField, TwitchCustomReward } from '@staroverlay/sdk';
 import { useEffect } from 'react';
 
 import TwitchRewardCard from '@/components/cards/twitch-reward/TwitchRewardCard';
 import TwitchRewardSelectModal from '@/components/modals/twitch-reward-select-modal/TwitchRewardSelectModal';
 import useQuery from '@/hooks/useQuery';
 import { toastError } from '@/lib/utils/toasts';
-import ITemplateField from '@/services/template-versions/template-field';
 import GetTwitchCustomRewardsQuery from '@/services/twitch/graphql/getTwitchCustomRewardsQuery';
-import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
 
 export interface FieldRendererTwitchRewardProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: unknown;
   setValue: (value: unknown) => void;
 }
@@ -31,10 +30,10 @@ export default function FieldRendererTwitchReward({
     data: rewards,
     error: rewardsError,
     loading: rewardsLoading,
-  } = useQuery<ITwitchCustomReward[]>(GetTwitchCustomRewardsQuery);
+  } = useQuery<TwitchCustomReward[]>(GetTwitchCustomRewardsQuery);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
-  const selectedReward = ((rewards || []) as ITwitchCustomReward[]).find(
+  const selectedReward = ((rewards || []) as TwitchCustomReward[]).find(
     (r) => r.id === value,
   );
 
@@ -73,7 +72,7 @@ export default function FieldRendererTwitchReward({
         {selectedReward == null && <Button size={'sm'}>Select reward</Button>}
         {selectedReward != null && (
           <TwitchRewardCard
-            reward={selectedReward as ITwitchCustomReward}
+            reward={selectedReward as TwitchCustomReward}
             size="sm"
             variant="horizontal"
             onSelect={() => onOpen()}

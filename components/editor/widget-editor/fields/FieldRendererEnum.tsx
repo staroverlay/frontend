@@ -7,11 +7,10 @@ import {
   Select,
   Stack,
 } from '@chakra-ui/react';
-
-import ITemplateField from '@/services/template-versions/template-field';
+import { TemplateField } from '@staroverlay/sdk';
 
 export interface FieldRendererEnumProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: string;
   setValue: (value: string) => void;
 }

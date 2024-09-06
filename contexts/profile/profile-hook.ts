@@ -1,4 +1,4 @@
-import Profile from '@/services/profile/profile';
+import { Profile } from '@staroverlay/sdk';
 
 export interface ProfileHook {
   profile: Profile | null;

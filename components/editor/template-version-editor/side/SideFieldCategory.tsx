@@ -1,20 +1,19 @@
 import { Button, Flex } from '@chakra-ui/react';
+import { TemplateField, TemplateFieldGroup } from '@staroverlay/sdk';
 import { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 import { randomString } from '@/lib/utils/random';
-import ITemplateField from '@/services/template-versions/template-field';
-import ITemplateFieldGroup from '@/services/template-versions/template-field-group';
 
 import SideField from './SideField';
 
 export interface SideFieldCategoryProps {
-  category: ITemplateFieldGroup;
-  onUpdate: (category: ITemplateFieldGroup) => unknown;
+  category: TemplateFieldGroup;
+  onUpdate: (category: TemplateFieldGroup) => unknown;
   onRemove: () => unknown;
-  onSelect: (field: ITemplateField | null) => unknown;
-  onRenameField: (field: ITemplateField, newName: string) => unknown;
-  selected: ITemplateField | null | undefined;
+  onSelect: (field: TemplateField | null) => unknown;
+  onRenameField: (field: TemplateField, newName: string) => unknown;
+  selected: TemplateField | null | undefined;
 }
 
 export default function SideFieldCategory({
@@ -27,7 +26,7 @@ export default function SideFieldCategory({
 }: SideFieldCategoryProps) {
   const [generatedFields, setGeneratedFields] = useState(1);
 
-  const handleRemove = (field: ITemplateField) => {
+  const handleRemove = (field: TemplateField) => {
     category.children = category.children.filter(
       (f) => f._internalId != field._internalId,
     );
@@ -40,7 +39,7 @@ export default function SideFieldCategory({
 
   const handleAdd = () => {
     const id = `field-${generatedFields}`;
-    const item: ITemplateField = {
+    const item: TemplateField = {
       _internalId: randomString(6),
       id,
       label: 'New Field',
@@ -54,7 +53,7 @@ export default function SideFieldCategory({
     setGeneratedFields(generatedFields + 1);
   };
 
-  const handleFieldUp = (field: ITemplateField) => {
+  const handleFieldUp = (field: TemplateField) => {
     const children = category.children;
     const index = children.findIndex(
       (f) => f._internalId === field._internalId,
@@ -65,7 +64,7 @@ export default function SideFieldCategory({
     onUpdate(category);
   };
 
-  const handleFieldDown = (field: ITemplateField) => {
+  const handleFieldDown = (field: TemplateField) => {
     const children = category.children;
     const index = children.findIndex(
       (f) => f._internalId === field._internalId,

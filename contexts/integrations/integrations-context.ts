@@ -1,14 +1,12 @@
+import { Integration, IntegrationType } from '@staroverlay/sdk';
 import React from 'react';
 
-import IIntegration, {
-  IntegrationType,
-} from '@/services/integrations/integration';
 import { IntegrationsHook } from './integrations-hook';
 
 export const IntegrationsContext = React.createContext<IntegrationsHook>({
   integrations: [],
-  addIntegration: (integration: IIntegration) => {},
-  updateIntegration: (integration: IIntegration) => {},
-  removeIntegration: (integration: IIntegration | string) => {},
+  addIntegration: (integration: Integration) => {},
+  updateIntegration: (integration: Integration) => {},
+  removeIntegration: (integration: Integration | string) => {},
   getIntegration: (type: IntegrationType) => null,
 });

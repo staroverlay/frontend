@@ -1,22 +1,22 @@
 import client from '@/lib/clients/graphql';
+import { Integration } from '@staroverlay/sdk';
 
 import CreateTwitchIntegrationMutation from './graphql/createTwitchIntegrationMutation';
 import GetUserIntegrationsQuery from './graphql/getUserIntegrationsQuery';
 import RemoveIntegrationMutation from './graphql/removeIntegrationMutation';
-import IIntegration from './integration';
 
-export async function getUserIntegrations(): Promise<IIntegration[]> {
+export async function getUserIntegrations(): Promise<Integration[]> {
   const integration = await client.fetch(GetUserIntegrationsQuery);
-  return integration as IIntegration[];
+  return integration as Integration[];
 }
 
 export async function createTwitchIntegration(
   code: string,
-): Promise<IIntegration> {
+): Promise<Integration> {
   const integration = await client.fetch(CreateTwitchIntegrationMutation, {
     code,
   });
-  return integration as IIntegration;
+  return integration as Integration;
 }
 
 export async function disconnectIntegration(id: string): Promise<Boolean> {

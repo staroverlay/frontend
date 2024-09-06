@@ -9,13 +9,15 @@ import {
   TabPanel,
   Textarea,
 } from '@chakra-ui/react';
+import {
+  ServiceType,
+  ServiceTypes,
+  TemplateVisibilities,
+  TemplateVisibility,
+} from '@staroverlay/sdk';
 
 import TemplateCard from '@/components/cards/template/TemplateCard';
 import MediaInput from '@/components/input/MediaInput';
-import ServiceType, { ServiceTypes } from '@/services/shared/service-type';
-import TemplateVisibility, {
-  TemplateVisibilities,
-} from '@/services/templates/template-visibility';
 
 type Dispatcher<T> = (state: T) => unknown;
 

@@ -1,4 +1,4 @@
-import IMedia from '@/services/medias/media';
+import { Media } from '@staroverlay/sdk';
 
 import FilePreview from '../../content/file-preview/FilePreview';
 import BaseModal from '../base-modal/BaseModal';
@@ -6,7 +6,7 @@ import BaseModal from '../base-modal/BaseModal';
 interface MediaPreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  media: IMedia;
+  media: Media;
 }
 
 export default function MediaPreviewModal({

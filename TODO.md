@@ -6,6 +6,7 @@ This is a list of things that need to be done in the project.
 
 - 📨 Invite codes for beta access.
 - 📡 Emit debug events.
+- 🔓 Refactor session retriever and endpoint redundant: (Session, SessionWithToken, SessionAndUser)
 
 ## ✅ Done
 

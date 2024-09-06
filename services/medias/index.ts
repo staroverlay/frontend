@@ -1,3 +1,5 @@
+import { Media } from '@staroverlay/sdk';
+
 import client from '@/lib/clients/graphql';
 import R2 from '@/lib/clients/r2';
 
@@ -5,7 +7,6 @@ import CompleteMediaMutation from './graphql/completeMediaMutation';
 import CreateMediaMutation from './graphql/createMediaMutation';
 import DeleteMediaMutation from './graphql/deleteMediaMutation';
 import GetAllMediaQuery from './graphql/getAllMediaQuery';
-import IMedia from './media';
 import IMediaPart from './media-part';
 
 export async function createMedia(payload: {
@@ -14,7 +15,7 @@ export async function createMedia(payload: {
   size: number;
 }) {
   const media = await client.fetch(CreateMediaMutation, { payload });
-  return media as IMedia;
+  return media as Media;
 }
 
 export async function uploadPart(
@@ -35,15 +36,15 @@ export async function completeMedia(payload: {
   thumbnailParts: IMediaPart[];
 }) {
   const media = await client.fetch(CompleteMediaMutation, { payload });
-  return media as IMedia;
+  return media as Media;
 }
 
 export async function getAllMedia() {
   const medias = await client.fetch(GetAllMediaQuery);
-  return medias as IMedia[];
+  return medias as Media[];
 }
 
-export async function deleteMedia(media: IMedia) {
+export async function deleteMedia(media: Media) {
   const id = media._id;
   return await client.fetch(DeleteMediaMutation, { id });
 }

@@ -1,9 +1,9 @@
+import { Membership } from '@staroverlay/sdk';
+
 import client from '@/lib/clients/graphql';
-
 import GetMyMembershipQuery from './graphql/getMyMembershipQuery';
-import IMembership from './membership';
 
-export async function getMyMembership(): Promise<IMembership | null> {
+export async function getMyMembership(): Promise<Membership | null> {
   const membership = await client.fetch(GetMyMembershipQuery);
-  return membership as IMembership | null;
+  return membership as Membership | null;
 }

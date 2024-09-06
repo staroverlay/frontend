@@ -1,6 +1,5 @@
+import { User } from '@staroverlay/sdk';
 import React from 'react';
-
-import User from '@/services/users/user';
 
 import { AuthHook } from './auth-hook';
 

@@ -11,6 +11,7 @@ import {
   Input,
   useColorMode,
 } from '@chakra-ui/react';
+import { IntegrationType, User } from '@staroverlay/sdk';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -18,9 +19,7 @@ import { FaTwitch } from 'react-icons/fa';
 
 import { oauthRegister } from '@/lib/utils/oauth';
 import { handlePromise } from '@/lib/utils/promise';
-import { IntegrationType } from '@/services/integrations/integration';
 import { createUser } from '@/services/users';
-import IUser from '@/services/users/user';
 
 export default function Register() {
   const { colorMode } = useColorMode();
@@ -69,7 +68,7 @@ export default function Register() {
   const handleOAuthRegister = async (type: IntegrationType) => {
     setLoading(true);
 
-    const user = await handlePromise<IUser | null>(oauthRegister(type)).finally(
+    const user = await handlePromise<User | null>(oauthRegister(type)).finally(
       () => setLoading(false),
     );
 

@@ -7,6 +7,7 @@ import {
   useColorMode,
   useDisclosure,
 } from '@chakra-ui/react';
+import { Template } from '@staroverlay/sdk';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -17,7 +18,6 @@ import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { createAcquisition } from '@/services/acquisition';
 import { getTemplateByID } from '@/services/templates';
-import ITemplate from '@/services/templates/template';
 import { createWidget } from '@/services/widgets';
 
 import Error404 from '../404';
@@ -112,7 +112,7 @@ export default function StoreTemplatePage() {
   const { isAcquired } = useAcquisitions();
   const isTemplateAcquired = isAcquired('template', templateId);
 
-  const [template, setTemplate] = useState<ITemplate | null>(null);
+  const [template, setTemplate] = useState<Template | null>(null);
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {

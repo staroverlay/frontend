@@ -1,5 +1,6 @@
+import { SettingsScope } from '@staroverlay/sdk';
+
 import IDictionary from '@/lib/IDictionary';
-import SettingsScope from '@/services/shared/settings-scope';
 
 type WidgetUpdatePayload = {
   autoUpdate?: boolean;

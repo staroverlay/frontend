@@ -1,11 +1,11 @@
-import client from '@/lib/clients/graphql';
+import { Profile } from '@staroverlay/sdk';
 
+import client from '@/lib/clients/graphql';
 import UpdateProfileDTO from './dto/update-profile.dto';
 import GetMyProfileQuery from './graphql/getMyProfile';
 import GetProfileQuery from './graphql/getProfileQuery';
 import SyncProfileWithIntegrationMutation from './graphql/syncProfileWithIntegrationMutation';
 import UpdateProfileMutation from './graphql/updateProfileMutation';
-import Profile from './profile';
 
 export async function getProfile(id: string): Promise<Profile | null> {
   const profile = await client.fetch(GetProfileQuery, { id });

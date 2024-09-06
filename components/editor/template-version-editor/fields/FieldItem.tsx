@@ -8,19 +8,19 @@ import {
   Select,
   SimpleGrid,
 } from '@chakra-ui/react';
-
-import ITemplateField, {
-  ITemplateAdvancedField,
+import {
+  TemplateAdvancedField,
+  TemplateField,
   TemplateFieldType,
   TemplateFieldTypes,
-} from '@/services/template-versions/template-field';
+} from '@staroverlay/sdk';
 
 import FieldItemAdvanced from './FieldItemAdvanced';
 
 interface FieldItemProps {
   categoryId: string;
-  field: ITemplateField;
-  onUpdate: (field: ITemplateField) => void;
+  field: TemplateField;
+  onUpdate: (field: TemplateField) => void;
 }
 
 export default function FieldItem({
@@ -30,7 +30,7 @@ export default function FieldItem({
 }: FieldItemProps) {
   const { label, type, description } = field;
 
-  const setAdvanced = (advanced: ITemplateAdvancedField) => {
+  const setAdvanced = (advanced: TemplateAdvancedField) => {
     onUpdate({ ...field, ...advanced });
   };
 

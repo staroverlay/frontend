@@ -1,16 +1,16 @@
 import { Button, Flex, Heading, SimpleGrid } from '@chakra-ui/react';
+import { FileType, Media } from '@staroverlay/sdk';
 
 import MediaCard from '@/components/cards/media/MediaCard';
 import useMedia from '@/hooks/useMedia';
-import IMedia, { FileType } from '@/services/medias/media';
 
 import styles from './MediasGrid.module.css';
 
 interface MediasGridProps {
-  medias: IMedia[];
+  medias: Media[];
   cardSize?: 'sm' | 'md' | 'lg';
   filter?: FileType | FileType[];
-  onSelect?: (media: IMedia) => void;
+  onSelect?: (media: Media) => void;
 }
 
 function UploadContentButton() {

@@ -6,11 +6,10 @@ import {
   Switch,
   Text,
 } from '@chakra-ui/react';
-
-import ITemplateField from '@/services/template-versions/template-field';
+import { TemplateField } from '@staroverlay/sdk';
 
 export interface FieldRendererBooleanProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: boolean;
   setValue: (value: boolean) => void;
 }

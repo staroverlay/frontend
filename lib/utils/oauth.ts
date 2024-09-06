@@ -1,18 +1,20 @@
-import { createTwitchIntegration } from '../../services/integrations';
-import IIntegration, {
+import {
+  Integration,
   IntegrationType,
-} from '../../services/integrations/integration';
-import { createSessionWithTwitch } from '../../services/sessions';
-import ISessionAndUser from '../../services/sessions/session-and-user';
-import { createUserWithTwitch } from '../../services/users';
-import IUser from '../../services/users/user';
+  SessionAndUser,
+  User,
+} from '@staroverlay/sdk';
+
+import { createTwitchIntegration } from '@/services/integrations';
+import { createSessionWithTwitch } from '@/services/sessions';
+import { createUserWithTwitch } from '@/services/users';
 import { openWindow } from './window';
 
 export async function oauthIntegration(
   type: IntegrationType,
-): Promise<IIntegration | null> {
+): Promise<Integration | null> {
   const popup = openWindow('/oauth/' + type + '?action=redirect');
-  let integration: IIntegration | null = null;
+  let integration: Integration | null = null;
 
   if (type == 'twitch') {
     const code = await popup.waitMessageAndClose<string>('oauth');
@@ -36,9 +38,9 @@ export function postOAuthSignal<T>(data: T) {
 
 export async function oauthLogin(
   type: IntegrationType,
-): Promise<ISessionAndUser | null> {
+): Promise<SessionAndUser | null> {
   const popup = openWindow('/oauth/' + type + '?action=redirect');
-  let session: ISessionAndUser | null = null;
+  let session: SessionAndUser | null = null;
 
   if (type == 'twitch') {
     const code = await popup.waitMessageAndClose<string>('oauth');
@@ -50,9 +52,9 @@ export async function oauthLogin(
 
 export async function oauthRegister(
   type: IntegrationType,
-): Promise<IUser | null> {
+): Promise<User | null> {
   const popup = openWindow('/oauth/' + type + '?action=redirect');
-  let user: IUser | null = null;
+  let user: User | null = null;
 
   if (type == 'twitch') {
     const code = await popup.waitMessageAndClose<string>('oauth');

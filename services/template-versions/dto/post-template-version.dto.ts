@@ -1,9 +1,8 @@
-import TemplateScope from '../../shared/settings-scope';
-import ITemplateFieldGroup from '../template-field-group';
+import { SettingsScope, TemplateFieldGroup } from '@staroverlay/sdk';
 
 export default interface PostTemplateVersionDTO {
-  fields?: ITemplateFieldGroup[];
+  fields?: TemplateFieldGroup[];
   html?: string;
-  scopes?: TemplateScope[];
+  scopes?: SettingsScope[];
   version?: string;
 }

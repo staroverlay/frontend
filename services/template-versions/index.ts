@@ -1,17 +1,19 @@
 import client from '@/lib/clients/graphql';
 import { randomString } from '@/lib/utils/random';
+import {
+  Template,
+  TemplateField,
+  TemplateFieldGroup,
+  TemplateVersion,
+} from '@staroverlay/sdk';
 
-import ITemplate from '../templates/template';
 import PostTemplateVersionDTO from './dto/post-template-version.dto';
 import GetLastTemplateVersionQuery from './graphql/getLastTemplateVersionQuery';
 import GetTemplateVersionQuery from './graphql/getTemplateVersionQuery';
 import PostTemplateVersionMutation from './graphql/postTemplateVersionMutation';
-import ITemplateField from './template-field';
-import ITemplateFieldGroup from './template-field-group';
-import TemplateVersion from './template-version';
 
 export async function getTemplateVersion(
-  template: ITemplate,
+  template: Template,
   versionId: string,
 ): Promise<TemplateVersion | null> {
   const templateId = template._id;
@@ -22,7 +24,7 @@ export async function getTemplateVersion(
   return version as TemplateVersion | null;
 }
 
-export async function getLastTemplateVersion(template: ITemplate) {
+export async function getLastTemplateVersion(template: Template) {
   const id = template._id;
   const version = (await client.fetch(GetLastTemplateVersionQuery, {
     id,
@@ -32,8 +34,8 @@ export async function getLastTemplateVersion(template: ITemplate) {
     return null;
   }
 
-  version.fields.forEach((field: ITemplateFieldGroup) => {
-    field.children?.forEach((child: Partial<ITemplateField>) => {
+  version.fields.forEach((field: TemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<TemplateField>) => {
       child._internalId = randomString(6);
     });
   });
@@ -42,15 +44,15 @@ export async function getLastTemplateVersion(template: ITemplate) {
 }
 
 export async function postTemplateUpdate(
-  template: ITemplate,
+  template: Template,
   update: PostTemplateVersionDTO,
 ) {
   const id = template._id;
   const payload = structuredClone(update);
-  const fields: ITemplateFieldGroup[] = payload.fields || [];
+  const fields: TemplateFieldGroup[] = payload.fields || [];
 
-  fields.forEach((field: ITemplateFieldGroup) => {
-    field.children?.forEach((child: Partial<ITemplateField>) => {
+  fields.forEach((field: TemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<TemplateField>) => {
       child._internalId = undefined;
       delete child._internalId;
     });
@@ -61,8 +63,8 @@ export async function postTemplateUpdate(
     payload,
   });
 
-  newTemplate.fields.forEach((field: ITemplateFieldGroup) => {
-    field.children?.forEach((child: Partial<ITemplateField>) => {
+  newTemplate.fields.forEach((field: TemplateFieldGroup) => {
+    field.children?.forEach((child: Partial<TemplateField>) => {
       child._internalId = randomString(6);
     });
   });

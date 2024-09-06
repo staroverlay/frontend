@@ -14,6 +14,7 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
+import { Template, TemplateVisibility } from '@staroverlay/sdk';
 import Link from 'next/link';
 import {
   FaDollarSign,
@@ -24,16 +25,13 @@ import {
   FaLock,
 } from 'react-icons/fa';
 
-import ITemplate from '@/services/templates/template';
-import TemplateVisibility from '@/services/templates/template-visibility';
-
 import styles from './TemplateCard.module.css';
 
 export interface TemplateCardProps {
-  template: ITemplate;
+  template: Template;
   context?: 'explorer' | 'creator' | 'editor';
-  onCreateWidget: (template: ITemplate) => void;
-  onDelete: (template: ITemplate) => void;
+  onCreateWidget: (template: Template) => void;
+  onDelete: (template: Template) => void;
 }
 
 const icons = {

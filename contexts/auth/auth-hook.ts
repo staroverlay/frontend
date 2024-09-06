@@ -1,11 +1,10 @@
-import ISessionAndUser from '@/services/sessions/session-and-user';
-import User from '@/services/users/user';
+import { SessionAndUser, User } from '@staroverlay/sdk';
 
 export interface AuthHook {
   sessionId: string | null;
   user: User | null;
   setUser: (user: User | null) => void;
   isLogged: () => boolean;
-  login: (session: ISessionAndUser) => User;
+  login: (session: SessionAndUser) => User;
   logout: (invalidate: boolean) => Promise<void>;
 }

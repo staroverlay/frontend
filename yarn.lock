@@ -1384,6 +1384,11 @@
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.10.3.tgz#391d528054f758f81e53210f1a1eebcf1a8b1d20"
   integrity sha512-qC/xYId4NMebE6w/V33Fh9gWxLgURiNYgVNObbJl2LZv0GUUItCcCqC5axQSwRaAgaxl2mELq1rMzlswaQ0Zxg==
 
+"@staroverlay/sdk@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@staroverlay/sdk/-/sdk-0.0.4.tgz#a51e40d3708fac5716a222ec34db862864311651"
+  integrity sha512-2M+O1vX4PmHnn0KvWPb4rBYZ5qsN3/NLm/WxYCLHwzkj5EJdQ5fDym6ooZBgRBTxsbOJA0fbvxv+59v1BfdbKQ==
+
 "@swc/helpers@0.5.2":
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.5.2.tgz#85ea0c76450b61ad7d10a37050289eded783c27d"
@@ -3954,6 +3959,11 @@ safe-regex-test@^1.0.3:
     call-bind "^1.0.6"
     es-errors "^1.3.0"
     is-regex "^1.1.4"
+
+safe-try-catch@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/safe-try-catch/-/safe-try-catch-0.1.0.tgz#82b19577342965dfb8ed19577280a9da684dc151"
+  integrity sha512-dgHfbTEMIraJS9cXOtj2GDZ/Z8rRvaNInf0BkBpR4P7g/v9McqKmx7eIMnfWNJ83dQ654k3TrjppDM8Ia8f3Hg==
 
 scheduler@^0.23.0:
   version "0.23.0"

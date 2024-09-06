@@ -1,6 +1,6 @@
 import client from '@/lib/clients/graphql';
+import { Acquisition } from '@staroverlay/sdk';
 
-import Acquisition from './acquisition';
 import CreateAcquisitionDTO from './dto/create-acquisition.dto';
 import CreateAcquisitionMutation from './graphql/createAcquisitionMutation';
 import GetAcquisitionsQuery from './graphql/getAcquisitionsQuery';

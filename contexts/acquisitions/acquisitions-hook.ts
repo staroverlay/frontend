@@ -1,4 +1,4 @@
-import Acquisition, { ProductType } from '@/services/acquisition/acquisition';
+import { Acquisition, ProductType } from '@staroverlay/sdk';
 
 export interface AcquisitionsHook {
   acquisitions: Acquisition[];

@@ -10,12 +10,12 @@ import { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 
 import IDictionary from '@/lib/IDictionary';
-import ITemplateField from '@/services/template-versions/template-field';
 
+import { TemplateField } from '@staroverlay/sdk';
 import FieldRenderer from './FieldRenderer';
 
 export interface FieldRendererMapProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: { [key: string]: any };
   setValue: (value: unknown) => void;
 }

@@ -1,4 +1,4 @@
-export default interface IMediaPart {
+export default interface MediaPart {
   etag: string;
   partNumber: number;
 }

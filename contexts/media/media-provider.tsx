@@ -1,15 +1,15 @@
 import { useDisclosure } from '@chakra-ui/react';
+import { Media } from '@staroverlay/sdk';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import Loading from '@/components/layout/loading';
 import UploadModal from '@/components/modals/upload-modal/UploadModal';
 import useAuth from '@/hooks/useAuth';
 import { getAllMedia } from '@/services/medias';
-import IMedia from '@/services/medias/media';
 
 import { MediaContext } from './media-context';
 
-function getStorageUsage(medias: IMedia[]) {
+function getStorageUsage(medias: Media[]) {
   let storage = 0;
 
   for (const media of medias) {
@@ -21,21 +21,21 @@ function getStorageUsage(medias: IMedia[]) {
 
 export function MediaProvider({ children }: PropsWithChildren) {
   const { user } = useAuth();
-  const [medias, setMedias] = useState<IMedia[]>([]);
+  const [medias, setMedias] = useState<Media[]>([]);
   const storageUsage = getStorageUsage(medias);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const [fetched, setFetched] = useState(false);
 
-  const removeMedia = (media: IMedia | string) => {
+  const removeMedia = (media: Media | string) => {
     const id = typeof media === 'string' ? media : media._id;
     setMedias(medias.filter((m) => m._id !== id));
   };
 
-  const addMedia = (media: IMedia) => {
+  const addMedia = (media: Media) => {
     setMedias([...medias, media]);
   };
 
-  const updateMedia = (media: IMedia) => {
+  const updateMedia = (media: Media) => {
     setMedias(medias.map((m) => (m._id === media._id ? media : m)));
   };
 

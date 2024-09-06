@@ -7,6 +7,7 @@ import {
   TabPanels,
   Tabs,
 } from '@chakra-ui/react';
+import { SettingsScope, Template, TemplateVersion } from '@staroverlay/sdk';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
@@ -18,11 +19,8 @@ import useWidgets from '@/hooks/useWidgets';
 import IDictionary from '@/lib/IDictionary';
 import { hasObjectChanged } from '@/lib/utils/object';
 import { toastPending } from '@/lib/utils/toasts';
-import SettingsScope from '@/services/shared/settings-scope';
 import { getTemplateVersion } from '@/services/template-versions';
-import TemplateVersion from '@/services/template-versions/template-version';
 import { getTemplateByID } from '@/services/templates';
-import ITemplate from '@/services/templates/template';
 import { updateWidget } from '@/services/widgets';
 
 import Error404 from '../404';
@@ -83,7 +81,7 @@ export default function WidgetPage() {
   const widget = widgets.find((w) => w._id === widgetId);
 
   // Find template by widget.
-  const [template, setTemplate] = useState<ITemplate | null>(null);
+  const [template, setTemplate] = useState<Template | null>(null);
   const [templateVersion, setTemplateVersion] =
     useState<TemplateVersion | null>(null);
 

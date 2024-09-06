@@ -1,10 +1,10 @@
-import ITemplate from '@/services/templates/template';
+import { Template } from '@staroverlay/sdk';
 
 export interface TemplatesHook {
-  sharedTemplates: ITemplate[];
-  userTemplates: ITemplate[];
+  sharedTemplates: Template[];
+  userTemplates: Template[];
 
-  addTemplate: (template: ITemplate) => void;
-  updateTemplate: (template: ITemplate) => void;
-  removeTemplate: (template: ITemplate | string) => void;
+  addTemplate: (template: Template) => void;
+  updateTemplate: (template: Template) => void;
+  removeTemplate: (template: Template | string) => void;
 }

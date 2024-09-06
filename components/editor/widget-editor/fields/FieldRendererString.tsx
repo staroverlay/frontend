@@ -4,11 +4,10 @@ import {
   FormLabel,
   Input,
 } from '@chakra-ui/react';
-
-import ITemplateField from '@/services/template-versions/template-field';
+import { TemplateField } from '@staroverlay/sdk';
 
 export interface FieldRendererStringProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: string;
   setValue: (value: string) => void;
 }

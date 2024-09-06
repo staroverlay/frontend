@@ -1,8 +1,9 @@
-import IPlan from '@/services/plans/plan';
+import { Plan } from '@staroverlay/sdk';
+
 import React from 'react';
 import { PlanHook } from './plan-hook';
 
-const DUMMY_PLAN: IPlan = {
+const DUMMY_PLAN: Plan = {
   _id: '',
   discountYearly: 0,
   isDefault: false,

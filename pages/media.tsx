@@ -10,16 +10,16 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
+import { FileType, Media } from '@staroverlay/sdk';
 
 import MediasGrid from '@/components/content/medias-grid/MediasGrid';
 import usePlan from '@/hooks/usePlan';
 
 import StatsCard from '../components/cards/stats/StatsCard';
 import useMedia from '../hooks/useMedia';
-import IMedia, { FileType } from '../services/medias/media';
 
 interface MediaFilesProps {
-  files: IMedia[];
+  files: Media[];
   filter?: FileType;
 }
 

@@ -9,6 +9,7 @@ import {
   Tag,
   useDisclosure,
 } from '@chakra-ui/react';
+import { Media } from '@staroverlay/sdk';
 import { useState } from 'react';
 import { FiDownload, FiEdit, FiTrash } from 'react-icons/fi';
 
@@ -17,16 +18,15 @@ import { downloadURL } from '@/lib/utils/files';
 import { getMediaThumbnailURL, getMediaURL } from '@/lib/utils/media';
 import { toastPending } from '@/lib/utils/toasts';
 import { deleteMedia } from '@/services/medias';
-import IMedia from '@/services/medias/media';
 
 import ConfirmationAlert from '../../alerts/confirmation/ConfirmationAlert';
 import MediaPreviewModal from '../../modals/media-preview-modal/MediaPreviewModal';
 import styles from './MediaCard.module.css';
 
 interface MediaCardProps {
-  media: IMedia;
+  media: Media;
   size?: 'lg' | 'md' | 'sm';
-  onSelect?: (media: IMedia) => void;
+  onSelect?: (media: Media) => void;
 }
 
 function DeleteButton({ media, size }: MediaCardProps) {

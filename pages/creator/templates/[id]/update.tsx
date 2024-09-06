@@ -7,8 +7,8 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  useColorMode,
 } from '@chakra-ui/react';
+import { TemplateVersion } from '@staroverlay/sdk';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
@@ -24,17 +24,11 @@ import {
   getLastTemplateVersion,
   postTemplateUpdate,
 } from '@/services/template-versions';
-import TemplateVersion from '@/services/template-versions/template-version';
 
 export default function CreatorTemplateUpdateSourcePage() {
-  const { userTemplates, updateTemplate: updateUserTemplate } = useTemplates();
+  const { userTemplates } = useTemplates();
   const { query } = useRouter();
   const [isSaving, setIsSaving] = useState(false);
-
-  // Theming.
-  const { colorMode } = useColorMode();
-  const isDark = colorMode === 'dark';
-  const bg = isDark ? 'gray.800' : 'gray.100';
 
   // Find template by ID in query.
   const templateId = query.id as string;

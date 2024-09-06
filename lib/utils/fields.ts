@@ -1,7 +1,6 @@
-import ITemplateField from '@/services/template-versions/template-field';
-import ITemplateFieldGroup from '@/services/template-versions/template-field-group';
+import { TemplateField, TemplateFieldGroup } from '@staroverlay/sdk';
 
-export function getFieldPath(cat: ITemplateFieldGroup, field: ITemplateField) {
+export function getFieldPath(cat: TemplateFieldGroup, field: TemplateField) {
   const categoryId = cat && cat.id != '' ? cat.id : null;
   return categoryId ? `${categoryId}.${field.id}` : field.id;
 }

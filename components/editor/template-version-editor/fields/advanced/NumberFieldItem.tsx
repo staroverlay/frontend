@@ -5,9 +5,8 @@ import {
   Select,
   SimpleGrid,
 } from '@chakra-ui/react';
+import { FieldNumberSettings } from '@staroverlay/sdk';
 import { useEffect, useState } from 'react';
-
-import { FieldNumberSettings } from '@/services/template-versions/template-field';
 
 interface NumberFieldItemProps {
   settings?: FieldNumberSettings;

@@ -1,5 +1,5 @@
-import IMembership from '@/services/memberships/membership';
+import { Membership } from '@staroverlay/sdk';
 
 export interface MembershipHook {
-  membership: IMembership | null;
+  membership: Membership | null;
 }

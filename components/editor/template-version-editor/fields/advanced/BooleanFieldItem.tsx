@@ -5,9 +5,8 @@ import {
   Select,
   SimpleGrid,
 } from '@chakra-ui/react';
+import { FieldBooleanSettings } from '@staroverlay/sdk';
 import { useEffect, useState } from 'react';
-
-import { FieldBooleanSettings } from '@/services/template-versions/template-field';
 
 interface BooleanFieldItemProps {
   settings?: FieldBooleanSettings;

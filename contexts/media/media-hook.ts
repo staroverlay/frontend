@@ -1,11 +1,11 @@
-import IMedia from '@/services/medias/media';
+import { Media } from '@staroverlay/sdk';
 
 export interface MediaHook {
-  medias: IMedia[];
-  addMedia: (media: IMedia) => void;
-  updateMedia: (media: IMedia) => void;
-  removeMedia: (media: IMedia | string) => void;
-  getMedia: (id: string) => IMedia | undefined;
+  medias: Media[];
+  addMedia: (media: Media) => void;
+  updateMedia: (media: Media) => void;
+  removeMedia: (media: Media | string) => void;
+  getMedia: (id: string) => Media | undefined;
   storageUsage: number;
 
   isUploadModalOpen: boolean;

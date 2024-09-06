@@ -13,19 +13,20 @@ import {
   Switch,
   TabPanel,
 } from '@chakra-ui/react';
+import {
+  SettingsScope,
+  SettingsScopes,
+  Template,
+  TemplateVersion,
+  Widget,
+} from '@staroverlay/sdk';
 import { useEffect, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { emitDebugEvent } from '@/services/events';
-import SettingsScope, {
-  SettingsScopes,
-} from '@/services/shared/settings-scope';
-import TemplateVersion from '@/services/template-versions/template-version';
-import ITemplate from '@/services/templates/template';
 import { resetWidgetToken } from '@/services/widgets';
-import IWidget from '@/services/widgets/widget';
 
 interface ScopeCheckboxProps {
   id: string;
@@ -85,8 +86,8 @@ const ScopeList = ({ templateScopes, scopes, setScopes }: ScopeListProps) => {
 };
 
 interface WidgetOverviewTabProps {
-  widget: IWidget;
-  template: ITemplate;
+  widget: Widget;
+  template: Template;
   version: TemplateVersion;
   name: string;
   autoUpdate: boolean;

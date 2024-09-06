@@ -7,9 +7,9 @@ import {
   FieldMapSettings,
   FieldNumberSettings,
   FieldStringSettings,
-  ITemplateAdvancedField,
+  TemplateAdvancedField,
   TemplateFieldType,
-} from '@/services/template-versions/template-field';
+} from '@staroverlay/sdk';
 
 import ArrayFieldItem from './advanced/ArrayFieldItem';
 import BooleanFieldItem from './advanced/BooleanFieldItem';
@@ -19,7 +19,7 @@ import StringFieldItem from './advanced/StringFieldItem';
 
 interface FieldItemAdvancedProps {
   type: TemplateFieldType;
-  setValue: (value: ITemplateAdvancedField) => unknown;
+  setValue: (value: TemplateAdvancedField) => unknown;
   stringOptions?: FieldStringSettings;
   numberOptions?: FieldNumberSettings;
   booleanOptions?: FieldBooleanSettings;

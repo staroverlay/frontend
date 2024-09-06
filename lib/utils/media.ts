@@ -1,16 +1,15 @@
+import { Media } from '@staroverlay/sdk';
 import imageCompression from 'browser-image-compression';
-
-import IMedia from '../../services/medias/media';
 
 const MAX_COVER_LENGTH = 0.256; // 256KB
 
-export function getMediaURL(media: IMedia) {
+export function getMediaURL(media: Media) {
   const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
   const url = `${worker}${media._id}`;
   return url;
 }
 
-export function getMediaThumbnailURL(media: IMedia) {
+export function getMediaThumbnailURL(media: Media) {
   const worker = process.env['NEXT_PUBLIC_R2_WORKER'];
   const url = `${worker}${media._id}/thumbnail`;
   return url;

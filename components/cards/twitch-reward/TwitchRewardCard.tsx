@@ -1,14 +1,14 @@
 import { Box, Flex, Image, Text } from '@chakra-ui/react';
 
-import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
+import { TwitchCustomReward } from '@staroverlay/sdk';
 
 import styles from './TwitchRewardCard.module.css';
 
 export interface TwitchRewardCardProps {
-  reward: ITwitchCustomReward;
+  reward: TwitchCustomReward;
   variant?: 'horizontal' | 'vertical';
   size?: 'lg' | 'md' | 'sm';
-  onSelect?: (reward: ITwitchCustomReward) => void;
+  onSelect?: (reward: TwitchCustomReward) => void;
 }
 
 export default function TwitchRewardCard({

@@ -6,14 +6,13 @@ import {
   FormLabel,
   IconButton,
 } from '@chakra-ui/react';
+import { TemplateField } from '@staroverlay/sdk';
 import { FaTrash } from 'react-icons/fa';
-
-import ITemplateField from '@/services/template-versions/template-field';
 
 import FieldRenderer from './FieldRenderer';
 
 export interface FieldRendererArrayProps {
-  field: ITemplateField;
+  field: TemplateField;
   value: unknown[];
   setValue: (value: unknown) => void;
 }

@@ -6,11 +6,11 @@ import WidgetCard from '@/components/cards/widget/WidgetCard';
 import useWidgets from '@/hooks/useWidgets';
 import { toastPending } from '@/lib/utils/toasts';
 import { deleteWidget } from '@/services/widgets';
-import IWidget from '@/services/widgets/widget';
+import { Widget } from '@staroverlay/sdk';
 
 interface WidgetsGridProps {
   search?: string;
-  widgets: IWidget[];
+  widgets: Widget[];
 }
 
 function NoWidgets({ message }: { message?: string }) {
@@ -23,7 +23,7 @@ function NoWidgets({ message }: { message?: string }) {
   );
 }
 
-function WidgetsRender({ widgets }: { widgets: IWidget[] }) {
+function WidgetsRender({ widgets }: { widgets: Widget[] }) {
   const {
     isOpen: isDeleteOpen,
     onOpen: onDeleteOpen,
@@ -32,17 +32,17 @@ function WidgetsRender({ widgets }: { widgets: IWidget[] }) {
   const [loading, setLoading] = useState(false);
 
   const { removeWidget } = useWidgets();
-  const [selectedWidget, setSelectedWidget] = useState<IWidget | null>(null);
+  const [selectedWidget, setSelectedWidget] = useState<Widget | null>(null);
 
   const handleDeleteWidget = () => {
     setLoading(true);
-    toastPending(deleteWidget(selectedWidget as IWidget), {
+    toastPending(deleteWidget(selectedWidget as Widget), {
       pending: 'Deleting widget',
       success: 'Widget deleted',
     })
       .then(() => {
         onDeleteClose();
-        removeWidget(selectedWidget as IWidget);
+        removeWidget(selectedWidget as Widget);
       })
       .finally(() => setLoading(false));
   };

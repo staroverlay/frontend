@@ -1,11 +1,9 @@
-import IIntegration, {
-  IntegrationType,
-} from '@/services/integrations/integration';
+import { Integration, IntegrationType } from '@staroverlay/sdk';
 
 export interface IntegrationsHook {
-  integrations: IIntegration[];
-  addIntegration: (integration: IIntegration) => void;
-  updateIntegration: (integration: IIntegration) => void;
-  removeIntegration: (integration: IIntegration | string) => void;
-  getIntegration: (type: IntegrationType) => IIntegration | null;
+  integrations: Integration[];
+  addIntegration: (integration: Integration) => void;
+  updateIntegration: (integration: Integration) => void;
+  removeIntegration: (integration: Integration | string) => void;
+  getIntegration: (type: IntegrationType) => Integration | null;
 }

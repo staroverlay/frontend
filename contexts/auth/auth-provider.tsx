@@ -1,12 +1,11 @@
+import { SessionAndUser, User } from '@staroverlay/sdk';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import Loading from '@/components/layout/loading';
 import { removeBearerToken, setBearerToken } from '@/lib/clients/graphql';
 import { toastError } from '@/lib/utils/toasts';
 import { invalidateSession } from '@/services/sessions';
-import ISessionAndUser from '@/services/sessions/session-and-user';
 import { getCurrentUser } from '@/services/users';
-import User from '@/services/users/user';
 
 import { AuthContext } from './auth-context';
 
@@ -47,7 +46,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     removeBearerToken();
   }
 
-  function login({ session, user }: ISessionAndUser): User {
+  function login({ session, user }: SessionAndUser): User {
     const token = session.token;
 
     setBearerToken(token);

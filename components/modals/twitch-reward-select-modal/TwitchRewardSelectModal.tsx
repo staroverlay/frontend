@@ -1,13 +1,13 @@
-import TwitchRewardsGrid from '@/components/content/twitch-rewards-grid/TwitchRewardsGrid';
-import { ITwitchCustomReward } from '@/services/twitch/twitch-custom-reward';
+import { TwitchCustomReward } from '@staroverlay/sdk';
 
+import TwitchRewardsGrid from '@/components/content/twitch-rewards-grid/TwitchRewardsGrid';
 import BaseModal from '../base-modal/BaseModal';
 
 interface TwitchRewardSelectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSelect: (reward: ITwitchCustomReward) => void;
-  rewards: ITwitchCustomReward[];
+  onSelect: (reward: TwitchCustomReward) => void;
+  rewards: TwitchCustomReward[];
 }
 
 export default function TwitchRewardSelectModal({

@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
+import { Media } from '@staroverlay/sdk';
 
 import { getMediaURL } from '@/lib/utils/media';
-import IMedia from '@/services/medias/media';
 
 import styles from './FilePreview.module.css';
 
@@ -26,7 +26,7 @@ function AudioFilePreview({ uri }: InternalFilePreviewProps) {
 
 interface FilePreviewProps {
   file?: File;
-  media?: IMedia;
+  media?: Media;
 }
 
 export default function FilePreview({ file, media }: FilePreviewProps) {
@@ -36,7 +36,7 @@ export default function FilePreview({ file, media }: FilePreviewProps) {
 
   if (!file && !media) return null;
 
-  const url = file ? URL.createObjectURL(file) : getMediaURL(media as IMedia);
+  const url = file ? URL.createObjectURL(file) : getMediaURL(media as Media);
 
   return (
     <Flex className={styles.container}>

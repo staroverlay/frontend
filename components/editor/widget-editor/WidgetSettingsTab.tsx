@@ -1,14 +1,14 @@
 import { Flex, Heading, TabPanel } from '@chakra-ui/react';
+import { TemplateVersion } from '@staroverlay/sdk';
 
 import IDictionary from '@/lib/IDictionary';
 import { getFieldPath } from '@/lib/utils/fields';
-import TemplateVersion from '@/services/template-versions/template-version';
-import IWidget from '@/services/widgets/widget';
+import { Widget } from '@staroverlay/sdk';
 
 import FieldRenderer from './fields/FieldRenderer';
 
 interface WidgetSettingsTab {
-  widget: IWidget;
+  widget: Widget;
   version: TemplateVersion;
   settings: IDictionary;
   setSettings: (settings: IDictionary) => void;
