@@ -22,6 +22,7 @@ import DashboardPage from './pages/dashboard/[channelId]';
 import DiscoverPage from './pages/discover';
 import EditorsPage from './pages/editors';
 import ErrorPage from './pages/error';
+import HomePage from './pages/home';
 import MediaPage from './pages/media';
 import MembershipPage from './pages/membership';
 import PricingPage from './pages/pricing';
@@ -45,7 +46,8 @@ const router = createBrowserRouter(
       {/* Layout: Main */}
       <Route path="/" element={<MainLayout />}>
         {/* Router: / */}
-        <Route index element={<DiscoverPage />} />
+        <Route path="/" index element={<HomePage />} />
+        <Route path="/discover" element={<DiscoverPage />} />
         <Route path="/chatbot" element={<ChatbotPage />} />
         <Route path="/editors" element={<EditorsPage />} />
         <Route path="/media" element={<MediaPage />} />

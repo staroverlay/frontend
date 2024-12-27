@@ -1,4 +1,5 @@
 import Container from '@/shared/components/Container';
+import IconButton from '@/shared/components/IconButton';
 import {
   Bell,
   ChevronDown,
@@ -37,13 +38,13 @@ export default function Navbar() {
 
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <button
+            <IconButton
               onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-              className="p-2 hover:bg-white/5 rounded-full relative"
+              variant="ghost"
+              hasNotification={true}
             >
               <Bell className="h-5 w-5 text-gray-300" />
-              <span className="absolute top-1 right-1 h-2 w-2 bg-purple-500 rounded-full"></span>
-            </button>
+            </IconButton>
 
             {isNotificationsOpen && (
               <Container className="absolute right-0 mt-2 w-80 py-2">

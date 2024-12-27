@@ -1,3 +1,4 @@
+import Button from '@/shared/components/Button';
 import Container from '@/shared/components/Container';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -18,15 +19,14 @@ export default function ErrorPage() {
                 The page you are looking for does not exist
               </p>
 
-              <button
-                className="flex items-center space-x-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg px-3 py-2 font-medium transition-colors"
+              <Button
                 onClick={() => {
                   navigate(-1);
                 }}
+                leftIcon={<ArrowLeft className="h-5 w-5" />}
               >
-                <ArrowLeft className="h-5 w-5" />
-                <span>Back</span>
-              </button>
+                Back
+              </Button>
             </div>
           </div>
         </div>

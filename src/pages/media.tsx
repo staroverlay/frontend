@@ -4,6 +4,7 @@ import { useState } from 'react';
 import MediaCard from '@/media/components/MediaCard';
 import PreviewMediaModal from '@/media/components/PreviewMediaModal';
 import UploadMediaModal from '@/media/components/UploadMediaModal';
+import Button from '@/shared/components/Button';
 import Container from '@/shared/components/Container';
 import ProgressBar from '@/shared/components/ProgressBar';
 import { Tab, Tabs } from '@/shared/components/Tabs';
@@ -79,13 +80,12 @@ export default function MediaPage() {
             </p>
           </div>
 
-          <button
+          <Button
             onClick={uploadModal.open}
-            className="flex items-center space-x-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg px-4 py-2 font-medium transition-colors"
+            leftIcon={<Upload className="h-5 w-5" />}
           >
-            <Upload className="h-5 w-5" />
-            <span>Upload Media</span>
-          </button>
+            Upload Media
+          </Button>
         </div>
 
         <Container className="mb-8 p-6">
@@ -94,9 +94,9 @@ export default function MediaPage() {
               <HardDrive className="h-5 w-5 text-purple-400" />
               <span className="font-medium text-gray-200">Storage Usage</span>
             </div>
-            <button className="text-sm text-purple-400 hover:text-purple-300 font-medium">
+            <Button variant="primary-link" size="sm">
               Upgrade Plan
-            </button>
+            </Button>
           </div>
 
           <ProgressBar

@@ -1,3 +1,5 @@
+import { cn } from '../utils/styleUtils';
+
 interface ContainerProps
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -12,7 +14,7 @@ export default function Container({
   ...props
 }: ContainerProps) {
   return (
-    <div className={`glass rounded-xl ${className || ''}`} {...props}>
+    <div className={cn('glass rounded-xl', className)} {...props}>
       {children}
     </div>
   );

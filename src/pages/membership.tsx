@@ -1,6 +1,7 @@
 import BillingCard from '@/membership/components/BillingCard';
 import PlanCard from '@/membership/components/PlanCard';
 import QuotaCard from '@/membership/components/QuotaCard';
+import Button from '@/shared/components/Button';
 import Container from '@/shared/components/Container';
 import {
   AlertTriangle,
@@ -72,10 +73,10 @@ export default function MembershipPage() {
               Manage your plan and monitor resource usage
             </p>
           </div>
-          <button className="flex items-center space-x-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg px-4 py-2 font-medium transition-colors">
-            <Shield className="h-5 w-5" />
+
+          <Button leftIcon={<Shield className="h-5 w-5" />}>
             <span>Upgrade Plan</span>
-          </button>
+          </Button>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
@@ -153,9 +154,9 @@ export default function MembershipPage() {
                   Your subscription will remain active until the end of the
                   current billing period.
                 </p>
-                <button className="mt-4 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg px-4 py-2 text-sm font-medium transition-colors">
+                <Button className="mt-4" variant="danger">
                   Cancel Plan
-                </button>
+                </Button>
               </div>
             </div>
           </Container>

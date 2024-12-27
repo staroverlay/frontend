@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@/shared': '/src/shared',
+      '@/theme': '/src/theme',
       '@': '/src/modules',
     },
   },
