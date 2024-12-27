@@ -1,0 +1,11 @@
+.grid-lg {
+  grid-template-columns: repeat(auto-fit, 300px);
+}
+
+.grid-md {
+  grid-template-columns: repeat(auto-fit, 240px);
+}
+
+.grid-sm {
+  grid-template-columns: repeat(auto-fit, 180px);
+}
