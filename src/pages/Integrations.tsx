@@ -92,21 +92,63 @@ export default function Integrations() {
                 )}
               </div>
 
-              <div className="mb-8 overflow-hidden">
-                <h3 className="text-xl font-extrabold text-white mb-1">{provider.name}</h3>
-                <p className="text-zinc-500 text-xs font-medium truncate">
-                  {isConnected
-                    ? integration.displayName || integration.providerUsername
-                    : `Connect your ${provider.name} account to sync data.`}
-                </p>
+              <div className="mb-8 flex items-center gap-4">
+                {isConnected && integration.providerAvatarUrl && (
+                  <div className="relative">
+                    <img 
+                      src={integration.providerAvatarUrl} 
+                      alt={integration.providerUsername}
+                      className="w-12 h-12 rounded-2xl object-cover ring-2 ring-white/10 shadow-lg"
+                    />
+                    <div className={cn("absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-zinc-900 flex items-center justify-center", provider.bg)}>
+                       <provider.icon className={cn("w-2 h-2", provider.color)} />
+                    </div>
+                  </div>
+                )}
+                <div className="overflow-hidden">
+                  <h3 className="text-xl font-black text-white tracking-tight leading-none mb-1.5">{provider.name}</h3>
+                  <p className={cn(
+                    "text-[10px] font-bold uppercase tracking-widest truncate max-w-[150px]",
+                    isConnected ? "text-emerald-400 font-black" : "text-zinc-500"
+                  )}>
+                    {isConnected
+                      ? (integration.displayName || `@${integration.providerUsername}`)
+                      : `Disconnected`}
+                  </p>
+                </div>
               </div>
+
+              {isConnected && (
+                <div className="mb-6 mx-1 p-3.5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group/toggle hover:bg-white/[0.07] transition-all">
+                    <div className="flex flex-col gap-0.5">
+                        <span className="text-[10px] font-black text-white/90 uppercase tracking-widest">Login Access</span>
+                        <span className="text-[9px] font-medium text-zinc-500">Allow sign in with this account</span>
+                    </div>
+                    <button 
+                        onClick={() => update(provider.id, { allowOauthLogin: !integration.allowOauthLogin })}
+                        className={cn(
+                            "w-10 h-5 rounded-full transition-all duration-300 relative border",
+                            integration.allowOauthLogin 
+                                ? "bg-emerald-500/20 border-emerald-500/50" 
+                                : "bg-zinc-800 border-zinc-700 hover:border-zinc-600"
+                        )}
+                    >
+                        <div className={cn(
+                            "absolute top-1 w-2.5 h-2.5 rounded-full transition-all duration-300 shadow-sm",
+                            integration.allowOauthLogin 
+                                ? "right-1 bg-emerald-500 shadow-emerald-500/50 scale-110" 
+                                : "left-1 bg-zinc-500"
+                        )} />
+                    </button>
+                </div>
+              )}
 
               {isConnected ? (
                 <div className="mt-auto flex gap-2">
                   <Button
                     variant="secondary"
-                    className="flex-1 bg-zinc-800/50 hover:bg-zinc-800 text-[11px] h-9 gap-1.5 font-bold uppercase tracking-wider"
-                    onClick={() => update(provider.id, { allowOauthLogin: !integration.allowOauthLogin })}
+                    className="flex-1 bg-zinc-800/50 hover:bg-zinc-800 text-[11px] h-9 gap-1.5 font-bold uppercase tracking-wider border border-white/5"
+                    onClick={() => update(provider.id, { })} // Just sync
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-zinc-400" />
                     Sync

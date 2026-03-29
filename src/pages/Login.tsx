@@ -3,11 +3,11 @@ import { useAuth } from '../hooks/use-auth';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Link } from 'react-router-dom';
-import { Mail, Lock, LogIn, Globe, Code2 } from 'lucide-react';
+import { Mail, Lock, LogIn, Video, Monitor, PlayCircle } from 'lucide-react';
 import { getError } from '../lib/utils';
 
 export default function Login() {
-  const { login, isLoading } = useAuth();
+  const { login, initiateOAuthLogin, isLoading } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -75,18 +75,40 @@ export default function Login() {
           <div className="mt-8">
             <div className="relative flex items-center justify-center mb-6">
               <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-zinc-800" /></div>
-              <span className="relative bg-[#09090b] px-3 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Or social login</span>
+              <span className="relative bg-[#09090b] px-3 text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Connect via Social</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <Button variant="secondary" className="gap-2.5 text-xs font-semibold bg-zinc-800 border border-zinc-700/50 hover:bg-zinc-700 transition-all">
-                <Globe className="w-4 h-4 text-[#ea4335]" />
-                Google
+            <div className="grid grid-cols-1 gap-3">
+              <Button 
+                variant="secondary" 
+                className="w-full h-11 gap-3 text-xs font-bold uppercase tracking-widest bg-[#9146ff]/10 border border-[#9146ff]/20 text-[#9146ff] hover:bg-[#9146ff] hover:text-white transition-all shadow-lg shadow-[#9146ff]/5"
+                onClick={() => initiateOAuthLogin('twitch')}
+                disabled={isLoading}
+              >
+                <Video className="w-4 h-4" />
+                Login with Twitch
               </Button>
-              <Button variant="secondary" className="gap-2.5 text-xs font-semibold bg-zinc-800 border border-zinc-700/50 hover:bg-zinc-700 transition-all">
-                <Code2 className="w-4 h-4 text-white" />
-                GitHub
-              </Button>
+              
+              <div className="grid grid-cols-2 gap-3">
+                <Button 
+                  variant="secondary" 
+                  className="h-11 gap-2.5 text-[10px] font-bold uppercase tracking-widest bg-zinc-800 border border-zinc-700/50 hover:border-emerald-500/50 hover:text-emerald-500 transition-all"
+                  onClick={() => initiateOAuthLogin('kick')}
+                  disabled={isLoading}
+                >
+                  <Monitor className="w-3.5 h-3.5" />
+                  Kick
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  className="h-11 gap-2.5 text-[10px] font-bold uppercase tracking-widest bg-zinc-800 border border-zinc-700/50 hover:border-red-500/50 hover:text-red-500 transition-all"
+                  onClick={() => initiateOAuthLogin('youtube')}
+                  disabled={isLoading}
+                >
+                  <PlayCircle className="w-3.5 h-3.5" />
+                  YouTube
+                </Button>
+              </div>
             </div>
           </div>
         </div>

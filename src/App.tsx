@@ -8,6 +8,7 @@ import VerifyEmail from './pages/VerifyEmail';
 import Dashboard from './pages/Dashboard';
 import Integrations from './pages/Integrations';
 import Settings from './pages/Settings';
+import OAuthCallback from './pages/OAuthCallback';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -56,6 +57,7 @@ export default function App() {
         {/* Protected Routes */}
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/integrations" element={<ProtectedRoute><Integrations /></ProtectedRoute>} />
+        <Route path="/oauth/callback/:provider" element={<OAuthCallback />} />
         <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
         {/* Catch-all */}

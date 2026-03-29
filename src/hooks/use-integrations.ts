@@ -74,7 +74,7 @@ export const useIntegrations = () => {
   const connect = async (provider: string) => {
     setIsLoading(true);
     try {
-      const response = await integrationsService.initiateConnect(provider);
+      const response = await oauthService.initiateConnect(provider);
       window.location.href = response.url;
     } catch (error) {
       throw error;

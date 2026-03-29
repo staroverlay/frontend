@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/auth-store';
 import { authService } from '../services/auth-service';
+import { oauthService } from '../services/oauth-service';
 import type { AuthResponse } from '../lib/types';
 
 export const useAuth = () => {
@@ -9,7 +10,6 @@ export const useAuth = () => {
   const { user, isAuthenticated, isLoading, setUser, setAuthenticated, setLoading, logout: storeLogout } = useAuthStore();
 
   const fetchUser = useCallback(async () => {
-    if (!isAuthenticated) return;
     setLoading(true);
     try {
       const userData = await authService.getMe();
@@ -83,6 +83,19 @@ export const useAuth = () => {
     }
   };
 
+  const initiateOAuthLogin = async (provider: string) => {
+    setLoading(true);
+    try {
+      const response = await oauthService.initiateLogin(provider);
+      window.location.href = response.url;
+    } catch (error) {
+      console.error('OAuth initiation error:', error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     user,
     isAuthenticated,
@@ -91,6 +104,7 @@ export const useAuth = () => {
     register,
     logout,
     verifyEmail,
+    initiateOAuthLogin,
     refreshUser: fetchUser
   };
 };
