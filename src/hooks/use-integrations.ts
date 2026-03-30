@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useIntegrationsStore } from '../stores/integrations-store';
 import { integrationsService } from '../services/integrations-service';
 import { oauthService } from '../services/oauth-service';
+import { type Integration } from '../lib/types';
 
 export type FetchStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -25,9 +26,9 @@ export const useIntegrations = () => {
       const data = await integrationsService.listIntegrations();
       setIntegrations(data);
       setStatus('success');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to fetch integrations:', err);
-      const msg = err?.response?.data?.error || err.message || 'Failed to connect to server';
+      const msg = (err as any)?.response?.data?.error || (err as Error).message || 'Failed to connect to server';
       setError(msg);
       setStatus('error');
     } finally {
@@ -59,7 +60,7 @@ export const useIntegrations = () => {
     }
   };
 
-  const update = async (provider: string, body: any) => {
+  const update = async (provider: string, body: Partial<Integration>) => {
     setIsLoading(true);
     try {
       const updated = await integrationsService.updateIntegration(provider, body);

@@ -1,8 +1,8 @@
 import api from '../lib/api-client';
-import type { BasicResponse, Session } from '../lib/types';
+import { type Session, type BasicResponse } from '../lib/types';
 
 export const sessionsService = {
-  async listSessions(): Promise<Session[]> {
+  async listActiveSessions(): Promise<Session[]> {
     const { data } = await api.get('/sessions');
     return data.sessions;
   },

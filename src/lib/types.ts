@@ -15,6 +15,7 @@ export interface Session {
   revokedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  current?: boolean;
 }
 
 export type Profile = {

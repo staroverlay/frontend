@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../hooks/use-auth';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Mail, CheckCircle, ShieldCheck } from 'lucide-react';
+import { CheckCircle, ShieldCheck } from 'lucide-react';
 import { getError } from '../lib/utils';
 
 export default function VerifyEmail() {
@@ -22,7 +22,6 @@ export default function VerifyEmail() {
       await verifyEmail({ email, code });
       setIsSuccess(true);
       
-      // If logged in, refresh user and go home. Otherwise go to login.
       if (user) {
         await refreshUser();
         setTimeout(() => navigate('/'), 2000);
@@ -36,16 +35,20 @@ export default function VerifyEmail() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
-        <div className="w-full max-w-md bg-zinc-900 border border-emerald-500/20 p-8 rounded-2xl text-center space-y-6 shadow-2xl shadow-emerald-500/10">
-          <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto border border-emerald-500/20">
-             <CheckCircle className="w-8 h-8 text-emerald-500" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 px-4 relative overflow-hidden">
+        <div className="w-full max-w-md glass-panel p-10 rounded-[2.5rem] text-center space-y-6 animate-in fade-in zoom-in-95 duration-700 relative z-10">
+          <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto text-emerald-500">
+             <CheckCircle className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-white mb-2">Email Verified</h1>
-          <p className="text-zinc-400 text-sm">Your account has been successfully verified. You're ready to go!</p>
-          <div className="pt-4 flex flex-col gap-3">
-             <Button onClick={() => navigate('/login')} className="w-full h-11 bg-blue-600 hover:bg-blue-500 shadow-lg shadow-blue-500/20 font-bold uppercase tracking-widest text-xs">
-                Continue to Login
+          <div className="space-y-2">
+             <h1 className="text-2xl font-bold text-white tracking-tight">Email Verified</h1>
+             <p className="text-zinc-400 text-sm leading-relaxed">
+               Your account has been successfully verified. You're ready to go!
+             </p>
+          </div>
+          <div className="pt-6">
+             <Button onClick={() => navigate('/login')} className="w-full h-12 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all">
+                Continue
              </Button>
           </div>
         </div>
@@ -54,60 +57,71 @@ export default function VerifyEmail() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">
-      <div className="absolute top-0 left-0 w-full h-1/4 bg-blue-600/5 -z-10 blur-3xl opacity-50" />
-      <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-800 items-center justify-center mb-4">
-             <ShieldCheck className="w-6 h-6 text-blue-500" />
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4 relative overflow-hidden">
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-600/10 blur-[120px] pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
+        <div className="mb-10 text-center animate-in fade-in slide-in-from-top-4 duration-500">
+          <div className="inline-flex w-14 h-14 rounded-2xl bg-violet-600/20 text-violet-500 items-center justify-center mb-6">
+             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h1 className="text-3xl font-black text-white tracking-tight mb-2">Verify Account</h1>
-          <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest px-4">Enter the code sent to your email address</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Verify Email</h1>
+          <p className="text-zinc-400 text-sm">Enter the code sent to your email</p>
         </div>
 
-        <div className="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/80 p-8 rounded-2xl shadow-2xl relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none transition-group hover:opacity-10">
-             <Mail className="w-24 h-24" />
-          </div>
+        <div className="glass-panel p-10 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-700 hover:border-violet-500/20 transition-all duration-500">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-2">
-              <div className="text-center pb-2">
-                <p className="text-zinc-500 text-[10px] uppercase font-black tracking-widest mb-1">Verifying Account</p>
-                <p className="text-white text-sm font-bold truncate">{email}</p>
-              </div>
+            <div className="text-center space-y-1 pb-2">
+                 <p className="text-zinc-500 text-sm">We sent a 6-digit code to</p>
+                 <p className="text-white text-sm font-semibold">{email}</p>
             </div>
             
-            <div className="space-y-2">
-              <Input 
-                 placeholder="000000"
-                 label="Verification Code"
-                 className="text-center text-xl font-bold tracking-[0.5em] h-14 bg-zinc-950/50 border-zinc-800"
-                 maxLength={6}
-                 value={code}
-                 onChange={(e) => setCode(e.target.value)}
-                 autoFocus
-                 required
-               />
+            <div className="space-y-4">
+               <div className="relative group">
+                  <Input 
+                    placeholder="000000"
+                    className="text-center text-3xl font-bold tracking-[0.5em] h-16 bg-zinc-900/50 border-zinc-800 rounded-2xl focus:border-violet-500/50 transition-all text-white placeholder:text-zinc-800"
+                    maxLength={6}
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    autoFocus
+                    required
+                  />
+               </div>
             </div>
 
             {error && (
-              <div 
-                key={error}
-                className="p-4 bg-red-500/20 border border-red-500/40 text-red-200 rounded-xl text-xs font-bold text-center animate-in fade-in zoom-in duration-300"
-              >
+              <div className="p-4 bg-rose-500/5 border border-rose-500/10 text-rose-500 rounded-xl text-sm text-center">
                 {error}
               </div>
             )}
 
-            <Button className="w-full h-12 font-black uppercase tracking-widest text-[11px] h-12 shadow-xl shadow-blue-500/10 active:scale-[0.98] transition-all" disabled={isLoading}>
+            <Button className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-lg shadow-violet-500/20 font-semibold transition-all" disabled={isLoading}>
               {isLoading ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
                   Verifying...
                 </div>
-              ) : 'Complete Verification'}
+              ) : 'Verify Account'}
             </Button>
           </form>
+        </div>
+        
+        <div className="mt-8 flex items-center justify-center gap-6 text-sm">
+           <button 
+             className="text-zinc-500 hover:text-zinc-300 transition-colors"
+             onClick={() => navigate('/login')}
+           >
+             Cancel
+           </button>
+           <div className="w-1 h-1 rounded-full bg-zinc-800" />
+           <button 
+             className="text-violet-400 font-semibold hover:text-violet-300 transition-colors"
+             onClick={() => window.location.reload()}
+           >
+             Resend code
+           </button>
         </div>
       </div>
     </div>

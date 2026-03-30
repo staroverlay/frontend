@@ -3,7 +3,7 @@ import { useAuth } from '../hooks/use-auth';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Link, useNavigate } from 'react-router-dom';
-import { UserPlus, Mail, Lock, CheckCircle2 } from 'lucide-react';
+import { UserPlus, Mail, Lock, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { getError } from '../lib/utils';
 
 export default function Register() {
@@ -35,21 +35,23 @@ export default function Register() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 px-4">
-        <div className="w-full max-w-md bg-zinc-900 border border-zinc-800 p-8 rounded-2xl text-center space-y-6">
-          <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mx-auto">
-             <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 px-4 relative overflow-hidden">
+        <div className="w-full max-w-md glass-panel p-10 rounded-[2.5rem] text-center space-y-6 animate-in fade-in zoom-in-95 duration-700 relative z-10">
+          <div className="w-16 h-16 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto text-emerald-500">
+             <CheckCircle2 className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Account Created!</h1>
-          <p className="text-zinc-400 text-sm">
-            We've sent a verification email to <span className="text-zinc-200 font-bold">{email}</span>. 
-            Please check your inbox to activate your account.
-          </p>
-          <div className="pt-4 flex flex-col gap-3">
-             <Link to="/login" className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-blue-500/20">
+          <div className="space-y-2">
+             <h1 className="text-2xl font-bold text-white tracking-tight">Account Created</h1>
+             <p className="text-zinc-400 text-sm leading-relaxed">
+               We've sent a verification email to <span className="text-white font-medium">{email}</span>. 
+               Please verify your email to continue.
+             </p>
+          </div>
+          <div className="pt-6 flex flex-col gap-4">
+             <Link to="/login" className="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-semibold transition-all">
                 Go to Login
              </Link>
-             <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Redirecting in 5 seconds...</p>
+             <p className="text-xs text-zinc-500">Redirecting in 5s...</p>
           </div>
         </div>
       </div>
@@ -57,71 +59,80 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 px-4">
-      <div className="absolute top-0 left-0 w-full h-1/3 bg-gradient-to-b from-blue-600/10 to-transparent -z-10" />
-      
-      <div className="w-full max-w-md">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-zinc-950 px-4 relative overflow-hidden">
+      {/* Background Effects */}
+      <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-600/10 blur-[120px] pointer-events-none" />
+
+      <div className="w-full max-w-md relative z-10">
         <div className="mb-10 text-center animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="inline-flex w-12 h-12 rounded-xl bg-blue-600 items-center justify-center mb-4 shadow-xl shadow-blue-500/30">
-             <UserPlus className="w-6 h-6 text-white" />
+          <div className="inline-flex w-14 h-14 rounded-2xl bg-violet-600/20 text-violet-500 items-center justify-center mb-6">
+             <UserPlus className="w-6 h-6" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Join StarOverlay</h1>
-          <p className="text-zinc-400 text-sm">Create your account to start streaming</p>
+          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Create Account</h1>
+          <p className="text-zinc-400 text-sm">Sign up to get started</p>
         </div>
 
-        <div className="bg-zinc-900/40 border border-zinc-800 p-8 rounded-2xl backdrop-blur-md shadow-2xl animate-in fade-in zoom-in-95 duration-500">
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div className="relative group px-1">
-               <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-600 group-focus-within:text-blue-500 transition-colors" />
-               <Input 
-                 placeholder="Email address"
-                 type="email"
-                 className="pl-12"
-                 value={email}
-                 onChange={(e) => setEmail(e.target.value)}
-                 required
-               />
-            </div>
+        <div className="glass-panel p-10 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-700 hover:border-violet-500/20 transition-all duration-500">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-4">
+               <div className="relative group px-1">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-500 group-focus-within:text-violet-500 transition-colors" />
+                  <Input 
+                    placeholder="Email address"
+                    type="email"
+                    className="pl-11 h-12 bg-zinc-900/50 border-zinc-800 focus:border-violet-500/50 transition-all text-sm rounded-xl"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+               </div>
 
-            <div className="relative group px-1">
-               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-600 group-focus-within:text-blue-500 transition-colors" />
-               <Input 
-                 placeholder="Password"
-                 type="password"
-                 className="pl-12"
-                 value={password}
-                 onChange={(e) => setPassword(e.target.value)}
-                 required
-               />
-            </div>
+               <div className="relative group px-1">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-500 group-focus-within:text-violet-500 transition-colors" />
+                  <Input 
+                    placeholder="Password"
+                    type="password"
+                    className="pl-11 h-12 bg-zinc-900/50 border-zinc-800 focus:border-violet-500/50 transition-all text-sm rounded-xl"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+               </div>
 
-            <div className="relative group px-1">
-               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-600 group-focus-within:text-blue-500 transition-colors" />
-               <Input 
-                 placeholder="Confirm Password"
-                 type="password"
-                 className="pl-12"
-                 value={confirmPassword}
-                 onChange={(e) => setConfirmPassword(e.target.value)}
-                 required
-               />
+               <div className="relative group px-1">
+                  <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-zinc-500 group-focus-within:text-violet-500 transition-colors" />
+                  <Input 
+                    placeholder="Confirm password"
+                    type="password"
+                    className="pl-11 h-12 bg-zinc-900/50 border-zinc-800 focus:border-violet-500/50 transition-all text-sm rounded-xl"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+               </div>
             </div>
 
             {error && (
-              <div className="p-3.5 bg-red-500/10 border border-red-500/20 text-red-500 rounded-lg text-xs font-semibold">
+              <div className="p-4 bg-rose-500/5 border border-rose-500/10 text-rose-500 rounded-xl text-sm text-center">
                 {error}
               </div>
             )}
 
-            <Button className="w-full py-2.5 h-11 text-sm font-semibold shadow-lg shadow-blue-500/20 active:scale-[0.98]" disabled={isLoading}>
-              {isLoading ? 'Creating account...' : 'Create Account'}
+            <Button className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-lg shadow-violet-500/20 font-semibold transition-all" disabled={isLoading}>
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                  Creating account...
+                </div>
+              ) : 'Sign up'}
             </Button>
           </form>
         </div>
 
-        <p className="mt-8 text-center text-sm text-zinc-500">
+        <p className="mt-8 text-center text-sm text-zinc-400">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-400 font-semibold hover:text-blue-300 underline underline-offset-4 decoration-blue-400/30 transition-all">
+          <Link to="/login" className="text-violet-400 font-semibold hover:text-violet-300 transition-colors">
             Sign in
           </Link>
         </p>
