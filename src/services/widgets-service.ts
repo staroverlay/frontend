@@ -12,7 +12,7 @@ export const widgetsService = {
     return data.widget as Widget;
   },
 
-  async createWidget(input: { app_id: string; integrations: string[] }): Promise<Widget> {
+  async createWidget(input: { app_id: string; integrations: string[]; display_name?: string }): Promise<Widget> {
     const { data } = await api.post('/widgets', input);
     return data.widget as Widget;
   },
@@ -33,6 +33,11 @@ export const widgetsService = {
   async rotateWidgetToken(widgetId: string): Promise<{ token: string } & BasicResponse> {
     const { data } = await api.post(`/widgets/${widgetId}/token/rotate`);
     return data as { token: string } & BasicResponse;
+  },
+
+  async deleteWidget(id: string): Promise<BasicResponse> {
+    const { data } = await api.delete(`/widgets/${id}`);
+    return data as BasicResponse;
   },
 };
 

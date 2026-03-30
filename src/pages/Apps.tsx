@@ -4,10 +4,15 @@ import { useAppExplorer } from '../hooks/use-app-explorer';
 import { useAppsStore } from '../stores/apps-store';
 import { AppsHeader } from '../components/apps/AppsHeader';
 import { AppCard } from '../components/apps/AppCard';
+import { InstallAppModal } from '../components/apps/InstallAppModal';
+import { type AppManifest } from '../services/apps-service';
 
 export default function Apps() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('');
+
+  const [selectedApp, setSelectedApp] = useState<AppManifest | null>(null);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   const { apps: allApps } = useAppsStore();
 
@@ -19,6 +24,11 @@ export default function Apps() {
   const categories = useMemo(() => {
     return Array.from(new Set(allApps.map(a => a.category).filter(Boolean)));
   }, [allApps]);
+
+  const handleInstallClick = (app: AppManifest) => {
+    setSelectedApp(app);
+    setIsInstallModalOpen(true);
+  };
 
   return (
     <div className="flex flex-col gap-8 w-full animate-in fade-in duration-700">
@@ -47,8 +57,8 @@ export default function Apps() {
           <button
             onClick={() => setCategory('')}
             className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${category === ''
-                ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/25'
-                : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
+              ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/25'
+              : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
               }`}
           >
             All Categories
@@ -58,8 +68,8 @@ export default function Apps() {
               key={cat}
               onClick={() => setCategory(cat)}
               className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all capitalize ${category === cat
-                  ? 'bg-zinc-800 text-white shadow-md shadow-black/20'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/40'
+                ? 'bg-zinc-800 text-white shadow-md shadow-black/20'
+                : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/40'
                 }`}
             >
               {cat}
@@ -91,11 +101,19 @@ export default function Apps() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {apps.map((app) => (
-              <AppCard key={app.id} app={app} />
+              <AppCard key={app.id} app={app} onInstall={handleInstallClick} />
             ))}
           </div>
         )}
       </div>
+
+      {selectedApp && (
+        <InstallAppModal
+          app={selectedApp}
+          isOpen={isInstallModalOpen}
+          onClose={() => setIsInstallModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

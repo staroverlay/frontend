@@ -1,35 +1,20 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { useApp } from '../hooks/use-app';
 import { useAppPage } from '../hooks/use-app-page';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ArrowLeft, Loader2, AlertCircle, Calendar, Tag, HardDrive, Sparkles } from 'lucide-react';
-import { widgetsService } from '../services/widgets-service';
+import { InstallAppModal } from '../components/apps/InstallAppModal';
 
 export default function AppDetails() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [app, isAppLoading, appError] = useApp(id || '');
   const [page, isPageLoading, pageError] = useAppPage(id || '');
 
   const WIDGET_SERVER = import.meta.env.VITE_APP_WIDGET_SERVER || 'http://localhost:4000';
 
-  const integrationProps = useMemo(() => app?.properties?.integrations ?? [], [app]);
-  const requiredProviders = useMemo(
-    () => integrationProps.filter((p: any) => p?.is_required).map((p: any) => p?.provider).filter(Boolean),
-    [integrationProps]
-  );
-
-  const [selectedIntegrations, setSelectedIntegrations] = useState<string[]>([]);
-  const [isInstalling, setIsInstalling] = useState(false);
-  const [installError, setInstallError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!app) return;
-    setSelectedIntegrations(requiredProviders);
-    setInstallError(null);
-  }, [app?.id, requiredProviders.join('|')]);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState(false);
 
   if (isAppLoading || isPageLoading || !id) {
     return (
@@ -103,7 +88,7 @@ export default function AppDetails() {
 
         {/* Sidebar */}
         <div className="flex flex-col gap-6">
-          <div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-6 backdrop-blur-xl">
+          <div className="bg-zinc-900/30 border border-white/5 rounded-3xl p-6 backdrop-blur-xl shrink-0 h-fit">
             <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
               <HardDrive className="w-5 h-5 text-violet-400" />
               App Details
@@ -117,7 +102,7 @@ export default function AppDetails() {
                   <div className="flex flex-wrap gap-2">
                     {app.compatible_with?.map(platform => (
                       <span key={platform} className="text-[10px] font-black tracking-widest uppercase bg-zinc-800 text-zinc-300 px-2 py-1 rounded">
-                        {platform}
+                        {platform === 'twitch' ? 'Twitch' : platform === 'kick' ? 'Kick' : platform === 'youtube' ? 'YouTube' : platform}
                       </span>
                     ))}
                   </div>
@@ -142,85 +127,29 @@ export default function AppDetails() {
                 <div className="w-5 h-5 text-zinc-500 mt-0.5 flex items-center justify-center font-bold font-mono text-xs">ID</div>
                 <div>
                   <div className="text-sm font-semibold text-white mb-1">Developer ID</div>
-                  <div className="text-xs font-mono text-zinc-400 bg-zinc-950 px-2 py-1 rounded border border-white/5">
+                  <div className="text-xs font-mono text-zinc-400 bg-zinc-950 px-2 py-1 rounded border border-white/5 truncate max-w-[150px]">
                     {id}
                   </div>
                 </div>
               </div>
+
+              <button
+                onClick={() => setIsInstallModalOpen(true)}
+                className="w-full mt-4 py-4 bg-violet-600 hover:bg-violet-500 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all shadow-lg shadow-violet-600/20 active:scale-95 flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                Install App
+              </button>
             </div>
-          </div>
-
-          {/* Install Widget */}
-          <div className="bg-zinc-950/30 border border-white/5 rounded-3xl p-6 backdrop-blur-xl">
-            <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-violet-400" />
-              Install Widget
-            </h3>
-
-            {integrationProps.length > 0 && (
-              <div className="flex flex-col gap-3 mb-4">
-                <div className="text-sm font-semibold text-zinc-200">Choose integrations</div>
-                <div className="flex flex-col gap-2">
-                  {integrationProps.map((p: any) => {
-                    const provider = p.provider as string;
-                    const checked = selectedIntegrations.includes(provider);
-                    return (
-                      <label key={provider} className="flex items-center gap-2 text-sm text-zinc-200 select-none">
-                        <input
-                          type="checkbox"
-                          className="accent-violet-500"
-                          checked={checked}
-                          onChange={(e) => {
-                            const next = e.target.checked
-                              ? Array.from(new Set([...selectedIntegrations, provider]))
-                              : selectedIntegrations.filter((x) => x !== provider);
-                            setSelectedIntegrations(next);
-                          }}
-                        />
-                        <span className="font-semibold">{provider}</span>
-                        {p.is_required && (
-                          <span className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded border border-violet-500/30 text-violet-300 bg-violet-500/10">
-                            required
-                          </span>
-                        )}
-                      </label>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {installError && (
-              <div className="text-red-400 text-sm mb-3">
-                {installError}
-              </div>
-            )}
-
-            <button
-              className="w-full py-4 bg-violet-600 hover:bg-violet-500 text-white font-bold rounded-2xl shadow-lg shadow-violet-600/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50"
-              disabled={isInstalling}
-              onClick={async () => {
-                if (!app) return;
-                setIsInstalling(true);
-                setInstallError(null);
-                try {
-                  await widgetsService.createWidget({
-                    app_id: id,
-                    integrations: selectedIntegrations,
-                  });
-                  navigate('/widgets');
-                } catch (e: any) {
-                  setInstallError(e?.response?.data?.error || e?.message || 'Failed to install widget');
-                } finally {
-                  setIsInstalling(false);
-                }
-              }}
-            >
-              {isInstalling ? 'Installing...' : 'Install App'}
-            </button>
           </div>
         </div>
       </div>
+
+      <InstallAppModal
+        app={app}
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
     </div>
   );
 }

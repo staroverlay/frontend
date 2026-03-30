@@ -1,13 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
 import {
     RotateCcw, Save, Settings2, ArrowLeft, Loader2,
     AlertCircle, Copy, Check, ExternalLink, Eye, EyeOff, LayoutPanelLeft
 } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 
 import { appsService } from '../services/apps-service';
 import { widgetsService } from '../services/widgets-service';
-import type { Widget } from '../lib/types';
+import { integrationsService } from '../services/integrations-service';
+import type { Widget, Integration } from '../lib/types';
 import { getError, cn } from '../lib/utils';
 
 type AppSettingChild = {
@@ -107,6 +108,8 @@ export default function WidgetDetails() {
     const [widget, setWidget] = useState<Widget | null>(null);
     const [widgetLoading, setWidgetLoading] = useState(true);
     const [widgetError, setWidgetError] = useState<string | null>(null);
+    const [integrations, setIntegrations] = useState<Integration[]>([]);
+    const [integrationsLoading, setIntegrationsLoading] = useState(true);
 
     const [appJson, setAppJson] = useState<any>(null);
 
@@ -150,8 +153,21 @@ export default function WidgetDetails() {
         }
     };
 
+    const loadIntegrations = async () => {
+        setIntegrationsLoading(true);
+        try {
+            const data = await integrationsService.listIntegrations();
+            setIntegrations(data);
+        } catch (e) {
+            console.error('Failed to load integrations', e);
+        } finally {
+            setIntegrationsLoading(false);
+        }
+    };
+
     useEffect(() => {
         loadWidget();
+        loadIntegrations();
     }, [id]);
 
     useEffect(() => {
@@ -188,7 +204,18 @@ export default function WidgetDetails() {
         return integrationProps.filter((p: any) => p.is_required).map((p: any) => p.provider);
     }, [integrationProps]);
 
-    const hasMissingRequired = requiredIntegrationProviders.some((p: string) => !metaDraft.integrations.includes(p));
+    const compatibleIntegrations = useMemo(() => {
+        if (!appJson) return [];
+        const supportedProviders = integrationProps.map((p: any) => p.provider as string);
+        return integrations.filter(i => supportedProviders.includes(i.provider as string));
+    }, [integrations, appJson, integrationProps]);
+
+    const hasMissingRequired = useMemo(() => {
+        const selectedProviders = compatibleIntegrations
+            .filter(i => metaDraft.integrations.includes(i.id))
+            .map(i => i.provider as string);
+        return requiredIntegrationProviders.some((p: string) => !selectedProviders.includes(p));
+    }, [requiredIntegrationProviders, compatibleIntegrations, metaDraft.integrations]);
 
     const groupedSettings = useMemo(() => {
         const out = new Map<string, { label?: string; fields: typeof flatSettings }>();
@@ -343,29 +370,51 @@ export default function WidgetDetails() {
 
                             <div className="space-y-3">
                                 <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest px-1">Linked Integrations</label>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2">
-                                    {integrationProps.map((p: any) => {
-                                        const isChecked = metaDraft.integrations.includes(p.provider);
-                                        return (
-                                            <button
-                                                key={p.provider}
-                                                onClick={() => {
-                                                    const next = isChecked ? metaDraft.integrations.filter(x => x !== p.provider) : [...new Set([...metaDraft.integrations, p.provider])];
-                                                    setMetaDraft(prev => ({ ...prev, integrations: next }));
-                                                }}
-                                                className={cn(
-                                                    "flex items-center justify-between p-3 rounded-xl border transition-all",
-                                                    isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400" : "bg-zinc-900/40 border-white/5 text-zinc-700 hover:border-white/10"
-                                                )}
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <div className={cn("w-1.5 h-1.5 rounded-full", isChecked ? "bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" : "bg-zinc-800")} />
-                                                    <span className="text-[10px] font-black uppercase tracking-tight">{p.provider}</span>
-                                                </div>
-                                                {p.is_required && <span className="text-[7px] font-black bg-rose-500/20 text-rose-500 px-1.5 py-0.5 rounded uppercase">Req.</span>}
-                                            </button>
-                                        );
-                                    })}
+                                <div className="grid grid-cols-1 gap-2">
+                                    {integrationsLoading ? (
+                                        <div className="py-8 flex flex-col items-center justify-center gap-2 border border-dashed border-white/5 rounded-xl">
+                                            <Loader2 className="w-4 h-4 text-zinc-800 animate-spin" />
+                                            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-800">Syncing...</span>
+                                        </div>
+                                    ) : compatibleIntegrations.length === 0 ? (
+                                        <div className="p-4 text-center border border-dashed border-rose-500/10 rounded-xl bg-rose-500/5">
+                                            <p className="text-[10px] font-bold text-rose-500/80 uppercase tracking-tight">No compatible connections</p>
+                                        </div>
+                                    ) : (
+                                        compatibleIntegrations.map((i: Integration) => {
+                                            const isChecked = metaDraft.integrations.includes(i.id);
+                                            const isRequired = requiredIntegrationProviders.includes(i.provider);
+                                            return (
+                                                <button
+                                                    key={i.id}
+                                                    onClick={() => {
+                                                        const next = isChecked ? metaDraft.integrations.filter(x => x !== i.id) : [...new Set([...metaDraft.integrations, i.id])];
+                                                        setMetaDraft(prev => ({ ...prev, integrations: next }));
+                                                    }}
+                                                    className={cn(
+                                                        "flex items-center justify-between p-3 rounded-xl border transition-all text-left group/btn",
+                                                        isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400" : "bg-zinc-900/40 border-white/5 text-zinc-700 hover:border-white/10"
+                                                    )}
+                                                >
+                                                    <div className="flex items-center gap-3">
+                                                        {i.providerAvatarUrl ? (
+                                                            <img src={i.providerAvatarUrl} className="w-6 h-6 rounded-lg bg-zinc-950 border border-white/5" alt="" />
+                                                        ) : (
+                                                            <div className={cn("w-1.5 h-1.5 rounded-full", isChecked ? "bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" : "bg-zinc-800")} />
+                                                        )}
+                                                        <div>
+                                                            <span className="block text-[10px] font-black uppercase tracking-tight leading-none mb-0.5">{i.displayName || i.providerUsername}</span>
+                                                            <span className="block text-[8px] font-bold text-zinc-600 uppercase tracking-widest">
+                                                                {i.provider === 'twitch' ? 'Twitch' : i.provider === 'kick' ? 'Kick' : i.provider === 'youtube' ? 'YouTube' : i.provider}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    {isRequired && isChecked && <Check className="w-3.5 h-3.5 text-violet-500" />}
+                                                    {isRequired && !isChecked && <span className="text-[7px] font-black bg-rose-500/20 text-rose-500 px-1.5 py-0.5 rounded uppercase">Req.</span>}
+                                                </button>
+                                            );
+                                        })
+                                    )}
                                 </div>
                             </div>
 

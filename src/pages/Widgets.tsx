@@ -119,7 +119,7 @@ export default function WidgetsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredWidgets.map((w) => (
-              <WidgetCard key={w.id} widget={w} />
+              <WidgetCard key={w.id} widget={w} onDelete={refresh} />
             ))}
           </div>
         )}

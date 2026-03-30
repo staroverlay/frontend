@@ -1,15 +1,22 @@
 import { Link } from 'react-router-dom';
 import type { Widget } from '../../lib/types';
-import { Layers, Settings2, Copy, Check } from 'lucide-react';
-import { useState } from 'react';
+import { Layers, Settings2, Copy, Check, MoreVertical, Trash2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { widgetsService } from '../../services/widgets-service';
+import { DeleteConfirmModal } from '../common/DeleteConfirmModal';
 
 interface WidgetCardProps {
     widget: Widget;
+    onDelete?: () => void;
 }
 
-export function WidgetCard({ widget }: WidgetCardProps) {
+export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
     const WIDGET_SERVER = import.meta.env.VITE_APP_WIDGET_SERVER || 'http://localhost:4000';
     const [copied, setCopied] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const widgetUrl = `${WIDGET_SERVER}/${widget.app_id}?token=${widget.token}`;
 
@@ -20,6 +27,29 @@ export function WidgetCard({ widget }: WidgetCardProps) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
     };
+
+    const handleDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await widgetsService.deleteWidget(widget.id);
+            setShowDeleteModal(false);
+            onDelete?.();
+        } catch (e) {
+            console.error('Failed to delete widget', e);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setShowMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     return (
         <Link
@@ -54,7 +84,7 @@ export function WidgetCard({ widget }: WidgetCardProps) {
                     </div>
                 </div>
 
-                <div className="absolute top-4 right-4">
+                <div className="absolute top-4 right-4 flex gap-1.5" ref={menuRef}>
                     <button
                         onClick={copyUrl}
                         className="bg-zinc-950/80 backdrop-blur-md p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-violet-500/40 transition-all shadow-xl group/btn"
@@ -62,6 +92,36 @@ export function WidgetCard({ widget }: WidgetCardProps) {
                     >
                         {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     </button>
+
+                    <div className="relative">
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setShowMenu(!showMenu);
+                            }}
+                            className="bg-zinc-950/80 backdrop-blur-md p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-rose-500/40 transition-all shadow-xl group/btn"
+                        >
+                            <MoreVertical className="w-4 h-4" />
+                        </button>
+
+                        {showMenu && (
+                            <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl py-1 z-30 animate-in fade-in zoom-in-95 duration-200">
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setShowDeleteModal(true);
+                                        setShowMenu(false);
+                                    }}
+                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-rose-500 hover:bg-rose-500/10 transition-colors"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                    Delete Instance
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -89,6 +149,15 @@ export function WidgetCard({ widget }: WidgetCardProps) {
                     </div>
                 </div>
             </div>
+
+            <DeleteConfirmModal
+                isOpen={showDeleteModal}
+                onClose={() => setShowDeleteModal(false)}
+                onConfirm={handleDelete}
+                title="Delete Widget?"
+                message={`Are you sure you want to delete "${widget.display_name || widget.app_id}"? This action cannot be undone.`}
+                isDeleting={isDeleting}
+            />
         </Link>
     );
 }
