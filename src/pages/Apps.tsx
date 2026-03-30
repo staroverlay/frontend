@@ -8,9 +8,9 @@ import { AppCard } from '../components/apps/AppCard';
 export default function Apps() {
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<string>('');
-  
+
   const { apps: allApps } = useAppsStore();
-  
+
   const { apps, isLoading, error } = useAppExplorer({
     search: search.length > 2 ? search : undefined,
     category: category || undefined,
@@ -21,16 +21,16 @@ export default function Apps() {
   }, [allApps]);
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto animate-in fade-in duration-700">
-      <AppsHeader 
+    <div className="flex flex-col gap-8 w-full animate-in fade-in duration-700">
+      <AppsHeader
         title="Explore"
         highlightedText="Apps"
         description="Discover widgets, overlays, and tools to supercharge your stream and customize your experience."
       />
 
       {/* Filters and Search */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-1 rounded-2xl bg-zinc-900/40 border border-white/5 backdrop-blur-md">
-        <div className="relative w-full md:w-96 flex-1">
+      <div className="flex flex-col lg:flex-row gap-4 items-center justify-between p-1 rounded-2xl bg-zinc-900/40 border border-white/5 backdrop-blur-md">
+        <div className="relative w-full lg:w-96 flex-1">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <Search className="w-4 h-4 text-zinc-500" />
           </div>
@@ -43,14 +43,13 @@ export default function Apps() {
           />
         </div>
 
-        <div className="flex items-center gap-2 px-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar">
+        <div className="flex items-center gap-2 px-2 overflow-x-auto w-full lg:w-auto pb-2 lg:pb-0 no-scrollbar">
           <button
             onClick={() => setCategory('')}
-            className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${
-              category === '' 
-                ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/25' 
+            className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${category === ''
+                ? 'bg-violet-500 text-white shadow-lg shadow-violet-500/25'
                 : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/50'
-            }`}
+              }`}
           >
             All Categories
           </button>
@@ -58,11 +57,10 @@ export default function Apps() {
             <button
               key={cat}
               onClick={() => setCategory(cat)}
-              className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all capitalize ${
-                category === cat
+              className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all capitalize ${category === cat
                   ? 'bg-zinc-800 text-white shadow-md shadow-black/20'
                   : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/40'
-              }`}
+                }`}
             >
               {cat}
             </button>

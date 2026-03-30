@@ -17,7 +17,7 @@ export function AppsHeader({ title, highlightedText, description }: AppsHeaderPr
           {title} <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-fuchsia-400">{highlightedText}</span>
         </h1>
       </div>
-      <p className="text-zinc-400 text-lg max-w-2xl pl-[4.5rem]">
+      <p className="text-zinc-400 text-base md:text-lg max-w-2xl md:pl-[4.5rem]">
         {description}
       </p>
 

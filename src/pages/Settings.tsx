@@ -120,18 +120,18 @@ export default function Settings() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto py-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-white">Settings</h1>
-        <p className="text-zinc-400 text-sm mt-2">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      <header className="mb-8 md:mb-10">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white m-0">Settings</h1>
+        <p className="text-zinc-500 text-sm md:text-base mt-2 max-w-2xl">
           Manage your account preferences and security settings.
         </p>
       </header>
 
-      <div className="flex flex-col md:flex-row gap-10 items-start">
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
         {/* Settings Sidebar */}
-        <aside className="w-full md:w-64 shrink-0">
-          <nav className="space-y-1 bg-zinc-900/40 p-2 rounded-2xl border border-zinc-800/50">
+        <aside className="w-full lg:w-64 shrink-0 -mx-4 md:mx-0">
+          <nav className="flex lg:flex-col gap-1.5 bg-zinc-900/30 p-1.5 md:p-2 rounded-2xl border border-white/5 overflow-x-auto lg:overflow-visible no-scrollbar px-4 md:px-2">
             {tabs.map((tab) => {
               const isActive = location.pathname.startsWith(tab.href);
               return (
@@ -139,10 +139,10 @@ export default function Settings() {
                   key={tab.name}
                   to={tab.href}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group',
+                    'flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs md:text-sm font-bold transition-all group shrink-0 lg:shrink',
                     isActive
-                      ? 'bg-violet-600/10 text-violet-400 text-violet-400 shadow-sm shadow-violet-500/5'
-                      : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
+                      ? 'bg-violet-600/10 text-violet-400 border border-violet-500/20 shadow-lg shadow-violet-500/5'
+                      : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 border border-transparent'
                   )}
                 >
                   <tab.icon className={cn('w-4 h-4', isActive ? 'text-violet-500' : 'text-zinc-600 group-hover:text-zinc-400')} />

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import { widgetsService } from '../services/widgets-service';
 import type { Widget } from '../lib/types';
-import { Skeleton } from '../components/ui/skeleton';
 import { ErrorView } from '../components/ui/ErrorView';
 import { getError } from '../lib/utils';
 import { WidgetCard } from '../components/widgets/WidgetCard';
@@ -41,7 +40,7 @@ export default function WidgetsPage() {
 
   if (error) {
     return (
-      <div className="space-y-6 animate-in fade-in duration-700 max-w-6xl mx-auto">
+      <div className="space-y-6 animate-in fade-in duration-700">
         <ErrorView
           message={error}
           onRetry={refresh}
@@ -52,8 +51,8 @@ export default function WidgetsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div className="flex flex-col gap-8 w-full animate-in fade-in duration-700">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div className="flex-1">
           <AppsHeader
             title="My Installed"

@@ -2,12 +2,12 @@ import { Sparkles, ArrowRight } from 'lucide-react';
 
 export function WidgetPrompt() {
   return (
-    <div className="p-10 rounded-[3rem] border border-zinc-900/50 bg-zinc-950/20 backdrop-blur-3xl relative flex flex-col items-center justify-center text-center group overflow-hidden transition-all duration-700 hover:border-violet-500/20 hover:bg-violet-500/5 selection:bg-violet-500/30">
+    <div className="p-8 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-zinc-900/50 bg-zinc-950/20 backdrop-blur-3xl relative flex flex-col items-center justify-center text-center group overflow-hidden transition-all duration-700 hover:border-violet-500/20 hover:bg-violet-500/5 selection:bg-violet-500/30 min-h-[350px]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(139,92,246,0.08)_0%,_transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      
+
       <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center mb-8 shadow-2xl shadow-violet-500/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 relative">
-         <Sparkles className="w-10 h-10 text-white" />
-         <div className="absolute inset-0 rounded-3xl animate-pulse blur-xl opacity-40 bg-fuchsia-500" />
+        <Sparkles className="w-10 h-10 text-white" />
+        <div className="absolute inset-0 rounded-3xl animate-pulse blur-xl opacity-40 bg-fuchsia-500" />
       </div>
 
       <div className="relative z-10 space-y-4">
