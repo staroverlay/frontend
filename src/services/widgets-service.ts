@@ -7,6 +7,11 @@ export const widgetsService = {
     return data.widgets as Widget[];
   },
 
+  async getWidget(id: string): Promise<Widget> {
+    const { data } = await api.get(`/widgets/${id}`);
+    return data.widget as Widget;
+  },
+
   async createWidget(input: { app_id: string; integrations: string[] }): Promise<Widget> {
     const { data } = await api.post('/widgets', input);
     return data.widget as Widget;

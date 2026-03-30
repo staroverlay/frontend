@@ -208,7 +208,7 @@ export default function AppDetails() {
                     app_id: id,
                     integrations: selectedIntegrations,
                   });
-                  navigate('/settings/widgets');
+                  navigate('/widgets');
                 } catch (e: any) {
                   setInstallError(e?.response?.data?.error || e?.message || 'Failed to install widget');
                 } finally {

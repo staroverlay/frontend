@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
-import { User, ShieldCheck, Monitor, Share2, Layers } from 'lucide-react';
+import { User, ShieldCheck, Monitor, Share2 } from 'lucide-react';
 import { getError, cn } from '../lib/utils';
 import { sessionsService } from '../services/sessions-service';
 import { type Session } from '../lib/types';
@@ -12,16 +12,15 @@ import { SecuritySection } from '../components/settings/SecuritySection';
 import { SessionsSection } from '../components/settings/SessionsSection';
 import Integrations from './Integrations';
 import { authService } from '../services/auth-service';
-import Widgets from './Widgets';
 
 export default function Settings() {
   const { user, refreshUser, logout } = useAuth();
-  const { 
-    profile, 
-    isLoading: isProfileInitialLoading, 
-    error: profileError, 
-    updateProfile, 
-    clearError: clearProfileError 
+  const {
+    profile,
+    isLoading: isProfileInitialLoading,
+    error: profileError,
+    updateProfile,
+    clearError: clearProfileError
   } = useProfile();
 
   const [displayName, setDisplayName] = useState('');
@@ -36,7 +35,7 @@ export default function Settings() {
 
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isSessionsLoading, setIsSessionsLoading] = useState(false);
-  
+
   useEffect(() => {
     fetchSessions();
   }, []);
@@ -54,10 +53,10 @@ export default function Settings() {
   };
 
   const handleRevokeSession = async (id: string, isCurrent: boolean) => {
-    const msg = isCurrent 
+    const msg = isCurrent
       ? 'Are you sure you want to revoke your CURRENT session? You will be logged out.'
       : 'Terminate this session? The device will be logged out.';
-      
+
     if (!window.confirm(msg)) return;
 
     try {
@@ -104,7 +103,6 @@ export default function Settings() {
   const tabs = [
     { name: 'Profile', href: '/settings/profile', icon: User },
     { name: 'Integrations', href: '/settings/integrations', icon: Share2 },
-    { name: 'Widgets', href: '/settings/widgets', icon: Layers },
     { name: 'Security', href: '/settings/security', icon: ShieldCheck },
     { name: 'Sessions', href: '/settings/sessions', icon: Monitor },
   ];
@@ -142,8 +140,8 @@ export default function Settings() {
                   to={tab.href}
                   className={cn(
                     'flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all group',
-                    isActive 
-                      ? 'bg-violet-600/10 text-violet-400 text-violet-400 shadow-sm shadow-violet-500/5' 
+                    isActive
+                      ? 'bg-violet-600/10 text-violet-400 text-violet-400 shadow-sm shadow-violet-500/5'
                       : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50'
                   )}
                 >
@@ -159,9 +157,9 @@ export default function Settings() {
         <main className="flex-1 min-w-0">
           <Routes>
             <Route path="/" element={<Navigate to="profile" replace />} />
-            
+
             <Route path="profile" element={
-              <ProfileSection 
+              <ProfileSection
                 user={user}
                 displayName={displayName}
                 setDisplayName={setDisplayName}
@@ -171,11 +169,11 @@ export default function Settings() {
                 onUpdate={handleUpdateProfile}
               />
             } />
-            
+
             <Route path="security" element={<SecuritySection logout={logout} />} />
-            
+
             <Route path="sessions" element={
-              <SessionsSection 
+              <SessionsSection
                 sessions={sessions}
                 isLoading={isSessionsLoading}
                 onRefresh={fetchSessions}
@@ -183,9 +181,8 @@ export default function Settings() {
                 onRevokeAll={handleKillAllSessions}
               />
             } />
-            
+
             <Route path="integrations" element={<Integrations />} />
-            <Route path="widgets" element={<Widgets />} />
           </Routes>
         </main>
       </div>
