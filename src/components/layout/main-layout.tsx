@@ -1,6 +1,6 @@
 import { useAuth } from '../../hooks/use-auth';
 import { useProfile } from '../../hooks/use-profile';
-import { LogOut, LayoutDashboard, Settings, User as UserIcon } from 'lucide-react';
+import { LogOut, LayoutDashboard, Settings, User as UserIcon, Grid } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
@@ -13,6 +13,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Explore Apps', href: '/apps', icon: Grid },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
