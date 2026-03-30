@@ -7,6 +7,14 @@ export interface AppManifest {
   compatible_with: string[];
   created_at: string;
   updated_at: string;
+  properties?: {
+    integrations?: Array<{
+      provider: string;
+      allow_multiple?: boolean;
+      is_required?: boolean;
+    }>;
+  };
+  settings?: Array<any>;
 }
 
 const BASE_URL = import.meta.env.VITE_APP_WIDGET_SERVER || "http://localhost:4000";

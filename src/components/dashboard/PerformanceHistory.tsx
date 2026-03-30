@@ -1,4 +1,3 @@
-import React from 'react';
 import { Sparkles, Activity } from 'lucide-react';
 
 export function PerformanceHistory() {

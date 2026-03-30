@@ -10,6 +10,7 @@ import Settings from './pages/Settings';
 import OAuthCallback from './pages/oauth/Callback';
 import Apps from './pages/Apps';
 import AppDetails from './pages/AppDetails';
+import Widgets from './pages/Widgets';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -63,6 +64,7 @@ export default function App() {
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/apps" element={<ProtectedRoute><Apps /></ProtectedRoute>} />
         <Route path="/apps/:id" element={<ProtectedRoute><AppDetails /></ProtectedRoute>} />
+        <Route path="/widgets" element={<ProtectedRoute><Widgets /></ProtectedRoute>} />
         <Route path="/oauth/callback/:provider" element={<OAuthCallback />} />
         <Route path="/settings/*" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 

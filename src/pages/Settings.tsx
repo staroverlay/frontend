@@ -3,7 +3,7 @@ import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
-import { User, ShieldCheck, Monitor, Share2 } from 'lucide-react';
+import { User, ShieldCheck, Monitor, Share2, Layers } from 'lucide-react';
 import { getError, cn } from '../lib/utils';
 import { sessionsService } from '../services/sessions-service';
 import { type Session } from '../lib/types';
@@ -12,6 +12,7 @@ import { SecuritySection } from '../components/settings/SecuritySection';
 import { SessionsSection } from '../components/settings/SessionsSection';
 import Integrations from './Integrations';
 import { authService } from '../services/auth-service';
+import Widgets from './Widgets';
 
 export default function Settings() {
   const { user, refreshUser, logout } = useAuth();
@@ -103,6 +104,7 @@ export default function Settings() {
   const tabs = [
     { name: 'Profile', href: '/settings/profile', icon: User },
     { name: 'Integrations', href: '/settings/integrations', icon: Share2 },
+    { name: 'Widgets', href: '/settings/widgets', icon: Layers },
     { name: 'Security', href: '/settings/security', icon: ShieldCheck },
     { name: 'Sessions', href: '/settings/sessions', icon: Monitor },
   ];
@@ -183,6 +185,7 @@ export default function Settings() {
             } />
             
             <Route path="integrations" element={<Integrations />} />
+            <Route path="widgets" element={<Widgets />} />
           </Routes>
         </main>
       </div>
