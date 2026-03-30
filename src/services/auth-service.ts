@@ -12,8 +12,8 @@ export const authService = {
     return data;
   },
 
-  async resendVerification(body: any): Promise<BasicResponse> {
-    const { data } = await api.post('/auth/resend-verification', body);
+  async resendVerification(): Promise<BasicResponse> {
+    const { data } = await api.post('/auth/resend-verification');
     return data;
   },
 
