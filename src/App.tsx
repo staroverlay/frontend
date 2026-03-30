@@ -12,6 +12,7 @@ import Apps from './pages/Apps';
 import AppDetails from './pages/AppDetails';
 import Widgets from './pages/Widgets';
 import WidgetDetails from './pages/WidgetDetails';
+import Content from './pages/Content';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -63,6 +64,7 @@ export default function App() {
 
         {/* Protected Routes */}
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/content" element={<ProtectedRoute><Content /></ProtectedRoute>} />
         <Route path="/apps" element={<ProtectedRoute><Apps /></ProtectedRoute>} />
         <Route path="/apps/:id" element={<ProtectedRoute><AppDetails /></ProtectedRoute>} />
         <Route path="/widgets" element={<ProtectedRoute><Widgets /></ProtectedRoute>} />
