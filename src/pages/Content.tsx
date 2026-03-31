@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { UploadCloud, Image as ImageIcon, Trash2, File as FileIcon, Loader2, AlertCircle, Search, Filter, SortAsc, Music, Film, ChevronDown, X } from 'lucide-react';
+import { UploadCloud, Image as ImageIcon, File as FileIcon, Loader2, AlertCircle, Search, SortAsc, ChevronDown, X } from 'lucide-react';
 import { UploadsService } from '../services/uploads.service';
+import { MediaCard } from '../components/media/MediaCard';
 
 interface Quota {
     usedBytes: number;
@@ -236,8 +237,8 @@ export default function Content() {
                                     key={t}
                                     onClick={() => setFilterType(t)}
                                     className={`px-4 py-1.5 rounded-lg text-xs font-bold capitalize transition-all ${filterType === t
-                                            ? 'bg-zinc-800 text-white shadow-sm'
-                                            : 'text-zinc-500 hover:text-zinc-300'
+                                        ? 'bg-zinc-800 text-white shadow-sm'
+                                        : 'text-zinc-500 hover:text-zinc-300'
                                         }`}
                                 >
                                     {t === 'all' ? 'All' : t === 'image' ? 'Images' : t === 'video' ? 'Videos' : 'Audio'}
@@ -308,75 +309,12 @@ export default function Content() {
                         </div>
                     ) : (
                         filteredAndSortedUploads.map((upload) => (
-                            <div key={upload.id} className="group flex flex-col rounded-2xl bg-zinc-900 border border-white/5 overflow-hidden hover:border-violet-500/30 transition-all hover:shadow-xl hover:shadow-black/40">
-                                <div className="aspect-square bg-zinc-950 relative overflow-hidden">
-                                    {upload.type === 'image' ? (
-                                        <img
-                                            src={upload.thumbnailUrl}
-                                            alt={upload.displayName}
-                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                            loading="lazy"
-                                        />
-                                    ) : upload.type === 'video' ? (
-                                        <div className="w-full h-full flex flex-col">
-                                            <video
-                                                src={upload.url}
-                                                className="w-full h-full object-cover group-hover:opacity-50 transition-opacity"
-                                                preload="metadata"
-                                                onMouseEnter={(e) => e.currentTarget.play().catch(() => { })}
-                                                onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
-                                                muted
-                                            />
-                                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:opacity-0 transition-opacity">
-                                                <Film className="w-10 h-10 text-white/20" />
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full h-full flex flex-col items-center justify-center bg-zinc-900 border-b border-white/5">
-                                            <div className="w-16 h-16 rounded-full bg-violet-500/10 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
-                                                <Music className="w-8 h-8 text-violet-400" />
-                                            </div>
-                                            <span className="text-[10px] font-black uppercase tracking-widest text-violet-500/50">Audio File</span>
-                                        </div>
-                                    )}
-
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all flex flex-col items-center justify-center gap-3 p-4 backdrop-blur-[2px]">
-                                        <div className="flex items-center gap-2">
-                                            <a
-                                                href={upload.url}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="p-3 rounded-xl bg-white/10 hover:bg-white/20 text-white backdrop-blur-md transition-all active:scale-95"
-                                                title="View Full"
-                                            >
-                                                {upload.type === 'audio' ? <Music className="w-5 h-5" /> : <ImageIcon className="w-5 h-5" />}
-                                            </a>
-                                            <button
-                                                onClick={() => handleDelete(upload.id)}
-                                                className="p-3 rounded-xl bg-rose-500/20 hover:bg-rose-500/40 text-rose-200 backdrop-blur-md transition-all active:scale-95"
-                                                title="Delete"
-                                            >
-                                                <Trash2 className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="p-4 bg-zinc-900">
-                                    <p className="text-sm font-bold text-white truncate mb-1" title={upload.displayName}>
-                                        {upload.displayName}
-                                    </p>
-                                    <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-wider">
-                                        <span className={`px-2 py-0.5 rounded ${upload.type === 'image' ? 'bg-blue-500/10 text-blue-400' :
-                                                upload.type === 'video' ? 'bg-amber-500/10 text-amber-400' :
-                                                    'bg-violet-500/10 text-violet-400'
-                                            }`}>
-                                            {upload.type}
-                                        </span>
-                                        <span className="text-zinc-500">{formatBytes(upload.sizeBytes)}</span>
-                                    </div>
-                                </div>
-                            </div>
+                            <MediaCard
+                                key={upload.id}
+                                upload={upload}
+                                onDelete={handleDelete}
+                                formatBytes={formatBytes}
+                            />
                         ))
                     )}
                 </div>

@@ -1,4 +1,5 @@
 import api from '../lib/api-client';
+import { ThumbnailGenerator } from '../lib/thumbnail-generator';
 
 const UPLOAD_SERVER = import.meta.env.VITE_UPLOAD_SERVER || 'http://localhost:8787';
 
@@ -26,7 +27,22 @@ export const UploadsService = {
         });
 
         if (!initiateRes.data.success) throw new Error("Failed to initiate upload");
-        const { upload, uploadId, key, fileId } = initiateRes.data;
+        const { upload, uploadId, key, fileId, thumbnailToken } = initiateRes.data;
+
+        // Generate and upload thumbnail in background (don't block main upload but it's small)
+        try {
+            const thumbBlob = await ThumbnailGenerator.generate(file);
+            await fetch(`${UPLOAD_SERVER}/thumbnail`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${thumbnailToken}`,
+                    'Content-Type': 'image/jpeg'
+                },
+                body: thumbBlob
+            });
+        } catch (e) {
+            console.error("Optional thumbnail upload failed", e);
+        }
 
         try {
             const chunkSize = 5 * 1024 * 1024;
