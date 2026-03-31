@@ -31,4 +31,9 @@ export const integrationsService = {
     const { data } = await api.post(`/integrations/connect/${provider}`);
     return data;
   },
+
+  async getChannelRewards(integrationId: string): Promise<{ id: string; title: string; cost: number; color: string; icon: string | null }[]> {
+    const { data } = await api.get(`/integrations/rewards/${integrationId}`);
+    return data.rewards;
+  },
 };

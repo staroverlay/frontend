@@ -2,7 +2,7 @@ import {
     RotateCcw, Save, Settings2, ArrowLeft, Loader2,
     AlertCircle, Copy, Check, ExternalLink, Eye, EyeOff, LayoutPanelLeft
 } from 'lucide-react';
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import { appsService } from '../services/apps-service';
@@ -49,7 +49,47 @@ export default function WidgetDetails() {
 
     const [appJson, setAppJson] = useState<AppJson | null>(null);
 
-    const [activeTab, setActiveTab] = useState<'overview' | 'settings'>('overview');
+    const [activeTab, setActiveTab] = useState<'overview' | 'settings'>('settings');
+
+    // Sidebar Resizer
+    const [sidebarWidth, setSidebarWidth] = useState(400);
+    const [isResizing, setIsResizing] = useState(false);
+    const isResizingRef = useRef(false);
+
+    const startResizing = useCallback((e: React.MouseEvent) => {
+        isResizingRef.current = true;
+        setIsResizing(true);
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    }, []);
+
+    const stopResizing = useCallback(() => {
+        isResizingRef.current = false;
+        setIsResizing(false);
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+    }, []);
+
+    const resize = useCallback((e: MouseEvent) => {
+        if (isResizingRef.current) {
+            const newWidth = e.clientX;
+            const maxWidth = Math.min(window.innerWidth - 300, 800);
+            if (newWidth >= 300 && newWidth <= maxWidth) {
+                setSidebarWidth(newWidth);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        window.addEventListener("mousemove", resize);
+        window.addEventListener("mouseup", stopResizing);
+        return () => {
+            window.removeEventListener("mousemove", resize);
+            window.removeEventListener("mouseup", stopResizing);
+        };
+    }, [resize, stopResizing]);
+
     const [showUrl, setShowUrl] = useState(false);
     const [copied, setCopied] = useState(false);
 
@@ -237,7 +277,13 @@ export default function WidgetDetails() {
     return (
         <div className="flex flex-col lg:flex-row h-screen bg-black overflow-hidden font-sans">
             {/* Settings Sidebar - Full Width on Mobile, Sidebar on Desktop */}
-            <aside className="w-full lg:w-[320px] flex flex-col border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-1 overflow-hidden">
+            <aside
+                className={cn(
+                    "w-full flex flex-col border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-none overflow-hidden transition-colors",
+                    isResizing && "border-violet-500/40 border-r-2"
+                )}
+                style={{ width: `${sidebarWidth}px`, maxWidth: '85vw' }}
+            >
                 <div className="p-4 border-b border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Link to="/widgets" className="p-1.5 border border-white/5 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 transition-all group">
@@ -356,6 +402,7 @@ export default function WidgetDetails() {
                                         fields={appJson.settings}
                                         values={settingsDraft}
                                         onChange={(path: string, val: any) => setSettingsDraft(p => ({ ...p, [path]: val }))}
+                                        integrationIds={metaDraft.integrations}
                                     />
                                 </div>
                             )}
@@ -393,8 +440,18 @@ export default function WidgetDetails() {
                 </div>
             </aside>
 
+            {/* Resize Handle for Desktop */}
+            <div
+                onMouseDown={startResizing}
+                className={cn(
+                    "hidden lg:block w-1.5 h-screen cursor-col-resize z-50 transition-all hover:bg-violet-500/20 active:bg-violet-500/40 relative shrink-0",
+                    isResizing && "bg-violet-500/40"
+                )}
+                style={{ marginLeft: '-3px', marginRight: '-3px' }}
+            />
+
             {/* Main Column: Preview & Top Bar */}
-            <main className="flex-1 relative flex flex-col overflow-hidden bg-black order-1 lg:order-2 h-[50vh] lg:h-auto">
+            <main className="flex-1 relative flex flex-col overflow-hidden bg-black order-1 lg:order-none h-[50vh] lg:h-auto">
                 {/* Top Management Bar - Responsive */}
                 <header className="min-h-16 lg:h-16 border-b border-white/5 bg-zinc-950/60 backdrop-blur-3xl flex flex-col lg:flex-row items-center justify-between px-4 lg:px-6 py-3 lg:py-0 z-10 shrink-0 gap-4 lg:gap-0 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
                     <div className="flex items-center gap-3 lg:gap-4 flex-1 w-full lg:max-w-3xl">

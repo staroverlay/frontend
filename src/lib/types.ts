@@ -81,6 +81,7 @@ export type AppSettingType =
   | 'media:image'
   | 'media:video'
   | 'media:audio'
+  | 'channel-reward'
   | 'group';
 
 export type AppSettingField = {
