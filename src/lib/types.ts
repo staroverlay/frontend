@@ -68,3 +68,66 @@ export type Widget = {
   created_at: string;
   updated_at: string;
 };
+
+export type AppSettingType =
+  | 'text'
+  | 'number'
+  | 'boolean'
+  | 'select'
+  | 'color'
+  | 'object'
+  | 'map'
+  | 'list'
+  | 'media:image'
+  | 'media:video'
+  | 'media:audio'
+  | 'group';
+
+export type AppSettingField = {
+  id: string;
+  type: AppSettingType;
+  label?: string;
+  description?: string;
+  default?: unknown;
+  render_as?: 'checkbox' | 'switch' | 'slider' | 'select' | 'picker' | string;
+
+  // For number
+  num_type?: 'integer' | 'float';
+  num_min?: number;
+  num_max?: number;
+  slider_step?: number;
+
+  // For select
+  options?: Array<{ value: string; label?: string }>;
+
+  // For object/group
+  fields?: AppSettingField[];
+  children?: AppSettingField[]; // group can have children too.
+
+  // For list
+  item_type?: AppSettingType;
+  item_schema?: AppSettingField;
+
+  // For map
+  key_label?: string;
+  value_label?: string;
+  value_schema?: AppSettingField;
+
+  // For validation?
+  min?: number;
+  max?: number;
+};
+
+export type AppJson = {
+  name: string;
+  version: string;
+  description?: string;
+  settings?: AppSettingField[];
+  properties?: {
+    integrations?: Array<{
+      provider: string;
+      allow_multiple?: boolean;
+      is_required?: boolean;
+    }>;
+  };
+};

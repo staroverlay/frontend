@@ -2,104 +2,40 @@ import {
     RotateCcw, Save, Settings2, ArrowLeft, Loader2,
     AlertCircle, Copy, Check, ExternalLink, Eye, EyeOff, LayoutPanelLeft
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
 import { appsService } from '../services/apps-service';
 import { widgetsService } from '../services/widgets-service';
 import { integrationsService } from '../services/integrations-service';
-import type { Widget, Integration } from '../lib/types';
+import type { Widget, Integration, AppJson, AppSettingField } from '../lib/types';
 import { getError, cn } from '../lib/utils';
+import { AppSettings } from '../components/apps/AppSettings';
 
-type AppSettingChild = {
-    id: string;
-    type: 'text' | 'number' | 'boolean' | 'select' | string;
-    label?: string;
-    description?: string;
-    default?: unknown;
-    num_type?: 'integer' | string;
-    num_min?: number;
-    num_max?: number;
-    render_as?: string;
-    slider_step?: number;
-    options?: Array<{ value: string; label?: string }>;
-};
-
-function stripMaybeNumber(v: unknown): number | null {
-    if (typeof v === 'number' && Number.isFinite(v)) return v;
-    if (typeof v === 'string' && v.trim().length > 0) {
-        const n = Number(v);
-        if (Number.isFinite(n)) return n;
-    }
-    return null;
-}
-
-function getByDottedPath(obj: unknown, dottedPath: string): unknown {
-    if (!obj || typeof obj !== 'object') return undefined;
-    const parts = dottedPath.split('.');
-    let cur: any = obj;
-    for (const part of parts) {
-        if (cur == null) return undefined;
-        cur = cur[part];
-    }
-    return cur;
-}
-
-function getDefaultValueForChild(child: AppSettingChild): unknown {
-    if (child.default !== undefined) return child.default;
-    switch (child.type) {
-        case 'boolean': return false;
-        case 'number': return 0;
-        case 'select': return child.options?.[0]?.value ?? '';
-        case 'text':
-        default: return '';
-    }
-}
-
-function buildFlatSettings(appJson: any): Array<{
-    key: string;
-    groupId?: string;
-    groupLabel?: string;
-    child: AppSettingChild;
-}> {
+function buildSettingsDraftFromWidgetAndApp(widget: Widget, appJson: AppJson | null) {
+    const draft: Record<string, unknown> = { ...widget.settings };
     const settingsDefs = Array.isArray(appJson?.settings) ? appJson.settings : [];
-    const flat: Array<{
-        key: string;
-        groupId?: string;
-        groupLabel?: string;
-        child: AppSettingChild;
-    }> = [];
 
-    for (const def of settingsDefs) {
-        if (def?.type === 'group' && Array.isArray(def?.children) && typeof def?.id === 'string') {
-            const groupId = def.id as string;
-            const groupLabel = typeof def.label === 'string' ? def.label : undefined;
-            for (const child of def.children as AppSettingChild[]) {
-                if (!child?.id) continue;
-                flat.push({
-                    key: `${groupId}.${child.id}`,
-                    groupId,
-                    groupLabel,
-                    child,
-                });
+    const fillDefaults = (fields: AppSettingField[], target: Record<string, unknown>) => {
+        for (const f of fields) {
+            if (target[f.id] === undefined) {
+                if (f.default !== undefined) target[f.id] = f.default;
+                else if (f.type === 'boolean') target[f.id] = false;
+                else if (f.type === 'number') target[f.id] = 0;
+                else if (f.type === 'object') {
+                    const obj = {} as Record<string, unknown>;
+                    target[f.id] = obj;
+                    fillDefaults(f.fields || f.children || [], obj);
+                }
+                else if (f.type === 'list') target[f.id] = [];
+                else if (f.type === 'map') target[f.id] = {};
+            } else if (f.type === 'object' && typeof target[f.id] === 'object' && target[f.id] !== null) {
+                fillDefaults(f.fields || f.children || [], target[f.id] as Record<string, unknown>);
             }
-        } else if (typeof def?.id === 'string' && typeof def?.type === 'string') {
-            flat.push({
-                key: def.id,
-                child: def as AppSettingChild,
-            });
         }
-    }
+    };
 
-    return flat;
-}
-
-function buildSettingsDraftFromWidgetAndApp(widget: Widget, flatSettings: ReturnType<typeof buildFlatSettings>) {
-    const draft: Record<string, unknown> = {};
-    for (const field of flatSettings) {
-        const existingVal = getByDottedPath(widget.settings, field.key);
-        draft[field.key] = existingVal !== undefined ? existingVal : getDefaultValueForChild(field.child);
-    }
+    fillDefaults(settingsDefs, draft);
     return draft;
 }
 
@@ -111,7 +47,7 @@ export default function WidgetDetails() {
     const [integrations, setIntegrations] = useState<Integration[]>([]);
     const [integrationsLoading, setIntegrationsLoading] = useState(true);
 
-    const [appJson, setAppJson] = useState<any>(null);
+    const [appJson, setAppJson] = useState<AppJson | null>(null);
 
     const [activeTab, setActiveTab] = useState<'overview' | 'settings'>('overview');
     const [showUrl, setShowUrl] = useState(false);
@@ -134,7 +70,7 @@ export default function WidgetDetails() {
 
     const WIDGET_SERVER = import.meta.env.VITE_APP_WIDGET_SERVER || 'http://localhost:4000';
 
-    const loadWidget = async () => {
+    const loadWidget = useCallback(async () => {
         if (!id) return;
         setWidgetLoading(true);
         setWidgetError(null);
@@ -151,9 +87,9 @@ export default function WidgetDetails() {
         } finally {
             setWidgetLoading(false);
         }
-    };
+    }, [id]);
 
-    const loadIntegrations = async () => {
+    const loadIntegrations = useCallback(async () => {
         setIntegrationsLoading(true);
         try {
             const data = await integrationsService.listIntegrations();
@@ -163,12 +99,12 @@ export default function WidgetDetails() {
         } finally {
             setIntegrationsLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         loadWidget();
         loadIntegrations();
-    }, [id]);
+    }, [loadWidget, loadIntegrations]);
 
     useEffect(() => {
         let cancelled = false;
@@ -187,11 +123,9 @@ export default function WidgetDetails() {
         };
     }, [widget?.app_id]);
 
-    const flatSettings = useMemo(() => (appJson ? buildFlatSettings(appJson) : []), [appJson]);
-
     useEffect(() => {
         if (!appJson || !widget) return;
-        const next = buildSettingsDraftFromWidgetAndApp(widget, flatSettings);
+        const next = buildSettingsDraftFromWidgetAndApp(widget, appJson);
         setSettingsDraft(next);
     }, [appJson, widget?.id]);
 
@@ -201,32 +135,23 @@ export default function WidgetDetails() {
     );
 
     const requiredIntegrationProviders = useMemo(() => {
-        return integrationProps.filter((p: any) => p.is_required).map((p: any) => p.provider);
+        return integrationProps.filter((p: { provider: string; is_required?: boolean }) => p.is_required).map((p: { provider: string }) => p.provider.toLowerCase());
     }, [integrationProps]);
 
     const compatibleIntegrations = useMemo(() => {
         if (!appJson) return [];
-        const supportedProviders = integrationProps.map((p: any) => p.provider as string);
-        return integrations.filter(i => supportedProviders.includes(i.provider as string));
+        const supportedProviders = integrationProps.map((p: { provider: string }) => p.provider.toLowerCase());
+        return integrations.filter(i => supportedProviders.includes((i.provider as string).toLowerCase()));
     }, [integrations, appJson, integrationProps]);
 
     const hasMissingRequired = useMemo(() => {
         const selectedProviders = compatibleIntegrations
             .filter(i => metaDraft.integrations.includes(i.id))
-            .map(i => i.provider as string);
+            .map(i => (i.provider as string).toLowerCase());
         return requiredIntegrationProviders.some((p: string) => !selectedProviders.includes(p));
     }, [requiredIntegrationProviders, compatibleIntegrations, metaDraft.integrations]);
 
-    const groupedSettings = useMemo(() => {
-        const out = new Map<string, { label?: string; fields: typeof flatSettings }>();
-        for (const field of flatSettings) {
-            const groupId = field.groupId ?? '__root__';
-            const label = field.groupLabel;
-            if (!out.has(groupId)) out.set(groupId, { label, fields: [] as any });
-            out.get(groupId)!.fields.push(field as any);
-        }
-        return Array.from(out.entries()).map(([groupId, g]) => ({ groupId, label: g.label, fields: g.fields }));
-    }, [flatSettings]);
+    // Grouped settings logic is now handled recursively in AppSettings component
 
     const saveMeta = async (nextMeta?: Partial<typeof metaDraft>) => {
         if (!widget) return;
@@ -312,78 +237,75 @@ export default function WidgetDetails() {
     return (
         <div className="flex flex-col lg:flex-row h-screen bg-black overflow-hidden font-sans">
             {/* Settings Sidebar - Full Width on Mobile, Sidebar on Desktop */}
-            <aside className="w-full lg:w-[360px] flex flex-col border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-1">
+            <aside className="w-full lg:w-[320px] flex flex-col border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-1 overflow-hidden">
                 <div className="p-4 border-b border-white/5 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                         <Link to="/widgets" className="p-1.5 border border-white/5 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 transition-all group">
-                            <ArrowLeft className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white" />
+                            <ArrowLeft className="w-3" />
                         </Link>
                         <div>
-                            <h1 className="text-sm font-black text-white leading-none">Settings</h1>
-                            <p className="text-[9px] uppercase font-bold text-violet-500/80 tracking-widest mt-1 truncate max-w-[120px]">{widget.app_id}</p>
+                            <h1 className="text-xs font-black text-white leading-none">Settings</h1>
+                            <p className="text-[8px] uppercase font-bold text-violet-500/80 tracking-widest mt-1 truncate max-w-[100px]">{widget.app_id}</p>
                         </div>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${widget.enabled ? 'bg-emerald-500' : 'bg-rose-500'} shadow-[0_0_8px_rgba(16,185,129,0.3)]`} />
+                    <div className={`w-1.5 h-1.5 rounded-full ${widget.enabled ? 'bg-emerald-500' : 'bg-rose-500'} shadow-[0_0_8px_rgba(16,185,129,0.3)]`} />
                 </div>
 
-                {/* Tabs Navigation */}
-                <div className="flex p-1 gap-1 border-b border-white/5 bg-zinc-950/40 shrink-0">
+                <div className="flex p-0.5 gap-0.5 border-b border-white/5 bg-black/40 shrink-0 mx-4 my-3 rounded-lg border border-white/[0.03]">
                     <button
                         onClick={() => setActiveTab('overview')}
                         className={cn(
-                            "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[10px] font-black transition-all",
+                            "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
                             activeTab === 'overview' ? "bg-white/5 text-white" : "text-zinc-600 hover:text-zinc-400"
                         )}
                     >
-                        <LayoutPanelLeft className="w-3.5 h-3.5" />
-                        Overview
+                        <LayoutPanelLeft className="w-3 h-3" />
+                        Profile
                     </button>
                     <button
                         onClick={() => setActiveTab('settings')}
                         className={cn(
-                            "flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[10px] font-black transition-all",
+                            "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
                             activeTab === 'settings' ? "bg-white/5 text-white" : "text-zinc-600 hover:text-zinc-400"
                         )}
                     >
-                        <Settings2 className="w-3.5 h-3.5" />
-                        Settings
+                        <Settings2 className="w-3 h-3" />
+                        App
                     </button>
                 </div>
 
-                {/* Content Area - Scrollable */}
-                <div className="flex-1 overflow-y-auto scrollbar-hide p-5 pb-24 lg:pb-32 bg-black/20 lg:bg-transparent">
+                <div className="flex-1 overflow-y-auto scrollbar-hide px-5 pb-8 space-y-5">
                     {activeTab === 'overview' && (
-                        <div className="space-y-6 animate-in fade-in slide-in-from-left-2 duration-300">
-                            <div className="space-y-2.5">
-                                <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest px-1">Identification</label>
-                                <div className="bg-zinc-900/40 border border-white/5 rounded-xl p-4 gap-4 flex flex-col">
-                                    <div className="space-y-1.5">
-                                        <span className="text-[10px] font-bold text-zinc-500">Public Name</span>
+                        <div className="space-y-5 animate-in fade-in slide-in-from-left-2 duration-300">
+                            <div className="space-y-1.5 mt-2">
+                                <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1">Identity</label>
+                                <div className="space-y-2">
+                                    <div className="space-y-1">
+                                        <span className="text-[8px] font-bold text-zinc-500 uppercase px-1">Display Name</span>
                                         <input
                                             value={metaDraft.display_name}
                                             onChange={e => setMetaDraft(p => ({ ...p, display_name: e.target.value }))}
-                                            className="w-full bg-zinc-950 border border-white/5 rounded-lg px-4 py-2.5 text-xs font-bold text-white focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans"
+                                            className="w-full bg-zinc-900 border border-white/5 rounded-xl px-3 py-2 text-[10px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all"
                                         />
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-3">
-                                <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest px-1">Linked Integrations</label>
-                                <div className="grid grid-cols-1 gap-2">
+                            <div className="space-y-2">
+                                <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1">Connections</label>
+                                <div className="grid grid-cols-1 gap-1.5">
                                     {integrationsLoading ? (
-                                        <div className="py-8 flex flex-col items-center justify-center gap-2 border border-dashed border-white/5 rounded-xl">
-                                            <Loader2 className="w-4 h-4 text-zinc-800 animate-spin" />
-                                            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-800">Syncing...</span>
+                                        <div className="py-6 flex flex-col items-center justify-center border border-dashed border-white/5 rounded-xl">
+                                            <Loader2 className="w-3 h-3 text-zinc-800 animate-spin" />
                                         </div>
                                     ) : compatibleIntegrations.length === 0 ? (
-                                        <div className="p-4 text-center border border-dashed border-rose-500/10 rounded-xl bg-rose-500/5">
-                                            <p className="text-[10px] font-bold text-rose-500/80 uppercase tracking-tight">No compatible connections</p>
+                                        <div className="p-3 text-center border border-dashed border-rose-500/10 rounded-xl bg-rose-500/5">
+                                            <p className="text-[8px] font-bold text-rose-500/60 uppercase tracking-widest">No compatible connects</p>
                                         </div>
                                     ) : (
                                         compatibleIntegrations.map((i: Integration) => {
                                             const isChecked = metaDraft.integrations.includes(i.id);
-                                            const isRequired = requiredIntegrationProviders.includes(i.provider);
+                                            const isRequired = requiredIntegrationProviders.includes((i.provider as string).toLowerCase());
                                             return (
                                                 <button
                                                     key={i.id}
@@ -392,166 +314,81 @@ export default function WidgetDetails() {
                                                         setMetaDraft(prev => ({ ...prev, integrations: next }));
                                                     }}
                                                     className={cn(
-                                                        "flex items-center justify-between p-3 rounded-xl border transition-all text-left group/btn",
-                                                        isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400" : "bg-zinc-900/40 border-white/5 text-zinc-700 hover:border-white/10"
+                                                        "flex items-center justify-between p-2 rounded-xl border transition-all text-left",
+                                                        isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400 shadow-lg shadow-violet-600/5" : "bg-zinc-900/20 border-white/5 text-zinc-700 hover:border-white/10"
                                                     )}
                                                 >
-                                                    <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-2 min-w-0">
                                                         {i.providerAvatarUrl ? (
-                                                            <img src={i.providerAvatarUrl} className="w-6 h-6 rounded-lg bg-zinc-950 border border-white/5" alt="" />
+                                                            <img src={i.providerAvatarUrl} className="w-4 h-4 rounded bg-zinc-950 border border-white/5" alt="" />
                                                         ) : (
-                                                            <div className={cn("w-1.5 h-1.5 rounded-full", isChecked ? "bg-violet-500 shadow-[0_0_8px_rgba(139,92,246,0.6)]" : "bg-zinc-800")} />
+                                                            <div className={cn("w-1 h-1 rounded-full", isChecked ? "bg-violet-500" : "bg-zinc-800")} />
                                                         )}
-                                                        <div>
-                                                            <span className="block text-[10px] font-black uppercase tracking-tight leading-none mb-0.5">{i.displayName || i.providerUsername}</span>
-                                                            <span className="block text-[8px] font-bold text-zinc-600 uppercase tracking-widest">
-                                                                {i.provider === 'twitch' ? 'Twitch' : i.provider === 'kick' ? 'Kick' : i.provider === 'youtube' ? 'YouTube' : i.provider}
-                                                            </span>
+                                                        <div className="min-w-0">
+                                                            <span className="block text-[8.5px] font-black uppercase tracking-tight truncate leading-none mb-0.5">{i.displayName || i.providerUsername}</span>
+                                                            <span className="block text-[6.5px] font-bold text-zinc-600 uppercase tracking-widest leading-none">{i.provider}</span>
                                                         </div>
                                                     </div>
-                                                    {isRequired && isChecked && <Check className="w-3.5 h-3.5 text-violet-500" />}
-                                                    {isRequired && !isChecked && <span className="text-[7px] font-black bg-rose-500/20 text-rose-500 px-1.5 py-0.5 rounded uppercase">Req.</span>}
+                                                    {isRequired && !isChecked && <span className="text-[5.5px] font-black bg-rose-500/20 text-rose-500 px-1 py-0.5 rounded uppercase font-mono">REQ</span>}
                                                 </button>
                                             );
                                         })
                                     )}
                                 </div>
                             </div>
-
-                            <div className="pt-4 fixed lg:sticky bottom-0 left-0 right-0 lg:relative bg-zinc-950/80 backdrop-blur-xl border-t border-white/5 lg:border-t-0 mt-auto px-5 lg:px-0 py-4 lg:py-0 z-10 w-full lg:w-auto">
-                                <button
-                                    onClick={() => saveMeta()}
-                                    disabled={metaLoading || hasMissingRequired}
-                                    className="w-full py-4 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
-                                >
-                                    {metaLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                                    Save Profile
-                                </button>
-                            </div>
                         </div>
                     )}
 
                     {activeTab === 'settings' && (
-                        <div className="space-y-6 animate-in fade-in slide-in-from-left-2 duration-300">
+                        <div className="space-y-4 animate-in fade-in slide-in-from-left-2 duration-300">
                             {!appJson ? (
-                                <div className="py-20 text-center flex flex-col items-center gap-4">
-                                    <Loader2 className="w-6 h-6 text-zinc-800 animate-spin" />
-                                    <p className="text-[9px] font-black uppercase tracking-widest text-zinc-700">Loading Schema...</p>
+                                <div className="py-12 text-center flex flex-col items-center gap-3">
+                                    <Loader2 className="w-4 h-4 text-zinc-800 animate-spin" />
+                                    <p className="text-[8px] font-black uppercase tracking-widest text-zinc-700">Syncing Schema...</p>
                                 </div>
-                            ) : groupedSettings.length === 0 ? (
-                                <div className="py-20 text-center">
-                                    <p className="text-[9px] font-bold text-zinc-700 uppercase tracking-widest">No parameters available.</p>
+                            ) : !appJson.settings || appJson.settings.length === 0 ? (
+                                <div className="py-12 text-center">
+                                    <p className="text-[8px] font-bold text-zinc-700 uppercase tracking-widest">Minimal Config</p>
                                 </div>
                             ) : (
-                                <div className="flex flex-col gap-6">
-                                    {groupedSettings.map(group => (
-                                        <div key={group.groupId} className="space-y-3">
-                                            {group.groupId !== '__root__' && (
-                                                <div className="px-1 text-[9px] font-black text-violet-500/60 uppercase tracking-[0.2em]">{group.label || group.groupId}</div>
-                                            )}
-                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-2.5">
-                                                {group.fields.map(field => {
-                                                    const child = field.child;
-                                                    const key = field.key;
-                                                    const val = settingsDraft[key];
-
-                                                    if (child.type === 'boolean') {
-                                                        return (
-                                                            <label key={key} className="flex items-center justify-between p-3.5 bg-zinc-900/40 border border-white/5 rounded-xl cursor-pointer hover:bg-zinc-900/60 transition-all">
-                                                                <div className="flex flex-col gap-0.5">
-                                                                    <span className="text-[10px] font-black uppercase text-zinc-200">{child.label || child.id}</span>
-                                                                    {child.description && <span className="text-[8px] font-bold text-zinc-600 uppercase tracking-tight">{child.description}</span>}
-                                                                </div>
-                                                                <input
-                                                                    type="checkbox"
-                                                                    checked={Boolean(val)}
-                                                                    onChange={e => setSettingsDraft(p => ({ ...p, [key]: e.target.checked }))}
-                                                                    className="w-4 h-4 accent-violet-600 bg-zinc-900 border-white/10 rounded-md cursor-pointer"
-                                                                />
-                                                            </label>
-                                                        );
-                                                    }
-
-                                                    if (child.type === 'select') {
-                                                        return (
-                                                            <div key={key} className="p-3.5 bg-zinc-900/40 border border-white/5 rounded-xl">
-                                                                <span className="block text-[10px] font-black uppercase text-zinc-200 mb-2.5 px-1">{child.label || child.id}</span>
-                                                                <select
-                                                                    value={String(val ?? '')}
-                                                                    onChange={e => setSettingsDraft(p => ({ ...p, [key]: e.target.value }))}
-                                                                    className="w-full bg-zinc-950 border border-white/10 p-2.5 rounded-lg text-[11px] font-bold text-zinc-400 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
-                                                                >
-                                                                    {(child.options ?? []).map(o => <option key={o.value} value={o.value}>{o.label || o.value}</option>)}
-                                                                </select>
-                                                            </div>
-                                                        );
-                                                    }
-
-                                                    if (child.type === 'number') {
-                                                        const n = stripMaybeNumber(val) ?? (typeof child.default === 'number' ? child.default : 0);
-                                                        return (
-                                                            <div key={key} className="p-3.5 bg-zinc-900/40 border border-white/5 rounded-xl space-y-3">
-                                                                <div className="flex justify-between items-center px-1">
-                                                                    <span className="text-[10px] font-black uppercase text-zinc-200">{child.label || child.id}</span>
-                                                                    <span className="text-[9px] font-bold text-violet-500/80 px-2 py-0.5 bg-violet-600/5 rounded-md border border-violet-500/10">{n}</span>
-                                                                </div>
-                                                                {child.render_as === 'slider' ? (
-                                                                    <input
-                                                                        type="range"
-                                                                        min={child.num_min ?? 0}
-                                                                        max={child.num_max ?? 100}
-                                                                        step={child.slider_step ?? 1}
-                                                                        value={n}
-                                                                        onChange={e => setSettingsDraft(p => ({ ...p, [key]: Number(e.target.value) }))}
-                                                                        className="w-full h-1 bg-zinc-950 rounded-lg appearance-none cursor-pointer accent-violet-600"
-                                                                    />
-                                                                ) : (
-                                                                    <input
-                                                                        type="number"
-                                                                        value={n}
-                                                                        onChange={e => setSettingsDraft(p => ({ ...p, [key]: Number(e.target.value) }))}
-                                                                        className="w-full bg-zinc-950 border border-white/10 p-2.5 rounded-lg text-[11px] font-bold text-zinc-400 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
-                                                                    />
-                                                                )}
-                                                            </div>
-                                                        );
-                                                    }
-
-                                                    return (
-                                                        <div key={key} className="p-3.5 bg-zinc-900/40 border border-white/5 rounded-xl">
-                                                            <span className="block text-[10px] font-black uppercase text-zinc-200 mb-2 px-1">{child.label || child.id}</span>
-                                                            <input
-                                                                value={String(val ?? '')}
-                                                                onChange={e => setSettingsDraft(p => ({ ...p, [key]: e.target.value }))}
-                                                                className="w-full bg-zinc-950 border border-white/10 p-2.5 rounded-lg text-[11px] font-bold text-zinc-400 focus:outline-none focus:ring-1 focus:ring-violet-500/40"
-                                                            />
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    <div className="pt-4 fixed lg:sticky bottom-0 left-0 right-0 lg:relative bg-zinc-950/80 backdrop-blur-xl border-t border-white/5 lg:border-t-0 mt-auto px-5 lg:px-0 py-4 lg:py-0 z-10 w-full lg:w-auto">
-                                        <button
-                                            onClick={saveSettings}
-                                            disabled={settingsLoading}
-                                            className="w-full py-4 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
-                                        >
-                                            {settingsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                                            Apply Parameters
-                                        </button>
-                                    </div>
+                                <div className="mt-2">
+                                    <AppSettings
+                                        fields={appJson.settings}
+                                        values={settingsDraft}
+                                        onChange={(path: string, val: any) => setSettingsDraft(p => ({ ...p, [path]: val }))}
+                                    />
                                 </div>
                             )}
                         </div>
                     )}
 
                     {error && (
-                        <div className="mt-4 p-3 bg-red-600/5 border border-red-500/10 rounded-xl flex items-center gap-2.5">
-                            <AlertCircle className="w-3.5 h-3.5 text-red-500 shrink-0" />
-                            <p className="text-[9px] font-bold text-red-500/80 uppercase tracking-tight leading-tight">{error}</p>
+                        <div className="p-2 bg-red-600/5 border border-red-500/10 rounded-lg flex items-center gap-2 mt-2">
+                            <AlertCircle className="w-2.5 h-2.5 text-red-500 shrink-0" />
+                            <p className="text-[7.5px] font-bold text-red-500 uppercase tracking-widest">{error}</p>
                         </div>
+                    )}
+                </div>
+
+                <div className="p-4 border-t border-white/5 bg-zinc-950/60 backdrop-blur-xl shrink-0 mt-auto">
+                    {activeTab === 'overview' ? (
+                        <button
+                            onClick={() => saveMeta()}
+                            disabled={metaLoading || hasMissingRequired}
+                            className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
+                        >
+                            {metaLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                            Update Profile
+                        </button>
+                    ) : (
+                        <button
+                            onClick={saveSettings}
+                            disabled={settingsLoading}
+                            className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
+                        >
+                            {settingsLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                            Apply Changes
+                        </button>
                     )}
                 </div>
             </aside>

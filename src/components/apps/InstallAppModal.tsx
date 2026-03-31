@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { integrationsService } from '../../services/integrations-service';
 import { widgetsService } from '../../services/widgets-service';
 import { type Integration } from '../../lib/types';
-import { type AppManifest } from '../../services/apps-service';
+import { appsService, type AppManifest } from '../../services/apps-service';
 import { X, Sparkles, Loader2, AlertCircle, Check, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { cn } from '../../lib/utils';
@@ -23,28 +23,38 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
     const [displayName, setDisplayName] = useState(app.name);
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+    const [fullApp, setFullApp] = useState<AppManifest | null>(null);
+
     useEffect(() => {
         if (!isOpen) return;
         setIsLoading(true);
         setError(null);
-        integrationsService.listIntegrations()
-            .then(setIntegrations)
+
+        Promise.all([
+            integrationsService.listIntegrations(),
+            appsService.getApp(app.id)
+        ])
+            .then(([ints, manifest]) => {
+                setIntegrations(ints);
+                setFullApp(manifest);
+                setDisplayName(manifest.name);
+            })
             .catch(err => {
                 console.error(err);
-                setError('Failed to load your integrations.');
+                setError('Failed to load required data.');
             })
             .finally(() => setIsLoading(false));
-    }, [isOpen]);
+    }, [isOpen, app.id]);
 
-    const appIntegrations = useMemo(() => app.properties?.integrations ?? [], [app]);
+    const appIntegrations = useMemo(() => fullApp?.properties?.integrations ?? [], [fullApp]);
 
     const compatibleIntegrations = useMemo(() => {
-        const supportedProviders = appIntegrations.map((p: any) => p.provider);
-        return integrations.filter(i => supportedProviders.includes(i.provider));
+        const supportedProviders = appIntegrations.map((p: any) => p.provider.toLowerCase());
+        return integrations.filter(i => supportedProviders.includes(i.provider.toLowerCase()));
     }, [integrations, appIntegrations]);
 
     const requiredProviders = useMemo(() =>
-        appIntegrations.filter((p: any) => p.is_required).map((p: any) => p.provider),
+        appIntegrations.filter((p: any) => p.is_required).map((p: any) => p.provider.toLowerCase()),
         [appIntegrations]
     );
 

@@ -1,3 +1,5 @@
+import type { AppSettingField } from '../lib/types';
+
 export interface AppManifest {
   id: string;
   name: string;
@@ -14,7 +16,7 @@ export interface AppManifest {
       is_required?: boolean;
     }>;
   };
-  settings?: Array<any>;
+  settings?: AppSettingField[];
 }
 
 const BASE_URL = import.meta.env.VITE_APP_WIDGET_SERVER || "http://localhost:4000";
