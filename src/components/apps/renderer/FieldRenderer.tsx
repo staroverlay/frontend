@@ -41,6 +41,7 @@ export const FieldRenderer: React.FC<FieldRendererProps> = ({ field, value, onCh
         case 'color':
             return <ColorField field={field} value={value} onChange={onChange} depth={depth} />;
 
+        case 'media':
         case 'media:image':
         case 'media:video':
         case 'media:audio':

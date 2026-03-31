@@ -78,6 +78,7 @@ export type AppSettingType =
   | 'object'
   | 'map'
   | 'list'
+  | 'media'
   | 'media:image'
   | 'media:video'
   | 'media:audio'
