@@ -62,7 +62,7 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
             {/* Thumbnail Header */}
             <div className="h-50 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0">
                 <img
-                    src={`${WIDGET_SERVER}/${widget.app_id}/thumbnail.jpg`}
+                    src={`${WIDGET_SERVER}/${widget.app_id}/meta/thumbnail.jpg`}
                     alt={`${widget.display_name || widget.app_id} thumbnail`}
                     className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
                     loading="lazy"

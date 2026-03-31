@@ -29,7 +29,7 @@ export const appsService = {
   },
 
   async getApp(id: string): Promise<AppManifest> {
-    const response = await fetch(`${BASE_URL}/${id}/app.json`);
+    const response = await fetch(`${BASE_URL}/${id}/meta/app.json`);
     if (!response.ok) throw new Error("Failed to fetch app details");
     const app = await response.json();
     app.id = id;
@@ -37,7 +37,7 @@ export const appsService = {
   },
 
   async getAppPage(id: string): Promise<string> {
-    const response = await fetch(`${BASE_URL}/${id}/page.md`);
+    const response = await fetch(`${BASE_URL}/${id}/meta/page.md`);
     if (!response.ok) throw new Error("Failed to fetch app page");
     return response.text();
   },
