@@ -28,47 +28,47 @@ export const MediaField: React.FC<MediaFieldProps> = ({ field, value, onChange, 
         <FieldBase field={field} icon={icon} depth={depth} description={field.description}>
             <div className="w-full">
                 {currentMedia ? (
-                    <div className="flex items-center gap-3 bg-zinc-950/40 border border-white/5 rounded-xl p-2.5 group/media relative overflow-hidden transition-all hover:bg-zinc-950/60 hover:border-white/10">
+                    <div className="flex items-center gap-2.5 bg-zinc-900/40 border border-white/5 rounded-xl p-1.5 group/media relative overflow-hidden transition-all hover:bg-zinc-900/50 hover:border-white/10">
                         <div
-                            className="w-10 h-10 rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer hover:bg-zinc-800 transition-all"
+                            className="w-8 h-8 rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center overflow-hidden shrink-0 cursor-pointer hover:bg-zinc-800 transition-all"
                             onClick={() => setOpen(true)}
                         >
                             {field.type === 'media:image' ? (
                                 <img src={currentMedia.thumbnailUrl || currentMedia.url} className="w-full h-full object-cover" />
                             ) : field.type === 'media:video' ? (
-                                <Video className="w-4 h-4 text-zinc-500" />
+                                <Video className="w-3.5 h-3.5 text-zinc-600" />
                             ) : (
-                                <Music className="w-4 h-4 text-zinc-500" />
+                                <Music className="w-3.5 h-3.5 text-zinc-600" />
                             )}
                         </div>
                         <div className="flex-1 min-w-0 cursor-pointer" onClick={() => setOpen(true)}>
-                            <p className="text-[10px] font-black text-white truncate uppercase tracking-tight leading-none mb-1">Asset Loaded</p>
-                            <p className="text-[7.5px] font-bold text-zinc-500 uppercase tracking-widest truncate leading-none">{value}</p>
+                            <p className="text-[9.5px] font-black text-white truncate uppercase tracking-tight leading-none mb-0.5">Asset Selected</p>
+                            <p className="text-[7.5px] font-bold text-zinc-500 uppercase tracking-widest truncate leading-none opacity-60">file://{currentMedia.id}</p>
                         </div>
-                        <div className="flex gap-1 shrink-0">
+                        <div className="flex gap-1 shrink-0 px-1">
                             <button
                                 onClick={() => setOpen(true)}
-                                className="p-2 rounded-xl bg-white/5 text-zinc-500 opacity-0 group-hover/media:opacity-100 transition-all hover:bg-white/10 hover:text-white"
+                                className="p-1.5 rounded-lg bg-white/5 text-zinc-500 opacity-0 group-hover/media:opacity-100 transition-all hover:bg-white/10 hover:text-white"
                                 title="Change Media"
                             >
-                                <Settings className="w-3.5 h-3.5" />
+                                <Settings className="w-3 h-3" />
                             </button>
                             <button
                                 onClick={() => onChange(null)}
-                                className="p-2 rounded-xl bg-rose-500/10 text-rose-500 opacity-0 group-hover/media:opacity-100 transition-all hover:bg-rose-500/20 shadow-lg shadow-rose-500/5"
+                                className="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 opacity-0 group-hover/media:opacity-100 transition-all hover:bg-rose-500/20 shadow-lg shadow-rose-500/5"
                                 title="Remove Media"
                             >
-                                <Trash2 className="w-3.5 h-3.5" />
+                                <Trash2 className="w-3 h-3" />
                             </button>
                         </div>
                     </div>
                 ) : (
                     <button
                         onClick={() => setOpen(true)}
-                        className="w-full py-4 rounded-xl border border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/30 transition-all flex items-center justify-center gap-2 group"
+                        className="w-full py-3 rounded-xl border border-dashed border-white/10 bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/30 transition-all flex items-center justify-center gap-2 group"
                     >
-                        <Plus className="w-3.5 h-3.5 text-zinc-600 group-hover:text-violet-500 transition-all" />
-                        <span className="text-[9px] font-black uppercase text-zinc-500 tracking-[0.15em] group-hover:text-zinc-300 transition-all">Select Media</span>
+                        <Plus className="w-3 h-3 text-zinc-700 group-hover:text-violet-500 transition-all" />
+                        <span className="text-[8.5px] font-black uppercase text-zinc-600 tracking-[0.1em] group-hover:text-zinc-400 transition-all">Select Media</span>
                     </button>
                 )}
             </div>

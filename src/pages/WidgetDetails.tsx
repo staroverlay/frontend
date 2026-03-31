@@ -1,6 +1,8 @@
 import {
     RotateCcw, Save, Settings2, ArrowLeft, Loader2,
-    AlertCircle, Copy, Check, ExternalLink, Eye, EyeOff, LayoutPanelLeft
+    AlertCircle, Copy, Check, ExternalLink, Eye, EyeOff, LayoutPanelLeft,
+    Sliders, Palette, Bell, Volume2, Shield, Zap, User, Image,
+    MessageSquare, Type, Layout, AppWindow, Package, Globe, Heart, Activity, Hash
 } from 'lucide-react';
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
@@ -10,7 +12,40 @@ import { widgetsService } from '../services/widgets-service';
 import { integrationsService } from '../services/integrations-service';
 import type { Widget, Integration, AppJson, AppSettingField } from '../lib/types';
 import { getError, cn } from '../lib/utils';
-import { AppSettings } from '../components/apps/AppSettings';
+import { FieldRenderer } from '../components/apps/renderer/FieldRenderer';
+import { useAuthStore } from '../stores/auth-store';
+import { AppSettingsProvider } from '../components/apps/AppSettingsContext';
+
+const ICON_MAP: Record<string, any> = {
+    general: Sliders,
+    settings: Settings2,
+    appearance: Palette,
+    visuals: Image,
+    audio: Volume2,
+    volume: Volume2,
+    notifications: Bell,
+    security: Shield,
+    advanced: Zap,
+    profile: User,
+    chat: MessageSquare,
+    text: Type,
+    layout: Layout,
+    integrations: AppWindow,
+    package: Package,
+    globe: Globe,
+    heart: Heart,
+    activity: Activity,
+    hash: Hash,
+};
+
+function getIcon(label: string, id: string) {
+    const l = label.toLowerCase();
+    const i = id.toLowerCase();
+    for (const key in ICON_MAP) {
+        if (l.includes(key) || i.includes(key)) return ICON_MAP[key];
+    }
+    return Settings2;
+}
 
 function buildSettingsDraftFromWidgetAndApp(widget: Widget, appJson: AppJson | null) {
     const draft: Record<string, unknown> = { ...widget.settings };
@@ -40,6 +75,7 @@ function buildSettingsDraftFromWidgetAndApp(widget: Widget, appJson: AppJson | n
 }
 
 export default function WidgetDetails() {
+    const { user } = useAuthStore();
     const { id } = useParams<{ id: string }>();
     const [widget, setWidget] = useState<Widget | null>(null);
     const [widgetLoading, setWidgetLoading] = useState(true);
@@ -49,7 +85,7 @@ export default function WidgetDetails() {
 
     const [appJson, setAppJson] = useState<AppJson | null>(null);
 
-    const [activeTab, setActiveTab] = useState<'overview' | 'settings'>('settings');
+    const [activeTab, setActiveTab] = useState<string>('overview');
 
     // Sidebar Resizer
     const [sidebarWidth, setSidebarWidth] = useState(400);
@@ -191,7 +227,48 @@ export default function WidgetDetails() {
         return requiredIntegrationProviders.some((p: string) => !selectedProviders.includes(p));
     }, [requiredIntegrationProviders, compatibleIntegrations, metaDraft.integrations]);
 
-    // Grouped settings logic is now handled recursively in AppSettings component
+    // Compute dynamic tabs based on app settings
+    const { tabs, activeTabLabel } = useMemo(() => {
+        const results: { id: string; label: string; icon: any; fields: AppSettingField[]; isGroup?: boolean }[] = [
+            { id: 'overview', label: 'Profile', icon: LayoutPanelLeft, fields: [] }
+        ];
+
+        if (appJson?.settings) {
+            const rootFields: AppSettingField[] = [];
+
+            appJson.settings.forEach(f => {
+                if (f.type === 'object' || f.type === 'group') {
+                    results.push({
+                        id: f.id,
+                        label: f.label || f.id,
+                        icon: getIcon(f.label || '', f.id),
+                        fields: f.fields || f.children || [],
+                        isGroup: true
+                    });
+                } else {
+                    rootFields.push(f);
+                }
+            });
+
+            if (rootFields.length > 0) {
+                // If there are root fields, add a "Settings" tab.
+                // We'll put it after Overview but before other groups if it's the "main" config
+                results.push({
+                    id: 'root_settings',
+                    label: 'Settings',
+                    icon: Settings2,
+                    fields: rootFields,
+                    isGroup: false
+                });
+            }
+        }
+
+        const active = results.find(t => t.id === activeTab) || results[0];
+
+        return { tabs: results, activeTabLabel: active.label };
+    }, [appJson, activeTab]);
+
+    const activeTabData = useMemo(() => tabs.find(t => t.id === activeTab) || tabs[0], [tabs, activeTab]);
 
     const saveMeta = async (nextMeta?: Partial<typeof metaDraft>) => {
         if (!widget) return;
@@ -279,166 +356,207 @@ export default function WidgetDetails() {
             {/* Settings Sidebar - Full Width on Mobile, Sidebar on Desktop */}
             <aside
                 className={cn(
-                    "w-full flex flex-col border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-none overflow-hidden transition-colors",
+                    "w-full flex border-b lg:border-b-0 lg:border-r border-white/5 bg-zinc-950/80 backdrop-blur-3xl z-20 shrink-0 lg:h-full order-2 lg:order-none overflow-hidden transition-colors",
                     isResizing && "border-violet-500/40 border-r-2"
                 )}
                 style={{ width: `${sidebarWidth}px`, maxWidth: '85vw' }}
             >
-                <div className="p-4 border-b border-white/5 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <Link to="/widgets" className="p-1.5 border border-white/5 rounded-lg bg-zinc-900/50 hover:bg-zinc-800 transition-all group">
-                            <ArrowLeft className="w-3" />
-                        </Link>
-                        <div>
-                            <h1 className="text-xs font-black text-white leading-none">Settings</h1>
-                            <p className="text-[8px] uppercase font-bold text-violet-500/80 tracking-widest mt-1 truncate max-w-[100px]">{widget.app_id}</p>
+                {/* Left Rail Icons */}
+                <div className="w-14 shrink-0 border-r border-white/5 bg-black/40 flex flex-col items-center py-4 gap-4">
+                    <Link to="/widgets" className="p-2.5 mb-2 border border-white/5 rounded-xl bg-zinc-900/50 hover:bg-zinc-800 transition-all group text-zinc-500 hover:text-white">
+                        <ArrowLeft className="w-4 h-4" />
+                    </Link>
+
+                    <div className="w-8 h-[1px] bg-white/5 mb-2" />
+
+                    {tabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = activeTab === tab.id;
+                        return (
+                            <div key={tab.id} className="relative group">
+                                <button
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={cn(
+                                        "p-3 rounded-xl transition-all duration-300 relative",
+                                        isActive
+                                            ? "bg-violet-600 text-white shadow-lg shadow-violet-600/20"
+                                            : "text-zinc-600 hover:text-zinc-300 hover:bg-white/5"
+                                    )}
+                                >
+                                    <Icon className="w-4 h-4" />
+                                    {isActive && (
+                                        <div className="absolute right-[-7px] top-1/2 -translate-y-1/2 w-1 h-4 bg-violet-500 rounded-full" />
+                                    )}
+                                </button>
+
+                                {/* Tooltip */}
+                                <div className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 px-2 py-1 bg-zinc-900 border border-white/10 rounded-md text-[8px] font-bold text-white uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-all duration-200 z-50 translate-x-2 group-hover:translate-x-0">
+                                    {tab.label}
+                                    <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-zinc-900 border-l border-b border-white/10 rotate-45" />
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+
+                {/* Right Side: Header + Content */}
+                <div className="flex-1 flex flex-col min-w-0 h-full">
+                    <div className="p-4 border-b border-white/5 flex items-center justify-between bg-black/20 shrink-0">
+                        <div className="min-w-0">
+                            <h1 className="text-[10px] font-black text-white leading-none tracking-tight uppercase mb-1">{activeTabLabel}</h1>
+                            <p className="text-[8px] font-bold text-zinc-500 uppercase tracking-widest truncate">{widget.display_name || widget.app_id}</p>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <div className={`w-1.5 h-1.5 rounded-full ${widget.enabled ? 'bg-emerald-500' : 'bg-rose-500'} shadow-[0_0_8px_rgba(16,185,129,0.3)]`} />
+
+                            {activeTab === 'overview' ? (
+                                <button
+                                    onClick={() => saveMeta()}
+                                    disabled={metaLoading || hasMissingRequired}
+                                    className="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all flex items-center gap-1.5 active:scale-95"
+                                >
+                                    {metaLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                                    Save
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={saveSettings}
+                                    disabled={settingsLoading}
+                                    className="px-3 py-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[8px] font-black uppercase tracking-widest rounded-lg transition-all flex items-center gap-1.5 active:scale-95"
+                                >
+                                    {settingsLoading ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}
+                                    Apply
+                                </button>
+                            )}
                         </div>
                     </div>
-                    <div className={`w-1.5 h-1.5 rounded-full ${widget.enabled ? 'bg-emerald-500' : 'bg-rose-500'} shadow-[0_0_8px_rgba(16,185,129,0.3)]`} />
-                </div>
 
-                <div className="flex p-0.5 gap-0.5 border-b border-white/5 bg-black/40 shrink-0 mx-4 my-3 rounded-lg border border-white/[0.03]">
-                    <button
-                        onClick={() => setActiveTab('overview')}
-                        className={cn(
-                            "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
-                            activeTab === 'overview' ? "bg-white/5 text-white" : "text-zinc-600 hover:text-zinc-400"
-                        )}
-                    >
-                        <LayoutPanelLeft className="w-3 h-3" />
-                        Profile
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('settings')}
-                        className={cn(
-                            "flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider transition-all",
-                            activeTab === 'settings' ? "bg-white/5 text-white" : "text-zinc-600 hover:text-zinc-400"
-                        )}
-                    >
-                        <Settings2 className="w-3 h-3" />
-                        App
-                    </button>
-                </div>
-
-                <div className="flex-1 overflow-y-auto scrollbar-hide px-5 pb-8 space-y-5">
-                    {activeTab === 'overview' && (
-                        <div className="space-y-5 animate-in fade-in slide-in-from-left-2 duration-300">
-                            <div className="space-y-1.5 mt-2">
-                                <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1">Identity</label>
-                                <div className="space-y-2">
-                                    <div className="space-y-1">
+                    <div className="flex-1 overflow-y-auto scrollbar-hide px-5 pb-8 py-5">
+                        {activeTab === 'overview' && (
+                            <div className="space-y-6 animate-in fade-in slide-in-from-left-2 duration-300">
+                                <div className="space-y-3">
+                                    <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1 flex items-center gap-2">
+                                        <span className="w-4 h-[1px] bg-zinc-800" />
+                                        Identity
+                                    </label>
+                                    <div className="space-y-1.5">
                                         <span className="text-[8px] font-bold text-zinc-500 uppercase px-1">Display Name</span>
                                         <input
                                             value={metaDraft.display_name}
                                             onChange={e => setMetaDraft(p => ({ ...p, display_name: e.target.value }))}
-                                            className="w-full bg-zinc-900 border border-white/5 rounded-xl px-3 py-2 text-[10px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all"
+                                            className="w-full bg-zinc-900/30 border border-white/5 rounded-xl px-3 py-2 text-[10px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all placeholder:text-zinc-700"
+                                            placeholder="My Awesome Widget"
                                         />
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1">Connections</label>
-                                <div className="grid grid-cols-1 gap-1.5">
-                                    {integrationsLoading ? (
-                                        <div className="py-6 flex flex-col items-center justify-center border border-dashed border-white/5 rounded-xl">
-                                            <Loader2 className="w-3 h-3 text-zinc-800 animate-spin" />
-                                        </div>
-                                    ) : compatibleIntegrations.length === 0 ? (
-                                        <div className="p-3 text-center border border-dashed border-rose-500/10 rounded-xl bg-rose-500/5">
-                                            <p className="text-[8px] font-bold text-rose-500/60 uppercase tracking-widest">No compatible connects</p>
-                                        </div>
-                                    ) : (
-                                        compatibleIntegrations.map((i: Integration) => {
-                                            const isChecked = metaDraft.integrations.includes(i.id);
-                                            const isRequired = requiredIntegrationProviders.includes((i.provider as string).toLowerCase());
-                                            return (
-                                                <button
-                                                    key={i.id}
-                                                    onClick={() => {
-                                                        const next = isChecked ? metaDraft.integrations.filter(x => x !== i.id) : [...new Set([...metaDraft.integrations, i.id])];
-                                                        setMetaDraft(prev => ({ ...prev, integrations: next }));
-                                                    }}
-                                                    className={cn(
-                                                        "flex items-center justify-between p-2 rounded-xl border transition-all text-left",
-                                                        isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400 shadow-lg shadow-violet-600/5" : "bg-zinc-900/20 border-white/5 text-zinc-700 hover:border-white/10"
-                                                    )}
-                                                >
-                                                    <div className="flex items-center gap-2 min-w-0">
-                                                        {i.providerAvatarUrl ? (
-                                                            <img src={i.providerAvatarUrl} className="w-4 h-4 rounded bg-zinc-950 border border-white/5" alt="" />
-                                                        ) : (
-                                                            <div className={cn("w-1 h-1 rounded-full", isChecked ? "bg-violet-500" : "bg-zinc-800")} />
+                                <div className="space-y-3 pt-2">
+                                    <label className="text-[7.5px] font-black text-zinc-600 uppercase tracking-widest px-1 flex items-center gap-2">
+                                        <span className="w-4 h-[1px] bg-zinc-800" />
+                                        Connections
+                                    </label>
+                                    <div className="grid grid-cols-1 gap-1.5">
+                                        {integrationsLoading ? (
+                                            <div className="py-6 flex flex-col items-center justify-center border border-dashed border-white/5 rounded-xl">
+                                                <Loader2 className="w-3 h-3 text-zinc-800 animate-spin" />
+                                            </div>
+                                        ) : compatibleIntegrations.length === 0 ? (
+                                            <div className="p-3 text-center border border-dashed border-rose-500/10 rounded-xl bg-rose-500/5">
+                                                <p className="text-[8px] font-bold text-rose-500/60 uppercase tracking-widest">No compatible connects</p>
+                                            </div>
+                                        ) : (
+                                            compatibleIntegrations.map((i: Integration) => {
+                                                const isChecked = metaDraft.integrations.includes(i.id);
+                                                const isRequired = requiredIntegrationProviders.includes((i.provider as string).toLowerCase());
+                                                return (
+                                                    <button
+                                                        key={i.id}
+                                                        onClick={() => {
+                                                            const next = isChecked ? metaDraft.integrations.filter(x => x !== i.id) : [...new Set([...metaDraft.integrations, i.id])];
+                                                            setMetaDraft(prev => ({ ...prev, integrations: next }));
+                                                        }}
+                                                        className={cn(
+                                                            "flex items-center justify-between p-2.5 rounded-xl border transition-all text-left group",
+                                                            isChecked ? "bg-violet-600/10 border-violet-500/20 text-violet-400 shadow-lg shadow-violet-600/5" : "bg-zinc-900/20 border-white/5 text-zinc-500 hover:border-white/10 hover:text-zinc-300"
                                                         )}
-                                                        <div className="min-w-0">
-                                                            <span className="block text-[8.5px] font-black uppercase tracking-tight truncate leading-none mb-0.5">{i.displayName || i.providerUsername}</span>
-                                                            <span className="block text-[6.5px] font-bold text-zinc-600 uppercase tracking-widest leading-none">{i.provider}</span>
+                                                    >
+                                                        <div className="flex items-center gap-2.5 min-w-0">
+                                                            {i.providerAvatarUrl ? (
+                                                                <img src={i.providerAvatarUrl} className={cn("w-4.5 h-4.5 rounded-md bg-zinc-950 border border-white/5 transition-all outline outline-offset-1 outline-transparent group-hover:outline-white/10", isChecked ? "grayscale-0 opacity-100" : "grayscale opacity-40")} alt="" />
+                                                            ) : (
+                                                                <div className={cn("w-1.5 h-1.5 rounded-full", isChecked ? "bg-violet-500" : "bg-zinc-800")} />
+                                                            )}
+                                                            <div className="min-w-0">
+                                                                <span className="block text-[8.5px] font-black uppercase tracking-tight truncate leading-none mb-0.5">{i.displayName || i.providerUsername}</span>
+                                                                <span className="block text-[6px] font-bold text-zinc-600 uppercase tracking-widest leading-none">{i.provider}</span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    {isRequired && !isChecked && <span className="text-[5.5px] font-black bg-rose-500/20 text-rose-500 px-1 py-0.5 rounded uppercase font-mono">REQ</span>}
-                                                </button>
-                                            );
-                                        })
-                                    )}
+                                                        {isRequired && !isChecked && <span className="text-[5.5px] font-black bg-rose-500/20 text-rose-500 px-1 py-0.5 rounded uppercase font-mono">REQ</span>}
+                                                    </button>
+                                                );
+                                            })
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {activeTab === 'settings' && (
-                        <div className="space-y-4 animate-in fade-in slide-in-from-left-2 duration-300">
-                            {!appJson ? (
-                                <div className="py-12 text-center flex flex-col items-center gap-3">
-                                    <Loader2 className="w-4 h-4 text-zinc-800 animate-spin" />
-                                    <p className="text-[8px] font-black uppercase tracking-widest text-zinc-700">Syncing Schema...</p>
-                                </div>
-                            ) : !appJson.settings || appJson.settings.length === 0 ? (
-                                <div className="py-12 text-center">
-                                    <p className="text-[8px] font-bold text-zinc-700 uppercase tracking-widest">Minimal Config</p>
-                                </div>
-                            ) : (
-                                <div className="mt-2">
-                                    <AppSettings
-                                        fields={appJson.settings}
-                                        values={settingsDraft}
-                                        onChange={(path: string, val: any) => setSettingsDraft(p => ({ ...p, [path]: val }))}
+                        {activeTab !== 'overview' && (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-left-2 duration-300">
+                                {!appJson ? (
+                                    <div className="py-12 text-center flex flex-col items-center gap-3">
+                                        <Loader2 className="w-4 h-4 text-zinc-800 animate-spin" />
+                                        <p className="text-[8px] font-black uppercase tracking-widest text-zinc-700">Syncing Schema...</p>
+                                    </div>
+                                ) : !activeTabData?.fields || activeTabData.fields.length === 0 ? (
+                                    <div className="py-12 text-center">
+                                        <p className="text-[8px] font-bold text-zinc-700 uppercase tracking-widest">Minimal Config</p>
+                                    </div>
+                                ) : (
+                                    <AppSettingsProvider
+                                        userId={user?.id}
                                         integrationIds={metaDraft.integrations}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    )}
+                                        values={settingsDraft}
+                                        onChange={() => { }}
+                                    >
+                                        <div className="space-y-4">
+                                            {activeTabData.fields.map((field) => (
+                                                <div key={field.id}>
+                                                    <FieldRenderer
+                                                        field={field}
+                                                        value={activeTabData.isGroup ? (settingsDraft[activeTabData.id] as any)?.[field.id] : settingsDraft[field.id]}
+                                                        onChange={(val) => {
+                                                            if (activeTabData.isGroup) {
+                                                                const currentGroup = (settingsDraft[activeTabData.id] as any) || {};
+                                                                setSettingsDraft(p => ({
+                                                                    ...p,
+                                                                    [activeTabData.id]: { ...currentGroup, [field.id]: val }
+                                                                }));
+                                                            } else {
+                                                                setSettingsDraft(p => ({ ...p, [field.id]: val }));
+                                                            }
+                                                        }}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </AppSettingsProvider>
+                                )}
+                            </div>
+                        )}
 
-                    {error && (
-                        <div className="p-2 bg-red-600/5 border border-red-500/10 rounded-lg flex items-center gap-2 mt-2">
-                            <AlertCircle className="w-2.5 h-2.5 text-red-500 shrink-0" />
-                            <p className="text-[7.5px] font-bold text-red-500 uppercase tracking-widest">{error}</p>
-                        </div>
-                    )}
-                </div>
-
-                <div className="p-4 border-t border-white/5 bg-zinc-950/60 backdrop-blur-xl shrink-0 mt-auto">
-                    {activeTab === 'overview' ? (
-                        <button
-                            onClick={() => saveMeta()}
-                            disabled={metaLoading || hasMissingRequired}
-                            className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
-                        >
-                            {metaLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                            Update Profile
-                        </button>
-                    ) : (
-                        <button
-                            onClick={saveSettings}
-                            disabled={settingsLoading}
-                            className="w-full py-3 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-2 active:scale-95"
-                        >
-                            {settingsLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-                            Apply Changes
-                        </button>
-                    )}
+                        {error && (
+                            <div className="p-3 bg-red-600/5 border border-red-500/10 rounded-xl flex items-center gap-3 mt-6">
+                                <AlertCircle className="w-3 h-3 text-red-500 shrink-0" />
+                                <p className="text-[7.5px] font-bold text-red-500 uppercase tracking-widest">{error}</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </aside>
+
+
 
             {/* Resize Handle for Desktop */}
             <div

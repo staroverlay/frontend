@@ -60,7 +60,7 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
             <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
             {/* Thumbnail Header */}
-            <div className="h-40 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0">
+            <div className="h-50 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0">
                 <img
                     src={`${WIDGET_SERVER}/${widget.app_id}/thumbnail.jpg`}
                     alt={`${widget.display_name || widget.app_id} thumbnail`}

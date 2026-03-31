@@ -24,7 +24,7 @@ export const TextField: React.FC<TextFieldProps> = ({ field, value, onChange, de
                 <select
                     value={value || field.default || ''}
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-zinc-950 border border-white/5 rounded-lg px-3 py-2 text-[10px] font-bold text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans appearance-none"
+                    className="w-full bg-zinc-900/40 border border-white/5 rounded-lg px-2.5 py-1.5 text-[9.5px] font-bold text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans appearance-none"
                 >
                     {(field.options || []).map((opt: any) => (
                         <option key={opt.value} value={opt.value} className="bg-zinc-950 text-white">
@@ -37,7 +37,7 @@ export const TextField: React.FC<TextFieldProps> = ({ field, value, onChange, de
                     value={String(value || '')}
                     onChange={(e) => onChange(e.target.value)}
                     placeholder={`Enter ${field.label || field.id}...`}
-                    className="w-full bg-zinc-950 border border-white/5 rounded-lg px-3 py-2 text-[10px] font-bold text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans"
+                    className="w-full bg-zinc-900/40 border border-white/5 rounded-lg px-2.5 py-1.5 text-[9.5px] font-bold text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans"
                 />
             )}
         </FieldBase>

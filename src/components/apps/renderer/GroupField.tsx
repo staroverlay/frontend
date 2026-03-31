@@ -30,7 +30,7 @@ export const GroupField: React.FC<GroupFieldProps> = ({ field, value, onChange, 
             onToggleExpand={() => setIsExpanded(!isExpanded)}
             description={field.description}
         >
-            <div className="mt-4 space-y-4 pl-1">
+            <div className="mt-2 space-y-2 pl-2 border-l border-white/5 ml-1.5">
                 {childFields.map((f) => (
                     <FieldRenderer
                         key={f.id}

@@ -16,7 +16,7 @@ export function AppCard({ app, onInstall }: AppCardProps) {
       <Link to={`/apps/${app.id}`} className="absolute inset-0 z-0" />
 
       {/* Thumbnail Header */}
-      <div className="h-40 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0 pointer-events-none">
+      <div className="h-50 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0 pointer-events-none">
         <img
           src={`${WIDGET_SERVER}/${app.id}/thumbnail.jpg`}
           alt={`${app.name} thumbnail`}
