@@ -23,11 +23,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     return (
       <div className="min-h-screen bg-zinc-950 flex items-center justify-center relative overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-600/5 blur-[100px] pointer-events-none" />
-        <div className="flex flex-col items-center gap-6 relative z-10 animate-in fade-in zoom-in-95 duration-1000">
-          <div className="w-16 h-16 rounded-[2rem] border-4 border-zinc-900 border-t-violet-500 animate-spin shadow-2xl shadow-violet-500/10" />
-          <div className="flex flex-col items-center gap-1.5">
-            <p className="text-zinc-500 text-[9px] font-black uppercase tracking-[0.4em] animate-pulse ml-1">Initializing Engine</p>
-            <span className="text-[10px] font-black text-violet-500/60 uppercase tracking-widest">Protocol 4.2-A</span>
+        <div className="flex flex-col items-center gap-8 relative z-10 animate-in fade-in zoom-in-95 duration-1000">
+          <div className="relative">
+            <div className="absolute inset-0 bg-violet-600/20 blur-2xl rounded-full animate-pulse" />
+            <div className="w-12 h-12 rounded-xl border-2 border-white/5 border-t-violet-500 animate-spin relative z-10" />
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-zinc-400 text-sm font-medium tracking-wide animate-pulse">Loading account data...</p>
+            <span className="text-[10px] font-bold text-violet-500/40 uppercase tracking-[0.3em]">StarOverlay</span>
           </div>
         </div>
       </div>

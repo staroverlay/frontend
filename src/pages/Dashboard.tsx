@@ -30,8 +30,8 @@ export default function Dashboard() {
           ))}
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <Skeleton className="lg:col-span-2 h-[450px] w-full rounded-[3rem] bg-zinc-900" />
-           <Skeleton className="h-[450px] w-full rounded-[3rem] bg-zinc-900" />
+          <Skeleton className="lg:col-span-2 h-[450px] w-full rounded-[3rem] bg-zinc-900" />
+          <Skeleton className="h-[450px] w-full rounded-[3rem] bg-zinc-900" />
         </div>
       </div>
     );
@@ -41,7 +41,7 @@ export default function Dashboard() {
     { name: 'Total Viewers', value: '2.4k', change: '+12.5%', icon: Users },
     { name: 'Avg. Activity', value: '84%', change: '+4.2%', icon: Activity },
     { name: 'Growth Rate', value: '18.2%', change: '+2.1%', icon: TrendingUp },
-    { name: 'Engine Health', value: '99.9%', change: 'Stable', icon: Sparkles },
+    { name: 'Overlay Status', value: '99.9%', change: 'Stable', icon: Sparkles },
   ];
 
   return (
@@ -49,8 +49,8 @@ export default function Dashboard() {
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-violet-400 font-semibold text-sm mb-2">
-             <LayoutDashboard className="w-4 h-4" />
-             Overview
+            <LayoutDashboard className="w-4 h-4" />
+            Overview
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-white mb-2">
             Welcome, {profile?.displayName || user?.email.split('@')[0]}
@@ -80,8 +80,8 @@ export default function Dashboard() {
 
       {/* Main Content Area */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-         <PerformanceHistory />
-         <WidgetPrompt />
+        <PerformanceHistory />
+        <WidgetPrompt />
       </div>
     </div>
   );

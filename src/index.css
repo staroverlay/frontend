@@ -5,7 +5,7 @@
   --color-brand-primary: #8b5cf6;
   --color-brand-secondary: #d946ef;
   --color-brand-accent: #c084fc;
-  
+
   --color-background-deep: #09090b;
   --color-background-surface: #18181b;
   --color-background-elevated: #27272a;
@@ -15,10 +15,25 @@
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-100 antialiased;
-    background-image: 
-      radial-gradient(circle at 0% 0%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 100% 100%, rgba(217, 70, 239, 0.05) 0%, transparent 50%);
+    @apply bg-zinc-950 text-zinc-100 antialiased relative;
+    background: radial-gradient(circle at 50% 50%, #0c0b16 0%, #09090b 100%);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
+      radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
+      radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0, 0, 0, 0));
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.1;
+    z-index: -1;
+    pointer-events: none;
   }
 }
 
@@ -26,7 +41,7 @@
   .glass-panel {
     @apply bg-zinc-900/40 backdrop-blur-xl border border-zinc-800/50 shadow-2xl;
   }
-  
+
   .purple-gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 font-black;
   }

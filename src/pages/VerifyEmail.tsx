@@ -87,30 +87,51 @@ export default function VerifyEmail() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4 relative overflow-hidden">
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-fuchsia-600/10 blur-[120px] pointer-events-none" />
+      {/* Immersive Cosmic Background */}
+      <div className="absolute top-[10%] left-[10%] w-[30%] h-[30%] rounded-full bg-violet-600/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[10%] right-[10%] w-[30%] h-[30%] rounded-full bg-fuchsia-600/5 blur-[120px] pointer-events-none" />
+
+      {/* Floating Stars (CSS-only) */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        {[...Array(15)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute rounded-full bg-white animate-pulse"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+              width: `${Math.random() * 1.5 + 1}px`,
+              height: `${Math.random() * 1.5 + 1}px`,
+              animationDelay: `${Math.random() * 5}s`,
+              animationDuration: `${Math.random() * 3 + 2}s`
+            }}
+          />
+        ))}
+      </div>
 
       <div className="w-full max-w-md relative z-10">
-        <div className="mb-10 text-center animate-in fade-in slide-in-from-top-4 duration-500">
-          <div className="inline-flex w-14 h-14 rounded-2xl bg-violet-600/20 text-violet-500 items-center justify-center mb-6">
-            <ShieldCheck className="w-6 h-6" />
+        <div className="mb-12 text-center animate-in fade-in slide-in-from-top-4 duration-700">
+          <div className="inline-flex w-16 h-16 rounded-3xl bg-white/5 border border-white/10 text-violet-400 items-center justify-center mb-6 shadow-2xl backdrop-blur-xl">
+            <ShieldCheck className="w-7 h-7" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Verify Email</h1>
-          <p className="text-zinc-400 text-sm">Enter the code sent to your email</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-white mb-3">Verification</h1>
+          <p className="text-zinc-400 font-medium">Please enter the security code sent to you</p>
         </div>
 
-        <div className="glass-panel p-10 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-700 hover:border-violet-500/20 transition-all duration-500">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="text-center space-y-1 pb-2">
-              <p className="text-zinc-500 text-sm">We sent a 6-digit code to</p>
-              <p className="text-white text-sm font-semibold">{email}</p>
+        <div className="glass-panel p-8 md:p-10 rounded-[2.5rem] shadow-2xl animate-in fade-in zoom-in-95 duration-1000 border-white/5 hover:border-violet-500/20 transition-all duration-500 relative overflow-hidden group">
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-violet-500/30 to-transparent" />
+
+          <form className="space-y-8" onSubmit={handleSubmit}>
+            <div className="text-center space-y-2">
+              <p className="text-zinc-500 text-sm font-medium">We've sent a 6-digit code to</p>
+              <p className="text-white text-base font-bold">{email}</p>
             </div>
 
             <div className="space-y-4">
               <div className="relative group">
                 <Input
                   placeholder="000000"
-                  className="text-center text-3xl font-bold tracking-[0.5em] h-16 bg-zinc-900/50 border-zinc-800 rounded-2xl focus:border-violet-500/50 transition-all text-white placeholder:text-zinc-800"
+                  className="text-center text-4xl font-black tracking-[0.6em] h-20 bg-white/5 border-white/5 rounded-2xl focus:border-violet-500/30 transition-all text-white placeholder:text-zinc-800 selection:bg-violet-500/30"
                   maxLength={6}
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
@@ -121,43 +142,47 @@ export default function VerifyEmail() {
             </div>
 
             {error && (
-              <div className="p-4 bg-rose-500/5 border border-rose-500/10 text-rose-500 rounded-xl text-sm text-center">
+              <div className="px-4 py-3 bg-rose-500/10 border border-rose-500/20 text-rose-400 rounded-2xl text-xs font-semibold text-center animate-in slide-in-from-top-2 duration-300">
                 {error}
               </div>
             )}
 
             {success && (
-              <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 text-emerald-500 rounded-xl text-sm text-center">
+              <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-xs font-semibold text-center animate-in slide-in-from-top-2 duration-300">
                 {success}
               </div>
             )}
 
-            <Button className="w-full h-12 bg-violet-600 hover:bg-violet-700 text-white rounded-xl shadow-lg shadow-violet-500/20 font-semibold transition-all" disabled={isLoading}>
+            <Button className="w-full h-14 bg-violet-600 hover:bg-violet-700 text-white rounded-2xl shadow-xl shadow-violet-500/20 font-extrabold text-sm transition-all active:scale-[0.98]" disabled={isLoading}>
               {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-                  Verifying...
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                  <span>Verifying...</span>
                 </div>
-              ) : 'Verify Account'}
+              ) : 'Confirm Authorization'}
             </Button>
           </form>
         </div>
 
-        <div className="mt-8 flex items-center justify-center gap-6 text-sm">
-          <button
-            className="text-zinc-500 hover:text-zinc-300 transition-colors"
-            onClick={() => navigate('/login')}
-          >
-            Cancel
-          </button>
-          <div className="w-1 h-1 rounded-full bg-zinc-800" />
-          <button
-            className={`font-semibold transition-colors ${resendCooldown > 0 || isResending ? 'text-zinc-600 cursor-not-allowed' : 'text-violet-400 hover:text-violet-300'}`}
-            onClick={handleResend}
-            disabled={resendCooldown > 0 || isResending}
-          >
-            {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : isResending ? 'Resending...' : 'Resend code'}
-          </button>
+        <div className="mt-10 flex flex-col items-center gap-6">
+          <div className="flex items-center gap-6">
+            <button
+              className="text-zinc-500 hover:text-zinc-300 transition-colors text-sm font-medium"
+              onClick={() => navigate('/login')}
+            >
+              Cancel
+            </button>
+            <div className="w-1.5 h-1.5 rounded-full bg-white/5" />
+            <button
+              className={`text-sm font-bold transition-colors ${resendCooldown > 0 || isResending ? 'text-zinc-700 cursor-not-allowed' : 'text-violet-400 hover:text-violet-300'}`}
+              onClick={handleResend}
+              disabled={resendCooldown > 0 || isResending}
+            >
+              {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : isResending ? 'Resending...' : 'Request new code'}
+            </button>
+          </div>
+
+          <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em]">StarOverlay Security Protocol</p>
         </div>
       </div>
     </div>

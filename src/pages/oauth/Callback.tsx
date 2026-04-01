@@ -74,21 +74,24 @@ export default function OAuthCallback() {
   }, [provider, searchParams, navigate, refreshUser]);
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6">
-      <div className="w-full max-w-md bg-zinc-900/50 backdrop-blur-3xl border border-white/5 rounded-[2.5rem] p-12 flex flex-col items-center gap-8 shadow-2xl relative overflow-hidden group">
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-1 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent" />
+    <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* Immersive Background Effects */}
+      <div className="absolute top-[20%] left-[20%] w-[40%] h-[40%] rounded-full bg-blue-600/5 blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[20%] right-[20%] w-[40%] h-[40%] rounded-full bg-violet-600/5 blur-[120px] pointer-events-none" />
+
+      <div className="w-full max-w-md bg-white/5 backdrop-blur-2xl border border-white/5 rounded-[3rem] p-12 flex flex-col items-center gap-10 shadow-2xl relative overflow-hidden group animate-in fade-in zoom-in-95 duration-700">
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent" />
 
         {status === 'processing' && (
           <>
             <div className="relative">
               <div className="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full scale-150 animate-pulse" />
-              <Loader2 className="w-16 h-16 text-blue-500 animate-spin relative z-10" />
+              <Loader2 className="w-16 h-16 text-blue-400 animate-spin relative z-10" />
             </div>
-            <div className="text-center space-y-3">
-              <h1 className="text-2xl font-black text-white tracking-tight uppercase">Authenticating</h1>
-              <p className="text-zinc-500 text-sm font-medium tracking-wide">
-                Securely connecting to <span className="text-blue-400 capitalize">{provider}</span>...
+            <div className="text-center space-y-4">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">Authenticating</h1>
+              <p className="text-zinc-400 text-base font-medium">
+                Securely connecting to <span className="text-blue-400 font-bold capitalize">{provider}</span>...
               </p>
             </div>
           </>
@@ -100,34 +103,37 @@ export default function OAuthCallback() {
               <div className="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full scale-150" />
               <CheckCircle2 className="w-16 h-16 text-emerald-500 relative z-10" />
             </div>
-            <div className="text-center space-y-3">
-              <h1 className="text-2xl font-black text-white tracking-tight uppercase">Connected!</h1>
-              <p className="text-zinc-500 text-sm font-medium tracking-wide">
-                Your <span className="text-emerald-400 capitalize">{provider}</span> account has been linked.
+            <div className="text-center space-y-4">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">Connection Ready</h1>
+              <p className="text-zinc-400 text-base font-medium">
+                Your <span className="text-emerald-400 font-bold capitalize">{provider}</span> account has been linked.
               </p>
             </div>
-            <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.2em]">Redirecting shortly</p>
+            <div className="flex flex-col items-center gap-3">
+              <Loader2 className="w-5 h-5 text-zinc-600 animate-spin" />
+              <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest">Redirecting</p>
+            </div>
           </>
         )}
 
         {status === 'error' && (
           <>
             <div className="relative animate-in zoom-in duration-500">
-              <div className="absolute inset-0 bg-red-500/20 blur-3xl rounded-full scale-150" />
-              <XCircle className="w-16 h-16 text-red-500 relative z-10" />
+              <div className="absolute inset-0 bg-rose-500/20 blur-3xl rounded-full scale-150" />
+              <XCircle className="w-16 h-16 text-rose-500 relative z-10" />
             </div>
-            <div className="text-center space-y-3">
-              <h1 className="text-2xl font-black text-white tracking-tight uppercase">Connection Failed</h1>
-              <p className="text-red-400/80 text-sm font-medium leading-relaxed">
+            <div className="text-center space-y-4">
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">Authentication Error</h1>
+              <p className="text-rose-400/90 text-sm font-medium leading-relaxed max-w-[280px]">
                 {errorMsg}
               </p>
             </div>
             <Button
               variant="secondary"
-              className="mt-4 w-full h-12 bg-white/5 hover:bg-white/10 text-white font-black uppercase tracking-widest text-[11px] rounded-2xl border border-white/5"
+              className="mt-4 w-full h-14 bg-white/5 hover:bg-white/10 text-white font-bold text-sm rounded-2xl border border-white/5 active:scale-[0.98] transition-all"
               onClick={() => navigate('/integrations')}
             >
-              Back to Integrations
+              Return to Integrations
             </Button>
           </>
         )}
