@@ -23,13 +23,6 @@ export function AppCard({ app, onInstall }: AppCardProps) {
           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           loading="lazy"
         />
-
-        <div className="absolute top-4 left-4">
-          <div className="bg-zinc-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-xl">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
-            <span className="text-[10px] font-black text-zinc-200 uppercase tracking-widest">{app.version}</span>
-          </div>
-        </div>
       </div>
 
       {/* Content Body */}
