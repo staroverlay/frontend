@@ -18,7 +18,7 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
-    const widgetUrl = `${WIDGET_SERVER}/${widget.app_id}?token=${widget.token}`;
+    const widgetUrl = `${WIDGET_SERVER}/widget/${widget.app_id}?token=${widget.token}`;
 
     const copyUrl = (e: React.MouseEvent) => {
         e.preventDefault();

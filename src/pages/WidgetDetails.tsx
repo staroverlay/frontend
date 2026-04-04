@@ -317,7 +317,7 @@ export default function WidgetDetails() {
         }
     };
 
-    const widgetUrl = widget ? `${WIDGET_SERVER}/${widget.app_id}?token=${widget.token}` : '';
+    const widgetUrl = widget ? `${WIDGET_SERVER}/widget/${widget.app_id}?token=${widget.token}` : '';
     const previewUrl = widget ? `${widgetUrl}&ispreview=true` : '';
 
     const copyUrl = () => {
