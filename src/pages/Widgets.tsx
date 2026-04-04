@@ -8,9 +8,12 @@ import { ErrorView } from '../components/ui/ErrorView';
 import { getError } from '../lib/utils';
 import { WidgetCard } from '../components/widgets/WidgetCard';
 import { AppsHeader } from '../components/apps/AppsHeader';
+import { useSubscriptionStore } from '../stores/subscription-store';
 
 export default function WidgetsPage() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
+  const { getPlan } = useSubscriptionStore();
+  const plan = getPlan();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
@@ -61,13 +64,35 @@ export default function WidgetsPage() {
           />
         </div>
 
-        <Link
-          to="/apps"
-          className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all shadow-lg shadow-violet-600/20 flex items-center gap-2 group shrink-0"
-        >
-          <Sparkles className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
-          Install New App
-        </Link>
+        <div className="flex flex-col gap-4 shrink-0">
+          <Link
+            to="/apps"
+            className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all shadow-lg shadow-violet-600/20 flex items-center gap-2 group shrink-0"
+          >
+            <Sparkles className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
+            Install New App
+          </Link>
+
+          {plan && (
+            <div className="flex flex-col gap-2 px-1">
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                  Widgets Slots
+                </span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                  {widgets.length} / {plan.limits.widgets}
+                </span>
+              </div>
+              <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                <div
+                  className={`h-full transition-all duration-700 ${(widgets.length / plan.limits.widgets) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'
+                    }`}
+                  style={{ width: `${Math.min(100, (widgets.length / plan.limits.widgets) * 100)}%` }}
+                />
+              </div>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Filters and Search */}

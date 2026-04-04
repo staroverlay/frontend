@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle, Search, SortAsc, ChevronDown, X } from 'lucide-react';
 import { UploadsService } from '../../services/uploads.service';
+import { useSubscriptionStore } from '../../stores/subscription-store';
 import { MediaCard } from './MediaCard';
 
 export interface UploadItem {
@@ -38,6 +39,8 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
     filterType: initialFilterType = 'all',
     selectedId
 }) => {
+    const { getPlan } = useSubscriptionStore();
+    const plan = getPlan();
     const [quota, setQuota] = useState<Quota | null>(null);
     const [uploads, setUploads] = useState<UploadItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -184,8 +187,15 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                     </button>
                 </div>
             )}
-
             <div className="flex flex-col gap-4 shrink-0">
+                <div className="flex items-center justify-between px-1">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Plan Quota</h2>
+                    {plan && (
+                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-500/60 bg-violet-500/5 px-2 py-0.5 rounded-full border border-violet-500/10">
+                            {plan.name} Tier
+                        </span>
+                    )}
+                </div>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-3 flex-1">
                         <div className="relative flex-1 max-w-xs group">
@@ -260,16 +270,29 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                 </div>
 
                 {quota && allowUpload && (
-                    <div className="flex items-center gap-3 px-1">
-                        <div className="flex-1 h-1 bg-zinc-900 rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-violet-600 transition-all duration-500"
-                                style={{ width: `${Math.min(100, quotaPercent)}%` }}
-                            />
+                    <div className="flex flex-col gap-2 px-1">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-1 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                                <div
+                                    className={`h-full transition-all duration-500 ${(quota.usedBytes / quota.maxBytes) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'}`}
+                                    style={{ width: `${Math.min(100, quotaPercent)}%` }}
+                                />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-zinc-500 tabular-nums min-w-[100px] text-right">
+                                <span className="text-zinc-400 mr-1">{formatBytes(quota.usedBytes)}</span> / {formatBytes(quota.maxBytes)}
+                            </span>
                         </div>
-                        <span className="text-[9px] font-black uppercase text-zinc-600 tabular-nums">
-                            {formatBytes(quota.usedBytes)} / {formatBytes(quota.maxBytes)}
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <div className="flex-1 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                                <div
+                                    className={`h-full transition-all duration-500 ${(quota.usedCount / quota.maxCount) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'}`}
+                                    style={{ width: `${Math.min(100, (quota.usedCount / quota.maxCount) * 100)}%` }}
+                                />
+                            </div>
+                            <span className="text-[9px] font-black uppercase text-zinc-500 tabular-nums min-w-[100px] text-right">
+                                <span className="text-zinc-400 mr-1">{quota.usedCount}</span> / {quota.maxCount} Files
+                            </span>
+                        </div>
                     </div>
                 )}
             </div>

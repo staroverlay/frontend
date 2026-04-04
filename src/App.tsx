@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/use-auth';
 import { MainLayout } from './components/layout/main-layout';
+import { useSubscriptionStore } from './stores/subscription-store';
+import { useEffect } from 'react';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import VerifyEmail from './pages/VerifyEmail';
@@ -14,9 +16,15 @@ import Widgets from './pages/Widgets';
 import WidgetDetails from './pages/WidgetDetails';
 import Content from './pages/Content';
 
-// Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
+  const { fetchSubscription, plans } = useSubscriptionStore();
+
+  useEffect(() => {
+    if (isAuthenticated && plans.length === 0) {
+      fetchSubscription();
+    }
+  }, [isAuthenticated, plans.length, fetchSubscription]);
 
   // Only show the global initializing screen if we don't have a user session yet.
   if (isLoading && !user) {
