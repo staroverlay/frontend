@@ -50,7 +50,7 @@ export default function AppDetails() {
       {/* Header Banner */}
       <div className="relative w-full h-64 md:h-80 rounded-3xl overflow-hidden bg-zinc-950 border border-white/10 mb-8 shadow-2xl">
         <img
-          src={`${WIDGET_SERVER}/${id}/meta/thumbnail.jpg`}
+          src={`${WIDGET_SERVER}/apps/${id}/thumbnail.jpg`}
           className="w-full h-full object-cover opacity-60"
           alt={`${app.name} cover`}
           onError={(e) => {

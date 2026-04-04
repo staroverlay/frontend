@@ -18,7 +18,7 @@ export function AppCard({ app, onInstall }: AppCardProps) {
       {/* Thumbnail Header */}
       <div className="h-50 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0 pointer-events-none">
         <img
-          src={`${WIDGET_SERVER}/${app.id}/meta/thumbnail.jpg`}
+          src={`${WIDGET_SERVER}/apps/${app.id}/thumbnail.jpg`}
           alt={`${app.name} thumbnail`}
           className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           loading="lazy"
