@@ -518,7 +518,17 @@ export default function WidgetDetails() {
                                         userId={user?.id}
                                         integrationIds={metaDraft.integrations}
                                         values={settingsDraft}
-                                        onChange={() => { }}
+                                        onChange={(id, val) => {
+                                            if (activeTabData.isGroup) {
+                                                const currentGroup = (settingsDraft[activeTabData.id] as any) || {};
+                                                setSettingsDraft(p => ({
+                                                    ...p,
+                                                    [activeTabData.id]: { ...currentGroup, [id]: val }
+                                                }));
+                                            } else {
+                                                setSettingsDraft(p => ({ ...p, [id]: val }));
+                                            }
+                                        }}
                                     >
                                         <div className="space-y-4">
                                             {activeTabData.fields.map((field) => (

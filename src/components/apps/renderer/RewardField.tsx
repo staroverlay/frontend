@@ -19,10 +19,15 @@ export const RewardField: React.FC<RewardFieldProps> = ({ field, value, onChange
     const [open, setOpen] = useState(false);
 
     // Extract integrationId and rewardId from the stored value "integrationId:rewardId"
+    // Since integrationId now has colons (type:userId:providerUserId), we use lastIndexOf
     const { integrationId, rewardId } = useMemo(() => {
         if (typeof value === 'string' && value.includes(':')) {
-            const [iId, rId] = value.split(':');
-            return { integrationId: iId, rewardId: rId };
+            const lastColon = value.lastIndexOf(':');
+            if (lastColon > 0) {
+                const iId = value.slice(0, lastColon);
+                const rId = value.slice(lastColon + 1);
+                return { integrationId: iId, rewardId: rId };
+            }
         }
         return { integrationId: null, rewardId: null };
     }, [value]);

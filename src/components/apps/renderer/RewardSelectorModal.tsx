@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Loader2, X, AlertCircle, ShoppingCart } from 'lucide-react';
 import { cn } from '../../../lib/utils';
@@ -38,7 +38,8 @@ export const RewardSelectorModal: React.FC<RewardSelectorModalProps> = ({
 
                 if (filtered.length > 0) {
                     if (selectedReward && selectedReward.includes(':')) {
-                        const [id] = selectedReward.split(':');
+                        const lastColon = selectedReward.lastIndexOf(':');
+                        const id = lastColon > 0 ? selectedReward.slice(0, lastColon) : null;
                         setActiveIntegrationId(filtered.some(i => i.id === id) ? id : filtered[0].id);
                     } else {
                         setActiveIntegrationId(filtered[0].id);

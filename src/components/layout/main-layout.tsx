@@ -5,6 +5,8 @@ import { LogOut, LayoutDashboard, Settings, User as UserIcon, Grid, Layers, Menu
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
+type Channel = "alpha" | "beta" | "test" | "stage" | "dev" | "prod";
+
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated, logout } = useAuth();
   const { profile } = useProfile();
@@ -23,13 +25,42 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col min-h-screen bg-zinc-950 text-zinc-100 font-sans selection:bg-violet-500/30 selection:text-violet-200 [scrollbar-gutter:stable] relative overflow-x-hidden">
+      {/* Channel Banner */}
+      {(() => {
+        const channel: Channel = (import.meta.env.VITE_APP_CHANNEL ?? (import.meta.env.DEV ? "dev" : "prod")) as Channel;
+        if (!channel) return null;
+
+        let bg = '';
+        let text = '';
+        if (channel === 'alpha') {
+          bg = 'bg-red-600/90';
+          text = 'ALPHA ACCESS - Unstable features ahead';
+        } else if (channel === 'beta') {
+          bg = 'bg-yellow-600/90 text-yellow-50';
+          text = 'BETA CHANNEL - Early access features';
+        } else if (channel === 'test' || channel === 'stage') {
+          bg = 'bg-pink-600/90';
+          text = 'TEST CHANNEL - Data may be deleted at any time';
+        } else if (channel === 'dev') {
+          bg = 'bg-sky-500/90';
+          text = 'DEVELOPMENT BRANCH';
+        } else {
+          return null;
+        }
+
+        return (
+          <div className={cn("w-full py-1.5 text-center text-xs font-black tracking-widest uppercase shadow-sm z-50", bg)}>
+            {text}
+          </div>
+        );
+      })()}
       {/* Background Effects from Auth */}
       <div className="fixed top-[0%] left-[-10%] w-[40%] h-[50%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none z-0" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[50%] rounded-full bg-fuchsia-600/10 blur-[120px] pointer-events-none z-0" />
 
       {/* Top Navbar */}
       {!location.pathname.match(/^\/widgets\/[a-zA-Z0-9-]+$/) && (
-        <header className="h-16 border-b border-white/5 bg-zinc-950/20 backdrop-blur-xl flex items-center justify-between px-4 md:px-8 fixed top-0 w-full z-50 transition-colors">
+        <header className="h-16 border-b border-white/5 bg-zinc-950/20 backdrop-blur-xl flex items-center justify-between px-4 md:px-8 w-full z-40 transition-colors sticky top-0">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -140,8 +171,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <main className={cn(
-        "flex-1 overflow-x-hidden relative z-10",
-        !location.pathname.match(/^\/widgets\/[a-zA-Z0-9-]+$/) && "pt-16"
+        "flex-1 overflow-x-hidden relative z-10"
       )}>
         {location.pathname.match(/^\/widgets\/[a-zA-Z0-9-]+$/) ? (
           children
