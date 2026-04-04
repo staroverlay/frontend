@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
-import { User, ShieldCheck, Monitor, Share2 } from 'lucide-react';
-import { getError, cn } from '../lib/utils';
+import { getError } from '../lib/utils';
 import { sessionsService } from '../services/sessions-service';
 import { type Session } from '../lib/types';
 import { ProfileSection } from '../components/settings/ProfileSection';
 import { SecuritySection } from '../components/settings/SecuritySection';
 import { SessionsSection } from '../components/settings/SessionsSection';
+import { SettingsNav } from '../components/settings/SettingsNav';
 import Integrations from './Integrations';
 import { authService } from '../services/auth-service';
 
@@ -98,15 +98,6 @@ export default function Settings() {
     }
   };
 
-  const location = useLocation();
-
-  const tabs = [
-    { name: 'Profile', href: '/settings/profile', icon: User },
-    { name: 'Integrations', href: '/settings/integrations', icon: Share2 },
-    { name: 'Security', href: '/settings/security', icon: ShieldCheck },
-    { name: 'Sessions', href: '/settings/sessions', icon: Monitor },
-  ];
-
   if (isProfileInitialLoading && !profile) {
     return (
       <div className="space-y-10 animate-in fade-in duration-500 max-w-5xl mx-auto">
@@ -129,31 +120,8 @@ export default function Settings() {
       </header>
 
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
-        {/* Settings Sidebar */}
-        <aside className="w-full lg:w-64 shrink-0 -mx-4 md:mx-0">
-          <nav className="flex lg:flex-col gap-1.5 bg-zinc-900/30 p-1.5 md:p-2 rounded-2xl border border-white/5 overflow-x-auto lg:overflow-visible no-scrollbar px-4 md:px-2">
-            {tabs.map((tab) => {
-              const isActive = location.pathname.startsWith(tab.href);
-              return (
-                <Link
-                  key={tab.name}
-                  to={tab.href}
-                  className={cn(
-                    'flex items-center gap-2.5 px-4 py-3 rounded-xl text-xs md:text-sm font-bold transition-all group shrink-0 lg:shrink',
-                    isActive
-                      ? 'bg-violet-600/10 text-violet-400 border border-violet-500/20 shadow-lg shadow-violet-500/5'
-                      : 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50 border border-transparent'
-                  )}
-                >
-                  <tab.icon className={cn('w-4 h-4', isActive ? 'text-violet-500' : 'text-zinc-600 group-hover:text-zinc-400')} />
-                  {tab.name}
-                </Link>
-              );
-            })}
-          </nav>
-        </aside>
+        <SettingsNav />
 
-        {/* Settings Content */}
         <main className="flex-1 min-w-0">
           <Routes>
             <Route path="/" element={<Navigate to="profile" replace />} />

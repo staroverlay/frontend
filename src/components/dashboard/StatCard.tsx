@@ -11,7 +11,7 @@ interface StatCardProps {
 
 export function StatCard({ name, value, change, icon: Icon, className }: StatCardProps) {
   const isPositive = change.startsWith('+');
-  
+
   return (
     <div className={cn(
       'p-5 rounded-2xl border bg-zinc-900/40 transition-all hover:-translate-y-1 hover:shadow-lg',
@@ -29,7 +29,7 @@ export function StatCard({ name, value, change, icon: Icon, className }: StatCar
           {change}
         </span>
       </div>
-      
+
       <div className="space-y-1">
         <p className="text-zinc-400 text-sm font-medium">{name}</p>
         <p className="text-3xl font-bold text-white tracking-tight">{value}</p>
