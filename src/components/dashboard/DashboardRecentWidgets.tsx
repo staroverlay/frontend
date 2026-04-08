@@ -12,11 +12,11 @@ export const DashboardRecentWidgets = ({ widgets, onDelete }: DashboardRecentWid
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between px-2">
-                <div className="flex items-center gap-2 text-zinc-300">
-                    <Clock className="w-5 h-5 text-violet-400" />
-                    <h3 className="font-bold">Last Widgets <span className="text-zinc-500 text-sm font-normal">Quick Access</span></h3>
+                <div className="flex items-center gap-2 text-content-secondary">
+                    <Clock className="w-5 h-5 text-brand-primary" />
+                    <h3 className="font-bold">Last Widgets <span className="text-content-dimmed text-sm font-normal">Quick Access</span></h3>
                 </div>
-                <Link to="/widgets" className="text-xs font-bold text-violet-400 hover:text-violet-300 flex items-center gap-1 transition-colors">
+                <Link to="/widgets" className="text-xs font-bold text-brand-primary hover:text-brand-accent flex items-center gap-1 transition-colors">
                     Manage Widgets <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
@@ -27,7 +27,7 @@ export const DashboardRecentWidgets = ({ widgets, onDelete }: DashboardRecentWid
                     </div>
                 ))}
                 {widgets.length === 0 && (
-                    <div className="text-zinc-500 text-sm py-8 w-full text-center border rounded-2xl border-dashed border-white/10 bg-zinc-900/20">
+                    <div className="text-content-dimmed text-sm py-8 w-full text-center border rounded-2xl border-dashed border-border-default bg-surface-card/20">
                         You haven't installed any widgets yet.
                     </div>
                 )}

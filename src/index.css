@@ -6,16 +6,33 @@
   --color-brand-secondary: #d946ef;
   --color-brand-accent: #c084fc;
 
-  --color-background-deep: #09090b;
-  --color-background-surface: #18181b;
-  --color-background-elevated: #27272a;
+  --color-surface-base: #09090b;
+  --color-surface-card: #0c0b16;
+  --color-surface-panel: #18181b;
+  --color-surface-elevated: #27272a;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-default: rgba(255, 255, 255, 0.1);
+  --color-border-accent: rgba(139, 92, 246, 0.3);
+
+  --color-content-primary: #ffffff;
+  --color-content-secondary: #d1d1d6;
+  --color-content-muted: #a1a1aa;
+  --color-content-dimmed: #71717a;
+
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #f43f5e;
+  --color-status-info: #0ea5e9;
 
   --font-sans: 'Inter', 'Outfit', sans-serif;
+
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-100 antialiased relative;
+    @apply bg-surface-base text-content-secondary antialiased relative;
     background: radial-gradient(circle at 50% 50%, #0c0b16 0%, #09090b 100%);
   }
 
@@ -39,14 +56,14 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-zinc-900/40 backdrop-blur-xl border border-zinc-800/50 shadow-2xl;
+    @apply bg-surface-panel/40 backdrop-blur-xl border border-border-subtle shadow-premium;
   }
 
   .purple-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-fuchsia-400 font-black;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary font-black;
   }
 
   .btn-primary {
-    @apply px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-violet-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2.5;
+    @apply px-6 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2.5;
   }
 }

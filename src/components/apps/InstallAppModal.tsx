@@ -98,21 +98,21 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-surface-base/80 backdrop-blur-sm" onClick={onClose} />
 
-            <div className="relative w-full max-w-lg bg-zinc-900 border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+            <div className="relative w-full max-w-lg bg-surface-card border border-border-default rounded-[2.5rem] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
                 {/* Header */}
-                <div className="p-6 md:p-8 border-b border-white/5 flex items-center justify-between">
+                <div className="p-6 md:p-8 border-b border-border-subtle flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-2xl bg-violet-500/20 flex items-center justify-center text-violet-400">
+                        <div className="w-10 h-10 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
                             <Sparkles className="w-5 h-5" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-white leading-none">Install App</h2>
-                            <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-1.5">{app.name}</p>
+                            <h2 className="text-xl font-black text-content-primary leading-none uppercase tracking-tight">Install App</h2>
+                            <p className="text-[10px] font-black text-content-dimmed uppercase tracking-widest mt-1.5">{app.name}</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 text-zinc-500 hover:text-white transition-colors">
+                    <button onClick={onClose} className="p-2 text-content-dimmed hover:text-content-primary transition-colors">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -120,43 +120,43 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
                 <div className="p-6 md:p-8 space-y-8">
                     {/* Display Name */}
                     <div className="space-y-3">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em] px-1">Widget Display Name</label>
+                        <label className="text-[10px] font-black text-content-dimmed uppercase tracking-[0.2em] px-1">Widget Display Name</label>
                         <input
                             value={displayName}
                             onChange={e => setDisplayName(e.target.value)}
                             placeholder="e.g. My Twitch Overlay"
-                            className="w-full bg-zinc-950 border border-white/5 rounded-2xl px-5 py-4 text-sm font-bold text-white placeholder:text-zinc-700 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all"
+                            className="w-full bg-surface-base border border-border-subtle rounded-2xl px-5 py-4 text-sm font-bold text-content-primary placeholder:text-content-dimmed focus:outline-none focus:ring-1 focus:ring-brand-primary/40 transition-all uppercase tracking-tight"
                         />
                     </div>
 
                     {/* Integrations Selection */}
                     <div className="space-y-4">
                         <div className="flex items-center justify-between px-1">
-                            <label className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.2em]">Connect Integrations</label>
+                            <label className="text-[10px] font-black text-content-dimmed uppercase tracking-[0.2em]">Connect Integrations</label>
                             {requiredProviders.length > 0 && (
-                                <span className="text-[8px] font-black bg-rose-500/10 text-rose-500 border border-rose-500/20 px-2 py-0.5 rounded uppercase tracking-tighter">
+                                <span className="text-[8px] font-black bg-status-error/10 text-status-error border border-status-error/20 px-2 py-0.5 rounded uppercase tracking-tighter">
                                     Required: {requiredProviders.join(', ')}
                                 </span>
                             )}
                         </div>
 
                         {isLoading ? (
-                            <div className="py-12 flex flex-col items-center justify-center gap-3 bg-zinc-950/30 rounded-3xl border border-dashed border-white/5">
-                                <Loader2 className="w-6 h-6 text-violet-500 animate-spin" />
-                                <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Scanning Connections...</p>
+                            <div className="py-12 flex flex-col items-center justify-center gap-3 bg-surface-base/30 rounded-3xl border border-dashed border-border-subtle">
+                                <Loader2 className="w-6 h-6 text-brand-primary animate-spin" />
+                                <p className="text-[10px] font-black text-content-dimmed uppercase tracking-widest">Scanning Connections...</p>
                             </div>
                         ) : compatibleIntegrations.length === 0 ? (
-                            <div className="p-6 text-center bg-zinc-950/30 rounded-3xl border border-dashed border-rose-500/20 space-y-4">
-                                <AlertCircle className="w-8 h-8 text-rose-500 mx-auto opacity-50" />
+                            <div className="p-6 text-center bg-surface-base/30 rounded-3xl border border-dashed border-status-error/20 space-y-4">
+                                <AlertCircle className="w-8 h-8 text-status-error mx-auto opacity-50" />
                                 <div className="space-y-1">
-                                    <p className="text-sm font-bold text-zinc-300">No compatible integrations found</p>
-                                    <p className="text-xs text-zinc-500 leading-relaxed">
+                                    <p className="text-sm font-bold text-content-secondary">No compatible integrations found</p>
+                                    <p className="text-xs text-content-dimmed leading-relaxed">
                                         This app requires {requiredProviders.join(' or ')}. Please connect them in your settings first.
                                     </p>
                                 </div>
                                 <button
                                     onClick={() => navigate('/settings/integrations')}
-                                    className="text-[10px] font-black text-violet-400 uppercase tracking-widest hover:text-violet-300 transition-colors"
+                                    className="text-[10px] font-black text-brand-primary uppercase tracking-widest hover:text-brand-accent transition-colors"
                                 >
                                     Go to Settings
                                 </button>
@@ -177,25 +177,25 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
                                             className={cn(
                                                 "w-full flex items-center justify-between p-4 rounded-2xl border transition-all text-left",
                                                 isSelected
-                                                    ? "bg-violet-600/10 border-violet-500/30 text-white"
-                                                    : "bg-zinc-950/50 border-white/5 text-zinc-500 hover:border-white/10"
+                                                    ? "bg-brand-primary/10 border-brand-primary/30 text-content-primary"
+                                                    : "bg-surface-base/50 border-border-subtle text-content-muted hover:border-border-default hover:bg-surface-base"
                                             )}
                                         >
                                             <div className="flex items-center gap-4">
                                                 <img
                                                     src={integration.providerAvatarUrl || ''}
-                                                    className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/5"
+                                                    className="w-10 h-10 rounded-xl bg-surface-card border border-border-subtle shadow-premium"
                                                     alt=""
                                                     onError={e => e.currentTarget.style.display = 'none'}
                                                 />
                                                 <div>
-                                                    <p className="text-xs font-black uppercase tracking-tight">{integration.displayName || integration.providerUsername}</p>
-                                                    <p className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest mt-0.5">{integration.provider} • {integration.providerUserId}</p>
+                                                    <p className="text-[10px] font-black uppercase tracking-tight">{integration.displayName || integration.providerUsername}</p>
+                                                    <p className="text-[9px] font-bold text-content-dimmed uppercase tracking-widest mt-0.5">{integration.provider} • {integration.providerUserId}</p>
                                                 </div>
                                             </div>
                                             <div className={cn(
                                                 "w-6 h-6 rounded-lg border flex items-center justify-center transition-colors",
-                                                isSelected ? "bg-violet-500 border-violet-400 text-white" : "border-white/10"
+                                                isSelected ? "bg-brand-primary border-brand-primary text-white" : "border-border-default"
                                             )}>
                                                 {isSelected && <Check className="w-3.5 h-3.5" />}
                                             </div>
@@ -207,9 +207,9 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
                     </div>
 
                     {error && (
-                        <div className="p-4 bg-rose-500/5 border border-rose-500/10 rounded-2xl flex items-start gap-3">
-                            <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
-                            <p className="text-[10px] font-bold text-rose-500/80 uppercase tracking-tight leading-relaxed">{error}</p>
+                        <div className="p-4 bg-status-error/5 border border-status-error/10 rounded-2xl flex items-start gap-3">
+                            <AlertCircle className="w-4 h-4 text-status-error shrink-0 mt-0.5" />
+                            <p className="text-[10px] font-bold text-status-error/80 uppercase tracking-tight leading-relaxed">{error}</p>
                         </div>
                     )}
 
@@ -217,13 +217,13 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
                         <button
                             onClick={handleInstall}
                             disabled={!canInstall || isInstalling}
-                            className="w-full py-5 bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white text-xs font-black uppercase tracking-[0.2em] rounded-2xl transition-all shadow-xl shadow-violet-600/10 flex items-center justify-center gap-3 active:scale-95"
+                            className="w-full py-5 bg-brand-primary hover:bg-brand-primary/90 disabled:opacity-30 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl transition-all shadow-xl shadow-brand-primary/10 flex items-center justify-center gap-3 active:scale-95"
                         >
                             {isInstalling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Check className="w-5 h-5" />}
                             Confirm Installation
                         </button>
                         {!canInstall && !isLoading && compatibleIntegrations.length > 0 && (
-                            <p className="text-center text-[9px] font-bold text-zinc-600 uppercase tracking-widest mt-4 flex items-center justify-center gap-1.5">
+                            <p className="text-center text-[9px] font-black text-content-dimmed uppercase tracking-widest mt-4 flex items-center justify-center gap-1.5 opacity-60">
                                 <Info className="w-3 h-3" />
                                 Select all required integrations to proceed
                             </p>

@@ -23,11 +23,11 @@ export default function Integrations() {
     return (
       <div className="flex items-center justify-center min-h-[60vh] animate-in fade-in duration-500">
         <div className="max-w-md w-full glass-panel p-12 rounded-[3rem] border-rose-500/20 text-center space-y-8">
-           <ErrorView
-             message={error}
-             onRetry={fetchIntegrations}
-             title="Failed to Load Integrations"
-           />
+          <ErrorView
+            message={error}
+            onRetry={fetchIntegrations}
+            title="Failed to Load Integrations"
+          />
         </div>
       </div>
     );
@@ -37,13 +37,13 @@ export default function Integrations() {
     return (
       <div className="space-y-12 animate-in fade-in duration-700">
         <div className="space-y-4 px-1">
-          <Skeleton className="h-4 w-32 bg-zinc-900" />
-          <Skeleton className="h-14 w-80 bg-zinc-900 rounded-2xl" />
-          <Skeleton className="h-4 w-96 bg-zinc-900" />
+          <Skeleton className="h-4 w-32 bg-surface-panel" />
+          <Skeleton className="h-14 w-80 bg-surface-panel rounded-2xl" />
+          <Skeleton className="h-4 w-96 bg-surface-panel" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[...Array(3)].map((_, i) => (
-            <Skeleton key={i} className="h-72 w-full rounded-[2.5rem] bg-zinc-900" />
+            <Skeleton key={i} className="h-72 w-full rounded-[2.5rem] bg-surface-panel" />
           ))}
         </div>
       </div>
@@ -73,11 +73,11 @@ export default function Integrations() {
         })}
       </div>
 
-      <div className="p-6 rounded-2xl border border-dashed border-zinc-800 bg-zinc-900/40 flex flex-col items-center justify-center text-center mt-6">
-        <div className="w-10 h-10 rounded-full bg-zinc-900 flex items-center justify-center border border-zinc-800">
-           <Sparkles className="w-5 h-5 text-zinc-600" />
+      <div className="p-6 rounded-2xl border border-dashed border-border-default bg-surface-card/40 flex flex-col items-center justify-center text-center mt-6">
+        <div className="w-10 h-10 rounded-full bg-surface-panel flex items-center justify-center border border-border-subtle">
+          <Sparkles className="w-5 h-5 text-content-dimmed" />
         </div>
-        <p className="mt-3 text-zinc-500 text-sm font-medium">More integrations coming soon</p>
+        <p className="mt-3 text-content-dimmed text-sm font-medium">More integrations coming soon</p>
       </div>
     </SectionCard>
   );

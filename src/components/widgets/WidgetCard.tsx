@@ -54,13 +54,13 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
     return (
         <Link
             to={`/widgets/${widget.id}`}
-            className="group relative flex flex-col rounded-3xl bg-zinc-900/40 border border-white/5 overflow-hidden hover:bg-zinc-800/60 hover:border-violet-500/30 transition-all duration-300 shadow-lg shadow-black/20 block"
+            className="group relative flex flex-col rounded-3xl bg-surface-card border border-border-subtle overflow-hidden hover:bg-surface-panel hover:border-brand-primary/30 transition-all duration-300 shadow-premium block"
         >
             {/* Glow effect on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />
 
             {/* Thumbnail Header */}
-            <div className="h-50 w-full bg-zinc-950 relative overflow-hidden border-b border-white/5 z-0">
+            <div className="h-50 w-full bg-surface-base relative overflow-hidden border-b border-border-subtle z-0">
                 <img
                     src={`${WIDGET_SERVER}/apps/${widget.app_id}/thumbnail.jpg`}
                     alt={`${widget.display_name || widget.app_id} thumbnail`}
@@ -72,13 +72,13 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
                 />
 
                 <div className="absolute top-4 left-4 flex gap-2">
-                    <div className="bg-zinc-950/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-xl">
+                    <div className="bg-surface-base/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-border-default flex items-center gap-1.5 shadow-xl">
                         {widget.enabled ? (
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-status-success shadow-[0_0_8px_rgba(16,185,129,0.8)]"></span>
                         ) : (
-                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]"></span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-status-error shadow-[0_0_8px_rgba(244,63,94,0.8)]"></span>
                         )}
-                        <span className="text-[10px] font-black text-zinc-200 uppercase tracking-widest">
+                        <span className="text-[10px] font-black text-content-secondary uppercase tracking-widest">
                             {widget.enabled ? 'Active' : 'Disabled'}
                         </span>
                     </div>
@@ -87,10 +87,10 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
                 <div className="absolute top-4 right-4 flex gap-1.5" ref={menuRef}>
                     <button
                         onClick={copyUrl}
-                        className="bg-zinc-950/80 backdrop-blur-md p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-violet-500/40 transition-all shadow-xl group/btn"
+                        className="bg-surface-base/80 backdrop-blur-md p-2 rounded-xl border border-border-default text-content-muted hover:text-content-primary hover:border-brand-primary/40 transition-all shadow-xl group/btn"
                         title="Copy Widget URL"
                     >
-                        {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                        {copied ? <Check className="w-4 h-4 text-status-success" /> : <Copy className="w-4 h-4" />}
                     </button>
 
                     <div className="relative">
@@ -100,13 +100,13 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
                                 e.stopPropagation();
                                 setShowMenu(!showMenu);
                             }}
-                            className="bg-zinc-950/80 backdrop-blur-md p-2 rounded-xl border border-white/10 text-zinc-400 hover:text-white hover:border-rose-500/40 transition-all shadow-xl group/btn"
+                            className="bg-surface-base/80 backdrop-blur-md p-2 rounded-xl border border-border-default text-content-muted hover:text-content-primary hover:border-status-error/40 transition-all shadow-xl group/btn"
                         >
                             <MoreVertical className="w-4 h-4" />
                         </button>
 
                         {showMenu && (
-                            <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-white/10 rounded-xl shadow-2xl py-1 z-30 animate-in fade-in zoom-in-95 duration-200">
+                            <div className="absolute right-0 mt-2 w-48 bg-surface-panel border border-border-default rounded-xl shadow-premium py-1 z-30 animate-in fade-in zoom-in-95 duration-200">
                                 <button
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -114,7 +114,7 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
                                         setShowDeleteModal(true);
                                         setShowMenu(false);
                                     }}
-                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-rose-500 hover:bg-rose-500/10 transition-colors"
+                                    className="w-full flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-status-error hover:bg-status-error/10 transition-colors"
                                 >
                                     <Trash2 className="w-3.5 h-3.5" />
                                     Delete Instance
@@ -128,22 +128,22 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
             {/* Content Body */}
             <div className="p-6 relative z-10 flex flex-col flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                    <Layers className="w-3.5 h-3.5 text-violet-400" />
-                    <span className="text-[10px] font-black text-violet-400/70 uppercase tracking-[0.2em]">{widget.app_id}</span>
+                    <Layers className="w-3.5 h-3.5 text-brand-primary" />
+                    <span className="text-[10px] font-black text-brand-primary/70 uppercase tracking-[0.2em]">{widget.app_id}</span>
                 </div>
 
-                <h3 className="text-xl font-black text-white mb-2 group-hover:text-violet-200 transition-colors">
+                <h3 className="text-xl font-black text-content-primary mb-2 group-hover:text-brand-accent transition-colors">
                     {widget.display_name || widget.app_id}
                 </h3>
 
                 <div className="flex justify-between items-center mt-auto">
                     <div className="flex gap-2">
-                        <span className="text-[9px] font-black uppercase tracking-widest bg-zinc-800 text-zinc-400 px-2.5 py-1 rounded border border-white/5">
+                        <span className="text-[9px] font-black uppercase tracking-widest bg-surface-elevated text-content-muted px-2.5 py-1 rounded border border-border-subtle">
                             ID: {widget.id.slice(0, 8)}...
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-zinc-500 group-hover:text-violet-400 transition-colors">
+                    <div className="flex items-center gap-1.5 text-content-dimmed group-hover:text-brand-primary transition-colors">
                         <Settings2 className="w-3.5 h-3.5" />
                         <span className="text-[10px] font-bold uppercase tracking-wider">Configure</span>
                     </div>

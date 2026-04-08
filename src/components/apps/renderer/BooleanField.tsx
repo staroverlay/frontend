@@ -21,13 +21,13 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ field, value, onChan
                 <button
                     onClick={() => onChange(!val)}
                     className={cn(
-                        "relative w-8 h-4 rounded-full transition-all duration-300 outline-none hover:ring-4 hover:ring-violet-500/5",
-                        val ? "bg-violet-600" : "bg-zinc-900 border border-white/5"
+                        "relative w-8 h-4 rounded-full transition-all duration-300 outline-none hover:ring-4 hover:ring-brand-primary/5 border",
+                        val ? "bg-brand-primary border-brand-primary" : "bg-surface-base border-border-subtle"
                     )}
                 >
                     <div className={cn(
                         "absolute top-0.75 w-2.5 h-2.5 rounded-full bg-white transition-all duration-300 shadow-sm",
-                        val ? "left-4.75" : "left-0.75 bg-zinc-700"
+                        val ? "left-4.75" : "left-0.75 bg-content-muted"
                     )} />
                 </button>
             ) : (
@@ -36,9 +36,9 @@ export const BooleanField: React.FC<BooleanFieldProps> = ({ field, value, onChan
                         type="checkbox"
                         checked={val}
                         onChange={(e) => onChange(e.target.checked)}
-                        className="w-3.5 h-3.5 rounded border-white/5 bg-zinc-900 text-violet-600 focus:ring-violet-500/40 cursor-pointer"
+                        className="w-3.5 h-3.5 rounded border-border-subtle bg-surface-base text-brand-primary focus:ring-brand-primary/40 cursor-pointer"
                     />
-                    <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">{val ? 'On' : 'Off'}</span>
+                    <span className="text-[9px] font-black text-content-dimmed uppercase tracking-widest">{val ? 'On' : 'Off'}</span>
                 </div>
             )}
         </FieldBase>

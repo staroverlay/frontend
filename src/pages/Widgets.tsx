@@ -67,7 +67,7 @@ export default function WidgetsPage() {
         <div className="flex flex-col gap-4 shrink-0">
           <Link
             to="/apps"
-            className="px-6 py-3 bg-violet-600 hover:bg-violet-500 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all shadow-lg shadow-violet-600/20 flex items-center gap-2 group shrink-0"
+            className="px-6 py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all shadow-lg shadow-brand-primary/20 flex items-center gap-2 group shrink-0"
           >
             <Sparkles className="w-3.5 h-3.5 group-hover:rotate-12 transition-transform" />
             Install New App
@@ -76,16 +76,16 @@ export default function WidgetsPage() {
           {plan && (
             <div className="flex flex-col gap-2 px-1">
               <div className="flex items-center justify-between gap-4">
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
+                <span className="text-[10px] font-black uppercase tracking-widest text-content-dimmed">
                   Widgets Slots
                 </span>
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                <span className="text-[10px] font-black uppercase tracking-widest text-content-muted">
                   {widgets.length} / {plan.limits.widgets}
                 </span>
               </div>
-              <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+              <div className="h-1.5 w-full bg-surface-panel rounded-full overflow-hidden border border-border-subtle">
                 <div
-                  className={`h-full transition-all duration-700 ${(widgets.length / plan.limits.widgets) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'
+                  className={`h-full transition-all duration-700 ${(widgets.length / plan.limits.widgets) >= 0.9 ? 'bg-status-warning' : 'bg-brand-primary'
                     }`}
                   style={{ width: `${Math.min(100, (widgets.length / plan.limits.widgets) * 100)}%` }}
                 />
@@ -96,17 +96,17 @@ export default function WidgetsPage() {
       </div>
 
       {/* Filters and Search */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-1 rounded-2xl bg-zinc-900/40 border border-white/5 backdrop-blur-md">
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-between p-1 rounded-2xl bg-surface-card border border-border-subtle backdrop-blur-md">
         <div className="relative w-full flex-1">
           <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <Search className="w-4 h-4 text-zinc-500" />
+            <Search className="w-4 h-4 text-content-dimmed" />
           </div>
           <input
             type="text"
             placeholder="Search your instances by name, app ID or instance ID..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-zinc-950/50 border-none rounded-xl pl-11 pr-4 py-3 text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500/50 transition-all font-medium"
+            className="w-full bg-surface-base/50 border-none rounded-xl pl-11 pr-4 py-3 text-sm text-content-secondary placeholder:text-content-dimmed focus:outline-none focus:ring-1 focus:ring-brand-primary/50 transition-all font-medium"
           />
         </div>
       </div>
@@ -116,30 +116,30 @@ export default function WidgetsPage() {
         {isLoading && widgets.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-[320px] bg-zinc-900/20 border border-white/5 rounded-3xl animate-pulse" />
+              <div key={i} className="h-[320px] bg-surface-panel/20 border border-border-subtle rounded-3xl animate-pulse" />
             ))}
           </div>
         ) : widgets.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-white/10 bg-zinc-900/20 text-center px-4">
-            <div className="w-16 h-16 rounded-full bg-zinc-950 border border-white/5 flex items-center justify-center mb-6">
-              <Layers className="w-8 h-8 text-zinc-700" />
+          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-border-default bg-surface-card/20 text-center px-4">
+            <div className="w-16 h-16 rounded-full bg-surface-base border border-border-subtle flex items-center justify-center mb-6">
+              <Layers className="w-8 h-8 text-content-dimmed" />
             </div>
-            <h3 className="text-xl font-black text-zinc-300">No widgets installed</h3>
-            <p className="text-zinc-500 mt-2 max-w-sm">
+            <h3 className="text-xl font-black text-content-secondary uppercase">No widgets installed</h3>
+            <p className="text-content-dimmed mt-2 max-w-sm">
               Explore the app store to find overlays and widgets to add to your stream.
             </p>
             <Link
               to="/apps"
-              className="mt-8 px-8 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-bold rounded-xl border border-white/5 transition-all"
+              className="mt-8 px-8 py-3 bg-surface-elevated hover:bg-surface-panel text-content-primary font-bold rounded-xl border border-border-subtle transition-all uppercase tracking-widest text-xs"
             >
               Browse Apps
             </Link>
           </div>
         ) : filteredWidgets.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-white/10 bg-zinc-900/20">
-            <Layers className="w-12 h-12 text-zinc-700 mb-4" />
-            <h3 className="text-xl font-bold text-zinc-300">No matches found</h3>
-            <p className="text-zinc-500 mt-2">Try a different search term.</p>
+          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-border-default bg-surface-card/20">
+            <Layers className="w-12 h-12 text-content-dimmed mb-4" />
+            <h3 className="text-xl font-bold text-content-secondary">No matches found</h3>
+            <p className="text-content-dimmed mt-2">Try a different search term.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

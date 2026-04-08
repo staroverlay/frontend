@@ -54,13 +54,13 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <div className="space-y-12 animate-in fade-in duration-700">
-        <Skeleton className="h-12 w-full bg-zinc-900 rounded-2xl" />
+        <Skeleton className="h-12 w-full bg-surface-panel rounded-2xl" />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-44 w-full rounded-3xl bg-zinc-900" />
+            <Skeleton key={i} className="h-44 w-full rounded-3xl bg-surface-panel" />
           ))}
         </div>
-        <Skeleton className="h-44 w-full rounded-3xl bg-zinc-900" />
+        <Skeleton className="h-44 w-full rounded-3xl bg-surface-panel" />
       </div>
     );
   }

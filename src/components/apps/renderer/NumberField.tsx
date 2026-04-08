@@ -18,9 +18,9 @@ export const NumberField: React.FC<NumberFieldProps> = ({ field, value, onChange
             {isSlider ? (
                 <div className="space-y-1 py-0.5">
                     <div className="flex justify-between items-center px-1">
-                        <span className="text-[8.5px] font-bold text-zinc-500 uppercase tracking-widest">{field.num_min ?? 0}</span>
-                        <span className="text-[9.5px] font-black text-violet-500 font-mono tracking-tighter">{value || 0}</span>
-                        <span className="text-[8.5px] font-bold text-zinc-500 uppercase tracking-widest">{field.num_max ?? 100}</span>
+                        <span className="text-[8.5px] font-black text-content-dimmed uppercase tracking-widest">{field.num_min ?? 0}</span>
+                        <span className="text-[9.5px] font-black text-brand-primary font-mono tracking-tighter">{value || 0}</span>
+                        <span className="text-[8.5px] font-black text-content-dimmed uppercase tracking-widest">{field.num_max ?? 100}</span>
                     </div>
                     <input
                         type="range"
@@ -29,7 +29,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({ field, value, onChange
                         step={field.slider_step || 1}
                         value={Number(value || 0)}
                         onChange={(e) => onChange(Number(e.target.value))}
-                        className="w-full h-1 bg-zinc-900/50 border border-white/5 rounded-full appearance-none accent-violet-500 cursor-pointer"
+                        className="w-full h-1 bg-surface-base border border-border-subtle rounded-full appearance-none accent-brand-primary cursor-pointer"
                     />
                 </div>
             ) : (
@@ -39,7 +39,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({ field, value, onChange
                     max={field.num_max}
                     value={Number(value || 0)}
                     onChange={(e) => onChange(Number(e.target.value))}
-                    className="w-full bg-zinc-900/40 border border-white/5 rounded-lg px-2.5 py-1.5 text-[9.5px] font-bold text-zinc-300 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans"
+                    className="w-full bg-surface-base/50 border border-border-subtle rounded-lg px-2.5 py-1.5 text-[9.5px] font-black text-content-secondary focus:outline-none focus:ring-1 focus:ring-brand-primary/40 transition-all font-sans"
                 />
             )}
         </FieldBase>

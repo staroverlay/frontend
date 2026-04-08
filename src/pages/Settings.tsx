@@ -101,10 +101,10 @@ export default function Settings() {
   if (isProfileInitialLoading && !profile) {
     return (
       <div className="space-y-10 animate-in fade-in duration-500 max-w-5xl mx-auto">
-        <Skeleton className="h-6 w-48 bg-zinc-900" />
+        <Skeleton className="h-6 w-48 bg-surface-panel" />
         <div className="flex gap-12 mt-8">
-          <Skeleton className="h-48 w-64 bg-zinc-900 rounded-2xl" />
-          <Skeleton className="h-96 flex-1 bg-zinc-900 rounded-2xl" />
+          <Skeleton className="h-48 w-64 bg-surface-panel rounded-2xl" />
+          <Skeleton className="h-96 flex-1 bg-surface-panel rounded-2xl" />
         </div>
       </div>
     );
@@ -113,8 +113,8 @@ export default function Settings() {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <header className="mb-8 md:mb-10">
-        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white m-0">Settings</h1>
-        <p className="text-zinc-500 text-sm md:text-base mt-2 max-w-2xl">
+        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-content-primary m-0 uppercase">Settings</h1>
+        <p className="text-content-dimmed text-sm md:text-base mt-2 max-w-2xl">
           Manage your account preferences and security settings.
         </p>
       </header>
