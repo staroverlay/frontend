@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
+import { PageHeader } from '../components/ui/PageHeader';
 import { getError } from '../lib/utils';
 import { sessionsService } from '../services/sessions-service';
 import { type Session } from '../lib/types';
@@ -12,6 +13,7 @@ import { SessionsSection } from '../components/settings/SessionsSection';
 import { SettingsNav } from '../components/settings/SettingsNav';
 import Integrations from './Integrations';
 import { authService } from '../services/auth-service';
+import { Settings as SettingsIcon } from 'lucide-react';
 
 export default function Settings() {
   const { user, refreshUser, logout } = useAuth();
@@ -28,17 +30,13 @@ export default function Settings() {
   const [profileSuccess, setProfileSuccess] = useState(false);
 
   useEffect(() => {
-    if (profile) {
-      setDisplayName(profile.displayName);
-    }
+    if (profile) setDisplayName(profile.displayName);
   }, [profile]);
 
   const [sessions, setSessions] = useState<Session[]>([]);
   const [isSessionsLoading, setIsSessionsLoading] = useState(false);
 
-  useEffect(() => {
-    fetchSessions();
-  }, []);
+  useEffect(() => { fetchSessions(); }, []);
 
   const fetchSessions = async () => {
     setIsSessionsLoading(true);
@@ -54,25 +52,20 @@ export default function Settings() {
 
   const handleRevokeSession = async (id: string, isCurrent: boolean) => {
     const msg = isCurrent
-      ? 'Are you sure you want to revoke your CURRENT session? You will be logged out.'
+      ? 'Revoke your CURRENT session? You will be logged out.'
       : 'Terminate this session? The device will be logged out.';
-
     if (!window.confirm(msg)) return;
-
     try {
       await sessionsService.revokeSession(id);
-      if (isCurrent) {
-        logout();
-      } else {
-        setSessions(prev => prev.filter(s => s.id !== id));
-      }
+      if (isCurrent) logout();
+      else setSessions(prev => prev.filter(s => s.id !== id));
     } catch (err) {
       alert('Failed to revoke session: ' + getError(err, 'Unknown error'));
     }
   };
 
   const handleKillAllSessions = async () => {
-    if (confirm('Are you sure you want to revoke ALL sessions? You will be instantly logged out.')) {
+    if (confirm('Revoke ALL sessions? You will be instantly logged out.')) {
       try {
         await authService.logoutAll();
         logout();
@@ -91,8 +84,8 @@ export default function Settings() {
       await updateProfile(displayName);
       setProfileSuccess(true);
       await refreshUser();
-    } catch (err) {
-      // Error handled by hook
+    } catch (_) {
+      // handled by hook
     } finally {
       setIsSavingProfile(false);
     }
@@ -100,10 +93,10 @@ export default function Settings() {
 
   if (isProfileInitialLoading && !profile) {
     return (
-      <div className="space-y-10 animate-in fade-in duration-500 max-w-5xl mx-auto">
-        <Skeleton className="h-6 w-48 bg-surface-panel" />
-        <div className="flex gap-12 mt-8">
-          <Skeleton className="h-48 w-64 bg-surface-panel rounded-2xl" />
+      <div className="space-y-10 animate-in fade-in duration-500">
+        <Skeleton className="h-20 w-full bg-surface-panel rounded-2xl" />
+        <div className="flex gap-10 mt-8">
+          <Skeleton className="h-48 w-60 bg-surface-panel rounded-2xl" />
           <Skeleton className="h-96 flex-1 bg-surface-panel rounded-2xl" />
         </div>
       </div>
@@ -112,12 +105,12 @@ export default function Settings() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <header className="mb-8 md:mb-10">
-        <h1 className="text-2xl md:text-3xl font-black tracking-tight text-content-primary m-0 uppercase">Settings</h1>
-        <p className="text-content-dimmed text-sm md:text-base mt-2 max-w-2xl">
-          Manage your account preferences and security settings.
-        </p>
-      </header>
+      <PageHeader
+        icon={<SettingsIcon className="w-5 h-5" />}
+        title="Account"
+        highlight="Settings"
+        description="Manage your profile, security preferences, active sessions, and service integrations."
+      />
 
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
         <SettingsNav />
@@ -125,7 +118,6 @@ export default function Settings() {
         <main className="flex-1 min-w-0">
           <Routes>
             <Route path="/" element={<Navigate to="profile" replace />} />
-
             <Route path="profile" element={
               <ProfileSection
                 user={user}
@@ -137,9 +129,7 @@ export default function Settings() {
                 onUpdate={handleUpdateProfile}
               />
             } />
-
             <Route path="security" element={<SecuritySection logout={logout} />} />
-
             <Route path="sessions" element={
               <SessionsSection
                 sessions={sessions}
@@ -149,7 +139,6 @@ export default function Settings() {
                 onRevokeAll={handleKillAllSessions}
               />
             } />
-
             <Route path="integrations" element={<Integrations />} />
           </Routes>
         </main>

@@ -11,9 +11,9 @@ export function AppCard({ app, onInstall }: AppCardProps) {
 
   return (
     <div
-      className="group relative flex flex-col rounded-3xl bg-surface-card border border-border-subtle overflow-hidden hover:bg-surface-panel hover:border-brand-primary/30 transition-all duration-300 shadow-premium"
+      className="group relative flex flex-col rounded-3xl bg-surface-card border border-white/[0.05] overflow-hidden card-hover shadow-premium"
     >
-      <Link to={`/apps/${app.id}`} className="absolute inset-0 z-0" />
+      <Link to={`/apps/${app.id}`} className="absolute inset-0 z-10" />
 
       {/* Thumbnail Header */}
       <div className="h-50 w-full bg-surface-base relative overflow-hidden border-b border-border-subtle z-0 pointer-events-none">

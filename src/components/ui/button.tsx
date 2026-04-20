@@ -9,16 +9,16 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = 'primary', size = 'md', ...props }, ref) => {
     const variants = {
-      primary: 'bg-brand-primary text-white hover:bg-brand-primary/90 active:scale-[0.98] shadow-lg shadow-brand-primary/20',
-      secondary: 'bg-surface-elevated text-content-primary hover:bg-surface-panel border border-border-subtle active:scale-[0.98]',
-      ghost: 'bg-transparent hover:bg-surface-panel text-content-muted hover:text-content-primary transition-colors',
-      danger: 'bg-status-error text-white hover:bg-status-error/90 active:scale-[0.98] shadow-lg shadow-status-error/20',
+      primary: 'bg-brand-primary text-white hover:bg-brand-primary/90 active:scale-[0.97] shadow-lg shadow-brand-primary/25 border border-white/10',
+      secondary: 'bg-surface-elevated/50 backdrop-blur-md text-content-primary hover:bg-surface-elevated hover:border-white/20 border border-white/10 shadow-sm active:scale-[0.97]',
+      ghost: 'bg-transparent hover:bg-white/5 text-content-dimmed hover:text-content-primary transition-all active:scale-[0.97]',
+      danger: 'bg-status-error/10 text-status-error hover:bg-status-error hover:text-white border border-status-error/20 active:scale-[0.97] shadow-sm',
     };
 
     const sizes = {
-      sm: 'px-3 py-1.5 text-xs',
-      md: 'px-4 py-2 text-sm',
-      lg: 'px-6 py-3 text-base',
+      sm: 'px-3.5 py-1.5 text-[11px] uppercase tracking-wider',
+      md: 'px-5 py-2.5 text-sm',
+      lg: 'px-8 py-4 text-base',
     };
 
     return (

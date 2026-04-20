@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
+import { PageHeader } from '../components/ui/PageHeader';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { widgetsService } from '../services/widgets-service';
 import { appsService, type AppManifest } from '../services/apps-service';
@@ -12,6 +13,7 @@ import { DashboardBanner } from '../components/dashboard/DashboardBanner';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
 import { DashboardRecentApps } from '../components/dashboard/DashboardRecentApps';
 import { DashboardRecentWidgets } from '../components/dashboard/DashboardRecentWidgets';
+import { LayoutDashboard, RefreshCw } from 'lucide-react';
 
 export default function Dashboard() {
   const { user, isLoading: isAuthLoading } = useAuth();
@@ -45,17 +47,15 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  useEffect(() => { fetchDashboardData(); }, []);
 
   const isLoading = isAuthLoading || (isProfileLoading && !profile) || isPlanLoading || isDataLoading;
 
   if (isLoading) {
     return (
-      <div className="space-y-12 animate-in fade-in duration-700">
-        <Skeleton className="h-12 w-full bg-surface-panel rounded-2xl" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="space-y-10 animate-in fade-in duration-700">
+        <Skeleton className="h-20 w-full bg-surface-panel rounded-2xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
             <Skeleton key={i} className="h-44 w-full rounded-3xl bg-surface-panel" />
           ))}
@@ -70,10 +70,28 @@ export default function Dashboard() {
   const editorsLimit = plan?.limits?.editors || 0;
 
   const recentApps = apps.slice(0, 5);
-  const recentWidgets = [...widgets].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 4);
+  const recentWidgets = [...widgets]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, 4);
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <PageHeader
+        icon={<LayoutDashboard className="w-5 h-5" />}
+        title="Command"
+        highlight="Center"
+        description="Your personal broadcast hub. Monitor widgets, integrations, and live data — all in one place."
+        actions={
+          <button
+            onClick={fetchDashboardData}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/[0.07] bg-surface-panel/70 hover:bg-surface-elevated text-content-muted hover:text-content-primary text-xs font-bold transition-all"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            Refresh
+          </button>
+        }
+      />
+
       <DashboardBanner planName={plan?.name} profile={profile} user={user} />
 
       <DashboardStats

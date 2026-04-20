@@ -1,182 +1,220 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/use-auth';
 import { useProfile } from '../../hooks/use-profile';
-import { LogOut, LayoutDashboard, Settings, User as UserIcon, Grid, Layers, Menu, X, FolderHeart } from 'lucide-react';
+import {
+  LogOut, LayoutDashboard, Settings, Grid, Layers,
+  Menu, X, FolderHeart, Bell, ChevronDown, User as UserIcon,
+} from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '../../lib/utils';
 
-type Channel = "alpha" | "beta" | "test" | "stage" | "dev" | "prod";
+type Channel = 'alpha' | 'beta' | 'test' | 'stage' | 'dev' | 'prod';
+
+const navigation = [
+  { name: 'Overview', href: '/', icon: LayoutDashboard },
+  { name: 'My Widgets', href: '/widgets', icon: Layers },
+  { name: 'Explore', href: '/apps', icon: Grid },
+  { name: 'Media', href: '/content', icon: FolderHeart },
+];
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated, logout } = useAuth();
   const { profile } = useProfile();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   if (!isAuthenticated) return <>{children}</>;
 
-  const navigation = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Explore Apps', href: '/apps', icon: Grid },
-    { name: 'Widgets', href: '/widgets', icon: Layers },
-    { name: 'Content', href: '/content', icon: FolderHeart },
-    { name: 'Settings', href: '/settings', icon: Settings },
-  ];
+  const isWidgetDetail = /^\/widgets\/[a-zA-Z0-9-]+$/.test(location.pathname);
+
+  const displayName = profile?.displayName || user?.email?.split('@')[0] || 'User';
+  const initials = displayName.slice(0, 2).toUpperCase();
 
   return (
-    <div className="flex flex-col min-h-screen bg-surface-base text-content-secondary font-sans selection:bg-brand-primary/30 selection:text-brand-accent [scrollbar-gutter:stable] relative overflow-x-hidden">
-      {/* Channel Banner */}
+    <div className="flex flex-col min-h-screen bg-surface-base text-content-secondary font-sans selection:bg-brand-primary/30 selection:text-brand-accent relative overflow-x-hidden">
+
+      {/* ── Channel Banner ─────────────────────────────────────────────── */}
       {(() => {
-        const channel: Channel = (import.meta.env.VITE_APP_CHANNEL ?? (import.meta.env.DEV ? "dev" : "prod")) as Channel;
-        if (!channel) return null;
-
-        let bg = '';
-        let text = '';
-        if (channel === 'alpha') {
-          bg = 'bg-status-error/90';
-          text = 'ALPHA ACCESS - Unstable features ahead';
-        } else if (channel === 'beta') {
-          bg = 'bg-status-warning/90 text-yellow-50';
-          text = 'BETA CHANNEL - Early access features';
-        } else if (channel === 'test' || channel === 'stage') {
-          bg = 'bg-pink-600/90';
-          text = 'TEST CHANNEL - Data may be deleted at any time';
-        } else if (channel === 'dev') {
-          bg = 'bg-status-info/90';
-          text = 'DEVELOPMENT BRANCH';
-        } else {
-          return null;
-        }
-
+        const channel: Channel = (import.meta.env.VITE_APP_CHANNEL ?? (import.meta.env.DEV ? 'dev' : 'prod')) as Channel;
+        const map: Record<string, { bg: string; label: string }> = {
+          alpha: { bg: 'bg-status-error/90', label: 'ALPHA ACCESS — Unstable features ahead' },
+          beta: { bg: 'bg-status-warning/90', label: 'BETA CHANNEL — Early access features' },
+          test: { bg: 'bg-pink-600/90', label: 'TEST CHANNEL — Data may be wiped at any time' },
+          stage: { bg: 'bg-pink-600/90', label: 'STAGING CHANNEL' },
+          dev: { bg: 'bg-status-info/90', label: 'DEVELOPMENT BRANCH' },
+        };
+        const cfg = map[channel];
+        if (!cfg) return null;
         return (
-          <div className={cn("w-full py-1.5 text-center text-xs font-black tracking-widest uppercase shadow-sm z-50", bg)}>
-            {text}
+          <div className={cn('w-full py-1.5 text-center text-[11px] font-black tracking-[0.2em] uppercase z-50', cfg.bg)}>
+            {cfg.label}
           </div>
         );
       })()}
-      {/* Background Effects from Auth */}
-      <div className="fixed top-[0%] left-[-10%] w-[40%] h-[50%] rounded-full bg-brand-primary/10 blur-[120px] pointer-events-none z-0" />
-      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[50%] rounded-full bg-brand-secondary/10 blur-[120px] pointer-events-none z-0" />
 
-      {/* Top Navbar */}
-      {!location.pathname.match(/^\/widgets\/[a-zA-Z0-9-]+$/) && (
-        <header className="h-16 border-b border-border-subtle bg-surface-base/20 backdrop-blur-xl flex items-center justify-between px-4 md:px-8 w-full z-40 transition-colors sticky top-0">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-content-muted hover:text-content-primary transition-colors"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-            <Link to="/" className="flex items-center gap-3">
-              <img
-                src="/logo.png"
-                alt="StarOverlay"
-                className="w-8 h-8 object-contain"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  const next = e.currentTarget.nextElementSibling;
-                  if (next) next.classList.remove('hidden');
-                }}
-              />
-              <div className="hidden w-8 h-8 rounded-xl bg-brand-primary shadow-lg shadow-brand-primary/20 flex items-center justify-center">
-                <span className="text-white font-black text-sm">S</span>
-              </div>
-              <span className="text-base font-black tracking-tight text-content-primary">
-                Star<span className="text-brand-primary">Overlay</span>
-              </span>
-            </Link>
-          </div>
+      {/* ── Ambient blobs ───────────────────────────────────────────────── */}
+      <div className="fixed top-[-10%] left-[-10%] w-[45%] h-[55%] rounded-full bg-brand-primary/8 blur-[130px] pointer-events-none z-0" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[50%] rounded-full bg-brand-secondary/8 blur-[130px] pointer-events-none z-0" />
 
-          <nav className="hidden lg:flex items-center gap-1">
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors',
-                    isActive
-                      ? 'text-brand-primary bg-brand-primary/10'
-                      : 'text-content-muted hover:text-content-secondary hover:bg-surface-panel'
-                  )}
-                >
-                  <item.icon className="w-4 h-4" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
+      {/* ── Top Navbar ─────────────────────────────────────────────────── */}
+      {!isWidgetDetail && (
+        <header className="fixed top-8 left-0 right-0 z-40 w-full flex items-center justify-center pointer-events-none">
+          <div className="flex items-center justify-between w-[calc(100%-2rem)] px-4 py-2 rounded-3xl pointer-events-auto">
 
-          <div className="flex items-center gap-2 md:gap-4">
-            <div className="flex items-center gap-3 pr-2 md:pr-4 md:border-r border-border-default">
-              <div className="text-right hidden md:block">
-                <p className="text-[10px] uppercase font-black text-brand-primary/60 leading-none mb-1">User Profile</p>
-                <p className="text-sm font-bold text-content-primary leading-tight">{profile?.displayName || user?.email.split('@')[0]}</p>
-              </div>
-              <div className="w-9 h-9 rounded-xl bg-surface-panel border border-border-subtle flex items-center justify-center text-content-muted">
-                <UserIcon className="w-4 h-4" />
-              </div>
+            {/* LEFT — Logo */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="lg:hidden p-2 rounded-xl text-content-dimmed hover:text-content-primary hover:bg-white/5 transition-colors"
+              >
+                {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+
+              <Link to="/" className="flex items-center gap-2.5 select-none pl-2">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center shadow-lg shadow-brand-primary/20">
+                  <span className="text-white font-black text-sm">S</span>
+                </div>
+                <span className="text-base font-black tracking-tight text-white hidden sm:block">
+                  Star<span className="text-lavender">Overlay</span>
+                </span>
+              </Link>
             </div>
-            <button
-              onClick={logout}
-              className="p-2.5 bg-surface-panel border border-border-subtle rounded-xl text-content-dimmed hover:text-status-error hover:border-status-error/20 transition-all flex items-center gap-2"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden lg:inline text-xs font-bold uppercase tracking-wider">Logout</span>
-            </button>
-          </div>
 
-          {/* Mobile Navigation Dropdown */}
-          <div className={cn(
-            "fixed inset-0 top-16 bg-surface-base/95 backdrop-blur-2xl lg:hidden transition-all duration-300 z-40 p-6 flex flex-col gap-2",
-            isMobileMenuOpen ? "opacity-100 pointer-events-auto translate-y-0" : "opacity-0 pointer-events-none -translate-y-4"
-          )}>
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={cn(
-                    'flex items-center gap-4 px-6 py-4 rounded-xl text-base font-bold transition-all border',
-                    isActive
-                      ? 'text-brand-primary bg-brand-primary/10 border-brand-primary/20'
-                      : 'text-content-muted hover:text-content-secondary hover:bg-surface-panel border-transparent'
-                  )}
+            {/* CENTER — Refined Island Navigation */}
+            <nav className="hidden lg:flex items-center gap-1 bg-white/[0.03] border border-white/[0.05] rounded-full px-1.5 py-1.5 backdrop-blur-2xl">
+              {navigation.map((item) => {
+                const isActive =
+                  item.href === '/'
+                    ? location.pathname === '/'
+                    : location.pathname.startsWith(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={cn(
+                      'flex items-center gap-2.5 px-6 py-2.5 rounded-full text-[13px] font-bold transition-all duration-300 whitespace-nowrap group',
+                      isActive
+                        ? 'bg-white/[0.08] text-white shadow-xl shadow-black/20 border border-white/[0.05]'
+                        : 'text-content-dimmed hover:text-content-primary'
+                    )}
+                  >
+                    <item.icon className={cn('w-4 h-4 shrink-0 transition-colors', isActive ? 'text-lavender' : 'text-content-dimmed group-hover:text-content-primary')} />
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* RIGHT — Bell + avatar menu */}
+            <div className="flex items-center gap-2">
+              {/* Bell */}
+              <button
+                className="relative w-9 h-9 rounded-xl border border-white/[0.06] bg-surface-panel/60 flex items-center justify-center text-content-dimmed hover:text-content-primary hover:border-white/10 transition-all"
+                title="Notifications"
+              >
+                <Bell className="w-4 h-4" />
+              </button>
+
+              {/* User menu */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-2 pl-1.5 pr-2.5 py-1.5 rounded-xl border border-white/[0.06] bg-surface-panel/60 hover:border-white/10 hover:bg-surface-elevated/60 transition-all"
                 >
-                  <item.icon className="w-5 h-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
+                  <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-brand-primary to-brand-secondary flex items-center justify-center text-white text-[10px] font-black shrink-0">
+                    {initials}
+                  </div>
+                  <span className="hidden sm:block text-xs font-semibold text-content-secondary max-w-[90px] truncate">
+                    {displayName}
+                  </span>
+                  <ChevronDown className={cn('w-3 h-3 text-content-dimmed transition-transform duration-200', isUserMenuOpen && 'rotate-180')} />
+                </button>
 
-            <div className="mt-auto pt-6 border-t border-border-subtle">
-              <div className="p-4 rounded-2xl bg-surface-panel/50 border border-border-subtle flex items-center gap-4">
-                <div className="w-10 h-10 rounded-xl bg-surface-elevated flex items-center justify-center text-content-muted">
-                  <UserIcon className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase font-black text-brand-primary/60 leading-none mb-1">Signed in as</p>
-                  <p className="text-sm font-bold text-content-primary leading-tight">{profile?.displayName || user?.email.split('@')[0]}</p>
-                </div>
+                {/* Dropdown */}
+                {isUserMenuOpen && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
+                    <div className="absolute right-0 top-[calc(100%+8px)] z-50 w-52 rounded-2xl border border-white/[0.08] bg-surface-panel/90 backdrop-blur-2xl shadow-xl shadow-black/40 overflow-hidden">
+                      <div className="px-4 py-3 border-b border-white/[0.05]">
+                        <p className="text-[10px] uppercase font-black text-brand-primary/60 tracking-widest leading-none mb-1">Signed in as</p>
+                        <p className="text-sm font-bold text-content-primary truncate">{displayName}</p>
+                        <p className="text-xs text-content-dimmed truncate mt-0.5">{user?.email}</p>
+                      </div>
+                      <div className="p-1.5">
+                        <Link
+                          to="/settings"
+                          onClick={() => setIsUserMenuOpen(false)}
+                          className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-sm text-content-muted hover:text-content-primary hover:bg-white/5 transition-colors"
+                        >
+                          <UserIcon className="w-4 h-4" />
+                          Profile & Settings
+                        </Link>
+                      </div>
+                      <div className="p-1.5 pt-0 border-t border-white/[0.05]">
+                        <button
+                          onClick={() => { setIsUserMenuOpen(false); logout(); }}
+                          className="flex items-center gap-3 w-full px-3 py-2 rounded-xl text-sm text-content-dimmed hover:text-status-error hover:bg-status-error/5 transition-colors mt-1"
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Sign out
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </header>
       )}
 
-      {/* Main Content */}
-      <main className={cn(
-        "flex-1 overflow-x-hidden relative z-10"
-      )}>
-        {location.pathname.match(/^\/widgets\/[a-zA-Z0-9-]+$/) ? (
+      {/* ── Mobile nav overlay ─────────────────────────────────────────── */}
+      {!isWidgetDetail && (
+        <div
+          className={cn(
+            'fixed inset-0 top-[60px] bg-surface-base/97 backdrop-blur-2xl lg:hidden transition-all duration-300 z-30 p-6 flex flex-col gap-2',
+            isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          )}
+        >
+          {navigation.map((item) => {
+            const isActive =
+              item.href === '/' ? location.pathname === '/' : location.pathname.startsWith(item.href);
+            return (
+              <Link
+                key={item.name}
+                to={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={cn(
+                  'flex items-center gap-4 px-5 py-3.5 rounded-2xl text-sm font-bold transition-all border',
+                  isActive
+                    ? 'text-brand-primary bg-brand-primary/8 border-brand-primary/15'
+                    : 'text-content-muted hover:text-content-secondary hover:bg-white/3 border-transparent'
+                )}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.name}
+              </Link>
+            );
+          })}
+          <div className="mt-auto pt-6 border-t border-white/[0.05]">
+            <button
+              onClick={logout}
+              className="flex items-center gap-3 w-full px-5 py-3.5 rounded-2xl text-sm font-bold text-content-dimmed hover:text-status-error hover:bg-status-error/5 transition-colors border border-transparent"
+            >
+              <LogOut className="w-4 h-4" />
+              Sign out
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Main Content ───────────────────────────────────────────────── */}
+      <main className="flex-1 overflow-x-hidden relative z-10">
+        {isWidgetDetail ? (
           children
         ) : (
-          <div className="max-w-7xl mx-auto p-4 md:p-8 lg:p-12">
+          <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-10">
             {children}
           </div>
         )}

@@ -4,14 +4,12 @@ import { Skeleton } from '../components/ui/skeleton';
 import { ErrorView } from '../components/ui/ErrorView';
 import { Share2, Monitor, Video, PlayCircle, Sparkles } from 'lucide-react';
 import { IntegrationCard } from '../components/integrations/IntegrationCard';
-import { SectionCard } from '../components/settings/SectionCard';
+import { PageHeader } from '../components/ui/PageHeader';
 
 export default function Integrations() {
   const { integrations, isLoading, error, clearError, fetchIntegrations, connect, disconnect, update } = useIntegrations();
 
-  useEffect(() => {
-    return () => clearError();
-  }, [clearError]);
+  useEffect(() => { return () => clearError(); }, [clearError]);
 
   const providers = [
     { id: 'twitch', name: 'Twitch', icon: Video, color: 'text-[#9146ff]', bg: 'bg-[#9146ff]/5 border-[#9146ff]/10 hover:border-[#9146ff]/30 shadow-[#9146ff]/10' },
@@ -22,12 +20,8 @@ export default function Integrations() {
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-[60vh] animate-in fade-in duration-500">
-        <div className="max-w-md w-full glass-panel p-12 rounded-[3rem] border-rose-500/20 text-center space-y-8">
-          <ErrorView
-            message={error}
-            onRetry={fetchIntegrations}
-            title="Failed to Load Integrations"
-          />
+        <div className="max-w-md w-full">
+          <ErrorView message={error} onRetry={fetchIntegrations} title="Failed to Load Integrations" />
         </div>
       </div>
     );
@@ -35,15 +29,11 @@ export default function Integrations() {
 
   if (isLoading && integrations.length === 0) {
     return (
-      <div className="space-y-12 animate-in fade-in duration-700">
-        <div className="space-y-4 px-1">
-          <Skeleton className="h-4 w-32 bg-surface-panel" />
-          <Skeleton className="h-14 w-80 bg-surface-panel rounded-2xl" />
-          <Skeleton className="h-4 w-96 bg-surface-panel" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="space-y-10 animate-in fade-in duration-700">
+        <Skeleton className="h-20 w-full bg-surface-panel rounded-2xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(3)].map((_, i) => (
-            <Skeleton key={i} className="h-72 w-full rounded-[2.5rem] bg-surface-panel" />
+            <Skeleton key={i} className="h-72 w-full rounded-3xl bg-surface-panel" />
           ))}
         </div>
       </div>
@@ -51,15 +41,17 @@ export default function Integrations() {
   }
 
   return (
-    <SectionCard
-      title="Service Integrations"
-      subtitle="Connect and manage your streaming accounts to synchronize real-time widgets and broadcast data."
-      icon={Share2}
-    >
+    <div className="flex flex-col gap-8 animate-in fade-in duration-700">
+      <PageHeader
+        icon={<Share2 className="w-5 h-5" />}
+        title="Service"
+        highlight="Integrations"
+        description="Connect your streaming accounts to synchronize real-time widgets and broadcast data across all platforms."
+      />
 
       <div className="flex flex-col gap-4">
         {providers.map((provider) => {
-          const integration = integrations.find(i => i.provider === provider.id);
+          const integration = integrations.find((i) => i.provider === provider.id);
           return (
             <IntegrationCard
               key={provider.id}
@@ -73,12 +65,12 @@ export default function Integrations() {
         })}
       </div>
 
-      <div className="p-6 rounded-2xl border border-dashed border-border-default bg-surface-card/40 flex flex-col items-center justify-center text-center mt-6">
-        <div className="w-10 h-10 rounded-full bg-surface-panel flex items-center justify-center border border-border-subtle">
+      <div className="p-6 rounded-2xl border border-dashed border-border-default bg-surface-card/40 flex flex-col items-center justify-center text-center">
+        <div className="w-10 h-10 rounded-full bg-surface-panel flex items-center justify-center border border-white/[0.06]">
           <Sparkles className="w-5 h-5 text-content-dimmed" />
         </div>
         <p className="mt-3 text-content-dimmed text-sm font-medium">More integrations coming soon</p>
       </div>
-    </SectionCard>
+    </div>
   );
 }

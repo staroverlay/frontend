@@ -54,7 +54,7 @@ export function WidgetCard({ widget, onDelete }: WidgetCardProps) {
     return (
         <Link
             to={`/widgets/${widget.id}`}
-            className="group relative flex flex-col rounded-3xl bg-surface-card border border-border-subtle overflow-hidden hover:bg-surface-panel hover:border-brand-primary/30 transition-all duration-300 shadow-premium block"
+            className="group relative flex flex-col rounded-3xl bg-surface-card border border-white/[0.05] overflow-hidden card-hover shadow-premium block"
         >
             {/* Glow effect on hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0" />

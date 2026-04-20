@@ -3,67 +3,80 @@
 
 @theme {
   --color-brand-primary: #8b5cf6;
-  --color-brand-secondary: #d946ef;
-  --color-brand-accent: #c084fc;
+  --color-brand-secondary: #c084fc;
+  --color-brand-accent: #d8b4fe;
+  --color-lavender: #a78bfa;
 
-  --color-surface-base: #09090b;
-  --color-surface-card: #0c0b16;
-  --color-surface-panel: #18181b;
-  --color-surface-elevated: #27272a;
+  --color-surface-base: #060608;
+  --color-surface-card: #0c0c0e;
+  --color-surface-panel: #111114;
+  --color-surface-elevated: #16161a;
+  --color-surface-island: rgba(10, 10, 12, 0.8);
 
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-default: rgba(255, 255, 255, 0.1);
-  --color-border-accent: rgba(139, 92, 246, 0.3);
+  --color-border-subtle: rgba(255, 255, 255, 0.03);
+  --color-border-default: rgba(255, 255, 255, 0.06);
+  --color-border-accent: rgba(167, 139, 250, 0.2);
 
   --color-content-primary: #ffffff;
-  --color-content-secondary: #d1d1d6;
-  --color-content-muted: #a1a1aa;
-  --color-content-dimmed: #71717a;
+  --color-content-secondary: #e2e8f0;
+  --color-content-muted: #94a3b8;
+  --color-content-dimmed: #64748b;
 
   --color-status-success: #10b981;
   --color-status-warning: #f59e0b;
-  --color-status-error: #f43f5e;
-  --color-status-info: #0ea5e9;
+  --color-status-error: #ef4444;
+  --color-status-info: #3b82f6;
 
-  --font-sans: 'Inter', 'Outfit', sans-serif;
+  --font-sans: 'Inter', 'Outfit', system-ui, sans-serif;
+  --font-display: 'Outfit', sans-serif;
 
-  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 30px rgba(139, 92, 246, 0.15);
+  --shadow-island: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
 @layer base {
   body {
     @apply bg-surface-base text-content-secondary antialiased relative;
-    background: radial-gradient(circle at 50% 50%, #0c0b16 0%, #09090b 100%);
+    background-image:
+      radial-gradient(circle at 1.5px 1.5px, rgba(255, 255, 255, 0.04) 1px, transparent 0);
+    background-size: 32px 32px;
+    min-height: 100vh;
   }
 
   body::before {
-    content: '';
+    content: "";
     position: fixed;
     inset: 0;
-    background-image:
-      radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
-      radial-gradient(1px 1px at 40px 70px, #ffffff, rgba(0, 0, 0, 0)),
-      radial-gradient(2px 2px at 50px 160px, #ffffff, rgba(0, 0, 0, 0)),
-      radial-gradient(2px 2px at 90px 40px, #ffffff, rgba(0, 0, 0, 0)),
-      radial-gradient(1px 1px at 130px 80px, #ffffff, rgba(0, 0, 0, 0));
-    background-repeat: repeat;
-    background-size: 200px 200px;
-    opacity: 0.1;
-    z-index: -1;
+    background: radial-gradient(circle at 50% -20%, rgba(139, 92, 246, 0.08) 0%, transparent 70%);
     pointer-events: none;
+    z-index: -1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
   }
 }
 
 @layer components {
   .glass-panel {
-    @apply bg-surface-panel/40 backdrop-blur-xl border border-border-subtle shadow-premium;
+    @apply bg-surface-panel/50 backdrop-blur-2xl border border-white/[0.05] shadow-premium;
   }
 
   .purple-gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary font-black;
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-brand-primary via-brand-accent to-brand-secondary font-black;
   }
 
   .btn-primary {
     @apply px-6 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2.5;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:translate-y-[-2px] hover:border-white/10 hover:bg-white/[0.02] hover:shadow-glow;
   }
 }
