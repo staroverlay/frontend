@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
+import { Monitor, Video, PlayCircle, Sparkles } from 'lucide-react';
+
 import { useIntegrations } from '../hooks/use-integrations';
 import { Skeleton } from '../components/ui/skeleton';
 import { ErrorView } from '../components/ui/ErrorView';
-import { Share2, Monitor, Video, PlayCircle, Sparkles } from 'lucide-react';
 import { IntegrationCard } from '../components/integrations/IntegrationCard';
-import { PageHeader } from '../components/ui/PageHeader';
 
 export default function Integrations() {
   const { integrations, isLoading, error, clearError, fetchIntegrations, connect, disconnect, update } = useIntegrations();
@@ -42,13 +42,6 @@ export default function Integrations() {
 
   return (
     <div className="flex flex-col gap-8 animate-in fade-in duration-700">
-      <PageHeader
-        icon={<Share2 className="w-5 h-5" />}
-        title="Service"
-        highlight="Integrations"
-        description="Connect your streaming accounts to synchronize real-time widgets and broadcast data across all platforms."
-      />
-
       <div className="flex flex-col gap-4">
         {providers.map((provider) => {
           const integration = integrations.find((i) => i.provider === provider.id);

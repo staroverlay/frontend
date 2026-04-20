@@ -43,7 +43,7 @@ export default function VerifyEmail() {
     setError('');
     setSuccess('');
     try {
-      await authService.resendVerification();
+      await authService.resendVerification({ email });
       setSuccess('Verification code resent!');
       setResendCooldown(60);
       const timer = setInterval(() => {

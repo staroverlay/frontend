@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../hooks/use-auth';
 import { useProfile } from '../../hooks/use-profile';
 import {
-  LogOut, LayoutDashboard, Settings, Grid, Layers,
+  LogOut, LayoutDashboard, Grid, Layers,
   Menu, X, FolderHeart, Bell, ChevronDown, User as UserIcon,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';

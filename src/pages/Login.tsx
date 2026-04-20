@@ -1,17 +1,22 @@
 import React, { useState } from 'react';
 import { Mail, Lock, LogIn, Video, Monitor, PlayCircle, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 import { useAuth } from '../hooks/use-auth';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Link } from 'react-router-dom';
 import { getError } from '../lib/utils';
+import { authService } from '../services/auth-service';
 
 export default function Login() {
-  const { login, initiateOAuthLogin, isLoading } = useAuth();
+  const { login, initiateOAuthLogin, isLoading, verifyEmail } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [code, setCode] = useState('');
+  const [isResending, setIsResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,7 +24,46 @@ export default function Login() {
     try {
       await login({ email, password });
     } catch (err: unknown) {
-      setError(getError(err, 'Failed to login'));
+      const errMsg = getError(err, 'Failed to login');
+      if (errMsg === 'EMAIL_NOT_VERIFIED' || errMsg.toLowerCase() === 'email not verified') {
+        setNeedsVerification(true);
+      } else {
+        setError(errMsg);
+      }
+    }
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    try {
+      await verifyEmail({ email, code });
+      await login({ email, password });
+    } catch (err: unknown) {
+      setError(getError(err, 'Invalid verification code'));
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendCooldown > 0 || isResending) return;
+    setIsResending(true);
+    setError('');
+    try {
+      await authService.resendVerification({ email });
+      setResendCooldown(60);
+      const timer = setInterval(() => {
+        setResendCooldown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } catch (err: unknown) {
+      setError(getError(err, 'Failed to resend code'));
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -61,85 +105,132 @@ export default function Login() {
         <div className="glass-panel p-8 md:p-10 rounded-[2.5rem] shadow-premium animate-in fade-in zoom-in-95 duration-1000 border-border-subtle hover:border-brand-primary/20 transition-all duration-500 relative overflow-hidden group">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div className="space-y-4">
+          {needsVerification ? (
+            <form className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-500" onSubmit={handleVerify}>
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold mb-2">Verify Email</h2>
+                <p className="text-sm text-content-dimmed">Enter the 6-digit code sent to {email}</p>
+              </div>
               <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-content-dimmed group-focus-within:text-brand-primary transition-colors z-10" />
                 <Input
-                  placeholder="Email address"
-                  type="email"
-                  className="pl-11"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="000000"
+                  className="text-center tracking-[0.5em] font-bold text-xl h-14"
+                  maxLength={6}
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  autoFocus
                   required
                 />
               </div>
-
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-content-dimmed group-focus-within:text-brand-primary transition-colors z-10" />
-                <Input
-                  placeholder="Password"
-                  type="password"
-                  className="pl-11"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            {error && (
-              <div className="px-4 py-3 bg-status-error/10 border border-status-error/20 text-status-error rounded-2xl text-xs font-bold text-center animate-in slide-in-from-top-2 duration-300">
-                {error}
-              </div>
-            )}
-
-            <Button className="w-full h-13 rounded-2xl" disabled={isLoading}>
-              {isLoading ? (
-                <div className="flex items-center gap-3">
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Signing in...</span>
+              {error && (
+                <div className="px-4 py-3 bg-status-error/10 border border-status-error/20 text-status-error rounded-2xl text-xs font-bold text-center">
+                  {error}
                 </div>
-              ) : 'Sign in'}
-            </Button>
-          </form>
-
-          <div className="mt-10">
-            <div className="relative flex items-center justify-center mb-8">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border-subtle" /></div>
-              <span className="relative bg-surface-card backdrop-blur-md px-4 text-[10px] text-content-dimmed font-black uppercase tracking-widest">Or connect via</span>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3">
-              <button
-                className="w-full h-13 flex items-center justify-center gap-3 rounded-2xl bg-[#9146ff] hover:bg-[#a970ff] text-white transition-all shadow-lg shadow-[#9146ff]/10 active:scale-[0.98] font-bold"
-                onClick={() => initiateOAuthLogin('twitch')}
-                disabled={isLoading}
-              >
-                <Video className="w-5 h-5" />
-                <span className="text-sm">Twitch</span>
-              </button>
-
-              <div className="grid grid-cols-2 gap-3">
+              )}
+              <Button className="w-full h-13 rounded-2xl" disabled={isLoading}>
+                {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Confirm'}
+              </Button>
+              <div className="flex items-center justify-between text-sm mt-4">
                 <button
-                  className="h-13 flex items-center justify-center gap-2 rounded-2xl bg-surface-panel border border-border-subtle text-content-secondary hover:bg-surface-elevated hover:text-content-primary transition-all active:scale-[0.98] font-bold"
-                  onClick={() => initiateOAuthLogin('kick')}
-                  disabled={isLoading}
+                  type="button"
+                  onClick={() => setNeedsVerification(false)}
+                  className="text-content-dimmed hover:text-white"
                 >
-                  <Monitor className="w-4 h-4" />
-                  <span className="text-sm">Kick</span>
+                  Back to Login
                 </button>
                 <button
-                  className="h-13 flex items-center justify-center gap-2 rounded-2xl bg-surface-panel border border-border-subtle text-content-secondary hover:bg-surface-elevated hover:text-content-primary transition-all active:scale-[0.98] font-bold"
-                  onClick={() => initiateOAuthLogin('youtube')}
-                  disabled={isLoading}
+                  type="button"
+                  onClick={handleResend}
+                  disabled={resendCooldown > 0 || isResending}
+                  className="text-brand-primary font-bold hover:text-brand-accent disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <PlayCircle className="w-4 h-4" />
-                  <span className="text-sm">YouTube</span>
+                  {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : isResending ? 'Resending...' : 'Resend code'}
                 </button>
               </div>
-            </div>
-          </div>
+            </form>
+          ) : (
+            <>
+              <form className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-500" onSubmit={handleSubmit}>
+                <div className="space-y-4">
+                  <div className="relative group">
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-content-dimmed group-focus-within:text-brand-primary transition-colors z-10" />
+                    <Input
+                      placeholder="Email address"
+                      type="email"
+                      className="pl-11"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="relative group">
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-content-dimmed group-focus-within:text-brand-primary transition-colors z-10" />
+                    <Input
+                      placeholder="Password"
+                      type="password"
+                      className="pl-11"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                {error && (
+                  <div className="px-4 py-3 bg-status-error/10 border border-status-error/20 text-status-error rounded-2xl text-xs font-bold text-center animate-in slide-in-from-top-2 duration-300">
+                    {error}
+                  </div>
+                )}
+
+                <Button className="w-full h-13 rounded-2xl" disabled={isLoading}>
+                  {isLoading ? (
+                    <div className="flex items-center gap-3">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <span>Signing in...</span>
+                    </div>
+                  ) : 'Sign in'}
+                </Button>
+              </form>
+
+              <div className="mt-10">
+                <div className="relative flex items-center justify-center mb-8">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border-subtle" /></div>
+                  <span className="relative bg-surface-card backdrop-blur-md px-4 text-[10px] text-content-dimmed font-black uppercase tracking-widest">Or connect via</span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                  <button
+                    className="w-full h-13 flex items-center justify-center gap-3 rounded-2xl bg-[#9146ff] hover:bg-[#a970ff] text-white transition-all shadow-lg shadow-[#9146ff]/10 active:scale-[0.98] font-bold"
+                    onClick={() => initiateOAuthLogin('twitch')}
+                    disabled={isLoading}
+                  >
+                    <Video className="w-5 h-5" />
+                    <span className="text-sm">Twitch</span>
+                  </button>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      className="h-13 flex items-center justify-center gap-2 rounded-2xl bg-surface-panel border border-border-subtle text-content-secondary hover:bg-surface-elevated hover:text-content-primary transition-all active:scale-[0.98] font-bold"
+                      onClick={() => initiateOAuthLogin('kick')}
+                      disabled={isLoading}
+                    >
+                      <Monitor className="w-4 h-4" />
+                      <span className="text-sm">Kick</span>
+                    </button>
+                    <button
+                      className="h-13 flex items-center justify-center gap-2 rounded-2xl bg-surface-panel border border-border-subtle text-content-secondary hover:bg-surface-elevated hover:text-content-primary transition-all active:scale-[0.98] font-bold"
+                      onClick={() => initiateOAuthLogin('youtube')}
+                      disabled={isLoading}
+                    >
+                      <PlayCircle className="w-4 h-4" />
+                      <span className="text-sm">YouTube</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         <p className="mt-10 text-center text-sm text-content-dimmed font-medium">
