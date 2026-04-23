@@ -35,7 +35,7 @@ export const WidgetAppSettings = () => {
         <div className="space-y-4 animate-in fade-in slide-in-from-left-2 duration-300">
             <AppSettingsProvider
                 userId={user?.id}
-                integrationIds={metaDraft.integrations}
+                integrationIds={metaDraft.integration_ids}
                 values={settingsDraft}
                 onChange={(id, val) => {
                     if (activeTabData.isGroup) {
