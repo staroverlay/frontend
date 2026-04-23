@@ -36,6 +36,9 @@ export type Integration = {
   providerAvatarUrl: string | null;
   tokenExpiresAt: string | null;
   allowOauthLogin: boolean;
+  eventsubActive: boolean;
+  eventsubSyncError: string | null;
+  eventsubLastSyncAt: string | null;
   createdAt: string;
   updatedAt: string;
 };

@@ -1,4 +1,4 @@
-import { CheckCircle2, RotateCcw, Unplug, type LucideIcon } from 'lucide-react';
+import { CheckCircle2, RotateCcw, Unplug, Sparkles, type LucideIcon } from 'lucide-react';
 
 import { cn } from '../../lib/utils';
 import { type Integration } from '../../lib/types';
@@ -50,10 +50,29 @@ export function IntegrationCard({
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-bold text-content-primary leading-none">{provider.name}</h3>
             {isConnected ? (
-              <span className="flex items-center gap-1 px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold">
-                <CheckCircle2 className="w-3 h-3" />
-                Connected
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="flex items-center gap-1 px-1.5 py-0.5 rounded border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold">
+                  <CheckCircle2 className="w-3 h-3" />
+                  App Connected
+                </span>
+
+                {integration.eventsubActive ? (
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded border border-blue-500/20 bg-blue-500/10 text-blue-400 text-[10px] font-semibold" title="Real-time events are active">
+                    <Sparkles className="w-3 h-3" />
+                    Live
+                  </span>
+                ) : integration.eventsubSyncError ? (
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/20 bg-amber-500/10 text-amber-400 text-[10px] font-semibold" title={integration.eventsubSyncError}>
+                    <RotateCcw className="w-3 h-3 animate-spin-slow" />
+                    Syncing...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 px-1.5 py-0.5 rounded border border-blue-500/20 bg-blue-500/10 text-blue-400 text-[10px] font-semibold">
+                    <RotateCcw className="w-3 h-3 animate-spin" />
+                    Connecting...
+                  </span>
+                )}
+              </div>
             ) : (
               <span className="px-1.5 py-0.5 rounded border border-border-subtle bg-surface-panel text-content-dimmed text-[10px] font-semibold">
                 Not connected
