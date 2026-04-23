@@ -11,11 +11,11 @@ export const useIntegrations = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { 
-    integrations, 
-    setIntegrations, 
-    updateIntegration, 
-    removeIntegration 
+  const {
+    integrations,
+    setIntegrations,
+    updateIntegration,
+    removeIntegration
   } = useIntegrationsStore();
 
   const fetchIntegrations = useCallback(async () => {
@@ -96,6 +96,18 @@ export const useIntegrations = () => {
     }
   };
 
+  const sync = async (provider: string) => {
+    setIsLoading(true);
+    try {
+      await integrationsService.syncIntegration(provider);
+      await fetchIntegrations(); // Refresh data to see new status
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     integrations,
     status,
@@ -105,6 +117,7 @@ export const useIntegrations = () => {
     disconnect,
     update,
     connect,
+    sync,
     initiateOAuthLogin,
     clearError
   };

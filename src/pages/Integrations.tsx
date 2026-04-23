@@ -7,7 +7,7 @@ import { ErrorView } from '../components/ui/ErrorView';
 import { IntegrationCard } from '../components/integrations/IntegrationCard';
 
 export default function Integrations() {
-  const { integrations, isLoading, error, clearError, fetchIntegrations, connect, disconnect, update } = useIntegrations();
+  const { integrations, isLoading, error, clearError, fetchIntegrations, connect, disconnect, update, sync } = useIntegrations();
 
   useEffect(() => { return () => clearError(); }, [clearError]);
 
@@ -53,6 +53,7 @@ export default function Integrations() {
               onConnect={() => connect(provider.id)}
               onDisconnect={() => disconnect(provider.id)}
               onUpdate={(id, data) => update(id, data)}
+              onSync={() => sync(provider.id)}
             />
           );
         })}

@@ -36,4 +36,8 @@ export const integrationsService = {
     const { data } = await api.get(`/integrations/rewards/${integrationId}`);
     return data.rewards;
   },
+  async syncIntegration(provider: string): Promise<BasicResponse> {
+    const { data } = await api.post(`/integrations/${provider}/sync`);
+    return data;
+  }
 };

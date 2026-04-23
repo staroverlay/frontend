@@ -15,6 +15,7 @@ interface IntegrationCardProps {
   onConnect: (id: string) => void;
   onDisconnect: (id: string) => void;
   onUpdate: (id: string, data: any) => void;
+  onSync: () => void;
 }
 
 export function IntegrationCard({
@@ -23,6 +24,7 @@ export function IntegrationCard({
   onConnect,
   onDisconnect,
   onUpdate,
+  onSync,
 }: IntegrationCardProps) {
   const isConnected = !!integration;
 
@@ -111,7 +113,7 @@ export function IntegrationCard({
 
             <button
               className="p-2 border border-border-subtle bg-surface-panel hover:bg-surface-elevated text-content-muted transition-colors rounded-lg flex items-center justify-center"
-              onClick={() => onUpdate(provider.id, {})}
+              onClick={onSync}
               title="Sync Data"
             >
               <RotateCcw className="w-4 h-4" />
