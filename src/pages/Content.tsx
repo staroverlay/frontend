@@ -1,5 +1,5 @@
 import { MediaLibrary } from '../components/media/MediaLibrary';
-import { PageHeader } from '../components/ui/PageHeader';
+import { PageHeader } from '../components/layouts/PageHeader';
 import { FolderHeart, Upload } from 'lucide-react';
 
 export default function Content() {

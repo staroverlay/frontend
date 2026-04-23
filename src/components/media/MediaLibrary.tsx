@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { UploadCloud, Image as ImageIcon, Loader2, AlertCircle, Search, SortAsc, ChevronDown, X } from 'lucide-react';
-import { UploadsService } from '../../services/uploads.service';
+import { UploadCloud, Image as ImageIcon, Loader2, Search, SortAsc, ChevronDown, X } from 'lucide-react';
+import { uploadsService } from '../../services/uploads-service';
 import { useSubscriptionStore } from '../../stores/subscription-store';
 import { MediaCard } from './MediaCard';
+import { EmptyState } from '../layouts/EmptyState';
+import { ErrorView } from '../layouts/ErrorView';
+import { cn } from '../../lib/utils';
 
 export interface UploadItem {
     id: string;
@@ -58,11 +61,11 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
         try {
             setError('');
             const [quotaData, uploadsData] = await Promise.all([
-                UploadsService.getQuota(),
-                UploadsService.listUploads(),
+                uploadsService.getQuota(),
+                uploadsService.listUploads(),
             ]);
             setQuota(quotaData);
-            setUploads(uploadsData);
+            setUploads(uploadsData.uploads || uploadsData); // Handle both {uploads: []} and []
         } catch (err: any) {
             setError(err.message || 'Failed to load content');
         } finally {
@@ -131,7 +134,7 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
             setError('');
             setUploadProgress(0);
 
-            await UploadsService.uploadFile(file, (p) => setUploadProgress(p));
+            await uploadsService.uploadFile(file, (p) => setUploadProgress(p));
             await fetchContent();
         } catch (err: any) {
             setError(err.message || 'Upload failed');
@@ -143,7 +146,7 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
 
     const handleDelete = async (id: string) => {
         try {
-            await UploadsService.deleteUpload(id);
+            await uploadsService.deleteUpload(id);
             setUploads(uploads.filter((u: UploadItem) => u.id !== id));
             setQuota((prev: Quota | null) => prev ? {
                 ...prev,
@@ -165,8 +168,9 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
 
     if (isLoading) {
         return (
-            <div className="flex h-64 items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+                <Loader2 className="h-8 w-8 animate-spin text-brand-primary" />
+                <p className="text-xs font-black uppercase tracking-widest text-content-dimmed">Accessing Vault...</p>
             </div>
         );
     }
@@ -174,50 +178,50 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
     const quotaPercent = quota ? (quota.usedBytes / quota.maxBytes) * 100 : 0;
 
     return (
-        <div className="space-y-6 flex flex-col h-full bg-black/20 overflow-hidden">
+        <div className="space-y-6 flex flex-col h-full bg-surface-card/10 overflow-hidden">
             {error && (
-                <div className="flex items-center gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 mx-1">
-                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                    <div className="flex-1 text-xs">
-                        <p className="font-bold">Action Failed</p>
-                        <p className="opacity-80">{error}</p>
-                    </div>
-                    <button onClick={() => setError('')} className="p-1 hover:bg-white/10 rounded-lg transition-colors">
+                <div className="flex items-center gap-3 p-4 rounded-xl bg-status-error/10 border border-status-error/20 text-status-error mx-1 animate-in slide-in-from-top-2">
+                    <ErrorView message={error} title="Action Failed" onRetry={fetchContent} />
+                    <button onClick={() => setError('')} className="absolute top-4 right-4 p-1 hover:bg-white/10 rounded-lg transition-colors">
                         <X className="w-4 h-4" />
                     </button>
                 </div>
             )}
-            <div className="flex flex-col gap-4 shrink-0">
-                <div className="flex items-center justify-between px-1">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">Plan Quota</h2>
+
+            <div className="flex flex-col gap-4 shrink-0 px-2 pt-2">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-content-dimmed">Plan Quota</h2>
                     {plan && (
-                        <span className="text-[10px] font-black uppercase tracking-widest text-violet-500/60 bg-violet-500/5 px-2 py-0.5 rounded-full border border-violet-500/10">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-brand-primary/60 bg-brand-primary/5 px-2 py-0.5 rounded-full border border-brand-primary/10">
                             {plan.name} Tier
                         </span>
                     )}
                 </div>
+
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div className="flex items-center gap-3 flex-1">
                         <div className="relative flex-1 max-w-xs group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-500 group-focus-within:text-violet-400 transition-colors" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-content-dimmed group-focus-within:text-brand-primary transition-colors" />
                             <input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Search repository..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full bg-zinc-900 border border-white/5 rounded-xl py-2 pl-9 pr-4 text-xs text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all font-sans"
+                                className="w-full bg-surface-panel/50 border border-border-subtle rounded-xl py-2 pl-9 pr-4 text-xs text-content-primary placeholder:text-content-dimmed focus:outline-none focus:ring-1 focus:ring-brand-primary/40 transition-all"
                             />
                         </div>
 
-                        <div className="flex items-center bg-zinc-950/50 p-1 rounded-xl border border-white/5">
+                        <div className="flex items-center bg-surface-panel/30 p-1 rounded-xl border border-border-subtle">
                             {(['all', 'image', 'video', 'audio'] as const).map((t) => (
                                 <button
                                     key={t}
                                     onClick={() => setFilterType(t)}
-                                    className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-tight transition-all ${filterType === t
-                                        ? 'bg-zinc-800 text-white shadow-sm'
-                                        : 'text-zinc-500 hover:text-zinc-300'
-                                        }`}
+                                    className={cn(
+                                        "px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-tight transition-all",
+                                        filterType === t
+                                            ? "bg-surface-elevated text-content-primary shadow-sm border border-white/[0.05]"
+                                            : "text-content-dimmed hover:text-content-secondary"
+                                    )}
                                 >
                                     {t === 'all' ? 'All' : t === 'image' ? 'Images' : t === 'video' ? 'Videos' : 'Audio'}
                                 </button>
@@ -230,7 +234,7 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                             <select
                                 value={sortBy}
                                 onChange={(e) => setSortBy(e.target.value as SortOption)}
-                                className="appearance-none bg-zinc-900 border border-white/5 rounded-xl py-2 pl-8 pr-8 text-[11px] font-bold text-zinc-400 focus:outline-none focus:ring-1 focus:ring-violet-500/40 transition-all cursor-pointer"
+                                className="appearance-none bg-surface-panel/50 border border-border-subtle rounded-xl py-2 pl-8 pr-8 text-[11px] font-bold text-content-muted focus:outline-none focus:ring-1 focus:ring-brand-primary/40 transition-all cursor-pointer hover:border-brand-primary/20"
                             >
                                 <option value="date-newest">Newest</option>
                                 <option value="date-oldest">Oldest</option>
@@ -239,8 +243,8 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                                 <option value="size-largest">Largest</option>
                                 <option value="size-smallest">Smallest</option>
                             </select>
-                            <SortAsc className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-600 pointer-events-none" />
-                            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-zinc-600 pointer-events-none" />
+                            <SortAsc className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-content-dimmed pointer-events-none" />
+                            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-content-dimmed pointer-events-none" />
                         </div>
 
                         {allowUpload && (
@@ -255,7 +259,7 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                                 />
                                 <button
                                     disabled={isUploading}
-                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:pointer-events-none shadow-lg shadow-violet-950/20 active:scale-95"
+                                    className="flex items-center gap-2 px-6 py-2 rounded-xl bg-brand-primary hover:bg-brand-primary/90 text-white text-[11px] font-black uppercase tracking-widest transition-all disabled:opacity-50 disabled:pointer-events-none shadow-lg shadow-brand-primary/20 active:scale-95"
                                 >
                                     {isUploading ? (
                                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -270,42 +274,56 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                 </div>
 
                 {quota && allowUpload && (
-                    <div className="flex flex-col gap-2 px-1">
-                        <div className="flex items-center gap-3">
-                            <div className="flex-1 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                    <div className="flex flex-col gap-2.5 bg-surface-panel/20 p-3 rounded-2xl border border-border-subtle">
+                        <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between px-0.5">
+                                <span className="text-[9px] font-black uppercase text-content-dimmed tracking-wider">Storage Volume</span>
+                                <span className="text-[9px] font-bold text-content-muted tabular-nums">
+                                    <span className="text-content-primary">{formatBytes(quota.usedBytes)}</span> / {formatBytes(quota.maxBytes)}
+                                </span>
+                            </div>
+                            <div className="h-1 w-full bg-surface-panel rounded-full overflow-hidden border border-white/[0.03]">
                                 <div
-                                    className={`h-full transition-all duration-500 ${(quota.usedBytes / quota.maxBytes) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'}`}
+                                    className={cn(
+                                        "h-full transition-all duration-700 rounded-full",
+                                        (quota.usedBytes / quota.maxBytes) >= 0.9 ? 'bg-status-warning' : 'bg-brand-primary'
+                                    )}
                                     style={{ width: `${Math.min(100, quotaPercent)}%` }}
                                 />
                             </div>
-                            <span className="text-[9px] font-black uppercase text-zinc-500 tabular-nums min-w-[100px] text-right">
-                                <span className="text-zinc-400 mr-1">{formatBytes(quota.usedBytes)}</span> / {formatBytes(quota.maxBytes)}
-                            </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="flex-1 h-1 bg-zinc-900 rounded-full overflow-hidden border border-white/5">
+                        <div className="flex flex-col gap-1.5">
+                            <div className="flex items-center justify-between px-0.5">
+                                <span className="text-[9px] font-black uppercase text-content-dimmed tracking-wider">File Limit</span>
+                                <span className="text-[9px] font-bold text-content-muted tabular-nums">
+                                    <span className="text-content-primary">{quota.usedCount}</span> / {quota.maxCount} files
+                                </span>
+                            </div>
+                            <div className="h-1 w-full bg-surface-panel rounded-full overflow-hidden border border-white/[0.03]">
                                 <div
-                                    className={`h-full transition-all duration-500 ${(quota.usedCount / quota.maxCount) >= 0.9 ? 'bg-amber-500' : 'bg-violet-600'}`}
+                                    className={cn(
+                                        "h-full transition-all duration-700 rounded-full",
+                                        (quota.usedCount / quota.maxCount) >= 0.9 ? 'bg-status-warning' : 'bg-brand-primary'
+                                    )}
                                     style={{ width: `${Math.min(100, (quota.usedCount / quota.maxCount) * 100)}%` }}
                                 />
                             </div>
-                            <span className="text-[9px] font-black uppercase text-zinc-500 tabular-nums min-w-[100px] text-right">
-                                <span className="text-zinc-400 mr-1">{quota.usedCount}</span> / {quota.maxCount} Files
-                            </span>
                         </div>
                     </div>
                 )}
             </div>
 
-            <div className="flex-1 overflow-y-auto min-h-0 scrollbar-hide">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 py-1 px-1">
-                    {filteredAndSortedUploads.length === 0 ? (
-                        <div className="col-span-full flex flex-col items-center justify-center text-zinc-600 bg-zinc-950/40 rounded-2xl border border-white/5 border-dashed p-12">
-                            <ImageIcon className="w-8 h-8 opacity-20 mb-4" />
-                            <p className="text-[11px] font-black uppercase tracking-widest text-zinc-500">No media found</p>
-                        </div>
-                    ) : (
-                        filteredAndSortedUploads.map((upload: UploadItem) => (
+            <div className="flex-1 overflow-y-auto min-h-0 px-2 pb-4 scrollbar-hide">
+                {filteredAndSortedUploads.length === 0 ? (
+                    <EmptyState
+                        icon={ImageIcon}
+                        title="Empty Library"
+                        description={searchQuery ? "No files match your search criteria." : "You haven't uploaded any media yet. Files you upload will appear here."}
+                        className="py-32"
+                    />
+                ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                        {filteredAndSortedUploads.map((upload: UploadItem) => (
                             <MediaCard
                                 key={upload.id}
                                 upload={upload}
@@ -314,9 +332,9 @@ export const MediaLibrary: React.FC<MediaLibraryProps> = ({
                                 formatBytes={formatBytes}
                                 isSelected={selectedId === upload.id}
                             />
-                        ))
-                    )}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </div>
     );

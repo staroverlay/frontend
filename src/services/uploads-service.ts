@@ -3,7 +3,7 @@ import { ThumbnailGenerator } from '../lib/thumbnail-generator';
 
 const UPLOAD_SERVER = import.meta.env.VITE_UPLOAD_SERVER || 'http://localhost:8787';
 
-export const UploadsService = {
+export const uploadsService = {
     async getQuota() {
         const { data } = await api.get('/uploads/quota');
         return data;

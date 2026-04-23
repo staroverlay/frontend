@@ -1,13 +1,21 @@
 import api from '../lib/api-client';
-import type { AuthResponse, BasicResponse, User } from '../lib/types';
+import type {
+  AuthResponse,
+  BasicResponse,
+  User,
+  LoginPayload,
+  RegisterPayload,
+  VerifyEmailPayload,
+  ChangePasswordPayload
+} from '../lib/types';
 
 export const authService = {
-  async register(body: any): Promise<BasicResponse & { userId: string }> {
+  async register(body: RegisterPayload): Promise<BasicResponse & { userId: string }> {
     const { data } = await api.post('/auth/register', body);
     return data;
   },
 
-  async verifyEmail(body: any): Promise<BasicResponse> {
+  async verifyEmail(body: VerifyEmailPayload): Promise<BasicResponse> {
     const { data } = await api.post('/auth/verify-email', body);
     return data;
   },
@@ -17,7 +25,7 @@ export const authService = {
     return data;
   },
 
-  async login(body: any): Promise<AuthResponse> {
+  async login(body: LoginPayload): Promise<AuthResponse> {
     const { data } = await api.post('/auth/login', body);
     return data;
   },
@@ -32,7 +40,7 @@ export const authService = {
     return data;
   },
 
-  async changePassword(body: any): Promise<BasicResponse> {
+  async changePassword(body: ChangePasswordPayload): Promise<BasicResponse> {
     const { data } = await api.post('/auth/change-password', body);
     return data;
   },

@@ -3,8 +3,8 @@ import { Monitor, Video, PlayCircle, Sparkles } from 'lucide-react';
 
 import { useIntegrations } from '../hooks/use-integrations';
 import { Skeleton } from '../components/ui/skeleton';
-import { ErrorView } from '../components/ui/ErrorView';
-import { IntegrationCard } from '../components/integrations/IntegrationCard';
+import { ErrorView } from '../components/layouts/ErrorView';
+import { IntegrationCard } from '../components/settings/IntegrationCard';
 
 export default function Integrations() {
   const { integrations, isLoading, error, clearError, fetchIntegrations, connect, disconnect, update, sync } = useIntegrations();

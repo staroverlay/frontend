@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/use-auth';
-import { MainLayout } from './components/layout/main-layout';
+import { MainLayout } from './components/layouts/MainLayout';
 import { useSubscriptionStore } from './stores/subscription-store';
 import { useEffect } from 'react';
 import Login from './pages/Login';
@@ -16,6 +16,8 @@ import Widgets from './pages/Widgets';
 import WidgetDetails from './pages/WidgetDetails';
 import Content from './pages/Content';
 
+import { LoadingScreen } from './components/layouts/LoadingScreen';
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const { fetchSubscription, plans } = useSubscriptionStore();
@@ -28,21 +30,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
   // Only show the global initializing screen if we don't have a user session yet.
   if (isLoading && !user) {
-    return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-violet-600/5 blur-[100px] pointer-events-none" />
-        <div className="flex flex-col items-center gap-8 relative z-10 animate-in fade-in zoom-in-95 duration-1000">
-          <div className="relative">
-            <div className="absolute inset-0 bg-violet-600/20 blur-2xl rounded-full animate-pulse" />
-            <div className="w-12 h-12 rounded-xl border-2 border-white/5 border-t-violet-500 animate-spin relative z-10" />
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            <p className="text-zinc-400 text-sm font-medium tracking-wide animate-pulse">Loading account data...</p>
-            <span className="text-[10px] font-bold text-violet-500/40 uppercase tracking-[0.3em]">StarOverlay</span>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   if (!isAuthenticated) {
@@ -59,7 +47,9 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 // Auth Route Component (Redirect if already logged in)
 const AuthRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  if (isLoading && !user) return <LoadingScreen />;
   if (isAuthenticated) return <Navigate to="/" replace />;
   return <>{children}</>;
 };

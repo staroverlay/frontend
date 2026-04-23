@@ -25,16 +25,14 @@ export interface UserSubscription {
     updatedAt: string;
 }
 
-class SubscriptionService {
+export const subscriptionService = {
     async getPlans(): Promise<Plan[]> {
         const { data } = await api.get<Plan[]>('/subscription/plans');
         return data;
-    }
+    },
 
     async getCurrentSubscription(): Promise<UserSubscription | null> {
         const { data } = await api.get<UserSubscription | null>('/subscription/current');
         return data;
-    }
-}
-
-export const subscriptionService = new SubscriptionService();
+    },
+};

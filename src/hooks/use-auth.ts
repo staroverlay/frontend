@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/auth-store';
 import { authService } from '../services/auth-service';
 import { oauthService } from '../services/oauth-service';
-import type { AuthResponse } from '../lib/types';
+import type { AuthResponse, LoginPayload, RegisterPayload, VerifyEmailPayload } from '../lib/types';
 
 export const useAuth = () => {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export const useAuth = () => {
     }
   }, [isAuthenticated, user, isLoading, fetchUser]);
 
-  const login = async (payload: any) => {
+  const login = async (payload: LoginPayload) => {
     setLoading(true);
     try {
       const response: AuthResponse = await authService.login(payload);
@@ -46,7 +46,7 @@ export const useAuth = () => {
     }
   };
 
-  const register = async (payload: any) => {
+  const register = async (payload: RegisterPayload) => {
     setLoading(true);
     try {
       const response = await authService.register(payload);
@@ -71,7 +71,7 @@ export const useAuth = () => {
     }
   };
 
-  const verifyEmail = async (payload: any) => {
+  const verifyEmail = async (payload: VerifyEmailPayload) => {
     setLoading(true);
     try {
       const response = await authService.verifyEmail(payload);

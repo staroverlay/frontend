@@ -61,6 +61,27 @@ export type OAuthInitiateResponse = {
   state: string;
 };
 
+export interface LoginPayload {
+  email: string;
+  password?: string;
+  code?: string;
+}
+
+export interface RegisterPayload {
+  email: string;
+  password?: string;
+}
+
+export interface VerifyEmailPayload {
+  email: string;
+  code: string;
+}
+
+export interface ChangePasswordPayload {
+  oldPassword?: string;
+  newPassword?: string;
+}
+
 export interface WidgetIntegrationRef {
   id: string;
   integrationId: string;

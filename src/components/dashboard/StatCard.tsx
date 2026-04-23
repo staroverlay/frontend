@@ -11,10 +11,11 @@ interface StatCardProps {
 
 export function StatCard({ name, value, change, icon: Icon, className }: StatCardProps) {
   const isPositive = change.startsWith('+');
+  const isNeutral = !change.startsWith('+') && !change.startsWith('-');
 
   return (
     <div className={cn(
-      'p-5 rounded-2xl border bg-surface-card transition-all hover:-translate-y-1 hover:shadow-premium',
+      'p-5 rounded-2xl border bg-surface-card transition-all hover:-translate-y-1 hover:shadow-premium group',
       'border-border-subtle hover:border-brand-primary/30',
       className
     )}>
@@ -23,8 +24,10 @@ export function StatCard({ name, value, change, icon: Icon, className }: StatCar
           <Icon className="w-5 h-5" />
         </div>
         <span className={cn(
-          'text-xs font-semibold px-2 py-0.5 rounded-md border',
-          isPositive ? 'text-status-success bg-status-success/10 border-status-success/20' : 'text-status-error bg-status-error/10 border-status-error/20'
+          'text-[10px] font-black uppercase tracking-tight px-2 py-0.5 rounded-md border',
+          isPositive ? 'text-status-success bg-status-success/10 border-status-success/20' :
+            isNeutral ? 'text-status-info bg-status-info/10 border-status-info/20' :
+              'text-status-error bg-status-error/10 border-status-error/20'
         )}>
           {change}
         </span>

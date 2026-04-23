@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react';
-import { Search, Layers, AlertCircle, Grid } from 'lucide-react';
+import { Search, Layers, Grid } from 'lucide-react';
 import { useAppExplorer } from '../hooks/use-app-explorer';
 import { useAppsStore } from '../stores/apps-store';
-import { PageHeader } from '../components/ui/PageHeader';
+import { PageHeader } from '../components/layouts/PageHeader';
 import { AppCard } from '../components/apps/AppCard';
 import { InstallAppModal } from '../components/apps/InstallAppModal';
-import { type AppManifest } from '../services/apps-service';
+import { ErrorView } from '../components/layouts/ErrorView';
+import { EmptyState } from '../components/layouts/EmptyState';
+import type { AppManifest } from '../services/apps-service';
 import { cn } from '../lib/utils';
 
 export default function Apps() {
@@ -88,11 +90,10 @@ export default function Apps() {
       {/* Content */}
       <div className="w-full min-h-[400px]">
         {error ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-status-error/5 border border-status-error/10 rounded-3xl">
-            <AlertCircle className="w-12 h-12 text-status-error mb-4" />
-            <h3 className="text-lg font-bold text-content-primary opacity-90">Error loading applications</h3>
-            <p className="text-status-error/80 mt-2 text-sm max-w-md text-center">{error.message}</p>
-          </div>
+          <ErrorView
+            title="Search failed"
+            message={error.message || "We couldn't search for apps at this moment."}
+          />
         ) : isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -100,11 +101,11 @@ export default function Apps() {
             ))}
           </div>
         ) : apps.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-border-default bg-surface-card/20">
-            <Layers className="w-12 h-12 text-content-dimmed mb-4" />
-            <h3 className="text-lg font-bold text-content-secondary">No apps found</h3>
-            <p className="text-content-dimmed mt-2 text-sm">Try adjusting your filters or search query.</p>
-          </div>
+          <EmptyState
+            icon={Layers}
+            title="No apps found"
+            description="Try adjusting your filters or search query to find what you're looking for."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {apps.map((app) => (

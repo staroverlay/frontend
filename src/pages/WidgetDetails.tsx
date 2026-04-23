@@ -1,8 +1,8 @@
 import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { WidgetDetailsProvider, useWidgetDetails } from '../components/widget-details/WidgetDetailsContext';
-import { WidgetSidebar } from '../components/widget-details/WidgetSidebar';
-import { WidgetPreviewArea } from '../components/widget-details/WidgetPreviewArea';
+import { WidgetDetailsProvider, useWidgetDetails } from '../components/widgets/WidgetDetailsContext';
+import { WidgetSidebar } from '../components/widgets/WidgetSidebar';
+import { WidgetPreviewArea } from '../components/widgets/WidgetPreviewArea';
 import { cn } from '../lib/utils';
 
 function WidgetDetailsContent() {

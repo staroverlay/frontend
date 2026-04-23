@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
-import { PageHeader } from '../components/ui/PageHeader';
+import { PageHeader } from '../components/layouts/PageHeader';
 import { getError } from '../lib/utils';
 import { sessionsService } from '../services/sessions-service';
 import { type Session } from '../lib/types';

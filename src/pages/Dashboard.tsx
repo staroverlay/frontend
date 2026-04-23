@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../hooks/use-auth';
 import { useProfile } from '../hooks/use-profile';
 import { Skeleton } from '../components/ui/skeleton';
-import { PageHeader } from '../components/ui/PageHeader';
+import { PageHeader } from '../components/layouts/PageHeader';
 import { useSubscriptionStore } from '../stores/subscription-store';
 import { widgetsService } from '../services/widgets-service';
 import { appsService, type AppManifest } from '../services/apps-service';
 import { integrationsService } from '../services/integrations-service';
-import { UploadsService } from '../services/uploads.service';
+import { uploadsService } from '../services/uploads-service';
 import type { Widget, Integration } from '../lib/types';
 import { DashboardBanner } from '../components/dashboard/DashboardBanner';
 import { DashboardStats } from '../components/dashboard/DashboardStats';
@@ -34,7 +34,7 @@ export default function Dashboard() {
         widgetsService.listWidgets().catch(() => []),
         appsService.getApps().catch(() => []),
         integrationsService.listIntegrations().catch(() => []),
-        UploadsService.listUploads().catch(() => ({ uploads: [] }))
+        uploadsService.listUploads().catch(() => ({ uploads: [] }))
       ]);
       setWidgets(w || []);
       setApps(a || []);

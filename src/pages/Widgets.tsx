@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 
 import { widgetsService } from '../services/widgets-service';
 import type { Widget } from '../lib/types';
-import { ErrorView } from '../components/ui/ErrorView';
+import { ErrorView } from '../components/layouts/ErrorView';
 import { getError } from '../lib/utils';
 import { WidgetCard } from '../components/widgets/WidgetCard';
-import { PageHeader } from '../components/ui/PageHeader';
+import { PageHeader } from '../components/layouts/PageHeader';
 import { useSubscriptionStore } from '../stores/subscription-store';
+import { EmptyState } from '../components/layouts/EmptyState';
 
 export default function WidgetsPage() {
   const [widgets, setWidgets] = useState<Widget[]>([]);
@@ -109,28 +110,26 @@ export default function WidgetsPage() {
             ))}
           </div>
         ) : widgets.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-border-default bg-surface-card/20 text-center px-4">
-            <div className="w-16 h-16 rounded-2xl bg-surface-panel border border-white/[0.06] flex items-center justify-center mb-6">
-              <Layers className="w-7 h-7 text-content-dimmed" />
-            </div>
-            <h3 className="text-lg font-black text-content-secondary">No widgets installed</h3>
-            <p className="text-content-dimmed mt-2 max-w-sm text-sm">
-              Explore the app store to find overlays and widgets for your stream.
-            </p>
-            <Link
-              to="/apps"
-              className="mt-8 flex items-center gap-2 px-6 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-primary/20 transition-all"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              Browse Apps
-            </Link>
-          </div>
+          <EmptyState
+            icon={Layers}
+            title="No widgets installed"
+            description="Explore the app store to find overlays and widgets for your stream."
+            action={
+              <Link
+                to="/apps"
+                className="flex items-center gap-2 px-6 py-2.5 bg-brand-primary hover:bg-brand-primary/90 text-white font-bold text-sm rounded-xl shadow-lg shadow-brand-primary/20 transition-all"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Browse Apps
+              </Link>
+            }
+          />
         ) : filteredWidgets.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 rounded-3xl border border-dashed border-border-default bg-surface-card/20">
-            <Layers className="w-12 h-12 text-content-dimmed mb-4" />
-            <h3 className="text-lg font-bold text-content-secondary">No matches found</h3>
-            <p className="text-content-dimmed mt-2 text-sm">Try a different search term.</p>
-          </div>
+          <EmptyState
+            icon={Search}
+            title="No matches found"
+            description="Try a different search term to find what you're looking for."
+          />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredWidgets.map((w) => (
