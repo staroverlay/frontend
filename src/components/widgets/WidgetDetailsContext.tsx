@@ -148,7 +148,7 @@ export function WidgetDetailsProvider({ children }: { children: React.ReactNode 
             setMetaDraft({
                 display_name: data.display_name,
                 enabled: data.enabled,
-                integration_ids: (data.integration_ids || []).map((i: any) => i.integrationId || i.id),
+                integration_ids: (data.integration_ids || []).map((i: any) => i.id),
             });
         } catch (e) {
             setWidgetError(getError(e, 'Failed to load widget'));

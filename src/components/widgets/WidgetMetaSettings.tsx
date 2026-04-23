@@ -52,8 +52,8 @@ export const WidgetMetaSettings = () => {
                                 <button
                                     key={i.id}
                                     onClick={() => {
-                                        const currentId = i.integrationId; // Always use the UUID for consistency if possible
-                                        const isReallyChecked = metaDraft.integration_ids.includes(i.id) || metaDraft.integration_ids.includes(i.integrationId);
+                                        const currentId = i.id; // Corrected to use composite ID
+                                        const isReallyChecked = metaDraft.integration_ids.includes(i.id);
                                         const next = isReallyChecked
                                             ? metaDraft.integration_ids.filter(x => x !== i.id && x !== i.integrationId)
                                             : [...new Set([...metaDraft.integration_ids, currentId])];
