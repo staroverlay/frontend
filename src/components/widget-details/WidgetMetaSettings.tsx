@@ -46,14 +46,14 @@ export const WidgetMetaSettings = () => {
                         </div>
                     ) : (
                         compatibleIntegrations.map((i: Integration) => {
-                            const isChecked = metaDraft.integrations.includes(i.id);
+                            const isChecked = metaDraft.integration_ids.includes(i.id);
                             const isRequired = requiredIntegrationProviders.includes((i.provider as string).toLowerCase());
                             return (
                                 <button
                                     key={i.id}
                                     onClick={() => {
-                                        const next = isChecked ? metaDraft.integrations.filter(x => x !== i.id) : [...new Set([...metaDraft.integrations, i.id])];
-                                        setMetaDraft(prev => ({ ...prev, integrations: next }));
+                                        const next = isChecked ? metaDraft.integration_ids.filter(x => x !== i.id) : [...new Set([...metaDraft.integration_ids, i.id])];
+                                        setMetaDraft(prev => ({ ...prev, integration_ids: next }));
                                     }}
                                     className={cn(
                                         "flex items-center justify-between p-2.5 rounded-xl border transition-all text-left group",

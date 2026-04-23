@@ -84,7 +84,7 @@ export function InstallAppModal({ app, isOpen, onClose }: InstallAppModalProps) 
         try {
             await widgetsService.createWidget({
                 app_id: app.id,
-                integrations: selectedIds,
+                integration_ids: selectedIds,
                 display_name: displayName,
             });
             onClose();
