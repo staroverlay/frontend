@@ -46,13 +46,17 @@ export const WidgetMetaSettings = () => {
                         </div>
                     ) : (
                         compatibleIntegrations.map((i: Integration) => {
-                            const isChecked = metaDraft.integration_ids.includes(i.id);
+                            const isChecked = metaDraft.integration_ids.includes(i.id) || metaDraft.integration_ids.includes(i.integrationId);
                             const isRequired = requiredIntegrationProviders.includes((i.provider as string).toLowerCase());
                             return (
                                 <button
                                     key={i.id}
                                     onClick={() => {
-                                        const next = isChecked ? metaDraft.integration_ids.filter(x => x !== i.id) : [...new Set([...metaDraft.integration_ids, i.id])];
+                                        const currentId = i.integrationId; // Always use the UUID for consistency if possible
+                                        const isReallyChecked = metaDraft.integration_ids.includes(i.id) || metaDraft.integration_ids.includes(i.integrationId);
+                                        const next = isReallyChecked
+                                            ? metaDraft.integration_ids.filter(x => x !== i.id && x !== i.integrationId)
+                                            : [...new Set([...metaDraft.integration_ids, currentId])];
                                         setMetaDraft(prev => ({ ...prev, integration_ids: next }));
                                     }}
                                     className={cn(

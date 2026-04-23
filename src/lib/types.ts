@@ -28,6 +28,7 @@ export type Profile = {
 
 export type Integration = {
   id: string;
+  integrationId: string;
   userId: string;
   provider: 'twitch' | 'kick' | 'youtube';
   displayName: string | null;
