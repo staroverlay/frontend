@@ -60,12 +60,18 @@ export type OAuthInitiateResponse = {
   state: string;
 };
 
+export interface WidgetIntegrationRef {
+  id: string;
+  integrationId: string;
+  provider: string;
+}
+
 export type Widget = {
   id: string;
   app_id: string;
   display_name: string;
   settings: Record<string, unknown>;
-  integrations: string[];
+  integration_ids: WidgetIntegrationRef[];
   enabled: boolean;
   token: string;
   created_at: string;

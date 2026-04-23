@@ -87,16 +87,16 @@ interface WidgetDetailsContextType {
     metaDraft: {
         display_name: string;
         enabled: boolean;
-        integrations: string[];
+        integration_ids: string[];
     };
     setMetaDraft: React.Dispatch<React.SetStateAction<{
         display_name: string;
         enabled: boolean;
-        integrations: string[];
+        integration_ids: string[];
     }>>;
     settingsDraft: Record<string, unknown>;
     setSettingsDraft: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
-    saveMeta: (nextMeta?: Partial<{ display_name: string; enabled: boolean; integrations: string[] }>) => Promise<void>;
+    saveMeta: (nextMeta?: Partial<{ display_name: string; enabled: boolean; integration_ids: string[] }>) => Promise<void>;
     saveSettings: () => Promise<void>;
     rotateToken: () => Promise<void>;
     tabs: any[];
@@ -126,11 +126,11 @@ export function WidgetDetailsProvider({ children }: { children: React.ReactNode 
     const [metaDraft, setMetaDraft] = useState<{
         display_name: string;
         enabled: boolean;
-        integrations: string[];
+        integration_ids: string[];
     }>({
         display_name: '',
         enabled: true,
-        integrations: [],
+        integration_ids: [],
     });
 
     const [settingsDraft, setSettingsDraft] = useState<Record<string, unknown>>({});
@@ -148,7 +148,7 @@ export function WidgetDetailsProvider({ children }: { children: React.ReactNode 
             setMetaDraft({
                 display_name: data.display_name,
                 enabled: data.enabled,
-                integrations: data.integrations ?? [],
+                integration_ids: (data.integration_ids || []).map((i: any) => i.integrationId || i.id),
             });
         } catch (e) {
             setWidgetError(getError(e, 'Failed to load widget'));
@@ -237,7 +237,7 @@ export function WidgetDetailsProvider({ children }: { children: React.ReactNode 
         setMetaLoading(true);
         const payload = {
             display_name: nextMeta?.display_name ?? metaDraft.display_name,
-            integrations: nextMeta?.integrations ?? metaDraft.integrations,
+            integration_ids: nextMeta?.integration_ids ?? metaDraft.integration_ids,
             enabled: nextMeta?.enabled ?? metaDraft.enabled,
         };
         try {
@@ -335,10 +335,10 @@ export function WidgetDetailsProvider({ children }: { children: React.ReactNode 
 
     const hasMissingRequired = useMemo(() => {
         const selectedProviders = compatibleIntegrations
-            .filter(i => metaDraft.integrations.includes(i.id))
+            .filter(i => metaDraft.integration_ids.includes(i.id))
             .map(i => (i.provider as string).toLowerCase());
         return requiredIntegrationProviders.some((p: string) => !selectedProviders.includes(p));
-    }, [requiredIntegrationProviders, compatibleIntegrations, metaDraft.integrations]);
+    }, [requiredIntegrationProviders, compatibleIntegrations, metaDraft.integration_ids]);
 
     return (
         <WidgetDetailsContext.Provider value={{

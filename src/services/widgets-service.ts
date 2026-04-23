@@ -12,14 +12,14 @@ export const widgetsService = {
     return data.widget as Widget;
   },
 
-  async createWidget(input: { app_id: string; integrations: string[]; display_name?: string }): Promise<Widget> {
+  async createWidget(input: { app_id: string; integration_ids: string[]; display_name?: string }): Promise<Widget> {
     const { data } = await api.post('/widgets', input);
     return data.widget as Widget;
   },
 
   async updateWidgetMeta(
     widgetId: string,
-    input: { display_name?: string; integrations?: string[]; enabled?: boolean }
+    input: { display_name?: string; integration_ids?: string[]; enabled?: boolean }
   ): Promise<Widget> {
     const { data } = await api.patch(`/widgets/${widgetId}`, input);
     return data.widget as Widget;
